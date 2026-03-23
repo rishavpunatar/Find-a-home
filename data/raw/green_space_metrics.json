@@ -1,0 +1,191 @@
+{
+  "PIN": {
+    "green_space_area_km2_within_1km": 1.02,
+    "green_cover_pct": 25.4,
+    "nearest_park_distance_m": 435,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "ECT": {
+    "green_space_area_km2_within_1km": 1.32,
+    "green_cover_pct": 29.5,
+    "nearest_park_distance_m": 419,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "RYN": {
+    "green_space_area_km2_within_1km": 1.54,
+    "green_cover_pct": 32.5,
+    "nearest_park_distance_m": 406,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "RUI": {
+    "green_space_area_km2_within_1km": 1.76,
+    "green_cover_pct": 35.6,
+    "nearest_park_distance_m": 394,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "RUM": {
+    "green_space_area_km2_within_1km": 1.86,
+    "green_cover_pct": 37.0,
+    "nearest_park_distance_m": 388,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "WRU": {
+    "green_space_area_km2_within_1km": 2.04,
+    "green_cover_pct": 39.5,
+    "nearest_park_distance_m": 378,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "ICK": {
+    "green_space_area_km2_within_1km": 2.12,
+    "green_cover_pct": 40.6,
+    "nearest_park_distance_m": 373,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "UXB": {
+    "green_space_area_km2_within_1km": 2.42,
+    "green_cover_pct": 44.7,
+    "nearest_park_distance_m": 356,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "NWH": {
+    "green_space_area_km2_within_1km": 1.18,
+    "green_cover_pct": 27.6,
+    "nearest_park_distance_m": 426,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "NWD": {
+    "green_space_area_km2_within_1km": 1.52,
+    "green_cover_pct": 32.3,
+    "nearest_park_distance_m": 407,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "MOP": {
+    "green_space_area_km2_within_1km": 1.78,
+    "green_cover_pct": 35.9,
+    "nearest_park_distance_m": 392,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "RKM": {
+    "green_space_area_km2_within_1km": 2.18,
+    "green_cover_pct": 41.4,
+    "nearest_park_distance_m": 370,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "CRX": {
+    "green_space_area_km2_within_1km": 2.28,
+    "green_cover_pct": 42.8,
+    "nearest_park_distance_m": 364,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "WAM": {
+    "green_space_area_km2_within_1km": 2.38,
+    "green_cover_pct": 44.2,
+    "nearest_park_distance_m": 358,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "HAH": {
+    "green_space_area_km2_within_1km": 1.66,
+    "green_cover_pct": 34.1,
+    "nearest_park_distance_m": 400,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "NHR": {
+    "green_space_area_km2_within_1km": 1.4,
+    "green_cover_pct": 30.6,
+    "nearest_park_distance_m": 414,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "SRI": {
+    "green_space_area_km2_within_1km": 2.02,
+    "green_cover_pct": 39.2,
+    "nearest_park_distance_m": 379,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "NOR": {
+    "green_space_area_km2_within_1km": 2.02,
+    "green_cover_pct": 39.1,
+    "nearest_park_distance_m": 379,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "WBP": {
+    "green_space_area_km2_within_1km": 2.46,
+    "green_cover_pct": 45.0,
+    "nearest_park_distance_m": 355,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "STM": {
+    "green_space_area_km2_within_1km": 2.42,
+    "green_cover_pct": 44.6,
+    "nearest_park_distance_m": 357,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "BSH": {
+    "green_space_area_km2_within_1km": 2.08,
+    "green_cover_pct": 40.0,
+    "nearest_park_distance_m": 376,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "HWD": {
+    "green_space_area_km2_within_1km": 1.86,
+    "green_cover_pct": 36.9,
+    "nearest_park_distance_m": 388,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "HSL": {
+    "green_space_area_km2_within_1km": 1.74,
+    "green_cover_pct": 35.4,
+    "nearest_park_distance_m": 394,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "HEN": {
+    "green_space_area_km2_within_1km": 1.66,
+    "green_cover_pct": 34.3,
+    "nearest_park_distance_m": 399,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "WFJ": {
+    "green_space_area_km2_within_1km": 2.42,
+    "green_cover_pct": 44.6,
+    "nearest_park_distance_m": 357,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "KNG": {
+    "green_space_area_km2_within_1km": 3.1,
+    "green_cover_pct": 58.8,
+    "nearest_park_distance_m": 298,
+    "status": "available",
+    "confidence": 0.76
+  },
+  "AMH": {
+    "green_space_area_km2_within_1km": 3.1,
+    "green_cover_pct": 57.0,
+    "nearest_park_distance_m": 295,
+    "status": "available",
+    "confidence": 0.76
+  }
+}

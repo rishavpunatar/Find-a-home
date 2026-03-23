@@ -1,0 +1,164 @@
+{
+  "PIN": {
+    "annual_no2": 27.4,
+    "annual_pm25": 12.4,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "ECT": {
+    "annual_no2": 26.5,
+    "annual_pm25": 12.1,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "RYN": {
+    "annual_no2": 25.8,
+    "annual_pm25": 11.9,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "RUI": {
+    "annual_no2": 24.7,
+    "annual_pm25": 11.6,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "RUM": {
+    "annual_no2": 24.2,
+    "annual_pm25": 11.4,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "WRU": {
+    "annual_no2": 23.4,
+    "annual_pm25": 11.2,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "ICK": {
+    "annual_no2": 23.1,
+    "annual_pm25": 11.1,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "UXB": {
+    "annual_no2": 22.2,
+    "annual_pm25": 10.8,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "NWH": {
+    "annual_no2": 26.8,
+    "annual_pm25": 12.3,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "NWD": {
+    "annual_no2": 25.5,
+    "annual_pm25": 11.8,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "MOP": {
+    "annual_no2": 24.5,
+    "annual_pm25": 11.5,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "RKM": {
+    "annual_no2": 23.1,
+    "annual_pm25": 11.1,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "CRX": {
+    "annual_no2": 22.6,
+    "annual_pm25": 10.9,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "WAM": {
+    "annual_no2": 22.1,
+    "annual_pm25": 10.8,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "HAH": {
+    "annual_no2": 25.7,
+    "annual_pm25": 11.9,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "NHR": {
+    "annual_no2": 26.2,
+    "annual_pm25": 12.0,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "SRI": {
+    "annual_no2": 23.6,
+    "annual_pm25": 11.2,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "NOR": {
+    "annual_no2": 24.1,
+    "annual_pm25": 11.4,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "WBP": {
+    "annual_no2": 31.0,
+    "annual_pm25": 11.1,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "STM": {
+    "annual_no2": 22.7,
+    "annual_pm25": 10.9,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "BSH": {
+    "annual_no2": 23.5,
+    "annual_pm25": 11.2,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "HWD": {
+    "annual_no2": 24.7,
+    "annual_pm25": 11.6,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "HSL": {
+    "annual_no2": 24.3,
+    "annual_pm25": 11.5,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "HEN": {
+    "annual_no2": 24.6,
+    "annual_pm25": 11.6,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "WFJ": {
+    "annual_no2": 22.7,
+    "annual_pm25": 10.9,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "KNG": {
+    "annual_no2": 18.3,
+    "annual_pm25": 9.5,
+    "status": "available",
+    "confidence": 0.82
+  },
+  "AMH": {
+    "annual_no2": 18.2,
+    "annual_pm25": 9.5,
+    "status": "available",
+    "confidence": 0.74
+  }
+}

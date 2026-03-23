@@ -1,0 +1,245 @@
+{
+  "PIN": {
+    "average_semi_price": 662000,
+    "median_semi_price": 625000,
+    "price_trend_pct_5y": 12.9,
+    "affordability_score": 63.8,
+    "value_for_money_score": 78.5,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "ECT": {
+    "average_semi_price": 631000,
+    "median_semi_price": 595000,
+    "price_trend_pct_5y": 12.4,
+    "affordability_score": 65.2,
+    "value_for_money_score": 76.8,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "RYN": {
+    "average_semi_price": 642000,
+    "median_semi_price": 606000,
+    "price_trend_pct_5y": 13.4,
+    "affordability_score": 64.7,
+    "value_for_money_score": 77.7,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "RUI": {
+    "average_semi_price": 587000,
+    "median_semi_price": 554000,
+    "price_trend_pct_5y": 11.8,
+    "affordability_score": 67.3,
+    "value_for_money_score": 74.5,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "RUM": {
+    "average_semi_price": 577000,
+    "median_semi_price": 544000,
+    "price_trend_pct_5y": 11.5,
+    "affordability_score": 67.8,
+    "value_for_money_score": 73.8,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "WRU": {
+    "average_semi_price": 586000,
+    "median_semi_price": 553000,
+    "price_trend_pct_5y": 12.2,
+    "affordability_score": 67.3,
+    "value_for_money_score": 74.5,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "ICK": {
+    "average_semi_price": 543000,
+    "median_semi_price": 512000,
+    "price_trend_pct_5y": 10.8,
+    "affordability_score": 69.4,
+    "value_for_money_score": 72.0,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "UXB": {
+    "average_semi_price": 519000,
+    "median_semi_price": 490000,
+    "price_trend_pct_5y": 10.2,
+    "affordability_score": 70.5,
+    "value_for_money_score": 69.2,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "NWH": {
+    "average_semi_price": 678000,
+    "median_semi_price": 640000,
+    "price_trend_pct_5y": 13.8,
+    "affordability_score": 63.0,
+    "value_for_money_score": 79.6,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "NWD": {
+    "average_semi_price": 666000,
+    "median_semi_price": 628000,
+    "price_trend_pct_5y": 14.1,
+    "affordability_score": 63.6,
+    "value_for_money_score": 79.1,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "MOP": {
+    "average_semi_price": 687000,
+    "median_semi_price": 648000,
+    "price_trend_pct_5y": 13.6,
+    "affordability_score": 62.6,
+    "value_for_money_score": 75.3,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "RKM": {
+    "average_semi_price": 643000,
+    "median_semi_price": 607000,
+    "price_trend_pct_5y": 12.9,
+    "affordability_score": 64.7,
+    "value_for_money_score": 73.1,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "CRX": {
+    "average_semi_price": 618000,
+    "median_semi_price": 583000,
+    "price_trend_pct_5y": 12.0,
+    "affordability_score": 65.8,
+    "value_for_money_score": 71.0,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "WAM": {
+    "average_semi_price": 599000,
+    "median_semi_price": 565000,
+    "price_trend_pct_5y": 11.3,
+    "affordability_score": 66.8,
+    "value_for_money_score": 69.3,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "HAH": {
+    "average_semi_price": 683000,
+    "median_semi_price": 644000,
+    "price_trend_pct_5y": 15.2,
+    "affordability_score": 62.8,
+    "value_for_money_score": 80.4,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "NHR": {
+    "average_semi_price": 683000,
+    "median_semi_price": 644000,
+    "price_trend_pct_5y": 14.5,
+    "affordability_score": 62.8,
+    "value_for_money_score": 80.1,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "SRI": {
+    "average_semi_price": 573000,
+    "median_semi_price": 541000,
+    "price_trend_pct_5y": 11.8,
+    "affordability_score": 68.0,
+    "value_for_money_score": 73.8,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "NOR": {
+    "average_semi_price": 625000,
+    "median_semi_price": 590000,
+    "price_trend_pct_5y": 13.8,
+    "affordability_score": 65.5,
+    "value_for_money_score": 77.2,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "WBP": {
+    "average_semi_price": 914000,
+    "median_semi_price": 870000,
+    "price_trend_pct_5y": 16.4,
+    "affordability_score": 59.1,
+    "value_for_money_score": 75.3,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "STM": {
+    "average_semi_price": 671000,
+    "median_semi_price": 905000,
+    "price_trend_pct_5y": 13.1,
+    "affordability_score": 63.4,
+    "value_for_money_score": 70.7,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "BSH": {
+    "average_semi_price": 661000,
+    "median_semi_price": 624000,
+    "price_trend_pct_5y": 13.4,
+    "affordability_score": 63.8,
+    "value_for_money_score": 74.0,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "HWD": {
+    "average_semi_price": 661000,
+    "median_semi_price": 624000,
+    "price_trend_pct_5y": 14.8,
+    "affordability_score": 63.8,
+    "value_for_money_score": 79.1,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "HSL": {
+    "average_semi_price": 624000,
+    "median_semi_price": 589000,
+    "price_trend_pct_5y": 12.9,
+    "affordability_score": 65.5,
+    "value_for_money_score": 76.6,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "HEN": {
+    "average_semi_price": 649000,
+    "median_semi_price": 612000,
+    "price_trend_pct_5y": 13.6,
+    "affordability_score": 64.4,
+    "value_for_money_score": 78.1,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "WFJ": {
+    "average_semi_price": 694000,
+    "median_semi_price": 655000,
+    "price_trend_pct_5y": 14.8,
+    "affordability_score": 62.2,
+    "value_for_money_score": 74.5,
+    "status": "available",
+    "confidence": 0.86
+  },
+  "KNG": {
+    "average_semi_price": 643000,
+    "median_semi_price": 607000,
+    "price_trend_pct_5y": 12.9,
+    "affordability_score": 64.7,
+    "value_for_money_score": 66.3,
+    "status": "available",
+    "confidence": 0.78
+  },
+  "AMH": {
+    "average_semi_price": 507000,
+    "median_semi_price": 760000,
+    "price_trend_pct_5y": 9.7,
+    "affordability_score": 71.1,
+    "value_for_money_score": 62.5,
+    "status": "available",
+    "confidence": 0.78
+  }
+}

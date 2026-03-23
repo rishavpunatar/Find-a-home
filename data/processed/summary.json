@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-03-23T21:53:46+00:00",
+  "count": 25,
+  "topMicroAreas": [
+    {
+      "microAreaId": "ma-hah",
+      "stationName": "Harrow-on-the-Hill",
+      "score": 62.65
+    },
+    {
+      "microAreaId": "ma-nhr",
+      "stationName": "North Harrow",
+      "score": 61.29
+    },
+    {
+      "microAreaId": "ma-hwd",
+      "stationName": "Harrow & Wealdstone",
+      "score": 61.26
+    },
+    {
+      "microAreaId": "ma-nor",
+      "stationName": "Northolt",
+      "score": 60.95
+    },
+    {
+      "microAreaId": "ma-wfj",
+      "stationName": "Watford Junction",
+      "score": 60.75
+    },
+    {
+      "microAreaId": "ma-wbp",
+      "stationName": "Wembley Park",
+      "score": 60.26
+    },
+    {
+      "microAreaId": "ma-ryn",
+      "stationName": "Rayners Lane",
+      "score": 60.22
+    },
+    {
+      "microAreaId": "ma-nwd",
+      "stationName": "Northwood",
+      "score": 60.12
+    },
+    {
+      "microAreaId": "ma-nwh",
+      "stationName": "Northwood Hills",
+      "score": 60.1
+    },
+    {
+      "microAreaId": "ma-stm",
+      "stationName": "Stanmore",
+      "score": 59.31
+    }
+  ]
+}

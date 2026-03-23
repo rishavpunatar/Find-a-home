@@ -1,0 +1,245 @@
+{
+  "PIN": {
+    "nearby_primary_count": 16,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 81.2,
+    "secondary_quality_score": 77.3,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "ECT": {
+    "nearby_primary_count": 16,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 80.6,
+    "secondary_quality_score": 77.0,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "RYN": {
+    "nearby_primary_count": 16,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 80.5,
+    "secondary_quality_score": 77.0,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "RUI": {
+    "nearby_primary_count": 14,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 76.0,
+    "secondary_quality_score": 73.1,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "RUM": {
+    "nearby_primary_count": 13,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 74.3,
+    "secondary_quality_score": 71.6,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "WRU": {
+    "nearby_primary_count": 12,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 72.2,
+    "secondary_quality_score": 69.8,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "ICK": {
+    "nearby_primary_count": 12,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 71.8,
+    "secondary_quality_score": 69.5,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "UXB": {
+    "nearby_primary_count": 12,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 71.1,
+    "secondary_quality_score": 69.1,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "NWH": {
+    "nearby_primary_count": 16,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 80.3,
+    "secondary_quality_score": 76.6,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "NWD": {
+    "nearby_primary_count": 15,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 77.3,
+    "secondary_quality_score": 74.1,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "MOP": {
+    "nearby_primary_count": 14,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 74.8,
+    "secondary_quality_score": 72.0,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "RKM": {
+    "nearby_primary_count": 13,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 72.5,
+    "secondary_quality_score": 70.2,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "CRX": {
+    "nearby_primary_count": 12,
+    "nearby_secondary_count": 4,
+    "primary_quality_score": 70.9,
+    "secondary_quality_score": 68.8,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "WAM": {
+    "nearby_primary_count": 11,
+    "nearby_secondary_count": 4,
+    "primary_quality_score": 69.2,
+    "secondary_quality_score": 67.3,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "HAH": {
+    "nearby_primary_count": 17,
+    "nearby_secondary_count": 8,
+    "primary_quality_score": 82.0,
+    "secondary_quality_score": 78.6,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "NHR": {
+    "nearby_primary_count": 16,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 80.2,
+    "secondary_quality_score": 76.6,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "SRI": {
+    "nearby_primary_count": 13,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 73.4,
+    "secondary_quality_score": 70.9,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "NOR": {
+    "nearby_primary_count": 15,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 77.8,
+    "secondary_quality_score": 75.0,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "WBP": {
+    "nearby_primary_count": 17,
+    "nearby_secondary_count": 8,
+    "primary_quality_score": 81.8,
+    "secondary_quality_score": 79.1,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "STM": {
+    "nearby_primary_count": 14,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 75.5,
+    "secondary_quality_score": 73.2,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "BSH": {
+    "nearby_primary_count": 13,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 74.1,
+    "secondary_quality_score": 71.7,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "HWD": {
+    "nearby_primary_count": 15,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 78.7,
+    "secondary_quality_score": 75.7,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "HSL": {
+    "nearby_primary_count": 13,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 72.8,
+    "secondary_quality_score": 70.1,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "HEN": {
+    "nearby_primary_count": 13,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 73.2,
+    "secondary_quality_score": 70.4,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "WFJ": {
+    "nearby_primary_count": 14,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 75.5,
+    "secondary_quality_score": 73.2,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "KNG": {
+    "nearby_primary_count": 8,
+    "nearby_secondary_count": 2,
+    "primary_quality_score": 62.1,
+    "secondary_quality_score": 61.6,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  },
+  "AMH": {
+    "nearby_primary_count": 8,
+    "nearby_secondary_count": 2,
+    "primary_quality_score": 62.9,
+    "secondary_quality_score": 62.4,
+    "status": "available",
+    "confidence": 0.8,
+    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+  }
+}

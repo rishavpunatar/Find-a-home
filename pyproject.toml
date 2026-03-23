@@ -1,0 +1,9 @@
+[project]
+name = "find-a-home-pipeline"
+version = "0.1.0"
+description = "Pipeline for station-centred micro-area ranking around Pinner"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["pipeline/tests"]

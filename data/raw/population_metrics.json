@@ -1,0 +1,137 @@
+{
+  "PIN": {
+    "population_in_reference_zone": 25780,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "ECT": {
+    "population_in_reference_zone": 25800,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "RYN": {
+    "population_in_reference_zone": 26040,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "RUI": {
+    "population_in_reference_zone": 22900,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "RUM": {
+    "population_in_reference_zone": 21780,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "WRU": {
+    "population_in_reference_zone": 20440,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "ICK": {
+    "population_in_reference_zone": 20220,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "UXB": {
+    "population_in_reference_zone": 20240,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "NWH": {
+    "population_in_reference_zone": 25340,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "NWD": {
+    "population_in_reference_zone": 23560,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "MOP": {
+    "population_in_reference_zone": 22000,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "RKM": {
+    "population_in_reference_zone": 20900,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "CRX": {
+    "population_in_reference_zone": 19780,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "WAM": {
+    "population_in_reference_zone": 18660,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "HAH": {
+    "population_in_reference_zone": 27400,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "NHR": {
+    "population_in_reference_zone": 25580,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "SRI": {
+    "population_in_reference_zone": 21340,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "NOR": {
+    "population_in_reference_zone": 24720,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "WBP": {
+    "population_in_reference_zone": 28580,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "STM": {
+    "population_in_reference_zone": 23620,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "BSH": {
+    "population_in_reference_zone": 22020,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "HWD": {
+    "population_in_reference_zone": 25160,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "HSL": {
+    "population_in_reference_zone": 20420,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "HEN": {
+    "population_in_reference_zone": 20640,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "WFJ": {
+    "population_in_reference_zone": 23620,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "KNG": {
+    "population_in_reference_zone": 14900,
+    "status": "estimated",
+    "confidence": 0.7
+  },
+  "AMH": {
+    "population_in_reference_zone": 15580,
+    "status": "estimated",
+    "confidence": 0.7
+  }
+}

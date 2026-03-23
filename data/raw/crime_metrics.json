@@ -1,0 +1,299 @@
+{
+  "PIN": {
+    "crime_rate_per_1000": 96.6,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 23.2,
+      "theft": 28.0,
+      "vehicle": 10.6,
+      "other": 34.8
+    }
+  },
+  "ECT": {
+    "crime_rate_per_1000": 93.5,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 22.4,
+      "theft": 27.1,
+      "vehicle": 10.3,
+      "other": 33.7
+    }
+  },
+  "RYN": {
+    "crime_rate_per_1000": 91.5,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 22.0,
+      "theft": 26.5,
+      "vehicle": 10.1,
+      "other": 32.9
+    }
+  },
+  "RUI": {
+    "crime_rate_per_1000": 85.4,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 20.5,
+      "theft": 24.8,
+      "vehicle": 9.4,
+      "other": 30.7
+    }
+  },
+  "RUM": {
+    "crime_rate_per_1000": 83.0,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 19.9,
+      "theft": 24.1,
+      "vehicle": 9.1,
+      "other": 29.9
+    }
+  },
+  "WRU": {
+    "crime_rate_per_1000": 79.5,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 19.1,
+      "theft": 23.1,
+      "vehicle": 8.7,
+      "other": 28.6
+    }
+  },
+  "ICK": {
+    "crime_rate_per_1000": 78.4,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 18.8,
+      "theft": 22.7,
+      "vehicle": 8.6,
+      "other": 28.2
+    }
+  },
+  "UXB": {
+    "crime_rate_per_1000": 75.3,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 18.1,
+      "theft": 21.8,
+      "vehicle": 8.3,
+      "other": 27.1
+    }
+  },
+  "NWH": {
+    "crime_rate_per_1000": 94.4,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 22.7,
+      "theft": 27.4,
+      "vehicle": 10.4,
+      "other": 34.0
+    }
+  },
+  "NWD": {
+    "crime_rate_per_1000": 88.7,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 21.3,
+      "theft": 25.7,
+      "vehicle": 9.8,
+      "other": 31.9
+    }
+  },
+  "MOP": {
+    "crime_rate_per_1000": 84.1,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 20.2,
+      "theft": 24.4,
+      "vehicle": 9.3,
+      "other": 30.3
+    }
+  },
+  "RKM": {
+    "crime_rate_per_1000": 78.6,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 18.9,
+      "theft": 22.8,
+      "vehicle": 8.6,
+      "other": 28.3
+    }
+  },
+  "CRX": {
+    "crime_rate_per_1000": 76.2,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 18.3,
+      "theft": 22.1,
+      "vehicle": 8.4,
+      "other": 27.4
+    }
+  },
+  "WAM": {
+    "crime_rate_per_1000": 73.8,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 17.7,
+      "theft": 21.4,
+      "vehicle": 8.1,
+      "other": 26.6
+    }
+  },
+  "HAH": {
+    "crime_rate_per_1000": 91.9,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 22.1,
+      "theft": 26.7,
+      "vehicle": 10.1,
+      "other": 33.1
+    }
+  },
+  "NHR": {
+    "crime_rate_per_1000": 92.4,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 22.2,
+      "theft": 26.8,
+      "vehicle": 10.2,
+      "other": 33.3
+    }
+  },
+  "SRI": {
+    "crime_rate_per_1000": 80.8,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 19.4,
+      "theft": 23.4,
+      "vehicle": 8.9,
+      "other": 29.1
+    }
+  },
+  "NOR": {
+    "crime_rate_per_1000": 84.9,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 20.4,
+      "theft": 24.6,
+      "vehicle": 9.3,
+      "other": 30.6
+    }
+  },
+  "WBP": {
+    "crime_rate_per_1000": 116.0,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 20.4,
+      "theft": 24.6,
+      "vehicle": 9.3,
+      "other": 30.6
+    }
+  },
+  "STM": {
+    "crime_rate_per_1000": 79.4,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 19.1,
+      "theft": 23.0,
+      "vehicle": 8.7,
+      "other": 28.6
+    }
+  },
+  "BSH": {
+    "crime_rate_per_1000": 81.0,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 19.4,
+      "theft": 23.5,
+      "vehicle": 8.9,
+      "other": 29.2
+    }
+  },
+  "HWD": {
+    "crime_rate_per_1000": 87.1,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 20.9,
+      "theft": 25.3,
+      "vehicle": 9.6,
+      "other": 31.4
+    }
+  },
+  "HSL": {
+    "crime_rate_per_1000": 82.6,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 19.8,
+      "theft": 24.0,
+      "vehicle": 9.1,
+      "other": 29.7
+    }
+  },
+  "HEN": {
+    "crime_rate_per_1000": 83.7,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 20.1,
+      "theft": 24.3,
+      "vehicle": 9.2,
+      "other": 30.1
+    }
+  },
+  "WFJ": {
+    "crime_rate_per_1000": 79.4,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 19.1,
+      "theft": 23.0,
+      "vehicle": 8.7,
+      "other": 28.6
+    }
+  },
+  "KNG": {
+    "crime_rate_per_1000": 58.2,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 14.0,
+      "theft": 16.9,
+      "vehicle": 6.4,
+      "other": 21.0
+    }
+  },
+  "AMH": {
+    "crime_rate_per_1000": 58.4,
+    "status": "available",
+    "confidence": 0.83,
+    "breakdown": {
+      "violence": 14.0,
+      "theft": 16.9,
+      "vehicle": 6.4,
+      "other": 21.0
+    }
+  }
+}

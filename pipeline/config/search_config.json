@@ -1,0 +1,28 @@
+{
+  "methodology_version": "2026.1",
+  "generated_timezone": "Europe/London",
+  "pinner_coordinate": {
+    "lat": 51.5931,
+    "lon": -0.3818
+  },
+  "station_search_radius_km": 40,
+  "micro_area_walk_radius_m": 800,
+  "candidate_filter": {
+    "max_commute_minutes": 55,
+    "max_drive_minutes_to_pinner": 28
+  },
+  "dedupe": {
+    "station_distance_threshold_m": 500
+  },
+  "destination_station": "Oxford Circus",
+  "default_weights": {
+    "value": 25,
+    "transport": 20,
+    "schools": 20,
+    "environment": 15,
+    "crime": 12.5,
+    "proximity": 5,
+    "planningRisk": 2.5
+  },
+  "last_updated_default": "2026-03-01"
+}

@@ -1,0 +1,164 @@
+{
+  "PIN": {
+    "planning_risk_score": 46.5,
+    "status": "estimated",
+    "confidence": 0.58,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "ECT": {
+    "planning_risk_score": 47.8,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "RYN": {
+    "planning_risk_score": 50.6,
+    "status": "estimated",
+    "confidence": 0.58,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "RUI": {
+    "planning_risk_score": 43.5,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "RUM": {
+    "planning_risk_score": 41.4,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "WRU": {
+    "planning_risk_score": 40.4,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "ICK": {
+    "planning_risk_score": 38.9,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "UXB": {
+    "planning_risk_score": 39.9,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "NWH": {
+    "planning_risk_score": 47.5,
+    "status": "estimated",
+    "confidence": 0.58,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "NWD": {
+    "planning_risk_score": 46.0,
+    "status": "estimated",
+    "confidence": 0.58,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "MOP": {
+    "planning_risk_score": 43.6,
+    "status": "estimated",
+    "confidence": 0.58,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "RKM": {
+    "planning_risk_score": 42.9,
+    "status": "estimated",
+    "confidence": 0.58,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "CRX": {
+    "planning_risk_score": 40.1,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "WAM": {
+    "planning_risk_score": 37.5,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "HAH": {
+    "planning_risk_score": 56.2,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "NHR": {
+    "planning_risk_score": 50.0,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "SRI": {
+    "planning_risk_score": 41.6,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "NOR": {
+    "planning_risk_score": 51.1,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "WBP": {
+    "planning_risk_score": 64.7,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "STM": {
+    "planning_risk_score": 50.4,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "BSH": {
+    "planning_risk_score": 45.2,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "HWD": {
+    "planning_risk_score": 52.1,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "HSL": {
+    "planning_risk_score": 39.3,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "HEN": {
+    "planning_risk_score": 40.0,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "WFJ": {
+    "planning_risk_score": 52.1,
+    "status": "estimated",
+    "confidence": 0.46,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "KNG": {
+    "planning_risk_score": 37.5,
+    "status": "placeholder",
+    "confidence": 0.35,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  },
+  "AMH": {
+    "planning_risk_score": 35.8,
+    "status": "placeholder",
+    "confidence": 0.35,
+    "methodology_note": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated."
+  }
+}
