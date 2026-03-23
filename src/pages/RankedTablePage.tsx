@@ -101,42 +101,87 @@ export const RankedTablePage = () => {
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
             How key columns are determined
           </h2>
-          <dl className="mt-3 space-y-2 text-sm">
-            <div>
-              <dt className="font-medium text-slate-800">School</dt>
-              <dd className="text-slate-600">
-                Composite sub-score from nearby primary/secondary quality and school counts. Higher
-                is better.
-              </dd>
-            </div>
-            <div>
-              <dt className="font-medium text-slate-800">NO2</dt>
-              <dd className="text-slate-600">
-                Annual mean NO2 (ug/m3) for the station micro-area proxy. Lower is better.
-              </dd>
-            </div>
-            <div>
-              <dt className="font-medium text-slate-800">Crime</dt>
-              <dd className="text-slate-600">
-                Annualised crime rate per 1,000 residents proxy. Lower is better.
-              </dd>
-            </div>
-            <div>
-              <dt className="font-medium text-slate-800">Green</dt>
-              <dd className="text-slate-600">
-                Green-cover percentage in and around the micro-area. Higher is better.
-              </dd>
-            </div>
-            <div>
-              <dt className="font-medium text-slate-800">Confidence</dt>
-              <dd className="text-slate-600">
-                Combined confidence score from metric-level confidence plus overlap confidence.
-              </dd>
-            </div>
-          </dl>
+          <div className="mt-3 space-y-3 text-sm text-slate-700">
+            <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
+              <summary className="cursor-pointer font-medium text-slate-900">
+                School (0-100, higher is better)
+              </summary>
+              <p className="mt-2 text-slate-600">
+                Displayed value is the <span className="font-semibold">school component score</span>
+                .
+              </p>
+              <p className="mt-1 text-slate-600">
+                Formula: school quality score = mean(primary quality, secondary quality); school
+                count score = mean(normalized primary count, normalized secondary count); final
+                school score = quality * 0.72 + count * 0.28.
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                Inputs come from nearby-school composites; status can be available or estimated.
+              </p>
+            </details>
+
+            <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
+              <summary className="cursor-pointer font-medium text-slate-900">
+                NO2 (ug/m3, lower is better)
+              </summary>
+              <p className="mt-2 text-slate-600">
+                Annual mean NO2 for the micro-area proxy (`annualNo2` metric). This table shows raw
+                concentration, not a transformed score.
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                In expanded London coverage, many rows are estimated by distance-weighted
+                interpolation from anchor stations and are explicitly marked estimated in raw
+                metric metadata.
+              </p>
+            </details>
+
+            <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
+              <summary className="cursor-pointer font-medium text-slate-900">
+                Crime (per 1,000, lower is better)
+              </summary>
+              <p className="mt-2 text-slate-600">
+                Annualized crime-rate proxy per 1,000 residents (`crimeRatePerThousand` metric).
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                The ranking model converts this into a score with inverse scaling (lower incident
+                rate gives higher crime/safety component score). Live cross-check results are shown
+                in the dataset verification section on the Overview page.
+              </p>
+            </details>
+
+            <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
+              <summary className="cursor-pointer font-medium text-slate-900">
+                Green (% cover, higher is better)
+              </summary>
+              <p className="mt-2 text-slate-600">
+                Percentage green cover proxy (`greenCoverPct`) around the station catchment.
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                Environment scoring also uses green-space area and nearest park distance, but this
+                table column is the raw green-cover percentage for direct filtering.
+              </p>
+            </details>
+
+            <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
+              <summary className="cursor-pointer font-medium text-slate-900">
+                Confidence (%)
+              </summary>
+              <p className="mt-2 text-slate-600">
+                Confidence shown here is `dataConfidenceScore * 100`.
+              </p>
+              <p className="mt-1 text-slate-600">
+                `dataConfidenceScore` is calculated as the mean of metric-level confidences plus
+                overlap confidence (how distinct the station catchment is from nearby candidates).
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                Confidence reflects data robustness and overlap ambiguity; it is not a value
+                judgment on the area itself.
+              </p>
+            </details>
+          </div>
           <p className="mt-3 text-xs text-slate-500">
-            Current MVP dataset is fixture-backed proxy data. Use the source links below to
-            integrate and validate with live official feeds.
+            All metric values also carry status, confidence, methodology note, and last-updated
+            metadata in the micro-area detail view and dataset JSON.
           </p>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
             <a
