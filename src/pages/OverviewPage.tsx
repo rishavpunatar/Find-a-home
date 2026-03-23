@@ -59,6 +59,35 @@ export const OverviewPage = () => {
         />
       </section>
 
+      {dataset.verificationSummary ? (
+        <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Data Verification Status
+          </h2>
+          <p className="mt-2 text-sm text-slate-700">
+            Overall:{' '}
+            <span className="font-semibold">{dataset.verificationSummary.overallStatus}</span> |
+            Crime live cross-check:{' '}
+            <span className="font-semibold">
+              {dataset.verificationSummary.crimeCrossCheckStatus}
+            </span>{' '}
+            | Live mode: {dataset.verificationSummary.liveMode ? 'on' : 'off'}
+          </p>
+          <p className="mt-1 text-xs text-slate-600">
+            Verification generated {formatDate(dataset.verificationSummary.generatedAt)}. Full
+            report:
+            <a
+              href={`${import.meta.env.BASE_URL}data/processed/verification_report.json`}
+              target="_blank"
+              rel="noreferrer"
+              className="ml-1 text-surge hover:underline"
+            >
+              verification_report.json
+            </a>
+          </p>
+        </section>
+      ) : null}
+
       <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h2 className="text-lg font-semibold">Top ranked micro-areas</h2>

@@ -86,6 +86,12 @@ export interface ProcessedDataset {
   generatedAt: string
   methodologyVersion: string
   destinationStation: string
+  verificationSummary?: {
+    overallStatus: string
+    crimeCrossCheckStatus: string
+    liveMode: boolean
+    generatedAt: string
+  }
   config: {
     pinnerCoordinate: Coordinate
     stationSearchRadiusKm: number

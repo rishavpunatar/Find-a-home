@@ -45,6 +45,12 @@ python3 -m pip install -r requirements-dev.txt
 python3 -m pipeline.jobs.build_micro_areas
 ```
 
+### 2b) Generate verification report (live cross-check mode)
+
+```bash
+python3 -m pipeline.jobs.verify_data_sources --live
+```
+
 ### 3) Start the app
 
 ```bash
@@ -61,6 +67,21 @@ npm run lint
 python3 -m pytest
 npm run build
 ```
+
+## Verification report
+
+The pipeline emits:
+
+- `data/processed/verification_report.json`
+- `verificationSummary` inside `data/processed/micro_areas.json`
+
+Current verification coverage:
+
+- Crime: live cross-check against `data.police.uk` monthly incidents annualised per 1,000 (using denominator proxy)
+- Property, schools, transport, pollution, greenspace, population: explicit `not_live_verified` status
+- Planning risk: explicit `low_confidence_placeholder`
+
+This is intentional transparency so the app does not claim precision where full cross-source automation is not yet complete.
 
 ## Data pipeline
 

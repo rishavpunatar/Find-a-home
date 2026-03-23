@@ -1,0 +1,350 @@
+{
+  "generatedAt": "2026-03-23T22:37:20+00:00",
+  "methodologyVersion": "2026.1",
+  "overallStatus": "attention_required",
+  "sourceMatrix": {
+    "property": {
+      "status": "not_live_verified",
+      "primarySource": "HM Land Registry Price Paid Data",
+      "secondarySource": "ONS UK House Price Index (planned cross-check)",
+      "note": "Current MVP uses fixture-backed sample property metrics. Live adapter and secondary statistical reconciliation still required."
+    },
+    "transport": {
+      "status": "not_live_verified",
+      "primarySource": "TfL/National Rail journey-time feeds (planned)",
+      "secondarySource": "Google/other routing benchmark (planned)",
+      "note": "Current commute and frequency metrics are fixture-backed estimates."
+    },
+    "schools": {
+      "status": "not_live_verified",
+      "primarySource": "DfE GIAS data exports",
+      "secondarySource": "Ofsted reports and CSCP performance feeds",
+      "note": "Current school metrics are fixture-backed composites. Ofsted grading/report-card transition requires careful mapping."
+    },
+    "pollution": {
+      "status": "not_live_verified",
+      "primarySource": "DEFRA UK-AIR PCM modelled background grids",
+      "secondarySource": "LA AQMA station-level/open pollutant feeds (planned)",
+      "note": "Current NO2/PM2.5 values are fixture-backed proxies."
+    },
+    "greenSpace": {
+      "status": "not_live_verified",
+      "primarySource": "OS Open Greenspace",
+      "secondarySource": "Local authority park inventories (planned)",
+      "note": "Current greenspace and park-distance values are fixture-backed proxies."
+    },
+    "crime": {
+      "status": "live_cross_check_available",
+      "primarySource": "Fixture-based annualised crime-rate proxy",
+      "secondarySource": "data.police.uk street-level monthly crime incidents",
+      "note": "Live cross-check compares relative station ordering from monthly incident counts. It is not a direct like-for-like per-1,000 replacement metric."
+    },
+    "population": {
+      "status": "not_live_verified",
+      "primarySource": "Fixture-based denominator proxy",
+      "secondarySource": "ONS mid-year estimates + lookup mapping (planned)",
+      "note": "Current population denominators are fixture-based estimates."
+    },
+    "planning": {
+      "status": "low_confidence_placeholder",
+      "primarySource": "Heuristic placeholder",
+      "secondarySource": "planning.data.gov.uk + LA planning application feeds (planned)",
+      "note": "Planning risk remains explicitly low-confidence until authoritative structured planning layers are integrated and quality-assured."
+    }
+  },
+  "crossChecks": {
+    "crime": {
+      "status": "weak_alignment",
+      "method": "Spearman rank correlation between fixture annualised crime-rate proxy and data.police.uk monthly incidents annualised per 1,000 using local denominator.",
+      "latestMonth": "2026-01",
+      "stationSampleSize": 25,
+      "spearmanRankCorrelation": 0.0719,
+      "stations": [
+        {
+          "microAreaId": "ma-hah",
+          "stationCode": "HAH",
+          "stationName": "Harrow-on-the-Hill",
+          "fixtureCrimeRatePerThousand": 91.9,
+          "liveMonthlyCrimes": 620,
+          "liveAnnualisedRatePerThousand": 271.53,
+          "populationDenominator": 27400,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-nhr",
+          "stationCode": "NHR",
+          "stationName": "North Harrow",
+          "fixtureCrimeRatePerThousand": 92.4,
+          "liveMonthlyCrimes": 307,
+          "liveAnnualisedRatePerThousand": 144.02,
+          "populationDenominator": 25580,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-hwd",
+          "stationCode": "HWD",
+          "stationName": "Harrow & Wealdstone",
+          "fixtureCrimeRatePerThousand": 87.1,
+          "liveMonthlyCrimes": 713,
+          "liveAnnualisedRatePerThousand": 340.06,
+          "populationDenominator": 25160,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-nor",
+          "stationCode": "NOR",
+          "stationName": "Northolt",
+          "fixtureCrimeRatePerThousand": 84.9,
+          "liveMonthlyCrimes": 307,
+          "liveAnnualisedRatePerThousand": 149.03,
+          "populationDenominator": 24720,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-wfj",
+          "stationCode": "WFJ",
+          "stationName": "Watford Junction",
+          "fixtureCrimeRatePerThousand": 79.4,
+          "liveMonthlyCrimes": 501,
+          "liveAnnualisedRatePerThousand": 254.53,
+          "populationDenominator": 23620,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-wbp",
+          "stationCode": "WBP",
+          "stationName": "Wembley Park",
+          "fixtureCrimeRatePerThousand": 116.0,
+          "liveMonthlyCrimes": 606,
+          "liveAnnualisedRatePerThousand": 254.44,
+          "populationDenominator": 28580,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-ryn",
+          "stationCode": "RYN",
+          "stationName": "Rayners Lane",
+          "fixtureCrimeRatePerThousand": 91.5,
+          "liveMonthlyCrimes": 256,
+          "liveAnnualisedRatePerThousand": 117.97,
+          "populationDenominator": 26040,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-nwd",
+          "stationCode": "NWD",
+          "stationName": "Northwood",
+          "fixtureCrimeRatePerThousand": 88.7,
+          "liveMonthlyCrimes": 103,
+          "liveAnnualisedRatePerThousand": 52.46,
+          "populationDenominator": 23560,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-nwh",
+          "stationCode": "NWH",
+          "stationName": "Northwood Hills",
+          "fixtureCrimeRatePerThousand": 94.4,
+          "liveMonthlyCrimes": 154,
+          "liveAnnualisedRatePerThousand": 72.93,
+          "populationDenominator": 25340,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-stm",
+          "stationCode": "STM",
+          "stationName": "Stanmore",
+          "fixtureCrimeRatePerThousand": 79.4,
+          "liveMonthlyCrimes": 145,
+          "liveAnnualisedRatePerThousand": 73.67,
+          "populationDenominator": 23620,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-mop",
+          "stationCode": "MOP",
+          "stationName": "Moor Park",
+          "fixtureCrimeRatePerThousand": 84.1,
+          "liveMonthlyCrimes": 17,
+          "liveAnnualisedRatePerThousand": 9.27,
+          "populationDenominator": 22000,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-pin",
+          "stationCode": "PIN",
+          "stationName": "Pinner",
+          "fixtureCrimeRatePerThousand": 96.6,
+          "liveMonthlyCrimes": 126,
+          "liveAnnualisedRatePerThousand": 58.65,
+          "populationDenominator": 25780,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-bsh",
+          "stationCode": "BSH",
+          "stationName": "Bushey",
+          "fixtureCrimeRatePerThousand": 81.0,
+          "liveMonthlyCrimes": 301,
+          "liveAnnualisedRatePerThousand": 164.03,
+          "populationDenominator": 22020,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-ect",
+          "stationCode": "ECT",
+          "stationName": "Eastcote",
+          "fixtureCrimeRatePerThousand": 93.5,
+          "liveMonthlyCrimes": 162,
+          "liveAnnualisedRatePerThousand": 75.35,
+          "populationDenominator": 25800,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-hen",
+          "stationCode": "HEN",
+          "stationName": "Hatch End",
+          "fixtureCrimeRatePerThousand": 83.7,
+          "liveMonthlyCrimes": 95,
+          "liveAnnualisedRatePerThousand": 55.23,
+          "populationDenominator": 20640,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-hsl",
+          "stationCode": "HSL",
+          "stationName": "Headstone Lane",
+          "fixtureCrimeRatePerThousand": 82.6,
+          "liveMonthlyCrimes": 267,
+          "liveAnnualisedRatePerThousand": 156.9,
+          "populationDenominator": 20420,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-rkm",
+          "stationCode": "RKM",
+          "stationName": "Rickmansworth",
+          "fixtureCrimeRatePerThousand": 78.6,
+          "liveMonthlyCrimes": 87,
+          "liveAnnualisedRatePerThousand": 49.95,
+          "populationDenominator": 20900,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-rui",
+          "stationCode": "RUI",
+          "stationName": "Ruislip",
+          "fixtureCrimeRatePerThousand": 85.4,
+          "liveMonthlyCrimes": 181,
+          "liveAnnualisedRatePerThousand": 94.85,
+          "populationDenominator": 22900,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-crx",
+          "stationCode": "CRX",
+          "stationName": "Croxley",
+          "fixtureCrimeRatePerThousand": 76.2,
+          "liveMonthlyCrimes": 98,
+          "liveAnnualisedRatePerThousand": 59.45,
+          "populationDenominator": 19780,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-wru",
+          "stationCode": "WRU",
+          "stationName": "West Ruislip",
+          "fixtureCrimeRatePerThousand": 79.5,
+          "liveMonthlyCrimes": 101,
+          "liveAnnualisedRatePerThousand": 59.3,
+          "populationDenominator": 20440,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-rum",
+          "stationCode": "RUM",
+          "stationName": "Ruislip Manor",
+          "fixtureCrimeRatePerThousand": 83.0,
+          "liveMonthlyCrimes": 201,
+          "liveAnnualisedRatePerThousand": 110.74,
+          "populationDenominator": 21780,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-sri",
+          "stationCode": "SRI",
+          "stationName": "South Ruislip",
+          "fixtureCrimeRatePerThousand": 80.8,
+          "liveMonthlyCrimes": 188,
+          "liveAnnualisedRatePerThousand": 105.72,
+          "populationDenominator": 21340,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-ick",
+          "stationCode": "ICK",
+          "stationName": "Ickenham",
+          "fixtureCrimeRatePerThousand": 78.4,
+          "liveMonthlyCrimes": 63,
+          "liveAnnualisedRatePerThousand": 37.39,
+          "populationDenominator": 20220,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-wam",
+          "stationCode": "WAM",
+          "stationName": "Watford (Met)",
+          "fixtureCrimeRatePerThousand": 73.8,
+          "liveMonthlyCrimes": 362,
+          "liveAnnualisedRatePerThousand": 232.8,
+          "populationDenominator": 18660,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-uxb",
+          "stationCode": "UXB",
+          "stationName": "Uxbridge",
+          "fixtureCrimeRatePerThousand": 75.3,
+          "liveMonthlyCrimes": 372,
+          "liveAnnualisedRatePerThousand": 220.55,
+          "populationDenominator": 20240,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        }
+      ],
+      "notes": [
+        "Weak alignment; fixture crime proxy should be recalibrated.",
+        "Live check annualises one month of incidents and is still a partial signal, not a full-year replacement."
+      ]
+    }
+  },
+  "limitations": [
+    "Property, schools, pollution, greenspace, transport, and population are not yet live cross-verified in this MVP.",
+    "Planning risk is intentionally low-confidence placeholder data until structured feeds are integrated.",
+    "This report improves transparency but is not equivalent to a full production data-audit pipeline."
+  ]
+}

@@ -13,7 +13,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "sync:data": "node scripts/syncData.mjs",
-    "pipeline:build": "python3 -m pipeline.jobs.build_micro_areas"
+    "pipeline:build": "python3 -m pipeline.jobs.build_micro_areas",
+    "pipeline:verify": "python3 -m pipeline.jobs.verify_data_sources",
+    "pipeline:verify:live": "python3 -m pipeline.jobs.verify_data_sources --live"
   },
   "dependencies": {
     "clsx": "^2.1.1",

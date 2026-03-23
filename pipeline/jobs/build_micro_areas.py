@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
@@ -15,6 +16,7 @@ from pipeline.adapters.population_adapter import FixturePopulationAdapter
 from pipeline.adapters.property_adapter import FixturePropertyAdapter
 from pipeline.adapters.school_adapter import FixtureSchoolAdapter
 from pipeline.adapters.station_transport_adapter import FixtureStationTransportAdapter
+from pipeline.jobs.verify_data_sources import generate_verification_report, write_report
 from pipeline.models.entities import Coordinate, NumericMetric, SearchConfig, StationRecord
 from pipeline.models.scoring import clamp, forward_score, inverse_score, mean, weighted_score
 
@@ -571,7 +573,16 @@ def write_outputs(dataset: dict[str, Any]) -> None:
 def main() -> None:
     config = load_config(CONFIG_PATH)
     dataset = compile_micro_areas(config)
+    live_verification = os.getenv('RUN_SOURCE_VERIFICATION', '0') == '1'
+    verification_report = generate_verification_report(dataset, live_mode=live_verification)
+    dataset['verificationSummary'] = {
+        'overallStatus': verification_report['overallStatus'],
+        'crimeCrossCheckStatus': verification_report['crossChecks']['crime']['status'],
+        'liveMode': live_verification,
+        'generatedAt': verification_report['generatedAt'],
+    }
     write_outputs(dataset)
+    write_report(verification_report, PROCESSED_DIR / 'verification_report.json')
     print(f"Generated {len(dataset['microAreas'])} micro-areas -> {PROCESSED_DIR / 'micro_areas.json'}")
 
 

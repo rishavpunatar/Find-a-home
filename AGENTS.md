@@ -18,6 +18,8 @@ Build and maintain a static-first web app that ranks UK station-centred micro-ar
 ## Pipeline commands
 
 - Rebuild processed dataset: `python3 -m pipeline.jobs.build_micro_areas`
+- Generate verification report: `python3 -m pipeline.jobs.verify_data_sources`
+- Generate live verification report: `python3 -m pipeline.jobs.verify_data_sources --live`
 - Run pipeline tests: `python3 -m pytest`
 
 ## Data flow
