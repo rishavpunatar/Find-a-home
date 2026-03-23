@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { RankedTable } from '@/components/table/RankedTable'
@@ -20,10 +22,22 @@ const LONDON_WIDE_COMMUTE_CAP_MINUTES = 60
 
 export const LondonWideRankedPage = () => {
   const { loading, error } = useDataContext()
-  const { pinnedIds, compareIds, togglePin, toggleCompare } = useSettings()
+  const { pinnedIds, compareIds, togglePin, toggleCompare, filters } = useSettings()
+  const londonWideFilters = useMemo(
+    () => ({
+      ...filters,
+      minSchoolScore: 0,
+      maxCrimeRatePerThousand: 10_000,
+      maxNo2: 1_000,
+      minGreenCoverPct: 0,
+      maxMedianPrice: 10_000_000,
+    }),
+    [filters],
+  )
   const { filtered, pinned, effectiveFilters } = useRankedData({
     maxCommuteMinutesCap: LONDON_WIDE_COMMUTE_CAP_MINUTES,
     ignoreMaxDriveMinutes: true,
+    overrideFilters: londonWideFilters,
   })
 
   if (loading) {
@@ -41,14 +55,13 @@ export const LondonWideRankedPage = () => {
           London-wide commute mode
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          This view enforces <span className="font-semibold">commute up to 60 minutes</span> and
-          intentionally ignores the drive-to-Pinner filter. All other active filters still apply.
+          This view enforces a <span className="font-semibold">commute cap up to 60 minutes</span>{' '}
+          and intentionally ignores the drive-to-Pinner filter.
         </p>
         <p className="mt-1 text-xs text-slate-600">
-          Effective filters: commute ≤ {effectiveFilters.maxCommuteMinutes} min, schools ≥{' '}
-          {effectiveFilters.minSchoolScore}, crime ≤ {effectiveFilters.maxCrimeRatePerThousand},
-          NO2 ≤ {effectiveFilters.maxNo2}, green ≥ {effectiveFilters.minGreenCoverPct}%, median
-          semi price ≤ £{effectiveFilters.maxMedianPrice.toLocaleString('en-GB')}.
+          Effective filters in this tab: commute ≤ {effectiveFilters.maxCommuteMinutes} min only.
+          School, crime, NO2, green, and price constraints are intentionally not limiting results
+          here. Use the Max commute slider (up to 60 min) to tighten or loosen this list.
         </p>
       </section>
 

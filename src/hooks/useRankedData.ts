@@ -18,6 +18,7 @@ interface RankedDataResult {
 interface RankedDataOptions {
   maxCommuteMinutesCap?: number
   ignoreMaxDriveMinutes?: boolean
+  overrideFilters?: Filters
 }
 
 export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult => {
@@ -25,12 +26,13 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
   const { normalizedWeights, filters, pinnedIds, compareIds } = useSettings()
 
   return useMemo(() => {
+    const sourceFilters = options.overrideFilters ?? filters
     const effectiveFilters: Filters = {
-      ...filters,
+      ...sourceFilters,
       maxCommuteMinutes:
         options.maxCommuteMinutesCap === undefined
-          ? filters.maxCommuteMinutes
-          : Math.min(filters.maxCommuteMinutes, options.maxCommuteMinutesCap),
+          ? sourceFilters.maxCommuteMinutes
+          : Math.min(sourceFilters.maxCommuteMinutes, options.maxCommuteMinutesCap),
     }
 
     if (!dataset) {
@@ -74,6 +76,7 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
     normalizedWeights,
     options.ignoreMaxDriveMinutes,
     options.maxCommuteMinutesCap,
+    options.overrideFilters,
     pinnedIds,
   ])
 }

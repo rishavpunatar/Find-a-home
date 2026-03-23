@@ -1,56 +1,56 @@
 {
-  "generatedAt": "2026-03-23T22:54:16+00:00",
-  "count": 27,
+  "generatedAt": "2026-03-23T23:29:29+00:00",
+  "count": 528,
   "topMicroAreas": [
     {
-      "microAreaId": "ma-hah",
-      "stationName": "Harrow-on-the-Hill",
-      "score": 62.65
+      "microAreaId": "ma-maidacff",
+      "stationName": "Maida Vale",
+      "score": 61.15
     },
     {
-      "microAreaId": "ma-nhr",
-      "stationName": "North Harrow",
-      "score": 61.29
+      "microAreaId": "ma-westb148",
+      "stationName": "Westbourne Park",
+      "score": 61.13
     },
     {
-      "microAreaId": "ma-hwd",
-      "stationName": "Harrow & Wealdstone",
-      "score": 61.26
+      "microAreaId": "ma-stjoh83d",
+      "stationName": "St. John's Wood",
+      "score": 61.11
     },
     {
-      "microAreaId": "ma-nor",
-      "stationName": "Northolt",
-      "score": 60.95
+      "microAreaId": "ma-highs7b8",
+      "stationName": "High Street Kensington",
+      "score": 61.1
     },
     {
-      "microAreaId": "ma-wfj",
-      "stationName": "Watford Junction",
-      "score": 60.75
+      "microAreaId": "ma-notti2f8",
+      "stationName": "Notting Hill Gate",
+      "score": 61.09
     },
     {
-      "microAreaId": "ma-wbp",
-      "stationName": "Wembley Park",
-      "score": 60.26
+      "microAreaId": "ma-queen181",
+      "stationName": "Queen's Park",
+      "score": 61.07
     },
     {
-      "microAreaId": "ma-ryn",
-      "stationName": "Rayners Lane",
-      "score": 60.22
+      "microAreaId": "ma-ladbr467",
+      "stationName": "Ladbroke Grove",
+      "score": 61.04
     },
     {
-      "microAreaId": "ma-nwd",
-      "stationName": "Northwood",
-      "score": 60.12
+      "microAreaId": "ma-holla0ac",
+      "stationName": "Holland Park",
+      "score": 61.03
     },
     {
-      "microAreaId": "ma-nwh",
-      "stationName": "Northwood Hills",
-      "score": 60.1
+      "microAreaId": "ma-knighbd3",
+      "stationName": "Knightsbridge",
+      "score": 61.03
     },
     {
-      "microAreaId": "ma-stm",
-      "stationName": "Stanmore",
-      "score": 59.31
+      "microAreaId": "ma-glouc99a",
+      "stationName": "Gloucester Road",
+      "score": 61.0
     }
   ]
 }

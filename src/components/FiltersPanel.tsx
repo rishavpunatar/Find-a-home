@@ -71,8 +71,8 @@ export const FiltersPanel = () => {
       </div>
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
-          London ≤60m mode is active: commute is capped at 60 minutes and drive-to-Pinner is not
-          applied in this tab.
+          London {'<=60m'} mode is active: only commute is applied here. Drive-to-Pinner, school,
+          crime, NO2, green-cover, and price filters are ignored in this tab.
         </p>
       ) : null}
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
@@ -103,6 +103,7 @@ export const FiltersPanel = () => {
           step={1}
           unit=""
           onChange={(next) => updateFilter('minSchoolScore', next)}
+          disabled={isLondonWideTab}
         />
         <RangeControl
           label="Max crime / 1,000"
@@ -112,6 +113,7 @@ export const FiltersPanel = () => {
           step={1}
           unit=""
           onChange={(next) => updateFilter('maxCrimeRatePerThousand', next)}
+          disabled={isLondonWideTab}
         />
         <RangeControl
           label="Max NO2"
@@ -121,6 +123,7 @@ export const FiltersPanel = () => {
           step={0.5}
           unit=" ug/m3"
           onChange={(next) => updateFilter('maxNo2', next)}
+          disabled={isLondonWideTab}
         />
         <RangeControl
           label="Min green cover"
@@ -130,6 +133,7 @@ export const FiltersPanel = () => {
           step={1}
           unit="%"
           onChange={(next) => updateFilter('minGreenCoverPct', next)}
+          disabled={isLondonWideTab}
         />
         <RangeControl
           label="Max median semi price"
@@ -139,6 +143,7 @@ export const FiltersPanel = () => {
           step={10000}
           unit=" GBP"
           onChange={(next) => updateFilter('maxMedianPrice', next)}
+          disabled={isLondonWideTab}
         />
       </div>
     </section>

@@ -10,6 +10,7 @@ Static-first web app and pipeline that precomputes and ranks UK station-centred 
 - Computes value, transport, schools, environment, crime, proximity, and planning-risk component scores.
 - Produces an overall weighted ranking with confidence and data-status metadata.
 - Lets you adjust weights and filters in the UI and inspect results in table, map, and chart views.
+- Includes a London-wide tab that prioritizes breadth (commute-only filter, capped at 60 minutes).
 
 ## Stack
 
@@ -45,6 +46,14 @@ python3 -m pip install -r requirements-dev.txt
 ```bash
 python3 -m pipeline.jobs.build_micro_areas
 ```
+
+### 2a) (Optional) Regenerate expanded station fixture
+
+```bash
+python3 -m pipeline.jobs.generate_station_fixture
+```
+
+This refreshes `data/raw/stations_transport.json` from live station geodata around Pinner and preserves seed records.
 
 ### 2b) Generate verification report (live cross-check mode)
 
@@ -100,6 +109,7 @@ python3 -m pipeline.jobs.build_micro_areas
    - drive to Pinner <= configured max
 3. Deduplicate highly overlapping station micro-areas.
 4. Build per-micro-area metrics via adapters.
+   - If a station has no direct fixture record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchored stations.
 5. Compute component scores and weighted overall rank.
 6. Persist `data/processed/micro_areas.json` and `data/processed/summary.json`.
 
@@ -110,7 +120,7 @@ Configuration lives in:
 UI note:
 
 - `/ranked` keeps the standard Pinner-focused filtering model.
-- `/ranked-london` applies a London-wide profile: commute capped at 60 minutes and no drive-to-Pinner filter.
+- `/ranked-london` applies a London-wide profile: commute only (slider capped at 60 minutes), no drive-to-Pinner filter, and no school/crime/pollution/green/price filtering.
 
 ## Adapter architecture
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 from dataclasses import asdict
 from datetime import datetime
@@ -110,6 +111,124 @@ def metric_from_record(
         str(record.get('methodology_note', note)),
         last_updated,
     )
+
+
+def nearest_anchor_samples(
+    target: StationRecord,
+    stations_by_code: dict[str, StationRecord],
+    anchor_records: dict[str, dict[str, Any]],
+    *,
+    limit: int = 8,
+) -> list[tuple[float, dict[str, Any]]]:
+    samples: list[tuple[float, dict[str, Any]]] = []
+
+    for station_code, record in anchor_records.items():
+        anchor_station = stations_by_code.get(station_code)
+        if not anchor_station:
+            continue
+
+        distance_m = haversine_distance_m(target.coordinate, anchor_station.coordinate)
+        samples.append((distance_m, record))
+
+    samples.sort(key=lambda item: item[0])
+    return samples[:limit]
+
+
+def idw_interpolate_value(
+    samples: list[tuple[float, dict[str, Any]]],
+    key: str,
+    *,
+    power: float = 1.8,
+    min_distance_m: float = 120.0,
+) -> float | None:
+    weighted_sum = 0.0
+    weight_total = 0.0
+
+    for distance_m, record in samples:
+        value = record.get(key)
+        if value is None:
+            continue
+
+        safe_distance = max(distance_m, min_distance_m)
+        weight = 1.0 / (safe_distance**power)
+        weighted_sum += float(value) * weight
+        weight_total += weight
+
+    if weight_total == 0:
+        return None
+
+    return weighted_sum / weight_total
+
+
+def interpolated_confidence(samples: list[tuple[float, dict[str, Any]]]) -> float:
+    if not samples:
+        return 0.25
+
+    nearest_distance_km = samples[0][0] / 1000.0
+    distance_factor = math.exp(-nearest_distance_km / 18.0)
+    anchor_confidence = mean([float(record.get('confidence', 0.6)) for _, record in samples])
+
+    return round(clamp(0.28 + 0.42 * distance_factor + 0.2 * (anchor_confidence - 0.5), 0.2, 0.75), 3)
+
+
+def synthesize_record_from_anchors(
+    target: StationRecord,
+    stations_by_code: dict[str, StationRecord],
+    anchor_records: dict[str, dict[str, Any]],
+    value_keys: list[str],
+    methodology_note: str,
+) -> dict[str, Any] | None:
+    samples = nearest_anchor_samples(target, stations_by_code, anchor_records)
+    if not samples:
+        return None
+
+    synthesized: dict[str, Any] = {}
+    for key in value_keys:
+        value = idw_interpolate_value(samples, key)
+        if value is None:
+            return None
+        synthesized[key] = round(float(value), 3)
+
+    synthesized['status'] = 'estimated'
+    synthesized['confidence'] = interpolated_confidence(samples)
+    synthesized['methodology_note'] = methodology_note
+    return synthesized
+
+
+def synthesize_crime_breakdown(
+    crime_rate: float,
+    target: StationRecord,
+    stations_by_code: dict[str, StationRecord],
+    crime_records: dict[str, dict[str, Any]],
+) -> dict[str, float]:
+    samples = nearest_anchor_samples(target, stations_by_code, crime_records, limit=10)
+    if not samples:
+        return {}
+
+    categories = ['violence', 'theft', 'vehicle', 'other']
+    weighted_props = {category: 0.0 for category in categories}
+    weight_total = 0.0
+
+    for distance_m, record in samples:
+        breakdown = record.get('breakdown')
+        if not isinstance(breakdown, dict):
+            continue
+
+        total = sum(float(breakdown.get(category, 0.0)) for category in categories)
+        if total <= 0:
+            continue
+
+        weight = 1.0 / (max(distance_m, 120.0) ** 1.6)
+        weight_total += weight
+
+        for category in categories:
+            weighted_props[category] += (float(breakdown.get(category, 0.0)) / total) * weight
+
+    if weight_total == 0:
+        return {}
+
+    proportions = {category: weighted_props[category] / weight_total for category in categories}
+    return {category: round(max(0.0, crime_rate * proportion), 1) for category, proportion in proportions.items()}
 
 
 def candidate_filter(stations: list[StationRecord], config: SearchConfig) -> list[StationRecord]:
@@ -271,20 +390,97 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     population_adapter = FixturePopulationAdapter(RAW_DIR / 'population_metrics.json')
     planning_adapter = FixturePlanningAdapter(RAW_DIR / 'planning_metrics.json')
 
+    property_anchor_records = json.loads((RAW_DIR / 'property_metrics.json').read_text(encoding='utf-8'))
+    school_anchor_records = json.loads((RAW_DIR / 'schools_metrics.json').read_text(encoding='utf-8'))
+    pollution_anchor_records = json.loads((RAW_DIR / 'pollution_metrics.json').read_text(encoding='utf-8'))
+    green_anchor_records = json.loads((RAW_DIR / 'green_space_metrics.json').read_text(encoding='utf-8'))
+    crime_anchor_records = json.loads((RAW_DIR / 'crime_metrics.json').read_text(encoding='utf-8'))
+    population_anchor_records = json.loads((RAW_DIR / 'population_metrics.json').read_text(encoding='utf-8'))
+    planning_anchor_records = json.loads((RAW_DIR / 'planning_metrics.json').read_text(encoding='utf-8'))
+
     all_stations = station_adapter.fetch_stations()
+    stations_by_code = {station.station_code: station for station in all_stations}
     scoped_stations = candidate_filter(all_stations, config)
     deduped_stations = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
 
     micro_areas: list[dict[str, Any]] = []
 
     for station in deduped_stations:
-        property_record = property_adapter.get_by_station(station.station_code)
-        school_record = school_adapter.get_by_station(station.station_code)
-        pollution_record = pollution_adapter.get_by_station(station.station_code)
-        green_record = green_adapter.get_by_station(station.station_code)
-        crime_record = crime_adapter.get_by_station(station.station_code)
-        population_record = population_adapter.get_by_station(station.station_code)
+        property_record = property_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
+            station,
+            stations_by_code,
+            property_anchor_records,
+            [
+                'average_semi_price',
+                'median_semi_price',
+                'price_trend_pct_5y',
+                'affordability_score',
+                'value_for_money_score',
+            ],
+            'Estimated by inverse-distance interpolation from nearby fixture-backed station property metrics.',
+        )
+        school_record = school_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
+            station,
+            stations_by_code,
+            school_anchor_records,
+            [
+                'nearby_primary_count',
+                'nearby_secondary_count',
+                'primary_quality_score',
+                'secondary_quality_score',
+            ],
+            'Estimated by inverse-distance interpolation from nearby station school composites. No single inspection label is used.',
+        )
+        pollution_record = pollution_adapter.get_by_station(
+            station.station_code,
+        ) or synthesize_record_from_anchors(
+            station,
+            stations_by_code,
+            pollution_anchor_records,
+            ['annual_no2', 'annual_pm25'],
+            'Estimated by inverse-distance interpolation from nearby station pollution proxies.',
+        )
+        green_record = green_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
+            station,
+            stations_by_code,
+            green_anchor_records,
+            ['green_space_area_km2_within_1km', 'green_cover_pct', 'nearest_park_distance_m'],
+            'Estimated by inverse-distance interpolation from nearby station greenspace proxies.',
+        )
+        crime_record = crime_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
+            station,
+            stations_by_code,
+            crime_anchor_records,
+            ['crime_rate_per_1000'],
+            'Estimated by inverse-distance interpolation from nearby station crime-rate proxies.',
+        )
+        if crime_record and 'breakdown' not in crime_record:
+            rate = float(crime_record.get('crime_rate_per_1000', 0.0))
+            crime_record['breakdown'] = synthesize_crime_breakdown(
+                rate,
+                station,
+                stations_by_code,
+                crime_anchor_records,
+            )
+
+        population_record = population_adapter.get_by_station(
+            station.station_code,
+        ) or synthesize_record_from_anchors(
+            station,
+            stations_by_code,
+            population_anchor_records,
+            ['population_in_reference_zone'],
+            'Estimated by inverse-distance interpolation from nearby station denominator proxies.',
+        )
         planning_record = planning_adapter.get_by_station(station.station_code)
+        if not planning_record or planning_record.get('planning_risk_score') is None:
+            planning_record = synthesize_record_from_anchors(
+                station,
+                stations_by_code,
+                planning_anchor_records,
+                ['planning_risk_score'],
+                'Heuristic planning/development risk estimated by interpolation from nearby placeholder station scores.',
+            ) or planning_record
 
         components = score_components(
             station,
