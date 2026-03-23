@@ -25,6 +25,7 @@ Static-first web app and pipeline that precomputes and ranks UK station-centred 
 
 - Overview dashboard
 - Ranked table (sortable, filterable, pin/compare, CSV export)
+- London `<=60m` ranked tab (commute capped at 60 minutes, drive-to-Pinner filter disabled)
 - Map view (colour by selected metric, detail side panel)
 - Comparison view (up to 5 micro-areas)
 - Micro-area detail page (raw metrics, statuses, confidence, explanations)
@@ -105,6 +106,11 @@ python3 -m pipeline.jobs.build_micro_areas
 Configuration lives in:
 
 - `pipeline/config/search_config.json`
+
+UI note:
+
+- `/ranked` keeps the standard Pinner-focused filtering model.
+- `/ranked-london` applies a London-wide profile: commute capped at 60 minutes and no drive-to-Pinner filter.
 
 ## Adapter architecture
 

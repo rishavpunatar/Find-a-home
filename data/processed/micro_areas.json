@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-23T22:37:20+00:00",
+  "generatedAt": "2026-03-23T22:54:16+00:00",
   "methodologyVersion": "2026.1",
   "destinationStation": "Oxford Circus",
   "config": {
@@ -9,8 +9,8 @@
     },
     "stationSearchRadiusKm": 40,
     "microAreaWalkRadiusM": 800,
-    "maxCommuteMinutesForCandidate": 55,
-    "maxDriveMinutesForCandidate": 28
+    "maxCommuteMinutesForCandidate": 60,
+    "maxDriveMinutesForCandidate": 60
   },
   "microAreas": [
     {
@@ -18,7 +18,10 @@
       "stationCode": "HAH",
       "stationName": "Harrow-on-the-Hill",
       "operator": "London Underground / Chiltern Railways",
-      "lines": ["Metropolitan", "Chiltern Main Line"],
+      "lines": [
+        "Metropolitan",
+        "Chiltern Main Line"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -255,7 +258,9 @@
       "stationCode": "NHR",
       "stationName": "North Harrow",
       "operator": "London Underground",
-      "lines": ["Metropolitan"],
+      "lines": [
+        "Metropolitan"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -492,7 +497,10 @@
       "stationCode": "HWD",
       "stationName": "Harrow & Wealdstone",
       "operator": "London Overground / London Northwestern",
-      "lines": ["West Coast Main Line", "London Overground"],
+      "lines": [
+        "West Coast Main Line",
+        "London Overground"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -729,7 +737,9 @@
       "stationCode": "NOR",
       "stationName": "Northolt",
       "operator": "London Underground",
-      "lines": ["Central"],
+      "lines": [
+        "Central"
+      ],
       "localAuthority": "Ealing",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -966,7 +976,10 @@
       "stationCode": "WFJ",
       "stationName": "Watford Junction",
       "operator": "West Midlands Trains / London Overground",
-      "lines": ["West Coast Main Line", "Watford DC Line"],
+      "lines": [
+        "West Coast Main Line",
+        "Watford DC Line"
+      ],
       "localAuthority": "Watford",
       "countyOrBorough": "Hertfordshire",
       "centroid": {
@@ -1203,7 +1216,10 @@
       "stationCode": "WBP",
       "stationName": "Wembley Park",
       "operator": "London Underground",
-      "lines": ["Metropolitan", "Jubilee"],
+      "lines": [
+        "Metropolitan",
+        "Jubilee"
+      ],
       "localAuthority": "Brent",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -1440,7 +1456,10 @@
       "stationCode": "RYN",
       "stationName": "Rayners Lane",
       "operator": "London Underground",
-      "lines": ["Metropolitan", "Piccadilly"],
+      "lines": [
+        "Metropolitan",
+        "Piccadilly"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -1676,7 +1695,9 @@
       "stationCode": "NWD",
       "stationName": "Northwood",
       "operator": "London Underground",
-      "lines": ["Metropolitan"],
+      "lines": [
+        "Metropolitan"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -1912,7 +1933,9 @@
       "stationCode": "NWH",
       "stationName": "Northwood Hills",
       "operator": "London Underground",
-      "lines": ["Metropolitan"],
+      "lines": [
+        "Metropolitan"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -2148,7 +2171,9 @@
       "stationCode": "STM",
       "stationName": "Stanmore",
       "operator": "London Underground",
-      "lines": ["Jubilee"],
+      "lines": [
+        "Jubilee"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -2385,7 +2410,9 @@
       "stationCode": "MOP",
       "stationName": "Moor Park",
       "operator": "London Underground",
-      "lines": ["Metropolitan"],
+      "lines": [
+        "Metropolitan"
+      ],
       "localAuthority": "Three Rivers",
       "countyOrBorough": "Hertfordshire",
       "centroid": {
@@ -2621,7 +2648,9 @@
       "stationCode": "PIN",
       "stationName": "Pinner",
       "operator": "London Underground",
-      "lines": ["Metropolitan"],
+      "lines": [
+        "Metropolitan"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -2857,7 +2886,9 @@
       "stationCode": "BSH",
       "stationName": "Bushey",
       "operator": "London Overground / West Midlands Trains",
-      "lines": ["West Coast Main Line"],
+      "lines": [
+        "West Coast Main Line"
+      ],
       "localAuthority": "Hertsmere",
       "countyOrBorough": "Hertfordshire",
       "centroid": {
@@ -3094,7 +3125,10 @@
       "stationCode": "ECT",
       "stationName": "Eastcote",
       "operator": "London Underground",
-      "lines": ["Metropolitan", "Piccadilly"],
+      "lines": [
+        "Metropolitan",
+        "Piccadilly"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -3331,7 +3365,9 @@
       "stationCode": "HEN",
       "stationName": "Hatch End",
       "operator": "London Overground",
-      "lines": ["Watford DC Line"],
+      "lines": [
+        "Watford DC Line"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -3568,7 +3604,9 @@
       "stationCode": "HSL",
       "stationName": "Headstone Lane",
       "operator": "London Overground",
-      "lines": ["Watford DC Line"],
+      "lines": [
+        "Watford DC Line"
+      ],
       "localAuthority": "Harrow",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -3805,7 +3843,10 @@
       "stationCode": "RKM",
       "stationName": "Rickmansworth",
       "operator": "London Underground / Chiltern Railways",
-      "lines": ["Metropolitan", "Chiltern Main Line"],
+      "lines": [
+        "Metropolitan",
+        "Chiltern Main Line"
+      ],
       "localAuthority": "Three Rivers",
       "countyOrBorough": "Hertfordshire",
       "centroid": {
@@ -4041,7 +4082,10 @@
       "stationCode": "RUI",
       "stationName": "Ruislip",
       "operator": "London Underground",
-      "lines": ["Metropolitan", "Piccadilly"],
+      "lines": [
+        "Metropolitan",
+        "Piccadilly"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -4274,11 +4318,252 @@
       }
     },
     {
+      "microAreaId": "ma-kng",
+      "stationCode": "KNG",
+      "stationName": "Kings Langley",
+      "operator": "West Midlands Trains",
+      "lines": [
+        "West Coast Main Line"
+      ],
+      "localAuthority": "Dacorum",
+      "countyOrBorough": "Hertfordshire",
+      "centroid": {
+        "lat": 51.7141,
+        "lon": -0.4395
+      },
+      "catchment": {
+        "type": "circle",
+        "radiusMeters": 800
+      },
+      "overlapConfidence": 1.0,
+      "dataConfidenceScore": 0.775,
+      "confidenceNotes": [
+        "Scores are catchment-level proxies and should be validated with on-the-ground checks.",
+        "School scoring uses composite indicators and does not rely on a single inspection field.",
+        "Planning/development risk is explicitly low-confidence until structured feeds are integrated."
+      ],
+      "flags": [
+        "Planning risk uses a low-confidence heuristic placeholder.",
+        "commuteOffPeakMinutes status is estimated.",
+        "commutePeakMinutes status is estimated.",
+        "commuteTypicalMinutes status is estimated.",
+        "driveTimeToPinnerMinutes status is estimated.",
+        "interchangeCount status is estimated.",
+        "planningRiskHeuristic status is placeholder.",
+        "serviceFrequencyPeakTph status is estimated."
+      ],
+      "walkCatchmentAssumption": "800m walk radius around station centroid",
+      "commuteDestination": "Oxford Circus",
+      "schoolMethodologyNotes": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+      "planningRiskMethodology": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated.",
+      "crimeCategoryBreakdown": {
+        "violence": 14.0,
+        "theft": 16.9,
+        "vehicle": 6.4,
+        "other": 21.0
+      },
+      "populationDenominator": 14900,
+      "componentScores": {
+        "value": 65.5,
+        "transport": 46.2,
+        "schools": 52.3,
+        "environment": 83.9,
+        "crime": 68.4,
+        "proximity": 0.0,
+        "planningRisk": 65.4
+      },
+      "overallWeightedScore": 56.2,
+      "rankingExplanationRules": [
+        "Strong air quality and green space score (83.9) improves rank.",
+        "Strong safety score (68.4) supports rank stability.",
+        "Lower transport score (46.2) drags the overall rank.",
+        "Lower proximity to Pinner score (0.0) limits upside."
+      ],
+      "averageSemiDetachedPrice": {
+        "value": 643000.0,
+        "unit": "GBP",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Derived from semi-detached transactions around station catchment.",
+        "lastUpdated": "2026-03-01"
+      },
+      "medianSemiDetachedPrice": {
+        "value": 607000.0,
+        "unit": "GBP",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Median semi-detached sold price from fixture-backed transaction sample.",
+        "lastUpdated": "2026-03-01"
+      },
+      "semiPriceTrendPct5y": {
+        "value": 12.9,
+        "unit": "%",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Approximate 5-year trend in sold price levels.",
+        "lastUpdated": "2026-03-01"
+      },
+      "affordabilityScore": {
+        "value": 64.7,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Affordability proxy from local median prices and commuting context.",
+        "lastUpdated": "2026-03-01"
+      },
+      "valueForMoneyScore": {
+        "value": 66.3,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Composite balancing median semi prices against commute and schools.",
+        "lastUpdated": "2026-03-01"
+      },
+      "commuteTypicalMinutes": {
+        "value": 38.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.8,
+        "methodologyNote": "Typical journey time to configured central destination from timetable profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "commutePeakMinutes": {
+        "value": 46.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.8,
+        "methodologyNote": "Peak journey time approximation from station profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "commuteOffPeakMinutes": {
+        "value": 35.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.8,
+        "methodologyNote": "Off-peak journey time approximation from station profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "serviceFrequencyPeakTph": {
+        "value": 5.0,
+        "unit": "tph",
+        "status": "estimated",
+        "confidence": 0.75,
+        "methodologyNote": "Peak frequency estimate from fixture timetable profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "interchangeCount": {
+        "value": 1.0,
+        "unit": "count",
+        "status": "estimated",
+        "confidence": 0.72,
+        "methodologyNote": "Interchange count to central destination from route pattern heuristics.",
+        "lastUpdated": "2026-03-01"
+      },
+      "driveTimeToPinnerMinutes": {
+        "value": 33.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.75,
+        "methodologyNote": "Drive-time estimate from station centroid to Pinner reference point.",
+        "lastUpdated": "2026-03-01"
+      },
+      "nearbyPrimaryCount": {
+        "value": 8.0,
+        "unit": "count",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "nearbySecondaryCount": {
+        "value": 2.0,
+        "unit": "count",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "primaryQualityScore": {
+        "value": 62.1,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "secondaryQualityScore": {
+        "value": 61.6,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "annualNo2": {
+        "value": 18.3,
+        "unit": "ug/m3",
+        "status": "available",
+        "confidence": 0.82,
+        "methodologyNote": "Annual NO2 mean from area-level pollution proxy grid.",
+        "lastUpdated": "2026-03-01"
+      },
+      "annualPm25": {
+        "value": 9.5,
+        "unit": "ug/m3",
+        "status": "available",
+        "confidence": 0.82,
+        "methodologyNote": "Annual PM2.5 mean from area-level pollution proxy grid.",
+        "lastUpdated": "2026-03-01"
+      },
+      "greenSpaceAreaKm2Within1km": {
+        "value": 3.1,
+        "unit": "km2",
+        "status": "available",
+        "confidence": 0.76,
+        "methodologyNote": "Estimated publicly accessible green space within 1km.",
+        "lastUpdated": "2026-03-01"
+      },
+      "greenCoverPct": {
+        "value": 58.8,
+        "unit": "%",
+        "status": "available",
+        "confidence": 0.76,
+        "methodologyNote": "Estimated green cover fraction from land-cover proxy.",
+        "lastUpdated": "2026-03-01"
+      },
+      "nearestParkDistanceM": {
+        "value": 298.0,
+        "unit": "m",
+        "status": "available",
+        "confidence": 0.76,
+        "methodologyNote": "Distance to nearest substantial park entry point.",
+        "lastUpdated": "2026-03-01"
+      },
+      "crimeRatePerThousand": {
+        "value": 58.2,
+        "unit": "per_1000",
+        "status": "available",
+        "confidence": 0.83,
+        "methodologyNote": "Annualised crime incidents per 1,000 residents proxy.",
+        "lastUpdated": "2026-03-01"
+      },
+      "planningRiskHeuristic": {
+        "value": 37.5,
+        "unit": "score",
+        "status": "placeholder",
+        "confidence": 0.35,
+        "methodologyNote": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated.",
+        "lastUpdated": "2026-03-01"
+      }
+    },
+    {
       "microAreaId": "ma-crx",
       "stationCode": "CRX",
       "stationName": "Croxley",
       "operator": "London Underground",
-      "lines": ["Metropolitan"],
+      "lines": [
+        "Metropolitan"
+      ],
       "localAuthority": "Three Rivers",
       "countyOrBorough": "Hertfordshire",
       "centroid": {
@@ -4515,7 +4800,10 @@
       "stationCode": "WRU",
       "stationName": "West Ruislip",
       "operator": "Chiltern Railways / London Underground",
-      "lines": ["Central", "Chiltern Main Line"],
+      "lines": [
+        "Central",
+        "Chiltern Main Line"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -4752,7 +5040,10 @@
       "stationCode": "RUM",
       "stationName": "Ruislip Manor",
       "operator": "London Underground",
-      "lines": ["Metropolitan", "Piccadilly"],
+      "lines": [
+        "Metropolitan",
+        "Piccadilly"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -4989,7 +5280,10 @@
       "stationCode": "SRI",
       "stationName": "South Ruislip",
       "operator": "London Underground / Chiltern Railways",
-      "lines": ["Central", "Chiltern Main Line"],
+      "lines": [
+        "Central",
+        "Chiltern Main Line"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -5226,7 +5520,10 @@
       "stationCode": "ICK",
       "stationName": "Ickenham",
       "operator": "London Underground",
-      "lines": ["Metropolitan", "Piccadilly"],
+      "lines": [
+        "Metropolitan",
+        "Piccadilly"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -5463,7 +5760,9 @@
       "stationCode": "WAM",
       "stationName": "Watford (Met)",
       "operator": "London Underground",
-      "lines": ["Metropolitan"],
+      "lines": [
+        "Metropolitan"
+      ],
       "localAuthority": "Watford",
       "countyOrBorough": "Hertfordshire",
       "centroid": {
@@ -5700,7 +5999,10 @@
       "stationCode": "UXB",
       "stationName": "Uxbridge",
       "operator": "London Underground",
-      "lines": ["Metropolitan", "Piccadilly"],
+      "lines": [
+        "Metropolitan",
+        "Piccadilly"
+      ],
       "localAuthority": "Hillingdon",
       "countyOrBorough": "Greater London",
       "centroid": {
@@ -5931,12 +6233,252 @@
         "methodologyNote": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated.",
         "lastUpdated": "2026-03-01"
       }
+    },
+    {
+      "microAreaId": "ma-amh",
+      "stationCode": "AMH",
+      "stationName": "Amersham",
+      "operator": "London Underground / Chiltern Railways",
+      "lines": [
+        "Metropolitan",
+        "Chiltern Main Line"
+      ],
+      "localAuthority": "Buckinghamshire",
+      "countyOrBorough": "Buckinghamshire",
+      "centroid": {
+        "lat": 51.6743,
+        "lon": -0.6078
+      },
+      "catchment": {
+        "type": "circle",
+        "radiusMeters": 800
+      },
+      "overlapConfidence": 1.0,
+      "dataConfidenceScore": 0.768,
+      "confidenceNotes": [
+        "Scores are catchment-level proxies and should be validated with on-the-ground checks.",
+        "School scoring uses composite indicators and does not rely on a single inspection field.",
+        "Planning/development risk is explicitly low-confidence until structured feeds are integrated."
+      ],
+      "flags": [
+        "Planning risk uses a low-confidence heuristic placeholder.",
+        "commuteOffPeakMinutes status is estimated.",
+        "commutePeakMinutes status is estimated.",
+        "commuteTypicalMinutes status is estimated.",
+        "driveTimeToPinnerMinutes status is estimated.",
+        "interchangeCount status is estimated.",
+        "planningRiskHeuristic status is placeholder.",
+        "serviceFrequencyPeakTph status is estimated."
+      ],
+      "walkCatchmentAssumption": "800m walk radius around station centroid",
+      "commuteDestination": "Oxford Circus",
+      "schoolMethodologyNotes": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+      "planningRiskMethodology": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated.",
+      "crimeCategoryBreakdown": {
+        "violence": 14.0,
+        "theft": 16.9,
+        "vehicle": 6.4,
+        "other": 21.0
+      },
+      "populationDenominator": 15580,
+      "componentScores": {
+        "value": 66.8,
+        "transport": 25.6,
+        "schools": 52.9,
+        "environment": 83.3,
+        "crime": 68.2,
+        "proximity": 0.0,
+        "planningRisk": 68.0
+      },
+      "overallWeightedScore": 52.56,
+      "rankingExplanationRules": [
+        "Strong air quality and green space score (83.3) improves rank.",
+        "Strong safety score (68.2) supports rank stability.",
+        "Lower transport score (25.6) drags the overall rank.",
+        "Lower proximity to Pinner score (0.0) limits upside."
+      ],
+      "averageSemiDetachedPrice": {
+        "value": 507000.0,
+        "unit": "GBP",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Derived from semi-detached transactions around station catchment.",
+        "lastUpdated": "2026-03-01"
+      },
+      "medianSemiDetachedPrice": {
+        "value": 760000.0,
+        "unit": "GBP",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Median semi-detached sold price from fixture-backed transaction sample.",
+        "lastUpdated": "2026-03-01"
+      },
+      "semiPriceTrendPct5y": {
+        "value": 9.7,
+        "unit": "%",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Approximate 5-year trend in sold price levels.",
+        "lastUpdated": "2026-03-01"
+      },
+      "affordabilityScore": {
+        "value": 71.1,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Affordability proxy from local median prices and commuting context.",
+        "lastUpdated": "2026-03-01"
+      },
+      "valueForMoneyScore": {
+        "value": 62.5,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.78,
+        "methodologyNote": "Composite balancing median semi prices against commute and schools.",
+        "lastUpdated": "2026-03-01"
+      },
+      "commuteTypicalMinutes": {
+        "value": 52.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.8,
+        "methodologyNote": "Typical journey time to configured central destination from timetable profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "commutePeakMinutes": {
+        "value": 61.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.8,
+        "methodologyNote": "Peak journey time approximation from station profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "commuteOffPeakMinutes": {
+        "value": 49.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.8,
+        "methodologyNote": "Off-peak journey time approximation from station profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "serviceFrequencyPeakTph": {
+        "value": 6.0,
+        "unit": "tph",
+        "status": "estimated",
+        "confidence": 0.75,
+        "methodologyNote": "Peak frequency estimate from fixture timetable profile.",
+        "lastUpdated": "2026-03-01"
+      },
+      "interchangeCount": {
+        "value": 1.0,
+        "unit": "count",
+        "status": "estimated",
+        "confidence": 0.72,
+        "methodologyNote": "Interchange count to central destination from route pattern heuristics.",
+        "lastUpdated": "2026-03-01"
+      },
+      "driveTimeToPinnerMinutes": {
+        "value": 34.0,
+        "unit": "minutes",
+        "status": "estimated",
+        "confidence": 0.75,
+        "methodologyNote": "Drive-time estimate from station centroid to Pinner reference point.",
+        "lastUpdated": "2026-03-01"
+      },
+      "nearbyPrimaryCount": {
+        "value": 8.0,
+        "unit": "count",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "nearbySecondaryCount": {
+        "value": 2.0,
+        "unit": "count",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "primaryQualityScore": {
+        "value": 62.9,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "secondaryQualityScore": {
+        "value": 62.4,
+        "unit": "score",
+        "status": "available",
+        "confidence": 0.8,
+        "methodologyNote": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input.",
+        "lastUpdated": "2026-03-01"
+      },
+      "annualNo2": {
+        "value": 18.2,
+        "unit": "ug/m3",
+        "status": "available",
+        "confidence": 0.74,
+        "methodologyNote": "Annual NO2 mean from area-level pollution proxy grid.",
+        "lastUpdated": "2026-03-01"
+      },
+      "annualPm25": {
+        "value": 9.5,
+        "unit": "ug/m3",
+        "status": "available",
+        "confidence": 0.74,
+        "methodologyNote": "Annual PM2.5 mean from area-level pollution proxy grid.",
+        "lastUpdated": "2026-03-01"
+      },
+      "greenSpaceAreaKm2Within1km": {
+        "value": 3.1,
+        "unit": "km2",
+        "status": "available",
+        "confidence": 0.76,
+        "methodologyNote": "Estimated publicly accessible green space within 1km.",
+        "lastUpdated": "2026-03-01"
+      },
+      "greenCoverPct": {
+        "value": 57.0,
+        "unit": "%",
+        "status": "available",
+        "confidence": 0.76,
+        "methodologyNote": "Estimated green cover fraction from land-cover proxy.",
+        "lastUpdated": "2026-03-01"
+      },
+      "nearestParkDistanceM": {
+        "value": 295.0,
+        "unit": "m",
+        "status": "available",
+        "confidence": 0.76,
+        "methodologyNote": "Distance to nearest substantial park entry point.",
+        "lastUpdated": "2026-03-01"
+      },
+      "crimeRatePerThousand": {
+        "value": 58.4,
+        "unit": "per_1000",
+        "status": "available",
+        "confidence": 0.83,
+        "methodologyNote": "Annualised crime incidents per 1,000 residents proxy.",
+        "lastUpdated": "2026-03-01"
+      },
+      "planningRiskHeuristic": {
+        "value": 35.8,
+        "unit": "score",
+        "status": "placeholder",
+        "confidence": 0.35,
+        "methodologyNote": "Heuristic placeholder: blends high-density planning indicators and station growth assumptions. Treat as low-confidence until structured local-plan layers are integrated.",
+        "lastUpdated": "2026-03-01"
+      }
     }
   ],
   "verificationSummary": {
     "overallStatus": "attention_required",
     "crimeCrossCheckStatus": "weak_alignment",
     "liveMode": true,
-    "generatedAt": "2026-03-23T22:37:20+00:00"
+    "generatedAt": "2026-03-23T22:54:16+00:00"
   }
 }

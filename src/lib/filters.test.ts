@@ -247,4 +247,25 @@ describe('matchesFilters', () => {
       ),
     ).toBe(false)
   })
+
+  it('can ignore the drive to Pinner filter for London-wide mode', () => {
+    expect(
+      matchesFilters(
+        {
+          ...baseArea,
+          driveTimeToPinnerMinutes: {
+            ...baseArea.driveTimeToPinnerMinutes,
+            value: 34,
+          },
+        },
+        {
+          ...DEFAULT_FILTERS,
+          maxDriveMinutes: 20,
+        },
+        {
+          ignoreMaxDriveMinutes: true,
+        },
+      ),
+    ).toBe(true)
+  })
 })

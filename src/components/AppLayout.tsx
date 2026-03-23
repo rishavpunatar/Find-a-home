@@ -11,6 +11,7 @@ import { SettingsPanel } from './SettingsPanel'
 const navItems = [
   { to: '/', label: 'Overview' },
   { to: '/ranked', label: 'Ranked Table' },
+  { to: '/ranked-london', label: 'London <=60m' },
   { to: '/map', label: 'Map' },
   { to: '/compare', label: 'Compare' },
 ]

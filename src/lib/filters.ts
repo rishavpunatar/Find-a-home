@@ -4,12 +4,23 @@ const isAtMost = (value: number | null, max: number): boolean => value !== null 
 
 const isAtLeast = (value: number | null, min: number): boolean => value !== null && value >= min
 
-export const matchesFilters = (area: MicroArea, filters: Filters): boolean => {
+interface FilterOptions {
+  ignoreMaxDriveMinutes?: boolean
+}
+
+export const matchesFilters = (
+  area: MicroArea,
+  filters: Filters,
+  options: FilterOptions = {},
+): boolean => {
   if (!isAtMost(area.commuteTypicalMinutes.value, filters.maxCommuteMinutes)) {
     return false
   }
 
-  if (!isAtMost(area.driveTimeToPinnerMinutes.value, filters.maxDriveMinutes)) {
+  if (
+    !options.ignoreMaxDriveMinutes &&
+    !isAtMost(area.driveTimeToPinnerMinutes.value, filters.maxDriveMinutes)
+  ) {
     return false
   }
 
@@ -36,5 +47,8 @@ export const matchesFilters = (area: MicroArea, filters: Filters): boolean => {
   return true
 }
 
-export const filterAreas = (areas: DerivedMicroArea[], filters: Filters): DerivedMicroArea[] =>
-  areas.filter((area) => matchesFilters(area, filters))
+export const filterAreas = (
+  areas: DerivedMicroArea[],
+  filters: Filters,
+  options: FilterOptions = {},
+): DerivedMicroArea[] => areas.filter((area) => matchesFilters(area, filters, options))

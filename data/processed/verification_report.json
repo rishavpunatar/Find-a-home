@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-23T22:37:20+00:00",
+  "generatedAt": "2026-03-23T22:54:16+00:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "attention_required",
   "sourceMatrix": {
@@ -57,8 +57,8 @@
       "status": "weak_alignment",
       "method": "Spearman rank correlation between fixture annualised crime-rate proxy and data.police.uk monthly incidents annualised per 1,000 using local denominator.",
       "latestMonth": "2026-01",
-      "stationSampleSize": 25,
-      "spearmanRankCorrelation": 0.0719,
+      "stationSampleSize": 27,
+      "spearmanRankCorrelation": 0.2293,
       "stations": [
         {
           "microAreaId": "ma-hah",
@@ -259,6 +259,17 @@
           "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
         },
         {
+          "microAreaId": "ma-kng",
+          "stationCode": "KNG",
+          "stationName": "Kings Langley",
+          "fixtureCrimeRatePerThousand": 58.2,
+          "liveMonthlyCrimes": 33,
+          "liveAnnualisedRatePerThousand": 26.58,
+          "populationDenominator": 14900,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
           "microAreaId": "ma-crx",
           "stationCode": "CRX",
           "stationName": "Croxley",
@@ -332,6 +343,17 @@
           "liveMonthlyCrimes": 372,
           "liveAnnualisedRatePerThousand": 220.55,
           "populationDenominator": 20240,
+          "status": "ok",
+          "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
+        },
+        {
+          "microAreaId": "ma-amh",
+          "stationCode": "AMH",
+          "stationName": "Amersham",
+          "fixtureCrimeRatePerThousand": 58.4,
+          "liveMonthlyCrimes": 71,
+          "liveAnnualisedRatePerThousand": 54.69,
+          "populationDenominator": 15580,
           "status": "ok",
           "note": "Live incident count fetched from data.police.uk and annualised using population denominator."
         }

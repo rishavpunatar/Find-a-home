@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { AppLayout } from '@/components/AppLayout'
 import { ComparisonPage } from '@/pages/ComparisonPage'
+import { LondonWideRankedPage } from '@/pages/LondonWideRankedPage'
 import { MapPage } from '@/pages/MapPage'
 import { MicroAreaDetailPage } from '@/pages/MicroAreaDetailPage'
 import { OverviewPage } from '@/pages/OverviewPage'
@@ -19,6 +20,7 @@ const App = () => (
     <Route path="/" element={<AppLayout />}>
       <Route index element={<OverviewPage />} />
       <Route path="ranked" element={<RankedTablePage />} />
+      <Route path="ranked-london" element={<LondonWideRankedPage />} />
       <Route path="map" element={<MapPage />} />
       <Route path="compare" element={<ComparisonPage />} />
       <Route path="micro-area/:microAreaId" element={<MicroAreaDetailPage />} />

@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom'
+
 import { useSettings } from '@/context/SettingsContext'
 import { DEFAULT_FILTERS } from '@/lib/constants'
 
@@ -9,10 +11,20 @@ interface RangeControlProps {
   step: number
   unit: string
   onChange: (next: number) => void
+  disabled?: boolean
 }
 
-const RangeControl = ({ label, value, min, max, step, unit, onChange }: RangeControlProps) => (
-  <label className="flex flex-col gap-1">
+const RangeControl = ({
+  label,
+  value,
+  min,
+  max,
+  step,
+  unit,
+  onChange,
+  disabled = false,
+}: RangeControlProps) => (
+  <label className={`flex flex-col gap-1 ${disabled ? 'opacity-60' : ''}`}>
     <span className="text-xs font-medium text-slate-600">
       {label}:{' '}
       <span className="font-semibold text-slate-800">{value.toLocaleString('en-GB') + unit}</span>
@@ -24,6 +36,7 @@ const RangeControl = ({ label, value, min, max, step, unit, onChange }: RangeCon
       step={step}
       value={value}
       onChange={(event) => onChange(Number(event.currentTarget.value))}
+      disabled={disabled}
       className="h-2 w-full cursor-pointer rounded-lg bg-teal-100"
       aria-label={label}
     />
@@ -31,7 +44,13 @@ const RangeControl = ({ label, value, min, max, step, unit, onChange }: RangeCon
 )
 
 export const FiltersPanel = () => {
+  const location = useLocation()
   const { filters, updateFilter, resetFilters } = useSettings()
+  const isLondonWideTab = location.pathname === '/ranked-london'
+  const commuteCap = isLondonWideTab ? 60 : 70
+  const displayedCommuteLimit = isLondonWideTab
+    ? Math.min(filters.maxCommuteMinutes, commuteCap)
+    : filters.maxCommuteMinutes
 
   const hasCustomFilters = JSON.stringify(filters) !== JSON.stringify(DEFAULT_FILTERS)
 
@@ -50,12 +69,18 @@ export const FiltersPanel = () => {
           Reset
         </button>
       </div>
+      {isLondonWideTab ? (
+        <p className="mb-3 text-xs text-slate-600">
+          London ≤60m mode is active: commute is capped at 60 minutes and drive-to-Pinner is not
+          applied in this tab.
+        </p>
+      ) : null}
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         <RangeControl
           label="Max commute"
-          value={filters.maxCommuteMinutes}
+          value={displayedCommuteLimit}
           min={25}
-          max={70}
+          max={commuteCap}
           step={1}
           unit=" min"
           onChange={(next) => updateFilter('maxCommuteMinutes', next)}
@@ -68,6 +93,7 @@ export const FiltersPanel = () => {
           step={1}
           unit=" min"
           onChange={(next) => updateFilter('maxDriveMinutes', next)}
+          disabled={isLondonWideTab}
         />
         <RangeControl
           label="Min school score"
