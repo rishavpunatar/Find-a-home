@@ -5,6 +5,7 @@ import csv
 import io
 import json
 import re
+import zipfile
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +17,12 @@ STATIONS_PATH = ROOT / 'data' / 'raw' / 'stations_transport.json'
 OUTPUT_PATH = ROOT / 'data' / 'raw' / 'pollution_metrics.json'
 LAQM_PAGE = 'https://uk-air.defra.gov.uk/data/laqm-background-maps?year=2021'
 LAQM_DATA = 'https://uk-air.defra.gov.uk/data/laqm-background-maps.php?view=data'
+LAEI_ZIP_PATH = ROOT / 'data' / 'external' / 'LAEI2019-Concentrations-Data-CSV.zip'
+LAEI_NO2_MEMBER = 'LAEI2019-Concentrations-Data-CSV/laei_LAEI2019v3_CorNOx15_NO2.csv'
+LAEI_PM25_MEMBER = 'LAEI2019-Concentrations-Data-CSV/laei_LAEI2019v3_CorNOx15_PM25.csv'
+LAEI_YEAR = 2019
+CATCHMENT_RADIUS_M = 800
+GRID_CELL_HALF_DIAGONAL_M = 707
 
 
 def load_stations(path: Path) -> list[dict[str, Any]]:
@@ -45,6 +52,48 @@ def station_context(lat: float, lon: float, session: requests.Session) -> dict[s
         return None
 
     return result[0]
+
+
+def as_int(value: Any) -> int | None:
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return int(value)
+    if isinstance(value, str):
+        stripped = value.strip()
+        if not stripped:
+            return None
+        try:
+            return int(float(stripped))
+        except ValueError:
+            return None
+    return None
+
+
+def build_station_contexts(
+    stations: list[dict[str, Any]],
+    session: requests.Session,
+) -> dict[str, dict[str, Any] | None]:
+    context_by_station: dict[str, dict[str, Any] | None] = {}
+    context_cache: dict[tuple[float, float], dict[str, Any] | None] = {}
+
+    for station in stations:
+        station_code = str(station['station_code'])
+        lat = float(station['lat'])
+        lon = float(station['lon'])
+        cache_key = (round(lat, 5), round(lon, 5))
+
+        if cache_key not in context_cache:
+            try:
+                context_cache[cache_key] = station_context(lat, lon, session)
+            except requests.RequestException:
+                context_cache[cache_key] = None
+
+        context_by_station[station_code] = context_cache[cache_key]
+
+    return context_by_station
 
 
 def fetch_laqm_grid(local_authority_code: str, pollutant: str, year: int) -> list[tuple[int, int, float]]:
@@ -93,6 +142,50 @@ def fetch_laqm_grid(local_authority_code: str, pollutant: str, year: int) -> lis
     return rows
 
 
+def fetch_laqm_region_grid(region: str, pollutant: str, year: int) -> list[tuple[int, int, float]]:
+    response = requests.get(
+        LAQM_DATA,
+        params={
+            'bkgrd-region': region,
+            'bkgrd-pollutant': pollutant,
+            'bkgrd-year': str(year),
+            'action': 'data',
+            'year': '2021',
+            'submit': 'Download CSV',
+        },
+        timeout=90,
+    )
+    response.raise_for_status()
+    text = response.text
+
+    header_index = None
+    lines = text.splitlines()
+    for idx, line in enumerate(lines):
+        if line.startswith('Local_Auth_Code,'):
+            header_index = idx
+            break
+
+    if header_index is None:
+        raise ValueError(f'Unable to locate CSV header for region {region} {pollutant} {year}')
+
+    csv_payload = '\n'.join(lines[header_index:])
+    reader = csv.DictReader(io.StringIO(csv_payload))
+    value_key = f'Total_NO2_{str(year)[-2:]}' if pollutant == 'no2' else f'Total_PM2.5_{str(year)[-2:]}'
+
+    rows: list[tuple[int, int, float]] = []
+    for row in reader:
+        x = row.get('x')
+        y = row.get('y')
+        value = row.get(value_key)
+        if not x or not y or not value:
+            continue
+        try:
+            rows.append((int(float(x)), int(float(y)), float(value)))
+        except ValueError:
+            continue
+    return rows
+
+
 def nearest_grid_value(easting: int, northing: int, grid_rows: list[tuple[int, int, float]]) -> float | None:
     if not grid_rows:
         return None
@@ -108,60 +201,255 @@ def nearest_grid_value(easting: int, northing: int, grid_rows: list[tuple[int, i
     return best_value
 
 
+def catchment_weighted_value(easting: int, northing: int, grid_rows: list[tuple[int, int, float]]) -> float | None:
+    if not grid_rows:
+        return None
+
+    inclusion_radius = CATCHMENT_RADIUS_M + GRID_CELL_HALF_DIAGONAL_M
+    selected: list[tuple[float, float]] = []
+
+    for grid_x, grid_y, value in grid_rows:
+        distance = ((grid_x - easting) ** 2 + (grid_y - northing) ** 2) ** 0.5
+        if distance <= inclusion_radius:
+            selected.append((distance, value))
+
+    if not selected:
+        return nearest_grid_value(easting, northing, grid_rows)
+
+    weighted_sum = 0.0
+    total_weight = 0.0
+    for distance, value in selected:
+        weight = 1.0 / (max(distance, 200.0) ** 1.3)
+        weighted_sum += value * weight
+        total_weight += weight
+
+    if total_weight == 0:
+        return None
+
+    return weighted_sum / total_weight
+
+
+def load_laei_catchment_values(
+    zip_path: Path,
+    member_name: str,
+    station_points: list[tuple[str, int, int]],
+) -> dict[str, float]:
+    if not station_points:
+        return {}
+
+    radius_sq = CATCHMENT_RADIUS_M * CATCHMENT_RADIUS_M
+    bin_size = 1000
+
+    bins: dict[tuple[int, int], list[int]] = {}
+    for idx, (_, easting, northing) in enumerate(station_points):
+        key = (easting // bin_size, northing // bin_size)
+        bins.setdefault(key, []).append(idx)
+
+    weighted_sum: dict[str, float] = {code: 0.0 for code, _, _ in station_points}
+    weight_total: dict[str, float] = {code: 0.0 for code, _, _ in station_points}
+
+    with zipfile.ZipFile(zip_path) as zip_file:
+        with zip_file.open(member_name) as member_handle:
+            stream = io.TextIOWrapper(member_handle, encoding='utf-8')
+            reader = csv.DictReader(stream)
+
+            for row in reader:
+                x = as_int(row.get('x'))
+                y = as_int(row.get('y'))
+                if x is None or y is None:
+                    continue
+
+                try:
+                    concentration = float(row.get('conc', ''))
+                except ValueError:
+                    continue
+
+                base_x = x // bin_size
+                base_y = y // bin_size
+                candidates: set[int] = set()
+                for delta_x in (-1, 0, 1):
+                    for delta_y in (-1, 0, 1):
+                        candidates.update(bins.get((base_x + delta_x, base_y + delta_y), []))
+
+                for idx in candidates:
+                    station_code, station_easting, station_northing = station_points[idx]
+                    distance_sq = (x - station_easting) ** 2 + (y - station_northing) ** 2
+                    if distance_sq > radius_sq:
+                        continue
+
+                    distance = distance_sq**0.5
+                    weight = 1.0 / (max(distance, 20.0) ** 1.2)
+                    weighted_sum[station_code] += concentration * weight
+                    weight_total[station_code] += weight
+
+    output: dict[str, float] = {}
+    for station_code, _, _ in station_points:
+        total = weight_total.get(station_code, 0.0)
+        if total > 0:
+            output[station_code] = weighted_sum[station_code] / total
+
+    return output
+
+
+def compute_london_laei_metrics(
+    stations: list[dict[str, Any]],
+    station_contexts: dict[str, dict[str, Any] | None],
+) -> dict[str, dict[str, Any]]:
+    if not LAEI_ZIP_PATH.exists():
+        return {}
+
+    london_points: list[tuple[str, int, int]] = []
+    for station in stations:
+        if str(station.get('county_or_borough') or '') != 'Greater London':
+            continue
+
+        station_code = str(station['station_code'])
+        context = station_contexts.get(station_code)
+        if not context:
+            continue
+
+        easting = as_int(context.get('eastings'))
+        northing = as_int(context.get('northings'))
+        if easting is None or northing is None:
+            continue
+
+        london_points.append((station_code, easting, northing))
+
+    no2_values = load_laei_catchment_values(LAEI_ZIP_PATH, LAEI_NO2_MEMBER, london_points)
+    pm25_values = load_laei_catchment_values(LAEI_ZIP_PATH, LAEI_PM25_MEMBER, london_points)
+
+    output: dict[str, dict[str, Any]] = {}
+    for station_code, _, _ in london_points:
+        if station_code not in no2_values or station_code not in pm25_values:
+            continue
+
+        output[station_code] = {
+            'annual_no2': round(no2_values[station_code], 5),
+            'annual_pm25': round(pm25_values[station_code], 5),
+            'status': 'available',
+            'confidence': 0.93,
+            'methodology_note': (
+                f'LAEI {LAEI_YEAR} modelled concentration maps (20m grid); station-centred 800m catchment '
+                'value from distance-weighted cells. This London estimate supersedes DEFRA 1km background data.'
+            ),
+        }
+
+    return output
+
+
 def generate_pollution_metrics(year: int) -> dict[str, dict[str, Any]]:
     stations = load_stations(STATIONS_PATH)
     authority_codes = fetch_authority_codes()
     session = requests.Session()
 
+    station_contexts = build_station_contexts(stations, session)
+    london_laei_metrics = compute_london_laei_metrics(stations, station_contexts)
+
     no2_cache: dict[str, list[tuple[int, int, float]]] = {}
     pm25_cache: dict[str, list[tuple[int, int, float]]] = {}
-    context_cache: dict[tuple[float, float], dict[str, Any] | None] = {}
+    region_no2_cache: dict[str, list[tuple[int, int, float]]] = {}
+    region_pm25_cache: dict[str, list[tuple[int, int, float]]] = {}
 
     output: dict[str, dict[str, Any]] = {}
 
     for station in stations:
         station_code = str(station['station_code'])
-        lat = float(station['lat'])
-        lon = float(station['lon'])
         authority_name = str(station.get('local_authority') or '').strip().lower()
-
         local_authority_code = authority_codes.get(authority_name)
-
-        cache_key = (round(lat, 5), round(lon, 5))
-        if cache_key not in context_cache:
-            try:
-                context_cache[cache_key] = station_context(lat, lon, session)
-            except requests.RequestException:
-                context_cache[cache_key] = None
-        context = context_cache[cache_key]
+        context = station_contexts.get(station_code)
+        county = str(station.get('county_or_borough') or '')
+        use_london_region = county == 'Greater London'
 
         if not local_authority_code and context:
             local_authority_code = (((context.get('codes') or {}).get('admin_district')) or '').strip()
 
+        if station_code in london_laei_metrics:
+            enriched = dict(london_laei_metrics[station_code])
+            easting = as_int((context or {}).get('eastings'))
+            northing = as_int((context or {}).get('northings'))
+            if easting is not None and northing is not None:
+                if 'Greater_London' not in region_no2_cache:
+                    try:
+                        region_no2_cache['Greater_London'] = fetch_laqm_region_grid(
+                            'Greater_London',
+                            'no2',
+                            year,
+                        )
+                    except Exception:
+                        region_no2_cache['Greater_London'] = []
+                if 'Greater_London' not in region_pm25_cache:
+                    try:
+                        region_pm25_cache['Greater_London'] = fetch_laqm_region_grid(
+                            'Greater_London',
+                            'pm25',
+                            year,
+                        )
+                    except Exception:
+                        region_pm25_cache['Greater_London'] = []
+
+                defra_no2 = catchment_weighted_value(easting, northing, region_no2_cache['Greater_London'])
+                defra_pm25 = catchment_weighted_value(easting, northing, region_pm25_cache['Greater_London'])
+                if defra_no2 is not None and defra_pm25 is not None:
+                    enriched['secondary_source_no2'] = round(defra_no2, 5)
+                    enriched['secondary_source_pm25'] = round(defra_pm25, 5)
+                    enriched['secondary_source_name'] = f'DEFRA LAQM {year} 1km background'
+                    enriched['no2_delta_vs_secondary'] = round(
+                        float(enriched['annual_no2']) - defra_no2,
+                        5,
+                    )
+                    enriched['pm25_delta_vs_secondary'] = round(
+                        float(enriched['annual_pm25']) - defra_pm25,
+                        5,
+                    )
+                    enriched['methodology_note'] = (
+                        f"{enriched['methodology_note']} Cross-check vs DEFRA LAQM {year} 1km background: "
+                        f'NO2 {defra_no2:.2f}, PM2.5 {defra_pm25:.2f} ug/m3.'
+                    )
+
+            output[station_code] = enriched
+            continue
+
         if not local_authority_code:
             continue
 
-        if local_authority_code not in no2_cache:
-            try:
-                no2_cache[local_authority_code] = fetch_laqm_grid(local_authority_code, 'no2', year)
-            except Exception:
-                no2_cache[local_authority_code] = []
-
-        if local_authority_code not in pm25_cache:
-            try:
-                pm25_cache[local_authority_code] = fetch_laqm_grid(local_authority_code, 'pm25', year)
-            except Exception:
-                pm25_cache[local_authority_code] = []
-
         if not context:
             continue
-        easting = context.get('eastings')
-        northing = context.get('northings')
-        if not isinstance(easting, int) or not isinstance(northing, int):
+        easting = as_int(context.get('eastings'))
+        northing = as_int(context.get('northings'))
+        if easting is None or northing is None:
             continue
 
-        no2_value = nearest_grid_value(easting, northing, no2_cache[local_authority_code])
-        pm25_value = nearest_grid_value(easting, northing, pm25_cache[local_authority_code])
+        if use_london_region:
+            if 'Greater_London' not in region_no2_cache:
+                try:
+                    region_no2_cache['Greater_London'] = fetch_laqm_region_grid('Greater_London', 'no2', year)
+                except Exception:
+                    region_no2_cache['Greater_London'] = []
+            if 'Greater_London' not in region_pm25_cache:
+                try:
+                    region_pm25_cache['Greater_London'] = fetch_laqm_region_grid('Greater_London', 'pm25', year)
+                except Exception:
+                    region_pm25_cache['Greater_London'] = []
+            no2_grid = region_no2_cache['Greater_London']
+            pm25_grid = region_pm25_cache['Greater_London']
+            methodology_scope = 'Greater London regional grid'
+        else:
+            if local_authority_code not in no2_cache:
+                try:
+                    no2_cache[local_authority_code] = fetch_laqm_grid(local_authority_code, 'no2', year)
+                except Exception:
+                    no2_cache[local_authority_code] = []
+            if local_authority_code not in pm25_cache:
+                try:
+                    pm25_cache[local_authority_code] = fetch_laqm_grid(local_authority_code, 'pm25', year)
+                except Exception:
+                    pm25_cache[local_authority_code] = []
+            no2_grid = no2_cache[local_authority_code]
+            pm25_grid = pm25_cache[local_authority_code]
+            methodology_scope = f'local authority {local_authority_code}'
+
+        no2_value = catchment_weighted_value(easting, northing, no2_grid)
+        pm25_value = catchment_weighted_value(easting, northing, pm25_grid)
         if no2_value is None or pm25_value is None:
             continue
 
@@ -169,10 +457,10 @@ def generate_pollution_metrics(year: int) -> dict[str, dict[str, Any]]:
             'annual_no2': round(no2_value, 5),
             'annual_pm25': round(pm25_value, 5),
             'status': 'available',
-            'confidence': 0.9,
+            'confidence': 0.88,
             'methodology_note': (
-                f'DEFRA LAQM background maps ({year}) mapped from station coordinate to nearest 1km grid '
-                f'cell within local authority {local_authority_code}.'
+                f'DEFRA LAQM background maps ({year}); station-centred 800m catchment value from '
+                f'distance-weighted 1km grid cells in {methodology_scope}.'
             ),
         }
 
@@ -180,7 +468,9 @@ def generate_pollution_metrics(year: int) -> dict[str, dict[str, Any]]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description='Generate pollution metrics from DEFRA LAQM background maps.')
+    parser = argparse.ArgumentParser(
+        description='Generate pollution metrics using LAEI 20m London concentrations where available and DEFRA LAQM fallback.',
+    )
     parser.add_argument('--year', type=int, default=2023, help='Pollution map year to extract.')
     args = parser.parse_args()
 

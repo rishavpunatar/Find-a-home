@@ -126,12 +126,12 @@ def source_matrix() -> dict[str, dict[str, str]]:
             ),
         },
         'pollution': {
-            'status': 'source_applied_not_cross_verified',
-            'primarySource': 'DEFRA UK-AIR PCM modelled background grids',
-            'secondarySource': 'LA AQMA station-level/open pollutant feeds (planned)',
+            'status': 'source_applied_model_cross_checked',
+            'primarySource': 'London Datastore LAEI (Greater London) + DEFRA UK-AIR LAQM background (elsewhere)',
+            'secondarySource': 'DEFRA UK-AIR LAQM background (London cross-check) + live monitor feeds (planned)',
             'note': (
-                'NO2/PM2.5 now use DEFRA LAQM background-map values mapped to nearest 1km grid cells. '
-                'Secondary source reconciliation is still pending.'
+                'Greater London uses LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields. '
+                'Non-London currently uses DEFRA 1km catchment values. Live monitor reconciliation is still pending.'
             ),
         },
         'greenSpace': {
@@ -320,7 +320,8 @@ def generate_verification_report(dataset: dict[str, Any], live_mode: bool = Fals
             'crime': crime_check,
         },
         'limitations': [
-            'Property, schools, pollution, greenspace, transport, and population are not yet live cross-verified in this MVP.',
+            'Property, schools, greenspace, transport, and population are not yet live cross-verified in this MVP.',
+            'Pollution has model-to-model cross-checks (LAEI vs DEFRA) but still lacks full monitor-network reconciliation.',
             'Planning risk is intentionally low-confidence placeholder data until structured feeds are integrated.',
             'This report improves transparency but is not equivalent to a full production data-audit pipeline.',
         ],

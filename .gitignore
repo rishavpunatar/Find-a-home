@@ -19,6 +19,7 @@ coverage
 __pycache__/
 .pytest_cache/
 *.pyc
+data/external/
 
 # Editor directories and files
 .vscode/*

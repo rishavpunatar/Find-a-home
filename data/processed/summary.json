@@ -1,56 +1,56 @@
 {
-  "generatedAt": "2026-03-24T00:19:15+00:00",
+  "generatedAt": "2026-03-24T12:25:40+00:00",
   "count": 528,
   "topMicroAreas": [
     {
-      "microAreaId": "ma-queen181",
-      "stationName": "Queen's Park",
-      "score": 63.17
+      "microAreaId": "ma-wfj",
+      "stationName": "Watford Junction",
+      "score": 62.76
     },
     {
-      "microAreaId": "ma-maidacff",
-      "stationName": "Maida Vale",
-      "score": 62.88
+      "microAreaId": "ma-mop",
+      "stationName": "Moor Park",
+      "score": 61.93
+    },
+    {
+      "microAreaId": "ma-bsh",
+      "stationName": "Bushey",
+      "score": 61.11
+    },
+    {
+      "microAreaId": "ma-queen181",
+      "stationName": "Queen's Park",
+      "score": 60.85
     },
     {
       "microAreaId": "ma-hamps13e",
       "stationName": "Hampstead",
-      "score": 62.85
-    },
-    {
-      "microAreaId": "ma-stjoh83d",
-      "stationName": "St. John's Wood",
-      "score": 62.77
-    },
-    {
-      "microAreaId": "ma-kensaac0",
-      "stationName": "Kensal Green",
-      "score": 62.76
-    },
-    {
-      "microAreaId": "ma-westhaba",
-      "stationName": "West Hampstead",
-      "score": 62.75
-    },
-    {
-      "microAreaId": "ma-wfj",
-      "stationName": "Watford Junction",
-      "score": 62.74
-    },
-    {
-      "microAreaId": "ma-kilbu869",
-      "stationName": "Kilburn",
-      "score": 62.74
+      "score": 60.74
     },
     {
       "microAreaId": "ma-kilbu4c3",
       "stationName": "Kilburn Park",
-      "score": 62.74
+      "score": 60.55
     },
     {
-      "microAreaId": "ma-holla0ac",
-      "stationName": "Holland Park",
-      "score": 62.67
+      "microAreaId": "ma-maidacff",
+      "stationName": "Maida Vale",
+      "score": 60.55
+    },
+    {
+      "microAreaId": "ma-belsi797",
+      "stationName": "Belsize Park",
+      "score": 60.52
+    },
+    {
+      "microAreaId": "ma-kilbu869",
+      "stationName": "Kilburn",
+      "score": 60.49
+    },
+    {
+      "microAreaId": "ma-wille265",
+      "stationName": "Willesden Green",
+      "score": 60.44
     }
   ]
 }

@@ -128,10 +128,19 @@ export const RankedTablePage = () => {
                 Annual mean NO2 for the micro-area proxy (`annualNo2` metric). This table shows raw
                 concentration, not a transformed score.
               </p>
+              <p className="mt-1 text-slate-600">
+                Method (Greater London): use LAEI 20m modelled NO2 cells inside the 800m
+                station-centred catchment, then take a distance-weighted mean
+                (`w = 1 / max(distance, 20)^1.2`).
+              </p>
+              <p className="mt-1 text-slate-600">
+                Method (outside Greater London): use DEFRA LAQM 1km cells intersecting the 800m
+                catchment approximation, then take a distance-weighted mean
+                (`w = 1 / max(distance, 200)^1.3`).
+              </p>
               <p className="mt-1 text-xs text-slate-500">
-                Values are sourced from DEFRA LAQM background maps (nearest 1km grid cell mapped to
-                station location) where available, with explicit estimated fallback only when no
-                direct grid mapping is available.
+                For London rows we store a DEFRA 1km secondary cross-check alongside the LAEI value
+                and include the delta in the metric methodology note on the detail page.
               </p>
             </details>
 
@@ -207,6 +216,14 @@ export const RankedTablePage = () => {
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
               DEFRA UK-AIR (NO2/PM2.5)
+            </a>
+            <a
+              href="https://data.london.gov.uk/dataset/london-atmospheric-emissions-inventory--laei--2019"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              London Datastore (LAEI)
             </a>
             <a
               href="https://www.gov.uk/guidance/get-information-about-schools"

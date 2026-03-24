@@ -88,7 +88,7 @@ The pipeline emits:
 Current verification coverage:
 
 - Crime: live cross-check against `data.police.uk` monthly incidents annualised per 1,000 (using denominator proxy)
-- Pollution: DEFRA LAQM background-map source is applied (`source_applied_not_cross_verified`)
+- Pollution: dual-source model applied (`source_applied_model_cross_checked`)
 - Property, schools, transport, greenspace, population: explicit `not_live_verified` status
 - Planning risk: explicit `low_confidence_placeholder`
 
@@ -102,11 +102,15 @@ Pipeline entrypoint:
 python3 -m pipeline.jobs.build_micro_areas
 ```
 
-Refresh DEFRA-backed pollution metrics:
+Refresh pollution metrics:
 
 ```bash
 npm run pipeline:pollution
 ```
+
+Optional London high-resolution mode:
+- If `data/external/LAEI2019-Concentrations-Data-CSV.zip` is present, London stations use LAEI 20m catchment calculations.
+- If that archive is absent, London stations gracefully fall back to DEFRA LAQM 1km catchment values.
 
 ### Candidate generation process
 
@@ -142,7 +146,7 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - population
 - planning
 
-Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Pollution metrics are now generated from DEFRA LAQM background maps; other domains remain fixture/interpolated in this MVP.
+Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Pollution metrics now use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Other domains remain fixture/interpolated in this MVP.
 
 ## Data quality model (no fake precision)
 
