@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-03-24T14:43:17+00:00",
+  "generatedAt": "2026-03-24T14:55:01+00:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "warning",
-  "microAreasAnalysed": 528,
+  "microAreasAnalysed": 707,
   "counts": {
     "critical": 0,
-    "warning": 3,
+    "warning": 182,
     "info": 0
   },
   "pollutionCrossSourceSummary": {
@@ -39,6 +39,114 @@
     },
     {
       "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-regen92e",
+      "stationCode": "REGEN92E",
+      "stationName": "Regent's Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-brent6ff",
+      "stationCode": "BRENT6FF",
+      "stationName": "Brent Cross West",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-south436",
+      "stationCode": "SOUTH436",
+      "stationName": "South Greenford",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-north85f",
+      "stationCode": "NORTH85F",
+      "stationName": "Northwick Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-strat804",
+      "stationCode": "STRAT804",
+      "stationName": "Stratford International DLR",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-londo539",
+      "stationCode": "LONDO539",
+      "stationName": "London Blackfriars",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hastecb3",
+      "stationCode": "HASTECB3",
+      "stationName": "Haste Hill",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-woodyfe0",
+      "stationCode": "WOODYFE0",
+      "stationName": "Woody Bay",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-willobd8",
+      "stationCode": "WILLOBD8",
+      "stationName": "Willow Lawn",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-newso5a3",
+      "stationCode": "NEWSO5A3",
+      "stationName": "New Southgate",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-syonl814",
+      "stationCode": "SYONL814",
+      "stationName": "Syon Lane",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-elstr304",
+      "stationCode": "ELSTR304",
+      "stationName": "Elstree & Borehamwood",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
       "code": "pollution_cross_source_delta",
       "message": "NO2 divergence vs secondary source is high; review recommended.",
       "microAreaId": "ma-hange8fb",
@@ -47,6 +155,1509 @@
       "field": "annualNo2",
       "observed": 18.69,
       "expected": "<= 18 ug/m3"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-carpe00a",
+      "stationCode": "CARPE00A",
+      "stationName": "Carpenders Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ravenf85",
+      "stationCode": "RAVENF85",
+      "stationName": "Ravensbourne",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-elmerb92",
+      "stationCode": "ELMERB92",
+      "stationName": "Elmers End",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-radle554",
+      "stationCode": "RADLE554",
+      "stationName": "Radlett",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-crews741",
+      "stationCode": "CREWS741",
+      "stationName": "Crews Hill",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hampt33f",
+      "stationCode": "HAMPT33F",
+      "stationName": "Hampton Court",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-stonec73",
+      "stationCode": "STONEC73",
+      "stationName": "Stoneleigh",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-watfob33",
+      "stationCode": "WATFOB33",
+      "stationName": "Watford High Street",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-canni20e",
+      "stationCode": "CANNI20E",
+      "stationName": "Canning Town",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-potte78f",
+      "stationCode": "POTTE78F",
+      "stationName": "Potters Bar",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-barki472",
+      "stationCode": "BARKI472",
+      "stationName": "Barking Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-thame2c0",
+      "stationCode": "THAME2C0",
+      "stationName": "Thames Ditton",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ewellfb3",
+      "stationCode": "EWELLFB3",
+      "stationName": "Ewell West",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ewell962",
+      "stationCode": "EWELL962",
+      "stationName": "Ewell East",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-walth6ae",
+      "stationCode": "WALTH6AE",
+      "stationName": "Waltham Cross",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hinchcf5",
+      "stationCode": "HINCHCF5",
+      "stationName": "Hinchley Wood",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-princ9d3",
+      "stationCode": "PRINC9D3",
+      "stationName": "Prince Regent",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hilli369",
+      "stationCode": "HILLI369",
+      "stationName": "Hillingdon",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-esher68e",
+      "stationCode": "ESHER68E",
+      "stationName": "Esher",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-kempta34",
+      "stationCode": "KEMPTA34",
+      "stationName": "Kempton Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-cufflbfc",
+      "stationCode": "CUFFLBFC",
+      "stationName": "Cuffley",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-dagen207",
+      "stationCode": "DAGEN207",
+      "stationName": "Dagenham Dock",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-houns344",
+      "stationCode": "HOUNS344",
+      "stationName": "Hounslow West",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-watfo984",
+      "stationCode": "WATFO984",
+      "stationName": "Watford North",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-brook0f8",
+      "stationCode": "BROOK0F8",
+      "stationName": "Brookmans Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-sunbu37f",
+      "stationCode": "SUNBU37F",
+      "stationName": "Sunbury",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-banst7e7",
+      "stationCode": "BANST7E7",
+      "stationName": "Banstead",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-clayg102",
+      "stationCode": "CLAYG102",
+      "stationName": "Claygate",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-royal4ab",
+      "stationCode": "ROYAL4AB",
+      "stationName": "Royal Albert",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hersh093",
+      "stationCode": "HERSH093",
+      "stationName": "Hersham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-epsom5f2",
+      "stationCode": "EPSOM5F2",
+      "stationName": "Epsom",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-cassia31",
+      "stationCode": "CASSIA31",
+      "stationName": "Cassiobury Park Station",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-londof13",
+      "stationCode": "LONDOF13",
+      "stationName": "London City Airport",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-epsome7e",
+      "stationCode": "EPSOME7E",
+      "stationName": "Epsom Downs",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-royal5c0",
+      "stationCode": "ROYAL5C0",
+      "stationName": "Royal Gunpowder Mills Railway",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-garstfc0",
+      "stationCode": "GARSTFC0",
+      "stationName": "Garston",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-beckt8f5",
+      "stationCode": "BECKT8F5",
+      "stationName": "Beckton Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-upper20f",
+      "stationCode": "UPPER20F",
+      "stationName": "Upper Halliford",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chipsc84",
+      "stationCode": "CHIPSC84",
+      "stationName": "Chipstead",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-powdee55",
+      "stationCode": "POWDEE55",
+      "stationName": "Powdermill Cut",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-cyprufae",
+      "stationCode": "CYPRUFAE",
+      "stationName": "Cyprus",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chesh3fd",
+      "stationCode": "CHESH3FD",
+      "stationName": "Chesham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-whyte3e9",
+      "stationCode": "WHYTE3E9",
+      "stationName": "Whyteleafe",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chalfce4",
+      "stationCode": "CHALFCE4",
+      "stationName": "Chalfont & Latimer",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-buckhfe9",
+      "stationCode": "BUCKHFE9",
+      "stationName": "Buckhurst Hill",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-barkide9",
+      "stationCode": "BARKIDE9",
+      "stationName": "Barking Riverside",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-brickd31",
+      "stationCode": "BRICKD31",
+      "stationName": "Bricket Wood",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-whyteb24",
+      "stationCode": "WHYTEB24",
+      "stationName": "Whyteleafe South",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chorl243",
+      "stationCode": "CHORL243",
+      "stationName": "Chorleywood",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chigwdad",
+      "stationCode": "CHIGWDAD",
+      "stationName": "Chigwell",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-howwo721",
+      "stationCode": "HOWWO721",
+      "stationName": "How Wood",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-lough0f9",
+      "stationCode": "LOUGH0F9",
+      "stationName": "Loughton",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-denha60d",
+      "stationCode": "DENHA60D",
+      "stationName": "Denham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-iverc7b",
+      "stationCode": "IVERC7B",
+      "stationName": "Iver",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-parks276",
+      "stationCode": "PARKS276",
+      "stationName": "Park Street",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-theobd29",
+      "stationCode": "THEOBD29",
+      "stationName": "Theobalds Grove",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-apsle1dd",
+      "stationCode": "APSLE1DD",
+      "stationName": "Apsley",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-stalbede",
+      "stationCode": "STALBEDE",
+      "stationName": "St Albans Abbey",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-denha0ff",
+      "stationCode": "DENHA0FF",
+      "stationName": "Denham Golf Club",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hemel124",
+      "stationCode": "HEMEL124",
+      "stationName": "Hemel Hempstead",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-debde8c6",
+      "stationCode": "DEBDE8C6",
+      "stationName": "Debden",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-great028",
+      "stationCode": "GREAT028",
+      "stationName": "Great Missenden",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-welhac20",
+      "stationCode": "WELHAC20",
+      "stationName": "Welham Green",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-walto962",
+      "stationCode": "WALTO962",
+      "stationName": "Walton-on-Thames",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-stalb850",
+      "stationCode": "STALB850",
+      "stationName": "St Albans City",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chesh86e",
+      "stationCode": "CHESH86E",
+      "stationName": "Cheshunt",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ashfo3f7",
+      "stationCode": "ASHFO3F7",
+      "stationName": "Ashford",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-tatte7f7",
+      "stationCode": "TATTE7F7",
+      "stationName": "Tattenham Corner",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-langl674",
+      "stationCode": "LANGL674",
+      "stationName": "Langley",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-berkhc95",
+      "stationCode": "BERKHC95",
+      "stationName": "Berkhamsted",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-beacoa47",
+      "stationCode": "BEACOA47",
+      "stationName": "Beaconsfield",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-sheppe95",
+      "stationCode": "SHEPPE95",
+      "stationName": "Shepperton",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ashte83d",
+      "stationCode": "ASHTE83D",
+      "stationName": "Ashtead",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-seerg1ab",
+      "stationCode": "SEERG1AB",
+      "stationName": "Seer Green and Jordans",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-oxsho9ba",
+      "stationCode": "OXSHO9BA",
+      "stationName": "Oxshott",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-tring700",
+      "stationCode": "TRING700",
+      "stationName": "Tring",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-kingsf81",
+      "stationCode": "KINGSF81",
+      "stationName": "Kingswood",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-wendoab9",
+      "stationCode": "WENDOAB9",
+      "stationName": "Wendover",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-sloug12c",
+      "stationCode": "SLOUG12C",
+      "stationName": "Slough",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-gerrab60",
+      "stationCode": "GERRAB60",
+      "stationName": "Gerrards Cross",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-highwc60",
+      "stationCode": "HIGHWC60",
+      "stationName": "High Wycombe",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-taploca1",
+      "stationCode": "TAPLOCA1",
+      "stationName": "Taplow",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-burnhe73",
+      "stationCode": "BURNHE73",
+      "stationName": "Burnham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-littl302",
+      "stationCode": "LITTL302",
+      "stationName": "Little Kimble",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-whips79d",
+      "stationCode": "WHIPS79D",
+      "stationName": "Whipsnade Central",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-monks528",
+      "stationCode": "MONKS528",
+      "stationName": "Monks Risborough",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-saunda3b",
+      "stationCode": "SAUNDA3B",
+      "stationName": "Saunderton",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-princ02c",
+      "stationCode": "PRINC02C",
+      "stationName": "Princes Risborough",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-tadwo777",
+      "stationCode": "TADWO777",
+      "stationName": "Tadworth",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-stoke05a",
+      "stationCode": "STOKE05A",
+      "stationName": "Stoke Mandeville",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-maide0ed",
+      "stationCode": "MAIDE0ED",
+      "stationName": "Maidenhead",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-harpecd5",
+      "stationCode": "HARPECD5",
+      "stationName": "Harpenden",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-lutonf11",
+      "stationCode": "LUTONF11",
+      "stationName": "Luton Airport Parkway",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ayles41e",
+      "stationCode": "AYLES41E",
+      "stationName": "Aylesbury",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-lutonf1a",
+      "stationCode": "LUTONF1A",
+      "stationName": "Luton",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chedd9c6",
+      "stationCode": "CHEDD9C6",
+      "stationName": "Cheddington",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-stainc48",
+      "stationCode": "STAINC48",
+      "stationName": "Staines",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-leagrc14",
+      "stationCode": "LEAGRC14",
+      "stationName": "Leagrave",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-heathc47",
+      "stationCode": "HEATHC47",
+      "stationName": "Heathrow Terminal 5",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chinn0fc",
+      "stationCode": "CHINN0FC",
+      "stationName": "Chinnor",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-bayfo708",
+      "stationCode": "BAYFO708",
+      "stationName": "Bayford",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-pages1fb",
+      "stationCode": "PAGES1FB",
+      "stationName": "Page's Park",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-bournfd8",
+      "stationCode": "BOURNFD8",
+      "stationName": "Bourne End",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-weybr95d",
+      "stationCode": "WEYBR95D",
+      "stationName": "Weybridge",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hatfi6d2",
+      "stationCode": "HATFI6D2",
+      "stationName": "Hatfield",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-leath217",
+      "stationCode": "LEATH217",
+      "stationName": "Leatherhead",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-marloa05",
+      "stationCode": "MARLOA05",
+      "stationName": "Marlow",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-wrayscfd",
+      "stationCode": "WRAYSCFD",
+      "stationName": "Wraysbury",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-twyfobe5",
+      "stationCode": "TWYFOBE5",
+      "stationName": "Twyford",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-cobha535",
+      "stationCode": "COBHA535",
+      "stationName": "Cobham & Stoke d'Abernon",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-broxbea9",
+      "stationCode": "BROXBEA9",
+      "stationName": "Broxbourne",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-sunny3ba",
+      "stationCode": "SUNNY3BA",
+      "stationName": "Sunnymeads",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-merst18c",
+      "stationCode": "MERST18C",
+      "stationName": "Merstham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-cookhf3c",
+      "stationCode": "COOKHF3C",
+      "stationName": "Cookham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-theyd693",
+      "stationCode": "THEYD693",
+      "stationName": "Theydon Bois",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-addle6c6",
+      "stationCode": "ADDLE6C6",
+      "stationName": "Addlestone",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-eppine97",
+      "stationCode": "EPPINE97",
+      "stationName": "Epping",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-bournf94",
+      "stationCode": "BOURNF94",
+      "stationName": "Bourne Again Junction",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-datch92d",
+      "stationCode": "DATCH92D",
+      "stationName": "Datchet",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-furze828",
+      "stationCode": "FURZE828",
+      "stationName": "Furze Platt",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-chert0cb",
+      "stationCode": "CHERT0CB",
+      "stationName": "Chertsey",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-eghama74",
+      "stationCode": "EGHAMA74",
+      "stationName": "Egham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-byfle1e8",
+      "stationCode": "BYFLE1E8",
+      "stationName": "Byfleet and New Haw",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-henle057",
+      "stationCode": "HENLE057",
+      "stationName": "Henley-on-Thames",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-shiplba1",
+      "stationCode": "SHIPLBA1",
+      "stationName": "Shiplake",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-bookh31b",
+      "stationCode": "BOOKH31B",
+      "stationName": "Bookham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-welwy02e",
+      "stationCode": "WELWY02E",
+      "stationName": "Welwyn Garden City",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-winds645",
+      "stationCode": "WINDS645",
+      "stationName": "Windsor and Eton Riverside",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-betchdf1",
+      "stationCode": "BETCHDF1",
+      "stationName": "Betchworth",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-effin8de",
+      "stationCode": "EFFIN8DE",
+      "stationName": "Effingham Junction",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-windsf2e",
+      "stationCode": "WINDSF2E",
+      "stationName": "Windsor and Eton Central",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-skyric84",
+      "stationCode": "SKYRIC84",
+      "stationName": "Sky Rider",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-welwy1c2",
+      "stationCode": "WELWY1C2",
+      "stationName": "Welwyn North",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-westba23",
+      "stationCode": "WESTBA23",
+      "stationName": "West Byfleet",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-northb57",
+      "stationCode": "NORTHB57",
+      "stationName": "North Weald",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-horsl7e0",
+      "stationCode": "HORSL7E0",
+      "stationName": "Horsley",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-wargr8f4",
+      "stationCode": "WARGR8F4",
+      "stationName": "Wargrave",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-steve30f",
+      "stationCode": "STEVE30F",
+      "stationName": "Stevenage",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ryehoeaf",
+      "stationCode": "RYEHOEAF",
+      "stationName": "Rye House",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-virgibe6",
+      "stationCode": "VIRGIBE6",
+      "stationName": "Virginia Water",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hertf01d",
+      "stationCode": "HERTF01D",
+      "stationName": "Hertford North",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-knebw1bc",
+      "stationCode": "KNEBW1BC",
+      "stationName": "Knebworth",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-clandabe",
+      "stationCode": "CLANDABE",
+      "stationName": "Clandon",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-boxhi309",
+      "stationCode": "BOXHI309",
+      "stationName": "Box Hill & Westhumble",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-longce1a",
+      "stationCode": "LONGCE1A",
+      "stationName": "Longcross",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-hertfe9c",
+      "stationCode": "HERTFE9C",
+      "stationName": "Hertford East",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-dorki96c",
+      "stationCode": "DORKI96C",
+      "stationName": "Dorking",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-watto0d7",
+      "stationCode": "WATTO0D7",
+      "stationName": "Watton-at-Stone",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-dorkie90",
+      "stationCode": "DORKIE90",
+      "stationName": "Dorking West",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-wokin282",
+      "stationCode": "WOKIN282",
+      "stationName": "Woking",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ascot78a",
+      "stationCode": "ASCOT78A",
+      "stationName": "Ascot",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-sunni63f",
+      "stationCode": "SUNNI63F",
+      "stationName": "Sunningdale",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-ware19a",
+      "stationCode": "WARE19A",
+      "stationName": "Ware",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-worplc89",
+      "stationCode": "WORPLC89",
+      "stationName": "Worplesdon",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-marti5ed",
+      "stationCode": "MARTI5ED",
+      "stationName": "Martins Heron",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-brooke42",
+      "stationCode": "BROOKE42",
+      "stationName": "Brookwood",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-brackf78",
+      "stationCode": "BRACKF78",
+      "stationName": "Bracknell",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-bagsh9cd",
+      "stationCode": "BAGSH9CD",
+      "stationName": "Bagshot",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-winne108",
+      "stationCode": "WINNE108",
+      "stationName": "Winnersh",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-winne7d2",
+      "stationCode": "WINNE7D2",
+      "stationName": "Winnersh Triangle",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-harlodd8",
+      "stationCode": "HARLODD8",
+      "stationName": "Harlow Town",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-crowt615",
+      "stationCode": "CROWT615",
+      "stationName": "Crowthorne",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-roydoe50",
+      "stationCode": "ROYDOE50",
+      "stationName": "Roydon",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-cambeaad",
+      "stationCode": "CAMBEAAD",
+      "stationName": "Camberley",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-wokin082",
+      "stationCode": "WOKIN082",
+      "stationName": "Wokingham",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-sandh523",
+      "stationCode": "SANDH523",
+      "stationName": "Sandhurst",
+      "field": "annualNo2"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_source_missing",
+      "message": "No raw pollution source record found for station.",
+      "microAreaId": "ma-blackca4",
+      "stationCode": "BLACKCA4",
+      "stationName": "Blackwater",
+      "field": "annualNo2"
     }
   ],
   "issuesTruncated": false

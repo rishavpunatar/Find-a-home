@@ -1,18 +1,8 @@
 {
-  "generatedAt": "2026-03-24T14:43:14+00:00",
-  "count": 528,
-  "londonWideCount": 538,
+  "generatedAt": "2026-03-24T14:55:01+00:00",
+  "count": 707,
+  "londonWideCount": 648,
   "topMicroAreas": [
-    {
-      "microAreaId": "ma-wfj",
-      "stationName": "Watford Junction",
-      "score": 62.67
-    },
-    {
-      "microAreaId": "ma-mop",
-      "stationName": "Moor Park",
-      "score": 61.78
-    },
     {
       "microAreaId": "ma-queen181",
       "stationName": "Queen's Park",
@@ -52,20 +42,20 @@
       "microAreaId": "ma-westhaba",
       "stationName": "West Hampstead",
       "score": 61.01
+    },
+    {
+      "microAreaId": "ma-tufne909",
+      "stationName": "Tufnell Park",
+      "score": 60.99
+    },
+    {
+      "microAreaId": "ma-holla0ac",
+      "stationName": "Holland Park",
+      "score": 60.95
     }
   ],
   "topLondonWideMicroAreas": [
     {
-      "microAreaId": "ma-wfj",
-      "stationName": "Watford Junction",
-      "score": 62.67
-    },
-    {
-      "microAreaId": "ma-mop",
-      "stationName": "Moor Park",
-      "score": 61.78
-    },
-    {
       "microAreaId": "ma-queen181",
       "stationName": "Queen's Park",
       "score": 61.37
@@ -104,6 +94,16 @@
       "microAreaId": "ma-westhaba",
       "stationName": "West Hampstead",
       "score": 61.01
+    },
+    {
+      "microAreaId": "ma-tufne909",
+      "stationName": "Tufnell Park",
+      "score": 60.99
+    },
+    {
+      "microAreaId": "ma-holla0ac",
+      "stationName": "Holland Park",
+      "score": 60.95
     }
   ]
 }

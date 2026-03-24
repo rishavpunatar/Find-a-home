@@ -475,12 +475,21 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     stations_by_code = {station.station_code: station for station in all_stations}
     scoped_stations = candidate_filter(all_stations, config)
     deduped_stations = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
-    london_wide_candidates = [
+    london_wide_all_deduped = dedupe_micro_areas(all_stations, config.station_distance_threshold_m)
+    london_wide_deduped = [
         station
-        for station in all_stations
+        for station in london_wide_all_deduped
         if station.typical_commute_min <= LONDON_WIDE_MAX_COMMUTE_MINUTES
     ]
-    london_wide_deduped = dedupe_micro_areas(london_wide_candidates, config.station_distance_threshold_m)
+    london_wide_excluded_by_commute = [
+        {
+            'stationCode': station.station_code,
+            'stationName': station.station_name,
+            'typicalCommuteMinutes': station.typical_commute_min,
+        }
+        for station in london_wide_all_deduped
+        if station.typical_commute_min > LONDON_WIDE_MAX_COMMUTE_MINUTES
+    ]
 
     def build_scope(
         stations_for_scope: list[StationRecord],
@@ -881,9 +890,12 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'londonWideMaxCommuteMinutesForCandidate': LONDON_WIDE_MAX_COMMUTE_MINUTES,
             'londonWideUsesPinnerRadiusPrefilter': False,
             'londonWideUsesDriveToPinnerPrefilter': False,
+            'londonWideSourceStationCount': len(london_wide_all_deduped),
+            'londonWideExcludedByCommuteCount': len(london_wide_excluded_by_commute),
         },
         'microAreas': micro_areas,
         'londonWideMicroAreas': london_wide_micro_areas,
+        'londonWideExcludedByCommute': london_wide_excluded_by_commute,
     }
 
 

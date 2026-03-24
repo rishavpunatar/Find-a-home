@@ -86,6 +86,11 @@ export interface ProcessedDataset {
   generatedAt: string
   methodologyVersion: string
   destinationStation: string
+  londonWideExcludedByCommute?: Array<{
+    stationCode: string
+    stationName: string
+    typicalCommuteMinutes: number
+  }>
   verificationSummary?: {
     overallStatus: string
     crimeCrossCheckStatus: string
@@ -105,6 +110,8 @@ export interface ProcessedDataset {
     londonWideMaxCommuteMinutesForCandidate?: number
     londonWideUsesPinnerRadiusPrefilter?: boolean
     londonWideUsesDriveToPinnerPrefilter?: boolean
+    londonWideSourceStationCount?: number
+    londonWideExcludedByCommuteCount?: number
   }
   microAreas: MicroArea[]
   londonWideMicroAreas?: MicroArea[]

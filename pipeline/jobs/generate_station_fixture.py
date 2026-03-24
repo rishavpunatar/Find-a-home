@@ -40,9 +40,9 @@ def haversine_km(lat_1: float, lon_1: float, lat_2: float, lon_2: float) -> floa
 def fetch_station_candidates(radius_m: int) -> list[dict[str, object]]:
     query = f"""[out:json][timeout:180];
 (
-  node(around:{radius_m},{PINNER[0]},{PINNER[1]})["railway"="station"];
-  way(around:{radius_m},{PINNER[0]},{PINNER[1]})["railway"="station"];
-  relation(around:{radius_m},{PINNER[0]},{PINNER[1]})["railway"="station"];
+  node(around:{radius_m},{OXFORD_CIRCUS[0]},{OXFORD_CIRCUS[1]})["railway"="station"];
+  way(around:{radius_m},{OXFORD_CIRCUS[0]},{OXFORD_CIRCUS[1]})["railway"="station"];
+  relation(around:{radius_m},{OXFORD_CIRCUS[0]},{OXFORD_CIRCUS[1]})["railway"="station"];
 );
 out center tags;"""
 
@@ -63,9 +63,11 @@ out center tags;"""
         if not name:
             continue
 
-        network = str(tags.get('network', ''))
-        if not any(term in network for term in ALLOWED_NETWORK_TERMS):
+        network = str(tags.get('network', '')).strip()
+        if network and not any(term.lower() in network.lower() for term in ALLOWED_NETWORK_TERMS):
             continue
+        if not network:
+            network = 'National Rail'
 
         station_tag = str(tags.get('station', ''))
         if station_tag in {'disused', 'abandoned', 'construction', 'proposed'}:
@@ -79,10 +81,6 @@ out center tags;"""
 
         lat_value = float(lat)
         lon_value = float(lon)
-
-        # Bounding box around Greater London + immediate edge belt.
-        if not (51.25 <= lat_value <= 51.75 and -0.75 <= lon_value <= 0.45):
-            continue
 
         candidates.append(
             {
@@ -167,6 +165,7 @@ def build_postcode_lookup():
                     best = result[0]
                     payload = {
                         'admin_district': str(best.get('admin_district') or 'Unknown'),
+                        'admin_county': str(best.get('admin_county') or ''),
                         'region': str(best.get('region') or ''),
                     }
                     cache[key] = payload
@@ -174,7 +173,7 @@ def build_postcode_lookup():
         except requests.RequestException:
             pass
 
-        fallback = {'admin_district': 'Unknown', 'region': ''}
+        fallback = {'admin_district': 'Unknown', 'admin_county': '', 'region': ''}
         cache[key] = fallback
         return fallback
 
@@ -273,10 +272,6 @@ def build_station_records(radius_m: int) -> list[dict[str, object]]:
         lon = float(station['lon'])
         geo = postcode_lookup(lat, lon)
 
-        # Keep London region here; we add original non-London seed records later.
-        if geo['region'] != 'London':
-            continue
-
         station_name = str(station['name'])
         tags = station['tags']
         network = str(station['network'])
@@ -296,7 +291,11 @@ def build_station_records(radius_m: int) -> list[dict[str, object]]:
                 'operator': operator,
                 'lines': lines,
                 'local_authority': geo['admin_district'] or 'Unknown',
-                'county_or_borough': 'Greater London',
+                'county_or_borough': (
+                    'Greater London'
+                    if geo['region'] == 'London'
+                    else geo['admin_county'] or geo['region'] or 'Unknown'
+                ),
                 'lat': round(lat, 6),
                 'lon': round(lon, 6),
                 **transport,
@@ -317,7 +316,12 @@ def build_station_records(radius_m: int) -> list[dict[str, object]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='Regenerate expanded station fixture around Pinner.')
-    parser.add_argument('--radius-m', type=int, default=45_000, help='Overpass radius around Pinner in meters.')
+    parser.add_argument(
+        '--radius-m',
+        type=int,
+        default=120_000,
+        help='Overpass radius around Central London in meters.',
+    )
     args = parser.parse_args()
 
     records = build_station_records(args.radius_m)

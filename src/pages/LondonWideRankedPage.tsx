@@ -32,6 +32,7 @@ export const LondonWideRankedPage = () => {
   const londonWideFilters = useMemo(
     () => ({
       ...filters,
+      maxCommuteMinutes: LONDON_WIDE_COMMUTE_CAP_MINUTES,
       minSchoolScore: 0,
       maxCrimeRatePerThousand: 10_000,
       maxPm25: 1_000,
@@ -60,6 +61,13 @@ export const LondonWideRankedPage = () => {
     }
     return [...byId.values()].sort((left, right) => right.dynamicOverallScore - left.dynamicOverallScore)
   }, [defaultRanked, londonWideRanked])
+  const brightonExclusion = useMemo(
+    () =>
+      dataset?.londonWideExcludedByCommute?.find(
+        (entry) => entry.stationName.toLowerCase() === 'brighton',
+      ) ?? null,
+    [dataset],
+  )
 
   if (loading) {
     return <LoadingState title="Building London-wide ranked table" />
@@ -85,12 +93,27 @@ export const LondonWideRankedPage = () => {
           and intentionally ignores the drive-to-Pinner filter and Pinner-radius candidate prefilter.
         </p>
         <p className="mt-1 text-xs text-slate-600">
-          Effective filters in this tab: commute ≤ {effectiveFilters.maxCommuteMinutes} min only.
+          Effective filters in this tab: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
           Candidate generation uses the London-wide scope from all known stations (not the default
           Pinner-focused pipeline search radius). School, crime, PM2.5, green, and price
           constraints
           are intentionally not limiting results here.
         </p>
+        {dataset.config.londonWideSourceStationCount !== undefined &&
+        dataset.config.londonWideExcludedByCommuteCount !== undefined ? (
+          <p className="mt-1 text-xs text-slate-600">
+            Source stations after dedupe: {dataset.config.londonWideSourceStationCount}. Excluded by
+            commute &gt; {LONDON_WIDE_COMMUTE_CAP_MINUTES} minutes:{' '}
+            {dataset.config.londonWideExcludedByCommuteCount}.
+          </p>
+        ) : null}
+        {brightonExclusion ? (
+          <p className="mt-1 text-xs text-slate-600">
+            Brighton is present in source stations but excluded in this tab because estimated
+            commute to {dataset.destinationStation} is {brightonExclusion.typicalCommuteMinutes}{' '}
+            minutes (&gt; {LONDON_WIDE_COMMUTE_CAP_MINUTES}).
+          </p>
+        ) : null}
       </section>
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
