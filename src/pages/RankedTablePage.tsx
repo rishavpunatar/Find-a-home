@@ -91,6 +91,11 @@ export const RankedTablePage = () => {
                 800m catchment (`status = available`).
               </p>
               <p className="mt-1 text-slate-600">
+                Median is distance-and-recency weighted: nearer catchment bands and newer
+                transactions have higher influence (inner band weighted highest, outer band lowest)
+                so the figure tracks current local pricing more closely.
+              </p>
+              <p className="mt-1 text-slate-600">
                 Station without direct property record: estimate using inverse-distance weighting
                 over nearby property anchors (`weight = 1 / max(distance_m, 120)^1.8`, up to 8
                 nearest stations), then `median = sum(value * weight) / sum(weight)` (`status =

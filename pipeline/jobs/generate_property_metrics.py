@@ -36,6 +36,12 @@ BANDS: list[tuple[str, float, float]] = [
     ('outer', 550.0, 800.0),
 ]
 
+BAND_PRICE_WEIGHTS: dict[str, float] = {
+    'inner': 1.35,
+    'middle': 1.0,
+    'outer': 0.75,
+}
+
 
 def clamp(value: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(maximum, value))
@@ -230,6 +236,58 @@ def bucket_transactions_by_postcode(rows: list[dict[str, Any]]) -> dict[str, lis
     return grouped
 
 
+def parse_deed_date(value: str) -> date | None:
+    try:
+        return date.fromisoformat(value[:10])
+    except ValueError:
+        return None
+
+
+def distance_weight(distance_m: float) -> float:
+    normalized = clamp(distance_m / CATCHMENT_RADIUS_M, 0.0, 1.0)
+    return 0.75 + (1.0 - normalized) * 0.5
+
+
+def recency_weight(*, deed_date: date | None, window_end: date) -> float:
+    if deed_date is None:
+        return 1.0
+
+    age_days = clamp(float((window_end - deed_date).days), 0.0, 365.0)
+    freshness = 1.0 - age_days / 365.0
+    return 0.7 + freshness * 0.6
+
+
+def weighted_mean(values: list[float], weights: list[float]) -> float:
+    if not values or not weights or len(values) != len(weights):
+        raise ValueError('values and weights must be same length and non-empty')
+
+    total_weight = sum(max(0.0, weight) for weight in weights)
+    if total_weight <= 0:
+        return float(statistics.mean(values))
+
+    weighted_sum = sum(value * max(0.0, weight) for value, weight in zip(values, weights))
+    return float(weighted_sum / total_weight)
+
+
+def weighted_median(values: list[float], weights: list[float]) -> float:
+    if not values or not weights or len(values) != len(weights):
+        raise ValueError('values and weights must be same length and non-empty')
+
+    pairs = sorted(zip(values, weights), key=lambda item: item[0])
+    total_weight = sum(max(0.0, weight) for _, weight in pairs)
+    if total_weight <= 0:
+        return float(statistics.median(values))
+
+    threshold = total_weight / 2
+    cumulative = 0.0
+    for value, weight in pairs:
+        cumulative += max(0.0, weight)
+        if cumulative >= threshold:
+            return float(value)
+
+    return float(pairs[-1][0])
+
+
 def sample_station_transactions(
     selected_postcodes: list[dict[str, Any]],
     transactions_by_outcode: dict[str, dict[str, list[dict[str, Any]]]],
@@ -288,16 +346,36 @@ def build_property_record(
     if not current_rows:
         return None
 
+    postcode_lookup = {str(item['postcode']): item for item in selected_postcodes}
+
+    def build_weights(rows: list[dict[str, Any]], *, window_end: date) -> list[float]:
+        computed: list[float] = []
+        for row in rows:
+            postcode = str(row.get('postcode', ''))
+            postcode_meta = postcode_lookup.get(postcode, {})
+            band = str(postcode_meta.get('band', 'middle'))
+            distance_m = float(postcode_meta.get('distance_m', CATCHMENT_RADIUS_M * 0.7))
+            band_weight = BAND_PRICE_WEIGHTS.get(band, 1.0)
+            deed = parse_deed_date(str(row.get('deed_date', '')))
+            weight = band_weight * distance_weight(distance_m) * recency_weight(
+                deed_date=deed,
+                window_end=window_end,
+            )
+            computed.append(max(0.1, float(weight)))
+        return computed
+
     prices = [float(row['price']) for row in current_rows]
-    median_price = float(statistics.median(prices))
-    average_price = float(statistics.mean(prices))
+    current_weights = build_weights(current_rows, window_end=current_window[1])
+    median_price = weighted_median(prices, current_weights)
+    average_price = weighted_mean(prices, current_weights)
 
     prior_rows, _prior_strata, _prior_postcodes = sample_station_transactions(
         selected_postcodes,
         prior_by_outcode,
     )
     prior_prices = [float(row['price']) for row in prior_rows]
-    prior_median = float(statistics.median(prior_prices)) if prior_prices else None
+    prior_weights = build_weights(prior_rows, window_end=prior_window[1]) if prior_rows else []
+    prior_median = weighted_median(prior_prices, prior_weights) if prior_prices else None
     trend_proxy = (
         ((median_price - prior_median) / prior_median) * 100.0
         if prior_median and prior_median > 0
@@ -324,6 +402,8 @@ def build_property_record(
         'HM Land Registry PPD semi-detached standard transactions. '
         f'Catchment postcode sample from postcodes.io within {CATCHMENT_RADIUS_M}m '
         'using distance strata (0-300m, 300-550m, 550-800m) and capped per-stratum sampling. '
+        'Median/average are distance-and-recency weighted so nearer catchment transactions and '
+        'newer sales have higher influence (band weights inner=1.35, middle=1.0, outer=0.75). '
         f'Current window {current_start.isoformat()} to {current_end.isoformat()}; '
         f'prior window {prior_start.isoformat()} to {prior_end.isoformat()} for trend proxy. '
         f'Sample transactions={sample_size}, postcodes with transactions={postcode_hits}, '

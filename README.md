@@ -170,7 +170,7 @@ Optional London high-resolution mode:
    - drive to Pinner <= configured max
 3. Deduplicate highly overlapping station micro-areas.
 4. Build per-micro-area metrics via adapters.
-   - Property metrics use HM Land Registry PPD semi-detached transactions sampled over a rolling 12-month window from postcode strata inside each 800m catchment.
+   - Property metrics use HM Land Registry PPD semi-detached transactions sampled over a rolling 12-month window from postcode strata inside each 800m catchment; median/average values are distance-and-recency weighted so nearer and newer catchment transactions influence the indicator more strongly.
    - If a station has no direct source record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchored stations.
 5. Compute component scores and weighted overall rank.
 6. Persist `data/processed/micro_areas.json` and `data/processed/summary.json`.
@@ -200,7 +200,7 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - planning
 - borough QoL (ONS APS personal well-being)
 
-Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics use HM Land Registry PPD + stratified catchment postcode sampling. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Some other domains remain fixture/interpolated in this MVP.
+Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics use HM Land Registry PPD + stratified catchment postcode sampling with distance/recency weighting for the displayed median and average indicators. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Some other domains remain fixture/interpolated in this MVP.
 
 ## Data quality model (no fake precision)
 
