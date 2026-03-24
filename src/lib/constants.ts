@@ -15,7 +15,7 @@ export const DEFAULT_FILTERS: Filters = {
   maxDriveMinutes: 20,
   minSchoolScore: 55,
   maxCrimeRatePerThousand: 82,
-  maxNo2: 24,
+  maxPm25: 12,
   minGreenCoverPct: 22,
   maxMedianPrice: 825000,
 }

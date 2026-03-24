@@ -62,8 +62,10 @@ export const RankedTablePage = () => {
         `Crime ${formatNumber(pinner.crimeRatePerThousand.value, 1)} > max ${filters.maxCrimeRatePerThousand}`,
       )
     }
-    if ((pinner.annualNo2.value ?? Number.POSITIVE_INFINITY) > filters.maxNo2) {
-      pinnerFailures.push(`NO2 ${formatNumber(pinner.annualNo2.value, 1)} > max ${filters.maxNo2}`)
+    if ((pinner.annualPm25.value ?? Number.POSITIVE_INFINITY) > filters.maxPm25) {
+      pinnerFailures.push(
+        `PM2.5 ${formatNumber(pinner.annualPm25.value, 1)} > max ${filters.maxPm25}`,
+      )
     }
     if ((pinner.greenCoverPct.value ?? 0) < filters.minGreenCoverPct) {
       pinnerFailures.push(
@@ -122,14 +124,14 @@ export const RankedTablePage = () => {
 
             <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
               <summary className="cursor-pointer font-medium text-slate-900">
-                NO2 (ug/m3, lower is better)
+                PM2.5 (ug/m3, lower is better)
               </summary>
               <p className="mt-2 text-slate-600">
-                Annual mean NO2 for the micro-area proxy (`annualNo2` metric). This table shows raw
-                concentration, not a transformed score.
+                Annual mean PM2.5 for the micro-area proxy (`annualPm25` metric). This table shows
+                raw concentration, not a transformed score.
               </p>
               <p className="mt-1 text-slate-600">
-                Method (Greater London): use LAEI 20m modelled NO2 cells inside the 800m
+                Method (Greater London): use LAEI 20m modelled PM2.5 cells inside the 800m
                 station-centred catchment, then take a distance-weighted mean
                 (`w = 1 / max(distance, 20)^1.2`).
               </p>
@@ -139,8 +141,8 @@ export const RankedTablePage = () => {
                 (`w = 1 / max(distance, 200)^1.3`).
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                For London rows we store a DEFRA 1km secondary cross-check alongside the LAEI value
-                and include the delta in the metric methodology note on the detail page.
+                PM2.5 is the primary air-quality filter in this app. NO2 remains available as a
+                secondary metric in the detail view and methodology notes.
               </p>
             </details>
 

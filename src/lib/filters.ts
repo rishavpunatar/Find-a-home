@@ -32,7 +32,7 @@ export const matchesFilters = (
     return false
   }
 
-  if (!isAtMost(area.annualNo2.value, filters.maxNo2)) {
+  if (!isAtMost(area.annualPm25.value, filters.maxPm25)) {
     return false
   }
 

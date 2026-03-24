@@ -124,7 +124,7 @@ export interface Filters {
   maxDriveMinutes: number
   minSchoolScore: number
   maxCrimeRatePerThousand: number
-  maxNo2: number
+  maxPm25: number
   minGreenCoverPct: number
   maxMedianPrice: number
 }

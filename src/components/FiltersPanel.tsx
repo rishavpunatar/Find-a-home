@@ -72,7 +72,7 @@ export const FiltersPanel = () => {
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
           London {'<=60m'} mode is active: only commute is applied here. Drive-to-Pinner, school,
-          crime, NO2, green-cover, and price filters are ignored in this tab, and candidates are
+          crime, PM2.5, green-cover, and price filters are ignored in this tab, and candidates are
           not prefiltered by the Pinner search radius.
         </p>
       ) : null}
@@ -117,13 +117,13 @@ export const FiltersPanel = () => {
           disabled={isLondonWideTab}
         />
         <RangeControl
-          label="Max NO2"
-          value={filters.maxNo2}
-          min={10}
-          max={40}
-          step={0.5}
+          label="Max PM2.5"
+          value={filters.maxPm25}
+          min={5}
+          max={25}
+          step={0.1}
           unit=" ug/m3"
-          onChange={(next) => updateFilter('maxNo2', next)}
+          onChange={(next) => updateFilter('maxPm25', next)}
           disabled={isLondonWideTab}
         />
         <RangeControl

@@ -27,8 +27,8 @@ const getSortValue = (area: DerivedMicroArea, key: string): number | string => {
       return area.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY
     case 'schools':
       return area.componentScores.schools
-    case 'no2':
-      return area.annualNo2.value ?? Number.POSITIVE_INFINITY
+    case 'pm25':
+      return area.annualPm25.value ?? Number.POSITIVE_INFINITY
     case 'crime':
       return area.crimeRatePerThousand.value ?? Number.POSITIVE_INFINITY
     case 'green':
@@ -129,7 +129,7 @@ export const RankedTable = ({
             <HeaderCell label="Drive" sortKey="drive" current={sort} onSort={toggleSort} />
             <HeaderCell label="Median price" sortKey="price" current={sort} onSort={toggleSort} />
             <HeaderCell label="School" sortKey="schools" current={sort} onSort={toggleSort} />
-            <HeaderCell label="NO2" sortKey="no2" current={sort} onSort={toggleSort} />
+            <HeaderCell label="PM2.5" sortKey="pm25" current={sort} onSort={toggleSort} />
             <HeaderCell label="Crime" sortKey="crime" current={sort} onSort={toggleSort} />
             <HeaderCell label="Green" sortKey="green" current={sort} onSort={toggleSort} />
             <HeaderCell
@@ -168,7 +168,7 @@ export const RankedTable = ({
                 </td>
                 <td className="px-3 py-2">{formatCurrency(area.medianSemiDetachedPrice.value)}</td>
                 <td className="px-3 py-2">{area.componentScores.schools.toFixed(1)}</td>
-                <td className="px-3 py-2">{formatNumber(area.annualNo2.value, 1)}</td>
+                <td className="px-3 py-2">{formatNumber(area.annualPm25.value, 1)}</td>
                 <td className="px-3 py-2">{formatNumber(area.crimeRatePerThousand.value, 1)}</td>
                 <td className="px-3 py-2">{formatNumber(area.greenCoverPct.value, 1)}%</td>
                 <td className="px-3 py-2">{(area.dataConfidenceScore * 100).toFixed(0)}%</td>

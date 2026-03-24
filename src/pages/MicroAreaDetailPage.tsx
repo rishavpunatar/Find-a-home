@@ -168,20 +168,20 @@ export const MicroAreaDetailPage = () => {
           updated={area.crimeRatePerThousand.lastUpdated}
         />
         <MetricRow
-          label="NO2 annual mean"
-          value={`${formatNumber(area.annualNo2.value, 1)} ug/m3`}
-          status={area.annualNo2.status}
-          confidence={area.annualNo2.confidence}
-          note={area.annualNo2.methodologyNote}
-          updated={area.annualNo2.lastUpdated}
-        />
-        <MetricRow
-          label="PM2.5 annual mean"
+          label="PM2.5 annual mean (primary)"
           value={`${formatNumber(area.annualPm25.value, 1)} ug/m3`}
           status={area.annualPm25.status}
           confidence={area.annualPm25.confidence}
           note={area.annualPm25.methodologyNote}
           updated={area.annualPm25.lastUpdated}
+        />
+        <MetricRow
+          label="NO2 annual mean (secondary)"
+          value={`${formatNumber(area.annualNo2.value, 1)} ug/m3`}
+          status={area.annualNo2.status}
+          confidence={area.annualNo2.confidence}
+          note={area.annualNo2.methodologyNote}
+          updated={area.annualNo2.lastUpdated}
         />
         <MetricRow
           label="Green cover"

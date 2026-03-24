@@ -28,7 +28,7 @@ export const LondonWideRankedPage = () => {
       ...filters,
       minSchoolScore: 0,
       maxCrimeRatePerThousand: 10_000,
-      maxNo2: 1_000,
+      maxPm25: 1_000,
       minGreenCoverPct: 0,
       maxMedianPrice: 10_000_000,
     }),
@@ -62,7 +62,8 @@ export const LondonWideRankedPage = () => {
         <p className="mt-1 text-xs text-slate-600">
           Effective filters in this tab: commute ≤ {effectiveFilters.maxCommuteMinutes} min only.
           Candidate generation uses the London-wide scope from all known stations (not the default
-          Pinner-focused pipeline search radius). School, crime, NO2, green, and price constraints
+          Pinner-focused pipeline search radius). School, crime, PM2.5, green, and price
+          constraints
           are intentionally not limiting results here.
         </p>
       </section>

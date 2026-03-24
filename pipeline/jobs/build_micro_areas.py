@@ -329,8 +329,8 @@ def score_components(
     green_area = float(green.get('green_space_area_km2_within_1km', 0.8)) if green else 0.8
     park_distance = float(green.get('nearest_park_distance_m', 900)) if green else 900
     environment_score = (
-        inverse_score(no2, 10, 40) * 0.28
-        + inverse_score(pm25, 7, 18) * 0.22
+        inverse_score(pm25, 7, 18) * 0.34
+        + inverse_score(no2, 10, 40) * 0.16
         + forward_score(green_cover, 10, 62) * 0.2
         + forward_score(green_area, 0.3, 3.2) * 0.18
         + inverse_score(park_distance, 120, 1500) * 0.12
