@@ -97,6 +97,7 @@ export interface ProcessedDataset {
   }
   config: {
     pinnerCoordinate: Coordinate
+    centralLondonCoordinate: Coordinate
     stationSearchRadiusKm: number
     microAreaWalkRadiusM: number
     maxCommuteMinutesForCandidate: number

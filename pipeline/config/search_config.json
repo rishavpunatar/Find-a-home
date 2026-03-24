@@ -5,6 +5,10 @@
     "lat": 51.5931,
     "lon": -0.3818
   },
+  "central_london_coordinate": {
+    "lat": 51.5152,
+    "lon": -0.1419
+  },
   "station_search_radius_km": 45,
   "micro_area_walk_radius_m": 800,
   "candidate_filter": {

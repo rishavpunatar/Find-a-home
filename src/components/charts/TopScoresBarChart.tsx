@@ -38,13 +38,26 @@ export const TopScoresBarChart = ({ areas }: TopScoresBarChartProps) => {
   }))
 
   return (
-    <div className="h-80 w-full">
+    <div className="h-[420px] w-full">
       <ResponsiveContainer>
         <BarChart data={data} margin={{ left: 0, right: 20, top: 10, bottom: 80 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" angle={-45} textAnchor="end" interval={0} height={90} />
           <YAxis domain={[0, 100]} />
-          <Tooltip />
+          <Tooltip
+            content={({ active, payload, label }) => {
+              if (!active || !payload || payload.length === 0) {
+                return null
+              }
+              const score = Number(payload[0]?.value ?? 0)
+              return (
+                <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs shadow">
+                  <p className="font-semibold text-slate-900">{String(label)}</p>
+                  <p className="text-slate-700">Weighted score: {score.toFixed(2)}</p>
+                </div>
+              )
+            }}
+          />
           <Bar dataKey="score" radius={[6, 6, 0, 0]}>
             {data.map((entry) => (
               <Cell key={entry.name} fill={getColor(entry.score)} />

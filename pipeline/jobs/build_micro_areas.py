@@ -32,12 +32,20 @@ LONDON_WIDE_MAX_COMMUTE_MINUTES = 60
 
 def load_config(path: Path) -> SearchConfig:
     payload = json.loads(path.read_text(encoding='utf-8'))
+    central_coordinate_payload = payload.get(
+        'central_london_coordinate',
+        {'lat': 51.5152, 'lon': -0.1419},
+    )
     return SearchConfig(
         methodology_version=payload['methodology_version'],
         generated_timezone=payload['generated_timezone'],
         pinner_coordinate=Coordinate(
             lat=payload['pinner_coordinate']['lat'],
             lon=payload['pinner_coordinate']['lon'],
+        ),
+        central_london_coordinate=Coordinate(
+            lat=central_coordinate_payload['lat'],
+            lon=central_coordinate_payload['lon'],
         ),
         station_search_radius_km=payload['station_search_radius_km'],
         micro_area_walk_radius_m=payload['micro_area_walk_radius_m'],
@@ -762,6 +770,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
         'destinationStation': config.destination_station,
         'config': {
             'pinnerCoordinate': asdict(config.pinner_coordinate),
+            'centralLondonCoordinate': asdict(config.central_london_coordinate),
             'stationSearchRadiusKm': config.station_search_radius_km,
             'microAreaWalkRadiusM': config.micro_area_walk_radius_m,
             'maxCommuteMinutesForCandidate': config.max_commute_minutes,

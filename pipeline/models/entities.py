@@ -52,6 +52,7 @@ class SearchConfig:
     methodology_version: str
     generated_timezone: str
     pinner_coordinate: Coordinate
+    central_london_coordinate: Coordinate
     station_search_radius_km: float
     micro_area_walk_radius_m: int
     max_commute_minutes: float

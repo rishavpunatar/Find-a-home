@@ -13,20 +13,26 @@ import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
+import { Pm25DistanceScatter } from '@/components/charts/Pm25DistanceScatter'
 import { SubscoreRadarChart } from '@/components/charts/SubscoreRadarChart'
 import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
 
 export const ComparisonPage = () => {
-  const { loading, error } = useDataContext()
+  const { dataset, loading, error } = useDataContext()
   const { compared, filtered } = useRankedData()
 
   if (loading) {
     return <LoadingState title="Preparing comparison view" />
   }
 
-  if (error) {
-    return <ErrorState title="Comparison unavailable" detail={error} />
+  if (error || !dataset) {
+    return (
+      <ErrorState
+        title="Comparison unavailable"
+        detail={error ?? 'Dataset is missing. Run the pipeline and sync processed files.'}
+      />
+    )
   }
 
   if (compared.length === 0) {
@@ -78,7 +84,7 @@ export const ComparisonPage = () => {
         <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
           Grouped component score comparison
         </h3>
-        <div className="h-[360px] w-full">
+        <div className="h-[420px] w-full">
           <ResponsiveContainer>
             <BarChart data={componentData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -110,6 +116,15 @@ export const ComparisonPage = () => {
             Pollution vs green space (filtered set)
           </h3>
           <EnvironmentScatter areas={filtered} />
+        </article>
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            PM2.5 vs distance from central London (filtered set)
+          </h3>
+          <Pm25DistanceScatter
+            areas={filtered}
+            centralCoordinate={dataset.config.centralLondonCoordinate}
+          />
         </article>
       </section>
     </div>

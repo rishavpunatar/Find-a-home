@@ -23,13 +23,26 @@ export const ScoreDistributionChart = ({ areas }: ScoreDistributionChartProps) =
   }))
 
   return (
-    <div className="h-72 w-full">
+    <div className="h-[360px] w-full">
       <ResponsiveContainer>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="label" />
           <YAxis allowDecimals={false} />
-          <Tooltip />
+          <Tooltip
+            content={({ active, payload, label }) => {
+              if (!active || !payload || payload.length === 0) {
+                return null
+              }
+              const count = Number(payload[0]?.value ?? 0)
+              return (
+                <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs shadow">
+                  <p className="font-semibold text-slate-900">Score bucket {String(label)}</p>
+                  <p className="text-slate-700">Micro-areas: {count}</p>
+                </div>
+              )
+            }}
+          />
           <Bar dataKey="count" fill="#0f766e" radius={[8, 8, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
