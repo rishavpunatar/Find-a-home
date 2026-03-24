@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
 import { Pm25DistanceScatter } from '@/components/charts/Pm25DistanceScatter'
-import { ScoreDistributionChart } from '@/components/charts/ScoreDistributionChart'
+import { QolDistanceScatter } from '@/components/charts/QolDistanceScatter'
 import { TopScoresBarChart } from '@/components/charts/TopScoresBarChart'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
@@ -234,15 +234,18 @@ export const OverviewPage = () => {
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Score distribution
-          </h3>
-          <ScoreDistributionChart areas={filtered} />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
             PM2.5 vs distance from central London
           </h3>
           <Pm25DistanceScatter
+            areas={filtered}
+            centralCoordinate={dataset.config.centralLondonCoordinate}
+          />
+        </article>
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Borough QoL vs distance from central London
+          </h3>
+          <QolDistanceScatter
             areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
           />

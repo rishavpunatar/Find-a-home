@@ -14,6 +14,7 @@ import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { Pm25DistanceScatter } from '@/components/charts/Pm25DistanceScatter'
+import { QolDistanceScatter } from '@/components/charts/QolDistanceScatter'
 import { SubscoreRadarChart } from '@/components/charts/SubscoreRadarChart'
 import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
@@ -122,6 +123,15 @@ export const ComparisonPage = () => {
             PM2.5 vs distance from central London (filtered set)
           </h3>
           <Pm25DistanceScatter
+            areas={filtered}
+            centralCoordinate={dataset.config.centralLondonCoordinate}
+          />
+        </article>
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Borough QoL vs distance from central London (filtered set)
+          </h3>
+          <QolDistanceScatter
             areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
           />
