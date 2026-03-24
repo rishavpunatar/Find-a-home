@@ -36,6 +36,7 @@ export const OverviewPage = () => {
   }
 
   const topFive = filtered.slice(0, 5)
+  const londonWideCount = dataset.londonWideMicroAreas?.length ?? ranked.length
   const averageScore = filtered.length
     ? (filtered.reduce((sum, area) => sum + area.dynamicOverallScore, 0) / filtered.length).toFixed(
         1,
@@ -46,6 +47,7 @@ export const OverviewPage = () => {
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Total micro-areas analysed" value={String(ranked.length)} />
+        <StatCard label="London-wide candidates" value={String(londonWideCount)} />
         <StatCard label="Passing current filters" value={String(filtered.length)} />
         <StatCard
           label="Average weighted score"

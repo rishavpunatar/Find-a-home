@@ -72,7 +72,8 @@ export const FiltersPanel = () => {
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
           London {'<=60m'} mode is active: only commute is applied here. Drive-to-Pinner, school,
-          crime, NO2, green-cover, and price filters are ignored in this tab.
+          crime, NO2, green-cover, and price filters are ignored in this tab, and candidates are
+          not prefiltered by the Pinner search radius.
         </p>
       ) : null}
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">

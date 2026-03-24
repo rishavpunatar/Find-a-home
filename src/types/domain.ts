@@ -101,8 +101,12 @@ export interface ProcessedDataset {
     microAreaWalkRadiusM: number
     maxCommuteMinutesForCandidate: number
     maxDriveMinutesForCandidate: number
+    londonWideMaxCommuteMinutesForCandidate?: number
+    londonWideUsesPinnerRadiusPrefilter?: boolean
+    londonWideUsesDriveToPinnerPrefilter?: boolean
   }
   microAreas: MicroArea[]
+  londonWideMicroAreas?: MicroArea[]
 }
 
 export interface Weights {

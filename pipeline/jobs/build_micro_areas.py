@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / 'data' / 'raw'
 PROCESSED_DIR = ROOT / 'data' / 'processed'
 CONFIG_PATH = ROOT / 'pipeline' / 'config' / 'search_config.json'
+LONDON_WIDE_MAX_COMMUTE_MINUTES = 60
 
 
 def load_config(path: Path) -> SearchConfig:
@@ -403,325 +404,355 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     stations_by_code = {station.station_code: station for station in all_stations}
     scoped_stations = candidate_filter(all_stations, config)
     deduped_stations = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
+    london_wide_candidates = [
+        station
+        for station in all_stations
+        if station.typical_commute_min <= LONDON_WIDE_MAX_COMMUTE_MINUTES
+    ]
+    london_wide_deduped = dedupe_micro_areas(london_wide_candidates, config.station_distance_threshold_m)
 
-    micro_areas: list[dict[str, Any]] = []
+    def build_scope(
+        stations_for_scope: list[StationRecord],
+        overlap_reference: list[StationRecord],
+        *,
+        scope_label: str,
+    ) -> list[dict[str, Any]]:
+        micro_areas: list[dict[str, Any]] = []
 
-    for station in deduped_stations:
-        property_record = property_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
-            station,
-            stations_by_code,
-            property_anchor_records,
-            [
-                'average_semi_price',
-                'median_semi_price',
-                'price_trend_pct_5y',
-                'affordability_score',
-                'value_for_money_score',
-            ],
-            'Estimated by inverse-distance interpolation from nearby fixture-backed station property metrics.',
-        )
-        school_record = school_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
-            station,
-            stations_by_code,
-            school_anchor_records,
-            [
-                'nearby_primary_count',
-                'nearby_secondary_count',
-                'primary_quality_score',
-                'secondary_quality_score',
-            ],
-            'Estimated by inverse-distance interpolation from nearby station school composites. No single inspection label is used.',
-        )
-        pollution_record = pollution_adapter.get_by_station(
-            station.station_code,
-        ) or synthesize_record_from_anchors(
-            station,
-            stations_by_code,
-            pollution_anchor_records,
-            ['annual_no2', 'annual_pm25'],
-            'Estimated by inverse-distance interpolation from nearby station pollution proxies.',
-        )
-        green_record = green_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
-            station,
-            stations_by_code,
-            green_anchor_records,
-            ['green_space_area_km2_within_1km', 'green_cover_pct', 'nearest_park_distance_m'],
-            'Estimated by inverse-distance interpolation from nearby station greenspace proxies.',
-        )
-        crime_record = crime_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
-            station,
-            stations_by_code,
-            crime_anchor_records,
-            ['crime_rate_per_1000'],
-            'Estimated by inverse-distance interpolation from nearby station crime-rate proxies.',
-        )
-        if crime_record and 'breakdown' not in crime_record:
-            rate = float(crime_record.get('crime_rate_per_1000', 0.0))
-            crime_record['breakdown'] = synthesize_crime_breakdown(
-                rate,
+        for station in stations_for_scope:
+            property_record = property_adapter.get_by_station(
+                station.station_code,
+            ) or synthesize_record_from_anchors(
+                station,
+                stations_by_code,
+                property_anchor_records,
+                [
+                    'average_semi_price',
+                    'median_semi_price',
+                    'price_trend_pct_5y',
+                    'affordability_score',
+                    'value_for_money_score',
+                ],
+                'Estimated by inverse-distance interpolation from nearby fixture-backed station property metrics.',
+            )
+            school_record = school_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
+                station,
+                stations_by_code,
+                school_anchor_records,
+                [
+                    'nearby_primary_count',
+                    'nearby_secondary_count',
+                    'primary_quality_score',
+                    'secondary_quality_score',
+                ],
+                'Estimated by inverse-distance interpolation from nearby station school composites. No single inspection label is used.',
+            )
+            pollution_record = pollution_adapter.get_by_station(
+                station.station_code,
+            ) or synthesize_record_from_anchors(
+                station,
+                stations_by_code,
+                pollution_anchor_records,
+                ['annual_no2', 'annual_pm25'],
+                'Estimated by inverse-distance interpolation from nearby station pollution proxies.',
+            )
+            green_record = green_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
+                station,
+                stations_by_code,
+                green_anchor_records,
+                ['green_space_area_km2_within_1km', 'green_cover_pct', 'nearest_park_distance_m'],
+                'Estimated by inverse-distance interpolation from nearby station greenspace proxies.',
+            )
+            crime_record = crime_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
                 station,
                 stations_by_code,
                 crime_anchor_records,
+                ['crime_rate_per_1000'],
+                'Estimated by inverse-distance interpolation from nearby station crime-rate proxies.',
             )
+            if crime_record and 'breakdown' not in crime_record:
+                rate = float(crime_record.get('crime_rate_per_1000', 0.0))
+                crime_record['breakdown'] = synthesize_crime_breakdown(
+                    rate,
+                    station,
+                    stations_by_code,
+                    crime_anchor_records,
+                )
 
-        population_record = population_adapter.get_by_station(
-            station.station_code,
-        ) or synthesize_record_from_anchors(
-            station,
-            stations_by_code,
-            population_anchor_records,
-            ['population_in_reference_zone'],
-            'Estimated by inverse-distance interpolation from nearby station denominator proxies.',
-        )
-        planning_record = planning_adapter.get_by_station(station.station_code)
-        if not planning_record or planning_record.get('planning_risk_score') is None:
-            planning_record = synthesize_record_from_anchors(
+            population_record = population_adapter.get_by_station(
+                station.station_code,
+            ) or synthesize_record_from_anchors(
                 station,
                 stations_by_code,
-                planning_anchor_records,
-                ['planning_risk_score'],
-                'Heuristic planning/development risk estimated by interpolation from nearby placeholder station scores.',
-            ) or planning_record
+                population_anchor_records,
+                ['population_in_reference_zone'],
+                'Estimated by inverse-distance interpolation from nearby station denominator proxies.',
+            )
+            planning_record = planning_adapter.get_by_station(station.station_code)
+            if not planning_record or planning_record.get('planning_risk_score') is None:
+                planning_record = synthesize_record_from_anchors(
+                    station,
+                    stations_by_code,
+                    planning_anchor_records,
+                    ['planning_risk_score'],
+                    'Heuristic planning/development risk estimated by interpolation from nearby placeholder station scores.',
+                ) or planning_record
 
-        components = score_components(
-            station,
-            property_record,
-            school_record,
-            pollution_record,
-            green_record,
-            crime_record,
-            planning_record,
-        )
-
-        overlap_conf = overlap_confidence(station, deduped_stations, config.micro_area_walk_radius_m)
-
-        metrics = {
-            'averageSemiDetachedPrice': metric_from_record(
+            components = score_components(
+                station,
                 property_record,
-                'average_semi_price',
-                unit='GBP',
-                note='Derived from semi-detached transactions around station catchment.',
-                last_updated=config.last_updated_default,
-            ),
-            'medianSemiDetachedPrice': metric_from_record(
-                property_record,
-                'median_semi_price',
-                unit='GBP',
-                note='Median semi-detached sold price from fixture-backed transaction sample.',
-                last_updated=config.last_updated_default,
-            ),
-            'semiPriceTrendPct5y': metric_from_record(
-                property_record,
-                'price_trend_pct_5y',
-                unit='%',
-                note='Approximate 5-year trend in sold price levels.',
-                last_updated=config.last_updated_default,
-            ),
-            'affordabilityScore': metric_from_record(
-                property_record,
-                'affordability_score',
-                unit='score',
-                note='Affordability proxy from local median prices and commuting context.',
-                last_updated=config.last_updated_default,
-            ),
-            'valueForMoneyScore': metric_from_record(
-                property_record,
-                'value_for_money_score',
-                unit='score',
-                note='Composite balancing median semi prices against commute and schools.',
-                last_updated=config.last_updated_default,
-            ),
-            'commuteTypicalMinutes': metric(
-                station.typical_commute_min,
-                'minutes',
-                'estimated',
-                0.8,
-                'Typical journey time to configured central destination from timetable profile.',
-                config.last_updated_default,
-            ),
-            'commutePeakMinutes': metric(
-                station.peak_commute_min,
-                'minutes',
-                'estimated',
-                0.8,
-                'Peak journey time approximation from station profile.',
-                config.last_updated_default,
-            ),
-            'commuteOffPeakMinutes': metric(
-                station.offpeak_commute_min,
-                'minutes',
-                'estimated',
-                0.8,
-                'Off-peak journey time approximation from station profile.',
-                config.last_updated_default,
-            ),
-            'serviceFrequencyPeakTph': metric(
-                station.peak_tph,
-                'tph',
-                'estimated',
-                0.75,
-                'Peak frequency estimate from fixture timetable profile.',
-                config.last_updated_default,
-            ),
-            'interchangeCount': metric(
-                float(station.interchange_count),
-                'count',
-                'estimated',
-                0.72,
-                'Interchange count to central destination from route pattern heuristics.',
-                config.last_updated_default,
-            ),
-            'driveTimeToPinnerMinutes': metric(
-                station.drive_to_pinner_min,
-                'minutes',
-                'estimated',
-                0.75,
-                'Drive-time estimate from station centroid to Pinner reference point.',
-                config.last_updated_default,
-            ),
-            'nearbyPrimaryCount': metric_from_record(
                 school_record,
-                'nearby_primary_count',
-                unit='count',
-                note='Nearby primary schools in and around 1km catchment proxy.',
-                last_updated=config.last_updated_default,
-            ),
-            'nearbySecondaryCount': metric_from_record(
-                school_record,
-                'nearby_secondary_count',
-                unit='count',
-                note='Nearby secondary schools in and around 1.5km proxy zone.',
-                last_updated=config.last_updated_default,
-            ),
-            'primaryQualityScore': metric_from_record(
-                school_record,
-                'primary_quality_score',
-                unit='score',
-                note='Primary school quality composite.',
-                last_updated=config.last_updated_default,
-            ),
-            'secondaryQualityScore': metric_from_record(
-                school_record,
-                'secondary_quality_score',
-                unit='score',
-                note='Secondary school quality composite.',
-                last_updated=config.last_updated_default,
-            ),
-            'annualNo2': metric_from_record(
                 pollution_record,
-                'annual_no2',
-                unit='ug/m3',
-                note='Annual NO2 mean from area-level pollution proxy grid.',
-                last_updated=config.last_updated_default,
-            ),
-            'annualPm25': metric_from_record(
-                pollution_record,
-                'annual_pm25',
-                unit='ug/m3',
-                note='Annual PM2.5 mean from area-level pollution proxy grid.',
-                last_updated=config.last_updated_default,
-            ),
-            'greenSpaceAreaKm2Within1km': metric_from_record(
                 green_record,
-                'green_space_area_km2_within_1km',
-                unit='km2',
-                note='Estimated publicly accessible green space within 1km.',
-                last_updated=config.last_updated_default,
-            ),
-            'greenCoverPct': metric_from_record(
-                green_record,
-                'green_cover_pct',
-                unit='%',
-                note='Estimated green cover fraction from land-cover proxy.',
-                last_updated=config.last_updated_default,
-            ),
-            'nearestParkDistanceM': metric_from_record(
-                green_record,
-                'nearest_park_distance_m',
-                unit='m',
-                note='Distance to nearest substantial park entry point.',
-                last_updated=config.last_updated_default,
-            ),
-            'crimeRatePerThousand': metric_from_record(
                 crime_record,
-                'crime_rate_per_1000',
-                unit='per_1000',
-                note='Annualised crime incidents per 1,000 residents proxy.',
-                last_updated=config.last_updated_default,
-            ),
-            'planningRiskHeuristic': metric_from_record(
                 planning_record,
-                'planning_risk_score',
-                unit='score',
-                note='Low-confidence planning/development pressure heuristic.',
-                last_updated=config.last_updated_default,
-                fallback_value=55,
-                fallback_status='placeholder',
-                fallback_confidence=0.2,
-            ),
-        }
+            )
 
-        confidence = confidence_score(list(metrics.values()), overlap_conf)
-        overall = weighted_score(components, config.default_weights, confidence)
+            overlap_conf = overlap_confidence(
+                station,
+                overlap_reference,
+                config.micro_area_walk_radius_m,
+            )
 
-        flags: list[str] = []
-        if metrics['planningRiskHeuristic'].confidence < 0.5:
-            flags.append('Planning risk uses a low-confidence heuristic placeholder.')
-
-        for metric_name, metric_value in metrics.items():
-            if metric_value.status != 'available':
-                flags.append(f'{metric_name} status is {metric_value.status}.')
-            if metric_value.value is None:
-                flags.append(f'{metric_name} value is missing.')
-
-        confidence_notes = [
-            'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
-            'School scoring uses composite indicators and does not rely on a single inspection field.',
-            'Planning/development risk is explicitly low-confidence until structured feeds are integrated.',
-        ]
-
-        micro_area = {
-            'microAreaId': f"ma-{station.station_code.lower()}",
-            'stationCode': station.station_code,
-            'stationName': station.station_name,
-            'operator': station.operator,
-            'lines': station.lines,
-            'localAuthority': station.local_authority,
-            'countyOrBorough': station.county_or_borough,
-            'centroid': asdict(station.coordinate),
-            'catchment': {
-                'type': 'circle',
-                'radiusMeters': config.micro_area_walk_radius_m,
-            },
-            'overlapConfidence': overlap_conf,
-            'dataConfidenceScore': confidence,
-            'confidenceNotes': confidence_notes,
-            'flags': sorted(set(flags)),
-            'walkCatchmentAssumption': f"{config.micro_area_walk_radius_m}m walk radius around station centroid",
-            'commuteDestination': config.destination_station,
-            'schoolMethodologyNotes': str(
-                (school_record or {}).get(
-                    'methodology_note',
-                    'Composite score from multiple indicators with explicit confidence weighting.',
+            metrics = {
+                'averageSemiDetachedPrice': metric_from_record(
+                    property_record,
+                    'average_semi_price',
+                    unit='GBP',
+                    note='Derived from semi-detached transactions around station catchment.',
+                    last_updated=config.last_updated_default,
                 ),
-            ),
-            'planningRiskMethodology': str(
-                (planning_record or {}).get(
-                    'methodology_note',
-                    'No planning feed linked. Placeholder score only.',
+                'medianSemiDetachedPrice': metric_from_record(
+                    property_record,
+                    'median_semi_price',
+                    unit='GBP',
+                    note='Median semi-detached sold price from fixture-backed transaction sample.',
+                    last_updated=config.last_updated_default,
                 ),
-            ),
-            'crimeCategoryBreakdown': (crime_record or {}).get('breakdown', {}),
-            'populationDenominator': (population_record or {}).get('population_in_reference_zone'),
-            'componentScores': components,
-            'overallWeightedScore': overall,
-            'rankingExplanationRules': ranking_rules(components),
-            **{name: metric_value.to_dict() for name, metric_value in metrics.items()},
-        }
+                'semiPriceTrendPct5y': metric_from_record(
+                    property_record,
+                    'price_trend_pct_5y',
+                    unit='%',
+                    note='Approximate 5-year trend in sold price levels.',
+                    last_updated=config.last_updated_default,
+                ),
+                'affordabilityScore': metric_from_record(
+                    property_record,
+                    'affordability_score',
+                    unit='score',
+                    note='Affordability proxy from local median prices and commuting context.',
+                    last_updated=config.last_updated_default,
+                ),
+                'valueForMoneyScore': metric_from_record(
+                    property_record,
+                    'value_for_money_score',
+                    unit='score',
+                    note='Composite balancing median semi prices against commute and schools.',
+                    last_updated=config.last_updated_default,
+                ),
+                'commuteTypicalMinutes': metric(
+                    station.typical_commute_min,
+                    'minutes',
+                    'estimated',
+                    0.8,
+                    'Typical journey time to configured central destination from timetable profile.',
+                    config.last_updated_default,
+                ),
+                'commutePeakMinutes': metric(
+                    station.peak_commute_min,
+                    'minutes',
+                    'estimated',
+                    0.8,
+                    'Peak journey time approximation from station profile.',
+                    config.last_updated_default,
+                ),
+                'commuteOffPeakMinutes': metric(
+                    station.offpeak_commute_min,
+                    'minutes',
+                    'estimated',
+                    0.8,
+                    'Off-peak journey time approximation from station profile.',
+                    config.last_updated_default,
+                ),
+                'serviceFrequencyPeakTph': metric(
+                    station.peak_tph,
+                    'tph',
+                    'estimated',
+                    0.75,
+                    'Peak frequency estimate from fixture timetable profile.',
+                    config.last_updated_default,
+                ),
+                'interchangeCount': metric(
+                    float(station.interchange_count),
+                    'count',
+                    'estimated',
+                    0.72,
+                    'Interchange count to central destination from route pattern heuristics.',
+                    config.last_updated_default,
+                ),
+                'driveTimeToPinnerMinutes': metric(
+                    station.drive_to_pinner_min,
+                    'minutes',
+                    'estimated',
+                    0.75,
+                    'Drive-time estimate from station centroid to Pinner reference point.',
+                    config.last_updated_default,
+                ),
+                'nearbyPrimaryCount': metric_from_record(
+                    school_record,
+                    'nearby_primary_count',
+                    unit='count',
+                    note='Nearby primary schools in and around 1km catchment proxy.',
+                    last_updated=config.last_updated_default,
+                ),
+                'nearbySecondaryCount': metric_from_record(
+                    school_record,
+                    'nearby_secondary_count',
+                    unit='count',
+                    note='Nearby secondary schools in and around 1.5km proxy zone.',
+                    last_updated=config.last_updated_default,
+                ),
+                'primaryQualityScore': metric_from_record(
+                    school_record,
+                    'primary_quality_score',
+                    unit='score',
+                    note='Primary school quality composite.',
+                    last_updated=config.last_updated_default,
+                ),
+                'secondaryQualityScore': metric_from_record(
+                    school_record,
+                    'secondary_quality_score',
+                    unit='score',
+                    note='Secondary school quality composite.',
+                    last_updated=config.last_updated_default,
+                ),
+                'annualNo2': metric_from_record(
+                    pollution_record,
+                    'annual_no2',
+                    unit='ug/m3',
+                    note='Annual NO2 mean from area-level pollution proxy grid.',
+                    last_updated=config.last_updated_default,
+                ),
+                'annualPm25': metric_from_record(
+                    pollution_record,
+                    'annual_pm25',
+                    unit='ug/m3',
+                    note='Annual PM2.5 mean from area-level pollution proxy grid.',
+                    last_updated=config.last_updated_default,
+                ),
+                'greenSpaceAreaKm2Within1km': metric_from_record(
+                    green_record,
+                    'green_space_area_km2_within_1km',
+                    unit='km2',
+                    note='Estimated publicly accessible green space within 1km.',
+                    last_updated=config.last_updated_default,
+                ),
+                'greenCoverPct': metric_from_record(
+                    green_record,
+                    'green_cover_pct',
+                    unit='%',
+                    note='Estimated green cover fraction from land-cover proxy.',
+                    last_updated=config.last_updated_default,
+                ),
+                'nearestParkDistanceM': metric_from_record(
+                    green_record,
+                    'nearest_park_distance_m',
+                    unit='m',
+                    note='Distance to nearest substantial park entry point.',
+                    last_updated=config.last_updated_default,
+                ),
+                'crimeRatePerThousand': metric_from_record(
+                    crime_record,
+                    'crime_rate_per_1000',
+                    unit='per_1000',
+                    note='Annualised crime incidents per 1,000 residents proxy.',
+                    last_updated=config.last_updated_default,
+                ),
+                'planningRiskHeuristic': metric_from_record(
+                    planning_record,
+                    'planning_risk_score',
+                    unit='score',
+                    note='Low-confidence planning/development pressure heuristic.',
+                    last_updated=config.last_updated_default,
+                    fallback_value=55,
+                    fallback_status='placeholder',
+                    fallback_confidence=0.2,
+                ),
+            }
 
-        micro_areas.append(micro_area)
+            confidence = confidence_score(list(metrics.values()), overlap_conf)
+            overall = weighted_score(components, config.default_weights, confidence)
 
-    micro_areas.sort(key=lambda item: item['overallWeightedScore'], reverse=True)
+            flags: list[str] = []
+            if metrics['planningRiskHeuristic'].confidence < 0.5:
+                flags.append('Planning risk uses a low-confidence heuristic placeholder.')
+            if scope_label == 'londonWide':
+                flags.append(
+                    'Included in London-wide scope generated from all known stations (no Pinner-radius prefilter).',
+                )
+
+            for metric_name, metric_value in metrics.items():
+                if metric_value.status != 'available':
+                    flags.append(f'{metric_name} status is {metric_value.status}.')
+                if metric_value.value is None:
+                    flags.append(f'{metric_name} value is missing.')
+
+            confidence_notes = [
+                'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
+                'School scoring uses composite indicators and does not rely on a single inspection field.',
+                'Planning/development risk is explicitly low-confidence until structured feeds are integrated.',
+            ]
+
+            micro_area = {
+                'microAreaId': f"ma-{station.station_code.lower()}",
+                'stationCode': station.station_code,
+                'stationName': station.station_name,
+                'operator': station.operator,
+                'lines': station.lines,
+                'localAuthority': station.local_authority,
+                'countyOrBorough': station.county_or_borough,
+                'centroid': asdict(station.coordinate),
+                'catchment': {
+                    'type': 'circle',
+                    'radiusMeters': config.micro_area_walk_radius_m,
+                },
+                'overlapConfidence': overlap_conf,
+                'dataConfidenceScore': confidence,
+                'confidenceNotes': confidence_notes,
+                'flags': sorted(set(flags)),
+                'walkCatchmentAssumption': f"{config.micro_area_walk_radius_m}m walk radius around station centroid",
+                'commuteDestination': config.destination_station,
+                'schoolMethodologyNotes': str(
+                    (school_record or {}).get(
+                        'methodology_note',
+                        'Composite score from multiple indicators with explicit confidence weighting.',
+                    ),
+                ),
+                'planningRiskMethodology': str(
+                    (planning_record or {}).get(
+                        'methodology_note',
+                        'No planning feed linked. Placeholder score only.',
+                    ),
+                ),
+                'crimeCategoryBreakdown': (crime_record or {}).get('breakdown', {}),
+                'populationDenominator': (population_record or {}).get('population_in_reference_zone'),
+                'componentScores': components,
+                'overallWeightedScore': overall,
+                'rankingExplanationRules': ranking_rules(components),
+                **{name: metric_value.to_dict() for name, metric_value in metrics.items()},
+            }
+
+            micro_areas.append(micro_area)
+
+        micro_areas.sort(key=lambda item: item['overallWeightedScore'], reverse=True)
+        return micro_areas
+
+    micro_areas = build_scope(deduped_stations, deduped_stations, scope_label='default')
+    london_wide_micro_areas = build_scope(
+        london_wide_deduped,
+        london_wide_deduped,
+        scope_label='londonWide',
+    )
 
     generated_at = datetime.now(ZoneInfo(config.generated_timezone)).isoformat(timespec='seconds')
 
@@ -735,8 +766,12 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'microAreaWalkRadiusM': config.micro_area_walk_radius_m,
             'maxCommuteMinutesForCandidate': config.max_commute_minutes,
             'maxDriveMinutesForCandidate': config.max_drive_minutes_to_pinner,
+            'londonWideMaxCommuteMinutesForCandidate': LONDON_WIDE_MAX_COMMUTE_MINUTES,
+            'londonWideUsesPinnerRadiusPrefilter': False,
+            'londonWideUsesDriveToPinnerPrefilter': False,
         },
         'microAreas': micro_areas,
+        'londonWideMicroAreas': london_wide_micro_areas,
     }
 
 
@@ -751,6 +786,7 @@ def write_outputs(dataset: dict[str, Any]) -> None:
     summary = {
         'generatedAt': dataset['generatedAt'],
         'count': len(dataset['microAreas']),
+        'londonWideCount': len(dataset.get('londonWideMicroAreas', [])),
         'topMicroAreas': [
             {
                 'microAreaId': area['microAreaId'],
@@ -758,6 +794,14 @@ def write_outputs(dataset: dict[str, Any]) -> None:
                 'score': area['overallWeightedScore'],
             }
             for area in dataset['microAreas'][:10]
+        ],
+        'topLondonWideMicroAreas': [
+            {
+                'microAreaId': area['microAreaId'],
+                'stationName': area['stationName'],
+                'score': area['overallWeightedScore'],
+            }
+            for area in dataset.get('londonWideMicroAreas', [])[:10]
         ],
     }
 
@@ -795,7 +839,11 @@ def main() -> None:
             f"See {PROCESSED_DIR / 'data_quality_report.json'}.",
         )
 
-    print(f"Generated {len(dataset['microAreas'])} micro-areas -> {PROCESSED_DIR / 'micro_areas.json'}")
+    print(
+        f"Generated {len(dataset['microAreas'])} default micro-areas and "
+        f"{len(dataset.get('londonWideMicroAreas', []))} London-wide micro-areas -> "
+        f"{PROCESSED_DIR / 'micro_areas.json'}",
+    )
 
 
 if __name__ == '__main__':

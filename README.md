@@ -145,7 +145,7 @@ Configuration lives in:
 UI note:
 
 - `/ranked` keeps the standard Pinner-focused filtering model.
-- `/ranked-london` applies a London-wide profile: commute only (slider capped at 60 minutes), no drive-to-Pinner filter, and no school/crime/pollution/green/price filtering.
+- `/ranked-london` uses a separate London-wide candidate scope (no Pinner-radius prefilter, no drive-to-Pinner candidate prefilter), then applies commute-only filtering in the UI (slider capped at 60 minutes).
 
 ## Adapter architecture
 

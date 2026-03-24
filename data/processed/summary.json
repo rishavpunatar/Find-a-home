@@ -1,7 +1,60 @@
 {
-  "generatedAt": "2026-03-24T12:38:43+00:00",
+  "generatedAt": "2026-03-24T14:01:35+00:00",
   "count": 528,
+  "londonWideCount": 538,
   "topMicroAreas": [
+    {
+      "microAreaId": "ma-wfj",
+      "stationName": "Watford Junction",
+      "score": 62.76
+    },
+    {
+      "microAreaId": "ma-mop",
+      "stationName": "Moor Park",
+      "score": 61.93
+    },
+    {
+      "microAreaId": "ma-bsh",
+      "stationName": "Bushey",
+      "score": 61.11
+    },
+    {
+      "microAreaId": "ma-queen181",
+      "stationName": "Queen's Park",
+      "score": 60.85
+    },
+    {
+      "microAreaId": "ma-hamps13e",
+      "stationName": "Hampstead",
+      "score": 60.74
+    },
+    {
+      "microAreaId": "ma-kilbu4c3",
+      "stationName": "Kilburn Park",
+      "score": 60.55
+    },
+    {
+      "microAreaId": "ma-maidacff",
+      "stationName": "Maida Vale",
+      "score": 60.55
+    },
+    {
+      "microAreaId": "ma-belsi797",
+      "stationName": "Belsize Park",
+      "score": 60.52
+    },
+    {
+      "microAreaId": "ma-kilbu869",
+      "stationName": "Kilburn",
+      "score": 60.49
+    },
+    {
+      "microAreaId": "ma-wille265",
+      "stationName": "Willesden Green",
+      "score": 60.44
+    }
+  ],
+  "topLondonWideMicroAreas": [
     {
       "microAreaId": "ma-wfj",
       "stationName": "Watford Junction",

@@ -19,6 +19,7 @@ interface RankedDataOptions {
   maxCommuteMinutesCap?: number
   ignoreMaxDriveMinutes?: boolean
   overrideFilters?: Filters
+  scope?: 'default' | 'londonWide'
 }
 
 export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult => {
@@ -45,7 +46,11 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
       }
     }
 
-    const ranked = rankMicroAreas(dataset.microAreas, normalizedWeights)
+    const sourceAreas =
+      options.scope === 'londonWide'
+        ? (dataset.londonWideMicroAreas ?? dataset.microAreas)
+        : dataset.microAreas
+    const ranked = rankMicroAreas(sourceAreas, normalizedWeights)
     const filtered = filterAreas(
       ranked,
       effectiveFilters,
@@ -77,6 +82,7 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
     options.ignoreMaxDriveMinutes,
     options.maxCommuteMinutesCap,
     options.overrideFilters,
+    options.scope,
     pinnedIds,
   ])
 }
