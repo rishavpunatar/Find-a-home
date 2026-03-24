@@ -18,7 +18,7 @@ const downloadCsv = (filename: string, data: string) => {
 }
 
 export const RankedTablePage = () => {
-  const { loading, error } = useDataContext()
+  const { loading, error, dataset } = useDataContext()
   const { filtered, pinned, ranked } = useRankedData()
   const { pinnedIds, compareIds, togglePin, toggleCompare, filters } = useSettings()
 
@@ -26,9 +26,18 @@ export const RankedTablePage = () => {
     return <LoadingState title="Building ranked table" />
   }
 
-  if (error) {
-    return <ErrorState title="Ranked table unavailable" detail={error} />
+  if (error || !dataset) {
+    return (
+      <ErrorState
+        title="Ranked table unavailable"
+        detail={error ?? 'Dataset is missing. Run the pipeline and sync processed files.'}
+      />
+    )
   }
+
+  const qolSource = dataset.config.boroughQolSource
+  const qolCoveragePeriod = qolSource?.coveragePeriod ?? 'up to 2022-23'
+  const qolReleaseDate = qolSource?.releaseDate ?? '2023-11-28'
 
   const pinner = ranked.find((area) => area.stationCode === 'PIN')
   const pinnerInFiltered = filtered.some((area) => area.stationCode === 'PIN')
@@ -117,6 +126,14 @@ export const RankedTablePage = () => {
                 count score = mean(normalized primary count, normalized secondary count); final
                 school score = quality * 0.72 + count * 0.28.
               </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Source:</span> DfE GIAS + fixture-backed local
+                school composites.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Data reference period:</span> mixed-year composite
+                proxy (no single source-traceable national cut date wired yet).
+              </p>
               <p className="mt-1 text-xs text-slate-500">
                 Inputs come from nearby-school composites; status can be available or estimated.
               </p>
@@ -134,6 +151,14 @@ export const RankedTablePage = () => {
                 Composite formula: `((life satisfaction + worthwhile + happiness + (10 -
                 anxiety)) / 4) * 10`, using the latest available APS period from ONS local
                 authority series.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Source:</span> ONS personal well-being estimates by
+                local authority (APS).
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Data reference period:</span> {qolCoveragePeriod}{' '}
+                (ONS release date {qolReleaseDate}).
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 This is a borough-wide context signal; it does not represent station-level QoL
@@ -159,6 +184,14 @@ export const RankedTablePage = () => {
                 catchment approximation, then take a distance-weighted mean
                 (`w = 1 / max(distance, 200)^1.3`).
               </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Source:</span> London Datastore LAEI (London) +
+                DEFRA UK-AIR LAQM background maps.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Data reference period:</span> LAEI 2019 (London
+                modelled layers) and DEFRA LAQM 2023 background map extraction for non-London.
+              </p>
               <p className="mt-1 text-xs text-slate-500">
                 PM2.5 is the primary air-quality filter in this app. NO2 remains available as a
                 secondary metric in the detail view and methodology notes.
@@ -171,6 +204,15 @@ export const RankedTablePage = () => {
               </summary>
               <p className="mt-2 text-slate-600">
                 Annualized crime-rate proxy per 1,000 residents (`crimeRatePerThousand` metric).
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Source:</span> fixture-backed annualised proxy with
+                live cross-check against data.police.uk incidents.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Data reference period:</span> proxy composite (no
+                single source-traceable annual cut date yet), with live monthly cross-check
+                available in verification reports.
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 The ranking model converts this into a score with inverse scaling (lower incident
@@ -190,6 +232,14 @@ export const RankedTablePage = () => {
                 Method: distance-weighted blend of station green-cover values within a wider radius
                 of 1,600m (2x the 800m walk catchment) so nearby green context beyond the immediate
                 station circle is reflected.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Source:</span> OS Open Greenspace-derived fixture
+                proxies plus interpolation.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Data reference period:</span> mixed proxy baseline
+                (single authoritative timestamp not yet wired).
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Environment scoring also uses green-space area and nearest park distance, but this
@@ -220,6 +270,14 @@ export const RankedTablePage = () => {
               <p className="mt-1 text-slate-600">
                 Interpolated metrics use distance-aware confidence:
                 `clamp(0.28 + 0.42*exp(-nearestKm/18) + 0.2*(anchorConfidenceMean-0.5), 0.2, 0.75)`.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Source:</span> derived internally from metric-level
+                confidence and catchment overlap; not from a single external feed.
+              </p>
+              <p className="mt-1 text-slate-600">
+                <span className="font-semibold">Data reference period:</span> follows each
+                underlying metric&apos;s own reference period.
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Confidence reflects data robustness/coverage and overlap ambiguity, not how
