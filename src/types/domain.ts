@@ -76,6 +76,10 @@ export interface MicroArea {
 
   planningRiskHeuristic: NumericMetric
   planningRiskMethodology: string
+  boroughQolScore: NumericMetric
+  boroughQolAuthority: string
+  boroughQolPeriod: string
+  boroughQolMethodology: string
 
   componentScores: ComponentScores
   overallWeightedScore: number
@@ -112,6 +116,16 @@ export interface ProcessedDataset {
     londonWideUsesDriveToPinnerPrefilter?: boolean
     londonWideSourceStationCount?: number
     londonWideExcludedByCommuteCount?: number
+    boroughQolSource?: {
+      name?: string
+      dataset?: string
+      csvUrl?: string
+      metadataUrl?: string
+      releaseDate?: string
+      accrualPeriodicity?: string
+      coveragePeriod?: string
+      generatedAt?: string
+    }
   }
   microAreas: MicroArea[]
   londonWideMicroAreas?: MicroArea[]

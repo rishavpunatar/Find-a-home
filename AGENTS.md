@@ -21,6 +21,7 @@ Build and maintain a static-first web app that ranks UK station-centred micro-ar
 - Generate verification report: `python3 -m pipeline.jobs.verify_data_sources`
 - Generate live verification report: `python3 -m pipeline.jobs.verify_data_sources --live`
 - Run strict dataset quality audit: `python3 -m pipeline.jobs.validate_dataset --fail-on-critical`
+- Refresh ONS borough QoL metrics: `python3 -m pipeline.jobs.generate_wellbeing_metrics`
 - Run pipeline tests: `python3 -m pytest`
 
 ## Data flow
@@ -42,6 +43,7 @@ Adapters live in `pipeline/adapters/` with one adapter per data domain:
 - `crime_adapter.py`
 - `population_adapter.py`
 - `planning_adapter.py`
+- `wellbeing_adapter.py`
 
 To add a real data source:
 

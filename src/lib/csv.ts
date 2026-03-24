@@ -19,6 +19,7 @@ export const shortlistToCsv = (areas: DerivedMicroArea[]): string => {
     'commute_minutes',
     'drive_to_pinner_minutes',
     'school_score',
+    'borough_qol_score',
     'environment_score',
     'crime_score',
   ]
@@ -31,6 +32,7 @@ export const shortlistToCsv = (areas: DerivedMicroArea[]): string => {
     area.commuteTypicalMinutes.value ?? 'N/A',
     area.driveTimeToPinnerMinutes.value ?? 'N/A',
     area.componentScores.schools.toFixed(1),
+    area.boroughQolScore.value ?? 'N/A',
     area.componentScores.environment.toFixed(1),
     area.componentScores.crime.toFixed(1),
   ])

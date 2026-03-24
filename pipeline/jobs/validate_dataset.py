@@ -43,6 +43,7 @@ NUMERIC_BOUNDS: dict[str, tuple[float, float]] = {
     'nearestParkDistanceM': (0.0, 10_000.0),
     'crimeRatePerThousand': (0.0, 2_000.0),
     'planningRiskHeuristic': (0.0, 100.0),
+    'boroughQolScore': (0.0, 100.0),
 }
 
 COMPONENT_KEYS = {'value', 'transport', 'schools', 'environment', 'crime', 'proximity', 'planningRisk'}
@@ -69,6 +70,7 @@ METRIC_FIELDS = [
     'nearestParkDistanceM',
     'crimeRatePerThousand',
     'planningRiskHeuristic',
+    'boroughQolScore',
 ]
 
 

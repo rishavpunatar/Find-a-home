@@ -169,6 +169,18 @@ export const OverviewPage = () => {
               <dt className="text-slate-600">Candidate drive limit</dt>
               <dd className="font-medium">{dataset.config.maxDriveMinutesForCandidate} min</dd>
             </div>
+            {dataset.config.boroughQolSource?.coveragePeriod ? (
+              <div className="flex justify-between gap-2">
+                <dt className="text-slate-600">ONS APS QoL coverage</dt>
+                <dd className="font-medium">{dataset.config.boroughQolSource.coveragePeriod}</dd>
+              </div>
+            ) : null}
+            {dataset.config.boroughQolSource?.releaseDate ? (
+              <div className="flex justify-between gap-2">
+                <dt className="text-slate-600">ONS APS release date</dt>
+                <dd className="font-medium">{dataset.config.boroughQolSource.releaseDate}</dd>
+              </div>
+            ) : null}
           </dl>
         </article>
       </section>

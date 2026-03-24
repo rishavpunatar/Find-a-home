@@ -8,6 +8,7 @@ Static-first web app and pipeline that precomputes and ranks UK station-centred 
 - Models each micro-area as an 800m station walk catchment (configurable).
 - Filters candidate stations by commute and drive constraints.
 - Computes value, transport, schools, environment, crime, proximity, and planning-risk component scores.
+- Links each micro-area to borough-level QoL from ONS APS personal well-being data.
 - Produces an overall weighted ranking with confidence and data-status metadata.
 - Lets you adjust weights and filters in the UI and inspect results in table, map, and chart views.
 - Includes a London-wide tab that prioritizes breadth (commute-only filter, capped at 60 minutes).
@@ -67,6 +68,12 @@ python3 -m pipeline.jobs.verify_data_sources --live
 npm run pipeline:quality
 ```
 
+### 2d) Refresh borough QoL metrics from ONS APS
+
+```bash
+npm run pipeline:wellbeing
+```
+
 ### 3) Start the app
 
 ```bash
@@ -115,6 +122,12 @@ Refresh pollution metrics:
 npm run pipeline:pollution
 ```
 
+Refresh borough QoL (ONS APS) metrics:
+
+```bash
+npm run pipeline:wellbeing
+```
+
 Run strict processed-dataset validation:
 
 ```bash
@@ -159,8 +172,9 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - crime
 - population
 - planning
+- borough QoL (ONS APS personal well-being)
 
-Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Pollution metrics now use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Other domains remain fixture/interpolated in this MVP.
+Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Other domains remain fixture/interpolated in this MVP.
 
 ## Data quality model (no fake precision)
 
@@ -172,6 +186,7 @@ Each metric emitted to frontend includes:
 - `lastUpdated`
 
 Planning/development risk is intentionally marked as heuristic low-confidence unless a robust structured source is connected.
+Borough QoL is sourced from ONS APS local authority well-being means and linked by normalized local authority name.
 
 In addition to per-metric metadata, a dataset-level audit runs on every build:
 

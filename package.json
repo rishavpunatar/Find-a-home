@@ -15,6 +15,7 @@
     "sync:data": "node scripts/syncData.mjs",
     "pipeline:build": "python3 -m pipeline.jobs.build_micro_areas",
     "pipeline:pollution": "python3 -m pipeline.jobs.generate_pollution_metrics --year 2023",
+    "pipeline:wellbeing": "python3 -m pipeline.jobs.generate_wellbeing_metrics",
     "pipeline:quality": "python3 -m pipeline.jobs.validate_dataset --fail-on-critical",
     "pipeline:verify": "python3 -m pipeline.jobs.verify_data_sources",
     "pipeline:verify:live": "python3 -m pipeline.jobs.verify_data_sources --live"

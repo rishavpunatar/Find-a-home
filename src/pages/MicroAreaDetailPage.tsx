@@ -191,6 +191,14 @@ export const MicroAreaDetailPage = () => {
           note={area.greenCoverPct.methodologyNote}
           updated={area.greenCoverPct.lastUpdated}
         />
+        <MetricRow
+          label="Borough QoL score (ONS APS)"
+          value={formatNumber(area.boroughQolScore.value, 1)}
+          status={area.boroughQolScore.status}
+          confidence={area.boroughQolScore.confidence}
+          note={area.boroughQolMethodology}
+          updated={area.boroughQolScore.lastUpdated}
+        />
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
@@ -237,6 +245,14 @@ export const MicroAreaDetailPage = () => {
             <div className="flex justify-between">
               <dt className="text-slate-600">Planning risk heuristic</dt>
               <dd className="font-medium">{formatNumber(area.planningRiskHeuristic.value, 1)}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-slate-600">Borough QoL authority link</dt>
+              <dd className="font-medium">{area.boroughQolAuthority || 'N/A'}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-slate-600">Borough QoL period</dt>
+              <dd className="font-medium">{area.boroughQolPeriod || 'N/A'}</dd>
             </div>
           </dl>
           <p className="mt-3 text-xs text-slate-600">{area.planningRiskMethodology}</p>

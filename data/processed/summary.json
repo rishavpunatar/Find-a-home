@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-03-24T14:55:01+00:00",
+  "generatedAt": "2026-03-24T15:17:43+00:00",
   "count": 707,
   "londonWideCount": 648,
   "topMicroAreas": [
     {
       "microAreaId": "ma-queen181",
       "stationName": "Queen's Park",
-      "score": 61.37
+      "score": 61.47
     },
     {
       "microAreaId": "ma-hamps13e",
       "stationName": "Hampstead",
-      "score": 61.31
+      "score": 61.41
     },
     {
       "microAreaId": "ma-maidacff",
       "stationName": "Maida Vale",
-      "score": 61.16
+      "score": 61.28
     },
     {
       "microAreaId": "ma-kilbu4c3",
       "stationName": "Kilburn Park",
-      "score": 61.13
+      "score": 61.24
     },
     {
       "microAreaId": "ma-belsi797",
       "stationName": "Belsize Park",
-      "score": 61.11
+      "score": 61.22
     },
     {
       "microAreaId": "ma-stjoh83d",
       "stationName": "St. John's Wood",
-      "score": 61.06
+      "score": 61.18
     },
     {
       "microAreaId": "ma-kilbu869",
       "stationName": "Kilburn",
-      "score": 61.01
+      "score": 61.13
     },
     {
       "microAreaId": "ma-westhaba",
       "stationName": "West Hampstead",
-      "score": 61.01
+      "score": 61.13
     },
     {
       "microAreaId": "ma-tufne909",
       "stationName": "Tufnell Park",
-      "score": 60.99
+      "score": 61.12
     },
     {
       "microAreaId": "ma-holla0ac",
       "stationName": "Holland Park",
-      "score": 60.95
+      "score": 61.07
     }
   ],
   "topLondonWideMicroAreas": [
     {
       "microAreaId": "ma-queen181",
       "stationName": "Queen's Park",
-      "score": 61.37
+      "score": 61.47
     },
     {
       "microAreaId": "ma-hamps13e",
       "stationName": "Hampstead",
-      "score": 61.31
+      "score": 61.41
     },
     {
       "microAreaId": "ma-maidacff",
       "stationName": "Maida Vale",
-      "score": 61.16
+      "score": 61.28
     },
     {
       "microAreaId": "ma-kilbu4c3",
       "stationName": "Kilburn Park",
-      "score": 61.13
+      "score": 61.24
     },
     {
       "microAreaId": "ma-belsi797",
       "stationName": "Belsize Park",
-      "score": 61.11
+      "score": 61.22
     },
     {
       "microAreaId": "ma-stjoh83d",
       "stationName": "St. John's Wood",
-      "score": 61.06
+      "score": 61.18
     },
     {
       "microAreaId": "ma-kilbu869",
       "stationName": "Kilburn",
-      "score": 61.01
+      "score": 61.13
     },
     {
       "microAreaId": "ma-westhaba",
       "stationName": "West Hampstead",
-      "score": 61.01
+      "score": 61.13
     },
     {
       "microAreaId": "ma-tufne909",
       "stationName": "Tufnell Park",
-      "score": 60.99
+      "score": 61.12
     },
     {
       "microAreaId": "ma-holla0ac",
       "stationName": "Holland Park",
-      "score": 60.95
+      "score": 61.07
     }
   ]
 }

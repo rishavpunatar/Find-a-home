@@ -52,3 +52,9 @@ class PlanningAdapter(ABC):
     @abstractmethod
     def get_by_station(self, station_code: str) -> dict[str, Any] | None:
         raise NotImplementedError
+
+
+class WellbeingAdapter(ABC):
+    @abstractmethod
+    def get_by_local_authority(self, local_authority: str) -> dict[str, Any] | None:
+        raise NotImplementedError

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-24T14:55:01+00:00",
+  "generatedAt": "2026-03-24T15:17:43+00:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "partial",
   "sourceMatrix": {
@@ -50,6 +50,12 @@
       "primarySource": "Heuristic placeholder",
       "secondarySource": "planning.data.gov.uk + LA planning application feeds (planned)",
       "note": "Planning risk remains explicitly low-confidence until authoritative structured planning layers are integrated and quality-assured."
+    },
+    "wellbeing": {
+      "status": "source_applied_not_live_verified",
+      "primarySource": "ONS APS Personal well-being estimates by local authority",
+      "secondarySource": "No secondary cross-check wired yet",
+      "note": "Borough QoL uses latest ONS APS means for life satisfaction, worthwhile, happiness, and anxiety (inverted for positive-wellbeing composite)."
     }
   },
   "crossChecks": {
@@ -69,6 +75,7 @@
     "Property, schools, greenspace, transport, and population are not yet live cross-verified in this MVP.",
     "Pollution has model-to-model cross-checks (LAEI vs DEFRA) but still lacks full monitor-network reconciliation.",
     "Planning risk is intentionally low-confidence placeholder data until structured feeds are integrated.",
+    "Borough QoL currently uses ONS source application without a separate secondary cross-check.",
     "This report improves transparency but is not equivalent to a full production data-audit pipeline."
   ]
 }

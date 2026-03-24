@@ -164,6 +164,15 @@ def source_matrix() -> dict[str, dict[str, str]]:
                 'planning layers are integrated and quality-assured.'
             ),
         },
+        'wellbeing': {
+            'status': 'source_applied_not_live_verified',
+            'primarySource': 'ONS APS Personal well-being estimates by local authority',
+            'secondarySource': 'No secondary cross-check wired yet',
+            'note': (
+                'Borough QoL uses latest ONS APS means for life satisfaction, worthwhile, '
+                'happiness, and anxiety (inverted for positive-wellbeing composite).'
+            ),
+        },
     }
 
 
@@ -323,6 +332,7 @@ def generate_verification_report(dataset: dict[str, Any], live_mode: bool = Fals
             'Property, schools, greenspace, transport, and population are not yet live cross-verified in this MVP.',
             'Pollution has model-to-model cross-checks (LAEI vs DEFRA) but still lacks full monitor-network reconciliation.',
             'Planning risk is intentionally low-confidence placeholder data until structured feeds are integrated.',
+            'Borough QoL currently uses ONS source application without a separate secondary cross-check.',
             'This report improves transparency but is not equivalent to a full production data-audit pipeline.',
         ],
     }

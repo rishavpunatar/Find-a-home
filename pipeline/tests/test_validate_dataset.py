@@ -56,6 +56,7 @@ def make_area() -> dict[str, object]:
         'nearestParkDistanceM': metric(210.0),
         'crimeRatePerThousand': metric(62.0),
         'planningRiskHeuristic': metric(44.0),
+        'boroughQolScore': metric(72.3),
     }
     return area
 

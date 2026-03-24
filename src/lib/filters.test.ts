@@ -199,6 +199,17 @@ const baseArea: DerivedMicroArea = {
     lastUpdated: '2026-03-01',
   },
   planningRiskMethodology: 'Test',
+  boroughQolScore: {
+    value: 72.3,
+    unit: 'score',
+    status: 'available',
+    confidence: 0.88,
+    methodologyNote: 'Test',
+    lastUpdated: '2023-11-28',
+  },
+  boroughQolAuthority: 'Test Borough',
+  boroughQolPeriod: '2022-23',
+  boroughQolMethodology: 'Test',
   componentScores: {
     value: 68,
     transport: 74,

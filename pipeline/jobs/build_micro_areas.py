@@ -17,6 +17,7 @@ from pipeline.adapters.population_adapter import FixturePopulationAdapter
 from pipeline.adapters.property_adapter import FixturePropertyAdapter
 from pipeline.adapters.school_adapter import FixtureSchoolAdapter
 from pipeline.adapters.station_transport_adapter import FixtureStationTransportAdapter
+from pipeline.adapters.wellbeing_adapter import FixtureWellbeingAdapter
 from pipeline.jobs.validate_dataset import generate_quality_report, write_quality_report
 from pipeline.jobs.verify_data_sources import generate_verification_report, write_report
 from pipeline.models.entities import Coordinate, NumericMetric, SearchConfig, StationRecord
@@ -462,6 +463,10 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     crime_adapter = FixtureCrimeAdapter(RAW_DIR / 'crime_metrics.json')
     population_adapter = FixturePopulationAdapter(RAW_DIR / 'population_metrics.json')
     planning_adapter = FixturePlanningAdapter(RAW_DIR / 'planning_metrics.json')
+    wellbeing_adapter = FixtureWellbeingAdapter(RAW_DIR / 'wellbeing_metrics.json')
+    wellbeing_last_updated = str(
+        wellbeing_adapter.source.get('releaseDate') or config.last_updated_default,
+    )
 
     property_anchor_records = json.loads((RAW_DIR / 'property_metrics.json').read_text(encoding='utf-8'))
     school_anchor_records = json.loads((RAW_DIR / 'schools_metrics.json').read_text(encoding='utf-8'))
@@ -578,6 +583,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     ['planning_risk_score'],
                     'Heuristic planning/development risk estimated by interpolation from nearby placeholder station scores.',
                 ) or planning_record
+            wellbeing_record = wellbeing_adapter.get_by_local_authority(station.local_authority)
 
             resolved_records_by_station[station.station_code] = {
                 'property': property_record,
@@ -587,6 +593,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 'crime': crime_record,
                 'population': population_record,
                 'planning': planning_record,
+                'wellbeing': wellbeing_record,
             }
 
         base_green_records = {
@@ -612,6 +619,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             crime_record = station_records.get('crime')
             population_record = station_records.get('population')
             planning_record = station_records.get('planning')
+            wellbeing_record = station_records.get('wellbeing')
 
             components = score_components(
                 station,
@@ -793,6 +801,19 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_status='placeholder',
                     fallback_confidence=0.2,
                 ),
+                'boroughQolScore': metric_from_record(
+                    wellbeing_record,
+                    'qol_score_0_100',
+                    unit='score',
+                    note=(
+                        'Borough-level QoL composite from ONS APS personal well-being means '
+                        '(life satisfaction, worthwhile, happiness, and inverted anxiety).'
+                    ),
+                    last_updated=wellbeing_last_updated,
+                    fallback_value=None,
+                    fallback_status='missing',
+                    fallback_confidence=0.25,
+                ),
             }
 
             confidence = confidence_score(list(metrics.values()), overlap_conf)
@@ -850,6 +871,18 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                         'No planning feed linked. Placeholder score only.',
                     ),
                 ),
+                'boroughQolAuthority': str(
+                    (wellbeing_record or {}).get('ons_geography_name', station.local_authority),
+                ),
+                'boroughQolPeriod': str(
+                    (wellbeing_record or {}).get('period', ''),
+                ),
+                'boroughQolMethodology': str(
+                    (wellbeing_record or {}).get(
+                        'methodology_note',
+                        'No ONS personal well-being match found for this local authority.',
+                    ),
+                ),
                 'crimeCategoryBreakdown': (crime_record or {}).get('breakdown', {}),
                 'populationDenominator': (population_record or {}).get('population_in_reference_zone'),
                 'componentScores': components,
@@ -892,6 +925,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'londonWideUsesDriveToPinnerPrefilter': False,
             'londonWideSourceStationCount': len(london_wide_all_deduped),
             'londonWideExcludedByCommuteCount': len(london_wide_excluded_by_commute),
+            'boroughQolSource': wellbeing_adapter.source,
         },
         'microAreas': micro_areas,
         'londonWideMicroAreas': london_wide_micro_areas,

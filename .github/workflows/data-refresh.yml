@@ -23,7 +23,9 @@ jobs:
           python-version: '3.12'
 
       - name: Rebuild processed outputs
-        run: python -m pipeline.jobs.build_micro_areas
+        run: |
+          python -m pipeline.jobs.generate_wellbeing_metrics
+          python -m pipeline.jobs.build_micro_areas
 
       - name: Create Pull Request with refreshed data
         uses: peter-evans/create-pull-request@v7
@@ -35,4 +37,5 @@ jobs:
           branch: chore/data-refresh
           delete-branch: true
           add-paths: |
+            data/raw/wellbeing_metrics.json
             data/processed/**

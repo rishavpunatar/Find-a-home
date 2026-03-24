@@ -124,6 +124,25 @@ export const RankedTablePage = () => {
 
             <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
               <summary className="cursor-pointer font-medium text-slate-900">
+                QoL (0-100, borough-level ONS APS, higher is better)
+              </summary>
+              <p className="mt-2 text-slate-600">
+                Borough QoL score linked to the micro-area local authority from ONS APS personal
+                well-being means.
+              </p>
+              <p className="mt-1 text-slate-600">
+                Composite formula: `((life satisfaction + worthwhile + happiness + (10 -
+                anxiety)) / 4) * 10`, using the latest available APS period from ONS local
+                authority series.
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                This is a borough-wide context signal; it does not represent station-level QoL
+                directly.
+              </p>
+            </details>
+
+            <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
+              <summary className="cursor-pointer font-medium text-slate-900">
                 PM2.5 (ug/m3, lower is better)
               </summary>
               <p className="mt-2 text-slate-600">
@@ -261,6 +280,14 @@ export const RankedTablePage = () => {
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
               OS Open Greenspace
+            </a>
+            <a
+              href="https://www.ons.gov.uk/datasets/wellbeing-local-authority"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              ONS APS Well-being
             </a>
           </div>
         </article>
