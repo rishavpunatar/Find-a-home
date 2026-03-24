@@ -150,6 +150,19 @@ interface MicroAreaMapProps {
   metric: ColorMetric
 }
 
+const MapPopupContent = ({ area }: { area: DerivedMicroArea }) => (
+  <div className="text-sm">
+    <p className="font-semibold">{area.stationName}</p>
+    <p className="text-xs text-slate-600">{area.localAuthority}</p>
+    <p>Score: {area.dynamicOverallScore.toFixed(1)}</p>
+    <p>Commute: {formatNumber(area.commuteTypicalMinutes.value)} min</p>
+    <p>Drive to Pinner: {formatNumber(area.driveTimeToPinnerMinutes.value)} min</p>
+    <Link to={`/micro-area/${area.microAreaId}`} className="mt-1 inline-block text-surge hover:underline">
+      Open full details
+    </Link>
+  </div>
+)
+
 export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [legendMode, setLegendMode] = useState<'quantile' | 'range'>('quantile')
@@ -214,11 +227,7 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
                 }}
               >
                 <Popup>
-                  <div className="text-sm">
-                    <p className="font-semibold">{area.stationName}</p>
-                    <p>Score: {area.dynamicOverallScore.toFixed(1)}</p>
-                    <p>Commute: {formatNumber(area.commuteTypicalMinutes.value)} min</p>
-                  </div>
+                  <MapPopupContent area={area} />
                 </Popup>
               </Circle>
             )
@@ -229,7 +238,14 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
                 <Marker
                   key={`${area.microAreaId}-marker`}
                   position={[area.centroid.lat, area.centroid.lon]}
-                />
+                  eventHandlers={{
+                    click: () => setSelectedId(area.microAreaId),
+                  }}
+                >
+                  <Popup>
+                    <MapPopupContent area={area} />
+                  </Popup>
+                </Marker>
               ))
             : null}
         </MapContainer>
@@ -306,7 +322,7 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
           </div>
         ) : (
           <p className="mt-5 text-sm text-slate-500">
-            Click a micro-area on the map to inspect details.
+            Click a catchment circle or a station pin to inspect area details.
           </p>
         )}
       </aside>
