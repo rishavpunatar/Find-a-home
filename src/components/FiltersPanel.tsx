@@ -1,6 +1,10 @@
+import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 
+import type { Filters } from '@/types/domain'
+
 import { useSettings } from '@/context/SettingsContext'
+import { useRankedData } from '@/hooks/useRankedData'
 import { DEFAULT_FILTERS } from '@/lib/constants'
 
 interface RangeControlProps {
@@ -12,6 +16,7 @@ interface RangeControlProps {
   unit: string
   onChange: (next: number) => void
   disabled?: boolean
+  exclusionLabel?: string
 }
 
 const RangeControl = ({
@@ -23,6 +28,7 @@ const RangeControl = ({
   unit,
   onChange,
   disabled = false,
+  exclusionLabel,
 }: RangeControlProps) => (
   <label className={`flex flex-col gap-1 ${disabled ? 'opacity-60' : ''}`}>
     <span className="text-xs font-medium text-slate-600">
@@ -40,8 +46,42 @@ const RangeControl = ({
       className="h-2 w-full cursor-pointer rounded-lg bg-teal-100"
       aria-label={label}
     />
+    {exclusionLabel ? <span className="text-[11px] text-slate-500">{exclusionLabel}</span> : null}
   </label>
 )
+
+const filterLabels: Record<keyof Filters, string> = {
+  maxCommuteMinutes: 'Commute',
+  maxDriveMinutes: 'Drive to Pinner',
+  minSchoolScore: 'School score',
+  maxCrimeRatePerThousand: 'Crime',
+  maxPm25: 'PM2.5',
+  minGreenCoverPct: 'Green cover',
+  maxMedianPrice: 'Median semi price',
+  minDataConfidencePct: 'Confidence',
+}
+
+const formatFilterValue = (key: keyof Filters, value: number): string => {
+  switch (key) {
+    case 'maxCommuteMinutes':
+    case 'maxDriveMinutes':
+      return `${value} min`
+    case 'maxCrimeRatePerThousand':
+      return `${value} / 1,000`
+    case 'maxPm25':
+      return `${value.toFixed(1)} ug/m3`
+    case 'minGreenCoverPct':
+    case 'minDataConfidencePct':
+      return `${value}%`
+    case 'maxMedianPrice':
+      return `GBP ${value.toLocaleString('en-GB')}`
+    default:
+      return value.toString()
+  }
+}
+
+const excludedLabel = (count: number, total: number): string =>
+  `${count.toLocaleString('en-GB')} excluded (${total.toLocaleString('en-GB')} total)`
 
 export const FiltersPanel = () => {
   const location = useLocation()
@@ -54,7 +94,77 @@ export const FiltersPanel = () => {
     ? Math.min(activeFilters.maxCommuteMinutes, commuteCap)
     : activeFilters.maxCommuteMinutes
 
+  const rankedOptions = isLondonWideTab
+    ? ({ scope: 'londonWide', maxCommuteMinutesCap: 60 } as const)
+    : ({ scope: 'default' } as const)
+
+  const { ranked } = useRankedData(rankedOptions)
+
   const hasCustomFilters = JSON.stringify(activeFilters) !== JSON.stringify(DEFAULT_FILTERS)
+  const totalAreaCount = ranked.length
+
+  const exclusionCounts = useMemo(() => {
+    const countExcluded = (predicate: (index: number) => boolean) =>
+      ranked.reduce((sum, _area, index) => (predicate(index) ? sum : sum + 1), 0)
+
+    return {
+      commute: countExcluded(
+        (index) =>
+          (ranked[index]?.commuteTypicalMinutes.value ?? Number.POSITIVE_INFINITY) <=
+          displayedCommuteLimit,
+      ),
+      drive: countExcluded(
+        (index) =>
+          (ranked[index]?.driveTimeToPinnerMinutes.value ?? Number.POSITIVE_INFINITY) <=
+          activeFilters.maxDriveMinutes,
+      ),
+      school: countExcluded((index) => (ranked[index]?.componentScores.schools ?? 0) >= activeFilters.minSchoolScore),
+      crime: countExcluded(
+        (index) =>
+          (ranked[index]?.crimeRatePerThousand.value ?? Number.POSITIVE_INFINITY) <=
+          activeFilters.maxCrimeRatePerThousand,
+      ),
+      pm25: countExcluded(
+        (index) =>
+          (ranked[index]?.annualPm25.value ?? Number.POSITIVE_INFINITY) <= activeFilters.maxPm25,
+      ),
+      green: countExcluded(
+        (index) => (ranked[index]?.greenCoverPct.value ?? Number.NEGATIVE_INFINITY) >= activeFilters.minGreenCoverPct,
+      ),
+      price: countExcluded(
+        (index) =>
+          (ranked[index]?.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY) <=
+          activeFilters.maxMedianPrice,
+      ),
+      confidence: countExcluded(
+        (index) =>
+          ((ranked[index]?.dataConfidenceScore ?? 0) * 100) >= activeFilters.minDataConfidencePct,
+      ),
+    }
+  }, [
+    activeFilters.maxCrimeRatePerThousand,
+    activeFilters.maxDriveMinutes,
+    activeFilters.maxMedianPrice,
+    activeFilters.maxPm25,
+    activeFilters.minDataConfidencePct,
+    activeFilters.minGreenCoverPct,
+    activeFilters.minSchoolScore,
+    displayedCommuteLimit,
+    ranked,
+  ])
+
+  const activeFilterChips = useMemo(
+    () =>
+      (Object.keys(DEFAULT_FILTERS) as (keyof Filters)[])
+        .filter((key) => activeFilters[key] !== DEFAULT_FILTERS[key])
+        .map((key) => ({
+          key,
+          label: filterLabels[key],
+          value: activeFilters[key],
+          resetValue: DEFAULT_FILTERS[key],
+        })),
+    [activeFilters],
+  )
 
   return (
     <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
@@ -78,6 +188,25 @@ export const FiltersPanel = () => {
           not prefiltered by the Pinner search radius. Confidence filter still applies.
         </p>
       ) : null}
+
+      <div className="mb-3 flex flex-wrap gap-2">
+        {activeFilterChips.length > 0 ? (
+          activeFilterChips.map((chip) => (
+            <button
+              key={chip.key}
+              type="button"
+              onClick={() => updateFilter(chip.key, chip.resetValue, scope)}
+              className="rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs text-slate-700 hover:bg-teal-100"
+              title={`Remove ${chip.label} override`}
+            >
+              {chip.label}: {formatFilterValue(chip.key, chip.value)} ✕
+            </button>
+          ))
+        ) : (
+          <p className="text-xs text-slate-500">No active filter overrides.</p>
+        )}
+      </div>
+
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
         <RangeControl
           label="Max commute"
@@ -87,6 +216,7 @@ export const FiltersPanel = () => {
           step={1}
           unit=" min"
           onChange={(next) => updateFilter('maxCommuteMinutes', next, scope)}
+          exclusionLabel={excludedLabel(exclusionCounts.commute, totalAreaCount)}
         />
         <RangeControl
           label="Max drive to Pinner"
@@ -97,6 +227,11 @@ export const FiltersPanel = () => {
           unit=" min"
           onChange={(next) => updateFilter('maxDriveMinutes', next, scope)}
           disabled={isLondonWideTab}
+          exclusionLabel={
+            isLondonWideTab
+              ? 'Ignored in London <=60m mode'
+              : excludedLabel(exclusionCounts.drive, totalAreaCount)
+          }
         />
         <RangeControl
           label="Min school score"
@@ -107,6 +242,11 @@ export const FiltersPanel = () => {
           unit=""
           onChange={(next) => updateFilter('minSchoolScore', next, scope)}
           disabled={isLondonWideTab}
+          exclusionLabel={
+            isLondonWideTab
+              ? 'Ignored in London <=60m mode'
+              : excludedLabel(exclusionCounts.school, totalAreaCount)
+          }
         />
         <RangeControl
           label="Max crime / 1,000"
@@ -117,6 +257,11 @@ export const FiltersPanel = () => {
           unit=""
           onChange={(next) => updateFilter('maxCrimeRatePerThousand', next, scope)}
           disabled={isLondonWideTab}
+          exclusionLabel={
+            isLondonWideTab
+              ? 'Ignored in London <=60m mode'
+              : excludedLabel(exclusionCounts.crime, totalAreaCount)
+          }
         />
         <RangeControl
           label="Max PM2.5"
@@ -127,6 +272,11 @@ export const FiltersPanel = () => {
           unit=" ug/m3"
           onChange={(next) => updateFilter('maxPm25', next, scope)}
           disabled={isLondonWideTab}
+          exclusionLabel={
+            isLondonWideTab
+              ? 'Ignored in London <=60m mode'
+              : excludedLabel(exclusionCounts.pm25, totalAreaCount)
+          }
         />
         <RangeControl
           label="Min green cover"
@@ -137,6 +287,11 @@ export const FiltersPanel = () => {
           unit="%"
           onChange={(next) => updateFilter('minGreenCoverPct', next, scope)}
           disabled={isLondonWideTab}
+          exclusionLabel={
+            isLondonWideTab
+              ? 'Ignored in London <=60m mode'
+              : excludedLabel(exclusionCounts.green, totalAreaCount)
+          }
         />
         <RangeControl
           label="Max median semi price"
@@ -147,6 +302,11 @@ export const FiltersPanel = () => {
           unit=" GBP"
           onChange={(next) => updateFilter('maxMedianPrice', next, scope)}
           disabled={isLondonWideTab}
+          exclusionLabel={
+            isLondonWideTab
+              ? 'Ignored in London <=60m mode'
+              : excludedLabel(exclusionCounts.price, totalAreaCount)
+          }
         />
         <RangeControl
           label="Min confidence"
@@ -156,6 +316,7 @@ export const FiltersPanel = () => {
           step={1}
           unit="%"
           onChange={(next) => updateFilter('minDataConfidencePct', next, scope)}
+          exclusionLabel={excludedLabel(exclusionCounts.confidence, totalAreaCount)}
         />
       </div>
     </section>

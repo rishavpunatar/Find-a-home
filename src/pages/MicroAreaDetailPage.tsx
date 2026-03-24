@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
@@ -41,8 +41,14 @@ const MetricRow = ({
 
 export const MicroAreaDetailPage = () => {
   const { microAreaId } = useParams()
+  const location = useLocation()
+  const navigate = useNavigate()
   const { loading, error } = useDataContext()
   const { ranked } = useRankedData()
+  const fromPath =
+    typeof (location.state as { from?: unknown } | null)?.from === 'string'
+      ? ((location.state as { from?: string }).from ?? '/ranked')
+      : '/ranked'
 
   const area = useMemo(
     () => ranked.find((item) => item.microAreaId === microAreaId),
@@ -85,9 +91,15 @@ export const MicroAreaDetailPage = () => {
           <span className="font-semibold text-surge">{area.dynamicOverallScore.toFixed(1)}</span>
           {' · '}Data confidence: {(area.dataConfidenceScore * 100).toFixed(0)}%
         </p>
-        <Link to="/ranked" className="mt-3 inline-block text-sm text-surge hover:underline">
-          Back to ranked table
-        </Link>
+        <button
+          type="button"
+          onClick={() => {
+            void navigate(fromPath)
+          }}
+          className="mt-3 inline-flex rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
+        >
+          Back to previous view
+        </button>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
@@ -20,8 +20,10 @@ const StatCard = ({ label, value, hint }: { label: string; value: string; hint?:
 )
 
 export const OverviewPage = () => {
+  const location = useLocation()
   const { dataset, loading, error } = useDataContext()
   const { ranked, filtered } = useRankedData()
+  const fromPath = `${location.pathname}${location.search}`
 
   if (loading) {
     return <LoadingState title="Loading precomputed micro-area dataset" />
@@ -149,6 +151,7 @@ export const OverviewPage = () => {
                   </p>
                   <Link
                     to={`/micro-area/${area.microAreaId}`}
+                    state={{ from: fromPath }}
                     className="text-xs text-surge hover:underline"
                   >
                     Inspect

@@ -1,14 +1,21 @@
 import 'leaflet/dist/leaflet.css'
 
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import L from 'leaflet'
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
 import markerIcon from 'leaflet/dist/images/marker-icon.png'
 import markerShadow from 'leaflet/dist/images/marker-shadow.png'
-import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import {
+  Circle,
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMapEvents,
+} from 'react-leaflet'
 
-import type { ComponentScores, DerivedMicroArea } from '@/types/domain'
+import type { ComponentScores, Coordinate, DerivedMicroArea } from '@/types/domain'
 
 import { formatCurrency, formatNumber } from '@/lib/format'
 
@@ -19,6 +26,12 @@ L.Icon.Default.mergeOptions({
 })
 
 export type ColorMetric = 'overall' | keyof ComponentScores
+
+export interface MapViewport {
+  lat: number
+  lon: number
+  zoom: number
+}
 
 const mapMetricLabel: Record<ColorMetric, string> = {
   overall: 'Overall score',
@@ -48,6 +61,12 @@ interface LegendBin {
   min: number
   max: number
   color: string
+}
+
+interface MarkerCluster {
+  lat: number
+  lon: number
+  members: DerivedMicroArea[]
 }
 
 const buildRangeLegendBins = (values: number[], binCount: number = LEGEND_COLORS.length): LegendBin[] => {
@@ -126,7 +145,10 @@ const buildQuantileLegendBins = (values: number[], binCount: number = LEGEND_COL
     const previousMax = bins[index - 1]?.max ?? start
     bins.push({
       min: index === 0 ? start : Math.max(start, previousMax),
-      max: index === safeBinCount - 1 ? sortedValues[sortedValues.length - 1] ?? end : Math.max(end, start),
+      max:
+        index === safeBinCount - 1
+          ? sortedValues[sortedValues.length - 1] ?? end
+          : Math.max(end, start),
       color: colorAt(index),
     })
   }
@@ -145,28 +167,184 @@ const colorForValue = (value: number, bins: LegendBin[]): string => {
   return bins[bins.length - 1]?.color ?? '#059669'
 }
 
+const haversineDistanceM = (left: Coordinate, right: Coordinate): number => {
+  const radiusM = 6_371_000
+  const lat1 = (left.lat * Math.PI) / 180
+  const lon1 = (left.lon * Math.PI) / 180
+  const lat2 = (right.lat * Math.PI) / 180
+  const lon2 = (right.lon * Math.PI) / 180
+  const dLat = lat2 - lat1
+  const dLon = lon2 - lon1
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2
+  return radiusM * 2 * Math.asin(Math.sqrt(h))
+}
+
+const buildMarkerClusters = (areas: DerivedMicroArea[], clusterRadiusM = 650): MarkerCluster[] => {
+  const clusters: MarkerCluster[] = []
+
+  for (const area of areas) {
+    let bestClusterIndex = -1
+    let bestDistance = Number.POSITIVE_INFINITY
+
+    for (let index = 0; index < clusters.length; index += 1) {
+      const cluster = clusters[index]
+      if (!cluster) {
+        continue
+      }
+      const distance = haversineDistanceM(area.centroid, {
+        lat: cluster.lat,
+        lon: cluster.lon,
+      })
+      if (distance <= clusterRadiusM && distance < bestDistance) {
+        bestDistance = distance
+        bestClusterIndex = index
+      }
+    }
+
+    if (bestClusterIndex === -1) {
+      clusters.push({
+        lat: area.centroid.lat,
+        lon: area.centroid.lon,
+        members: [area],
+      })
+      continue
+    }
+
+    const targetCluster = clusters[bestClusterIndex]
+    if (!targetCluster) {
+      continue
+    }
+    targetCluster.members.push(area)
+    const count = targetCluster.members.length
+    targetCluster.lat = (targetCluster.lat * (count - 1) + area.centroid.lat) / count
+    targetCluster.lon = (targetCluster.lon * (count - 1) + area.centroid.lon) / count
+  }
+
+  return clusters
+}
+
+const clusterIcon = (count: number) =>
+  L.divIcon({
+    className: '',
+    html: `<div style="
+      height:34px;
+      width:34px;
+      border-radius:17px;
+      background:#0f766e;
+      color:#fff;
+      border:2px solid #fff;
+      box-shadow:0 2px 8px rgba(0,0,0,0.25);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:12px;
+      line-height:1;
+    ">${count}</div>`,
+    iconSize: [34, 34],
+    iconAnchor: [17, 17],
+  })
+
+const MapInteractionBridge = ({
+  onViewportChange,
+  focusCoordinate,
+}: {
+  onViewportChange?: (viewport: MapViewport) => void
+  focusCoordinate?: Coordinate | null
+}) => {
+  const lastFocusKeyRef = useRef<string>('')
+  const map = useMapEvents({
+    moveend: () => {
+      const center = map.getCenter()
+      onViewportChange?.({
+        lat: center.lat,
+        lon: center.lng,
+        zoom: map.getZoom(),
+      })
+    },
+    zoomend: () => {
+      const center = map.getCenter()
+      onViewportChange?.({
+        lat: center.lat,
+        lon: center.lng,
+        zoom: map.getZoom(),
+      })
+    },
+  })
+
+  useEffect(() => {
+    if (!focusCoordinate) {
+      return
+    }
+
+    const focusKey = `${focusCoordinate.lat.toFixed(6)}:${focusCoordinate.lon.toFixed(6)}`
+    if (lastFocusKeyRef.current === focusKey) {
+      return
+    }
+
+    lastFocusKeyRef.current = focusKey
+    map.flyTo([focusCoordinate.lat, focusCoordinate.lon], Math.max(12, map.getZoom()), {
+      animate: true,
+      duration: 0.65,
+    })
+  }, [focusCoordinate, map])
+
+  return null
+}
+
 interface MicroAreaMapProps {
   areas: DerivedMicroArea[]
   metric: ColorMetric
+  selectedAreaId?: string | null
+  hoveredAreaId?: string | null
+  onSelectArea?: (id: string) => void
+  onHoverArea?: (id: string | null) => void
+  focusAreaId?: string | null
+  initialCenter?: [number, number]
+  initialZoom?: number
+  showMarkers?: boolean
+  onShowMarkersChange?: (next: boolean) => void
+  onViewportChange?: (viewport: MapViewport) => void
 }
 
-const MapPopupContent = ({ area }: { area: DerivedMicroArea }) => (
+const MapPopupContent = ({ area, fromPath }: { area: DerivedMicroArea; fromPath: string }) => (
   <div className="text-sm">
     <p className="font-semibold">{area.stationName}</p>
     <p className="text-xs text-slate-600">{area.localAuthority}</p>
     <p>Score: {area.dynamicOverallScore.toFixed(1)}</p>
     <p>Commute: {formatNumber(area.commuteTypicalMinutes.value)} min</p>
     <p>Drive to Pinner: {formatNumber(area.driveTimeToPinnerMinutes.value)} min</p>
-    <Link to={`/micro-area/${area.microAreaId}`} className="mt-1 inline-block text-surge hover:underline">
+    <Link
+      to={`/micro-area/${area.microAreaId}`}
+      state={{ from: fromPath }}
+      className="mt-1 inline-block text-surge hover:underline"
+    >
       Open full details
     </Link>
   </div>
 )
 
-export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+export const MicroAreaMap = ({
+  areas,
+  metric,
+  selectedAreaId,
+  hoveredAreaId,
+  onSelectArea,
+  onHoverArea,
+  focusAreaId,
+  initialCenter,
+  initialZoom = 11,
+  showMarkers,
+  onShowMarkersChange,
+  onViewportChange,
+}: MicroAreaMapProps) => {
+  const location = useLocation()
+  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(null)
+  const [internalHoveredId, setInternalHoveredId] = useState<string | null>(null)
   const [legendMode, setLegendMode] = useState<'quantile' | 'range'>('quantile')
-  const [showMarkers, setShowMarkers] = useState(false)
+  const [internalShowMarkers, setInternalShowMarkers] = useState(true)
 
   const values = useMemo(
     () =>
@@ -183,7 +361,7 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
   )
   const denseLayer = areas.length > 250
 
-  const center = useMemo(() => {
+  const fallbackCenter = useMemo(() => {
     if (areas.length === 0) {
       return [51.594, -0.381] as [number, number]
     }
@@ -194,23 +372,65 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
     return [lat, lon] as [number, number]
   }, [areas])
 
-  const selected = selectedId
-    ? (areas.find((area) => area.microAreaId === selectedId) ?? null)
+  const mapCenter = initialCenter ?? fallbackCenter
+  const currentSelectedId = selectedAreaId ?? internalSelectedId
+  const currentHoveredId = hoveredAreaId ?? internalHoveredId
+  const markerLayerVisible = showMarkers ?? internalShowMarkers
+  const fromPath = `${location.pathname}${location.search}`
+
+  const selected = currentSelectedId
+    ? (areas.find((area) => area.microAreaId === currentSelectedId) ?? null)
     : null
+
+  const focusCoordinate = focusAreaId
+    ? (areas.find((area) => area.microAreaId === focusAreaId)?.centroid ?? null)
+    : null
+
+  const markerClusters = useMemo(() => buildMarkerClusters(areas), [areas])
+
+  const setSelected = (id: string) => {
+    onSelectArea?.(id)
+    if (selectedAreaId === undefined) {
+      setInternalSelectedId(id)
+    }
+  }
+
+  const setHovered = (id: string | null) => {
+    onHoverArea?.(id)
+    if (hoveredAreaId === undefined) {
+      setInternalHoveredId(id)
+    }
+  }
+
+  const toggleMarkers = () => {
+    const next = !markerLayerVisible
+    onShowMarkersChange?.(next)
+    if (showMarkers === undefined) {
+      setInternalShowMarkers(next)
+    }
+  }
 
   return (
     <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
       <div className="h-[560px] overflow-hidden rounded-2xl border border-teal-100 bg-white shadow-panel">
-        <MapContainer center={center} zoom={11} scrollWheelZoom className="h-full w-full">
+        <MapContainer center={mapCenter} zoom={initialZoom} scrollWheelZoom className="h-full w-full">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+
+          <MapInteractionBridge
+            {...(onViewportChange ? { onViewportChange } : {})}
+            focusCoordinate={focusCoordinate}
           />
 
           {areas.map((area) => {
             const score =
               metric === 'overall' ? area.dynamicOverallScore : area.componentScores[metric]
             const color = colorForValue(score, legendBins)
+            const isSelected = area.microAreaId === currentSelectedId
+            const isHovered = area.microAreaId === currentHoveredId
+
             return (
               <Circle
                 key={area.microAreaId}
@@ -219,34 +439,105 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
                 pathOptions={{
                   color,
                   fillColor: color,
-                  fillOpacity: 0.3,
-                  weight: 1.5,
+                  fillOpacity: isSelected ? 0.48 : isHovered ? 0.38 : 0.3,
+                  weight: isSelected ? 3 : isHovered ? 2.2 : 1.5,
+                  opacity: isSelected ? 1 : 0.85,
                 }}
                 eventHandlers={{
-                  click: () => setSelectedId(area.microAreaId),
+                  click: () => setSelected(area.microAreaId),
+                  mouseover: () => setHovered(area.microAreaId),
+                  mouseout: () => setHovered(null),
                 }}
               >
                 <Popup>
-                  <MapPopupContent area={area} />
+                  <MapPopupContent area={area} fromPath={fromPath} />
                 </Popup>
               </Circle>
             )
           })}
 
-          {!denseLayer || showMarkers
-            ? areas.map((area) => (
-                <Marker
-                  key={`${area.microAreaId}-marker`}
-                  position={[area.centroid.lat, area.centroid.lon]}
-                  eventHandlers={{
-                    click: () => setSelectedId(area.microAreaId),
-                  }}
-                >
-                  <Popup>
-                    <MapPopupContent area={area} />
-                  </Popup>
-                </Marker>
-              ))
+          {markerLayerVisible
+            ? denseLayer
+              ? markerClusters.map((cluster, index) => {
+                  if (cluster.members.length === 1) {
+                    const [area] = cluster.members
+                    if (!area) {
+                      return null
+                    }
+                    return (
+                      <Marker
+                        key={`${area.microAreaId}-marker`}
+                        position={[area.centroid.lat, area.centroid.lon]}
+                        eventHandlers={{
+                          click: () => setSelected(area.microAreaId),
+                          mouseover: () => setHovered(area.microAreaId),
+                          mouseout: () => setHovered(null),
+                        }}
+                      >
+                        <Popup>
+                          <MapPopupContent area={area} fromPath={fromPath} />
+                        </Popup>
+                      </Marker>
+                    )
+                  }
+
+                  return (
+                    <Marker
+                      key={`cluster-${index}-${cluster.members.length}`}
+                      position={[cluster.lat, cluster.lon]}
+                      icon={clusterIcon(cluster.members.length)}
+                      eventHandlers={{
+                        click: () => {
+                          const first = cluster.members[0]
+                          if (first) {
+                            setSelected(first.microAreaId)
+                          }
+                        },
+                      }}
+                    >
+                      <Popup>
+                        <div className="text-sm">
+                          <p className="font-semibold">
+                            {cluster.members.length} areas in this cluster
+                          </p>
+                          <ul className="mt-2 max-h-36 space-y-1 overflow-auto text-xs">
+                            {cluster.members.slice(0, 12).map((member) => (
+                              <li key={member.microAreaId}>
+                                <button
+                                  type="button"
+                                  onClick={() => setSelected(member.microAreaId)}
+                                  className="text-surge hover:underline"
+                                >
+                                  {member.stationName}
+                                </button>
+                              </li>
+                            ))}
+                            {cluster.members.length > 12 ? (
+                              <li className="text-slate-500">
+                                +{cluster.members.length - 12} more
+                              </li>
+                            ) : null}
+                          </ul>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  )
+                })
+              : areas.map((area) => (
+                  <Marker
+                    key={`${area.microAreaId}-marker`}
+                    position={[area.centroid.lat, area.centroid.lon]}
+                    eventHandlers={{
+                      click: () => setSelected(area.microAreaId),
+                      mouseover: () => setHovered(area.microAreaId),
+                      mouseout: () => setHovered(null),
+                    }}
+                  >
+                    <Popup>
+                      <MapPopupContent area={area} fromPath={fromPath} />
+                    </Popup>
+                  </Marker>
+                ))
             : null}
         </MapContainer>
       </div>
@@ -273,15 +564,13 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
           >
             Equal-range bins
           </button>
-          {denseLayer ? (
-            <button
-              type="button"
-              onClick={() => setShowMarkers((current) => !current)}
-              className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700"
-            >
-              {showMarkers ? 'Hide markers' : 'Show markers'}
-            </button>
-          ) : null}
+          <button
+            type="button"
+            onClick={toggleMarkers}
+            className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700"
+          >
+            {markerLayerVisible ? 'Hide station markers' : 'Show station markers'}
+          </button>
         </div>
         {values.length > 0 ? (
           <p className="mt-1 text-xs text-slate-500">
@@ -289,9 +578,9 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
             {formatNumber(Math.max(...values), 1)}
           </p>
         ) : null}
-        {denseLayer && !showMarkers ? (
+        {denseLayer && markerLayerVisible ? (
           <p className="mt-1 text-xs text-slate-500">
-            Marker layer is hidden by default for performance at this density.
+            Marker clustering active ({markerClusters.length} clusters across {areas.length} areas).
           </p>
         ) : null}
         <ul className="mt-3 space-y-1 text-xs text-slate-700">
@@ -315,6 +604,7 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
             <p>Drive to Pinner: {formatNumber(selected.driveTimeToPinnerMinutes.value)} min</p>
             <Link
               to={`/micro-area/${selected.microAreaId}`}
+              state={{ from: fromPath }}
               className="mt-2 inline-block text-surge hover:underline"
             >
               Open full details
@@ -322,7 +612,7 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
           </div>
         ) : (
           <p className="mt-5 text-sm text-slate-500">
-            Click a catchment circle or a station pin to inspect area details.
+            Click a catchment circle, station pin, or list row to inspect area details.
           </p>
         )}
       </aside>
