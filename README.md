@@ -61,6 +61,12 @@ This refreshes `data/raw/stations_transport.json` from live station geodata arou
 python3 -m pipeline.jobs.verify_data_sources --live
 ```
 
+### 2c) Run strict dataset quality audit
+
+```bash
+npm run pipeline:quality
+```
+
 ### 3) Start the app
 
 ```bash
@@ -83,6 +89,7 @@ npm run build
 The pipeline emits:
 
 - `data/processed/verification_report.json`
+- `data/processed/data_quality_report.json`
 - `verificationSummary` inside `data/processed/micro_areas.json`
 
 Current verification coverage:
@@ -108,6 +115,12 @@ Refresh pollution metrics:
 npm run pipeline:pollution
 ```
 
+Run strict processed-dataset validation:
+
+```bash
+npm run pipeline:quality
+```
+
 Optional London high-resolution mode:
 - If `data/external/LAEI2019-Concentrations-Data-CSV.zip` is present, London stations use LAEI 20m catchment calculations.
 - If that archive is absent, London stations gracefully fall back to DEFRA LAQM 1km catchment values.
@@ -123,6 +136,7 @@ Optional London high-resolution mode:
    - If a station has no direct fixture record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchored stations.
 5. Compute component scores and weighted overall rank.
 6. Persist `data/processed/micro_areas.json` and `data/processed/summary.json`.
+7. Run strict quality checks and persist `data/processed/data_quality_report.json`.
 
 Configuration lives in:
 
@@ -158,6 +172,15 @@ Each metric emitted to frontend includes:
 - `lastUpdated`
 
 Planning/development risk is intentionally marked as heuristic low-confidence unless a robust structured source is connected.
+
+In addition to per-metric metadata, a dataset-level audit runs on every build:
+
+- hard range checks across key numeric fields
+- schema + status/confidence sanity checks
+- pollution raw-to-processed consistency checks
+- London pollution cross-source delta checks (LAEI vs DEFRA background)
+
+Critical failures stop the pipeline; warnings are surfaced in `data_quality_report.json` and the Overview page.
 
 ## Default scoring weights
 

@@ -20,6 +20,7 @@ Build and maintain a static-first web app that ranks UK station-centred micro-ar
 - Rebuild processed dataset: `python3 -m pipeline.jobs.build_micro_areas`
 - Generate verification report: `python3 -m pipeline.jobs.verify_data_sources`
 - Generate live verification report: `python3 -m pipeline.jobs.verify_data_sources --live`
+- Run strict dataset quality audit: `python3 -m pipeline.jobs.validate_dataset --fail-on-critical`
 - Run pipeline tests: `python3 -m pytest`
 
 ## Data flow
@@ -64,6 +65,7 @@ Before opening a PR, run:
 - `npm run test`
 - `npm run lint`
 - `python3 -m pytest`
+- `npm run pipeline:quality`
 - `npm run build`
 
 ## Frontend architecture expectations

@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-03-24T12:38:43+00:00",
+  "methodologyVersion": "2026.1",
+  "overallStatus": "warning",
+  "microAreasAnalysed": 528,
+  "counts": {
+    "critical": 0,
+    "warning": 3,
+    "info": 0
+  },
+  "pollutionCrossSourceSummary": {
+    "londonCrossSourceRows": 520,
+    "medianAbsNo2Delta": 10.758,
+    "p95AbsNo2Delta": 13.877,
+    "maxAbsNo2Delta": 18.69
+  },
+  "issues": [
+    {
+      "severity": "warning",
+      "code": "pollution_cross_source_delta",
+      "message": "NO2 divergence vs secondary source is high; review recommended.",
+      "microAreaId": "ma-edgwaa0d",
+      "stationCode": "EDGWAA0D",
+      "stationName": "Edgware Road",
+      "field": "annualNo2",
+      "observed": 18.171,
+      "expected": "<= 18 ug/m3"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_cross_source_delta",
+      "message": "NO2 divergence vs secondary source is high; review recommended.",
+      "microAreaId": "ma-great61c",
+      "stationCode": "GREAT61C",
+      "stationName": "Great Portland Street",
+      "field": "annualNo2",
+      "observed": 18.233,
+      "expected": "<= 18 ug/m3"
+    },
+    {
+      "severity": "warning",
+      "code": "pollution_cross_source_delta",
+      "message": "NO2 divergence vs secondary source is high; review recommended.",
+      "microAreaId": "ma-hange8fb",
+      "stationCode": "HANGE8FB",
+      "stationName": "Hanger Lane",
+      "field": "annualNo2",
+      "observed": 18.69,
+      "expected": "<= 18 ug/m3"
+    }
+  ],
+  "issuesTruncated": false
+}

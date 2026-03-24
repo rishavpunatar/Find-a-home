@@ -17,6 +17,7 @@ from pipeline.adapters.population_adapter import FixturePopulationAdapter
 from pipeline.adapters.property_adapter import FixturePropertyAdapter
 from pipeline.adapters.school_adapter import FixtureSchoolAdapter
 from pipeline.adapters.station_transport_adapter import FixtureStationTransportAdapter
+from pipeline.jobs.validate_dataset import generate_quality_report, write_quality_report
 from pipeline.jobs.verify_data_sources import generate_verification_report, write_report
 from pipeline.models.entities import Coordinate, NumericMetric, SearchConfig, StationRecord
 from pipeline.models.scoring import clamp, forward_score, inverse_score, mean, weighted_score
@@ -769,16 +770,31 @@ def write_outputs(dataset: dict[str, Any]) -> None:
 def main() -> None:
     config = load_config(CONFIG_PATH)
     dataset = compile_micro_areas(config)
+
+    pollution_records = json.loads((RAW_DIR / 'pollution_metrics.json').read_text(encoding='utf-8'))
+    quality_report = generate_quality_report(dataset, pollution_records, weights=config.default_weights)
+
     live_verification = os.getenv('RUN_SOURCE_VERIFICATION', '0') == '1'
     verification_report = generate_verification_report(dataset, live_mode=live_verification)
     dataset['verificationSummary'] = {
         'overallStatus': verification_report['overallStatus'],
         'crimeCrossCheckStatus': verification_report['crossChecks']['crime']['status'],
+        'dataQualityStatus': quality_report['overallStatus'],
+        'qualityCriticalIssues': quality_report['counts']['critical'],
+        'qualityWarningIssues': quality_report['counts']['warning'],
         'liveMode': live_verification,
         'generatedAt': verification_report['generatedAt'],
     }
     write_outputs(dataset)
     write_report(verification_report, PROCESSED_DIR / 'verification_report.json')
+    write_quality_report(quality_report, PROCESSED_DIR / 'data_quality_report.json')
+
+    if quality_report['counts']['critical'] > 0:
+        raise RuntimeError(
+            f"Dataset quality checks failed with {quality_report['counts']['critical']} critical issues. "
+            f"See {PROCESSED_DIR / 'data_quality_report.json'}.",
+        )
+
     print(f"Generated {len(dataset['microAreas'])} micro-areas -> {PROCESSED_DIR / 'micro_areas.json'}")
 
 

@@ -71,6 +71,18 @@ export const OverviewPage = () => {
             <span className="font-semibold">
               {dataset.verificationSummary.crimeCrossCheckStatus}
             </span>{' '}
+            | Data quality:{' '}
+            <span className="font-semibold">
+              {dataset.verificationSummary.dataQualityStatus ?? 'unknown'}
+            </span>
+            {typeof dataset.verificationSummary.qualityCriticalIssues === 'number' ? (
+              <>
+                {' '}
+                (critical {dataset.verificationSummary.qualityCriticalIssues}, warning{' '}
+                {dataset.verificationSummary.qualityWarningIssues ?? 0})
+              </>
+            ) : null}
+            {' '}
             | Live mode: {dataset.verificationSummary.liveMode ? 'on' : 'off'}
           </p>
           <p className="mt-1 text-xs text-slate-600">
@@ -83,6 +95,15 @@ export const OverviewPage = () => {
               className="ml-1 text-surge hover:underline"
             >
               verification_report.json
+            </a>
+            <span className="mx-1">|</span>
+            <a
+              href={`${import.meta.env.BASE_URL}data/processed/data_quality_report.json`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-surge hover:underline"
+            >
+              data_quality_report.json
             </a>
           </p>
         </section>

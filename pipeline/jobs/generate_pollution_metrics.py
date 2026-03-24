@@ -4,6 +4,7 @@ import argparse
 import csv
 import io
 import json
+import math
 import re
 import zipfile
 from pathlib import Path
@@ -27,6 +28,20 @@ GRID_CELL_HALF_DIAGONAL_M = 707
 
 def load_stations(path: Path) -> list[dict[str, Any]]:
     return json.loads(path.read_text(encoding='utf-8'))
+
+
+def haversine_distance_m(lat_1: float, lon_1: float, lat_2: float, lon_2: float) -> float:
+    radius_m = 6_371_000
+    lat_1_rad = math.radians(lat_1)
+    lon_1_rad = math.radians(lon_1)
+    lat_2_rad = math.radians(lat_2)
+    lon_2_rad = math.radians(lon_2)
+
+    d_lat = lat_2_rad - lat_1_rad
+    d_lon = lon_2_rad - lon_1_rad
+
+    h = math.sin(d_lat / 2) ** 2 + math.cos(lat_1_rad) * math.cos(lat_2_rad) * math.sin(d_lon / 2) ** 2
+    return radius_m * 2 * math.asin(math.sqrt(h))
 
 
 def fetch_authority_codes() -> dict[str, str]:
@@ -461,6 +476,57 @@ def generate_pollution_metrics(year: int) -> dict[str, dict[str, Any]]:
             'methodology_note': (
                 f'DEFRA LAQM background maps ({year}); station-centred 800m catchment value from '
                 f'distance-weighted 1km grid cells in {methodology_scope}.'
+            ),
+        }
+
+    station_lookup = {str(station['station_code']): station for station in stations}
+    missing_codes = [code for code in station_lookup if code not in output]
+
+    for station_code in missing_codes:
+        target = station_lookup[station_code]
+        lat = float(target['lat'])
+        lon = float(target['lon'])
+
+        candidates: list[tuple[float, dict[str, Any]]] = []
+        for anchor_code, record in output.items():
+            anchor_station = station_lookup.get(anchor_code)
+            if not anchor_station:
+                continue
+            distance_m = haversine_distance_m(
+                lat,
+                lon,
+                float(anchor_station['lat']),
+                float(anchor_station['lon']),
+            )
+            candidates.append((distance_m, record))
+
+        candidates.sort(key=lambda item: item[0])
+        top = candidates[:10]
+        if not top:
+            continue
+
+        weighted_no2 = 0.0
+        weighted_pm25 = 0.0
+        weight_total = 0.0
+        for distance_m, record in top:
+            weight = 1.0 / (max(distance_m, 120.0) ** 1.8)
+            weighted_no2 += float(record['annual_no2']) * weight
+            weighted_pm25 += float(record['annual_pm25']) * weight
+            weight_total += weight
+
+        if weight_total <= 0:
+            continue
+
+        nearest_km = top[0][0] / 1000.0
+        confidence = max(0.3, min(0.72, 0.72 - 0.018 * nearest_km))
+        output[station_code] = {
+            'annual_no2': round(weighted_no2 / weight_total, 5),
+            'annual_pm25': round(weighted_pm25 / weight_total, 5),
+            'status': 'estimated',
+            'confidence': round(confidence, 3),
+            'methodology_note': (
+                'Estimated by inverse-distance interpolation from nearest station pollution records '
+                f'({year} run), because no direct LAEI/DEFRA grid match was available for this station.'
             ),
         }
 

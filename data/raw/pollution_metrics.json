@@ -6779,5 +6779,12 @@
     "secondary_source_name": "DEFRA LAQM 2023 1km background",
     "no2_delta_vs_secondary": 10.21242,
     "pm25_delta_vs_secondary": 2.21871
+  },
+  "KNG": {
+    "annual_no2": 13.76108,
+    "annual_pm25": 8.31821,
+    "status": "estimated",
+    "confidence": 0.606,
+    "methodology_note": "Estimated by inverse-distance interpolation from nearest station pollution records (2023 run), because no direct LAEI/DEFRA grid match was available for this station."
   }
 }

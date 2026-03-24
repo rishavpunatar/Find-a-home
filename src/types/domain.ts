@@ -89,6 +89,9 @@ export interface ProcessedDataset {
   verificationSummary?: {
     overallStatus: string
     crimeCrossCheckStatus: string
+    dataQualityStatus?: string
+    qualityCriticalIssues?: number
+    qualityWarningIssues?: number
     liveMode: boolean
     generatedAt: string
   }
