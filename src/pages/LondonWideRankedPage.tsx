@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
@@ -28,6 +28,7 @@ const LONDON_WIDE_COMMUTE_CAP_MINUTES = 60
 export const LondonWideRankedPage = () => {
   const { dataset, loading, error } = useDataContext()
   const { pinnedIds, compareIds, togglePin, toggleCompare, filters } = useSettings()
+  const [showTable, setShowTable] = useState(false)
   const { ranked: defaultRanked } = useRankedData()
   const londonWideFilters = useMemo(
     () => ({
@@ -96,25 +97,42 @@ export const LondonWideRankedPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <p className="text-sm text-slate-700">
           {filtered.length} micro-areas match London-wide mode. Pin rows, then export your
-          shortlist.
+          shortlist. Use table toggle to focus on charts.
         </p>
-        <button
-          type="button"
-          disabled={pinned.length === 0}
-          onClick={() => downloadCsv('micro-area-shortlist-london-wide.csv', shortlistToCsv(pinned))}
-          className="rounded-lg bg-surge px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Export pinned shortlist CSV ({pinned.length})
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowTable((current) => !current)}
+            className="rounded-lg bg-ink px-3 py-2 text-sm font-medium text-white hover:bg-slate-700"
+          >
+            {showTable ? 'Hide table' : 'Show table'}
+          </button>
+          <button
+            type="button"
+            disabled={pinned.length === 0}
+            onClick={() =>
+              downloadCsv('micro-area-shortlist-london-wide.csv', shortlistToCsv(pinned))
+            }
+            className="rounded-lg bg-surge px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Export pinned shortlist CSV ({pinned.length})
+          </button>
+        </div>
       </div>
 
-      <RankedTable
-        areas={filtered}
-        pinnedIds={pinnedIds}
-        compareIds={compareIds}
-        onTogglePin={togglePin}
-        onToggleCompare={toggleCompare}
-      />
+      {showTable ? (
+        <RankedTable
+          areas={filtered}
+          pinnedIds={pinnedIds}
+          compareIds={compareIds}
+          onTogglePin={togglePin}
+          onToggleCompare={toggleCompare}
+        />
+      ) : (
+        <section className="rounded-2xl border border-teal-100 bg-white p-4 text-sm text-slate-700 shadow-panel">
+          London-wide table is hidden. Scroll down to view the full combined-scope charts.
+        </section>
+      )}
 
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
