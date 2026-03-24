@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-23T23:29:29+00:00",
+  "generatedAt": "2026-03-24T00:19:15+00:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "partial",
   "sourceMatrix": {
@@ -22,10 +22,10 @@
       "note": "Current school metrics are fixture-backed composites. Ofsted grading/report-card transition requires careful mapping."
     },
     "pollution": {
-      "status": "not_live_verified",
+      "status": "source_applied_not_cross_verified",
       "primarySource": "DEFRA UK-AIR PCM modelled background grids",
       "secondarySource": "LA AQMA station-level/open pollutant feeds (planned)",
-      "note": "Current NO2/PM2.5 values are fixture-backed proxies."
+      "note": "NO2/PM2.5 now use DEFRA LAQM background-map values mapped to nearest 1km grid cells. Secondary source reconciliation is still pending."
     },
     "greenSpace": {
       "status": "not_live_verified",

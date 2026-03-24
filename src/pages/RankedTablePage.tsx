@@ -129,9 +129,9 @@ export const RankedTablePage = () => {
                 concentration, not a transformed score.
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                In expanded London coverage, many rows are estimated by distance-weighted
-                interpolation from anchor stations and are explicitly marked estimated in raw
-                metric metadata.
+                Values are sourced from DEFRA LAQM background maps (nearest 1km grid cell mapped to
+                station location) where available, with explicit estimated fallback only when no
+                direct grid mapping is available.
               </p>
             </details>
 

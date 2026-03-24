@@ -126,10 +126,13 @@ def source_matrix() -> dict[str, dict[str, str]]:
             ),
         },
         'pollution': {
-            'status': 'not_live_verified',
+            'status': 'source_applied_not_cross_verified',
             'primarySource': 'DEFRA UK-AIR PCM modelled background grids',
             'secondarySource': 'LA AQMA station-level/open pollutant feeds (planned)',
-            'note': 'Current NO2/PM2.5 values are fixture-backed proxies.',
+            'note': (
+                'NO2/PM2.5 now use DEFRA LAQM background-map values mapped to nearest 1km grid cells. '
+                'Secondary source reconciliation is still pending.'
+            ),
         },
         'greenSpace': {
             'status': 'not_live_verified',

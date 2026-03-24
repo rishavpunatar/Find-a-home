@@ -88,7 +88,8 @@ The pipeline emits:
 Current verification coverage:
 
 - Crime: live cross-check against `data.police.uk` monthly incidents annualised per 1,000 (using denominator proxy)
-- Property, schools, transport, pollution, greenspace, population: explicit `not_live_verified` status
+- Pollution: DEFRA LAQM background-map source is applied (`source_applied_not_cross_verified`)
+- Property, schools, transport, greenspace, population: explicit `not_live_verified` status
 - Planning risk: explicit `low_confidence_placeholder`
 
 This is intentional transparency so the app does not claim precision where full cross-source automation is not yet complete.
@@ -99,6 +100,12 @@ Pipeline entrypoint:
 
 ```bash
 python3 -m pipeline.jobs.build_micro_areas
+```
+
+Refresh DEFRA-backed pollution metrics:
+
+```bash
+npm run pipeline:pollution
 ```
 
 ### Candidate generation process
@@ -135,7 +142,7 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - population
 - planning
 
-Current implementation uses fixture-backed adapters from `data/raw/` so the app runs immediately with reproducible sample data. Adapter interfaces are stable, so real data sources can replace fixture adapters without breaking the UI contract.
+Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Pollution metrics are now generated from DEFRA LAQM background maps; other domains remain fixture/interpolated in this MVP.
 
 ## Data quality model (no fake precision)
 
