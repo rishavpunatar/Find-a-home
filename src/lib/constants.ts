@@ -1,8 +1,8 @@
 import type { Filters, Weights } from '@/types/domain'
 
 export const DEFAULT_WEIGHTS: Weights = {
-  value: 25,
-  transport: 20,
+  value: 30,
+  transport: 15,
   schools: 20,
   environment: 15,
   crime: 12.5,

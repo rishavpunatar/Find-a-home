@@ -20,8 +20,8 @@
   },
   "destination_station": "Oxford Circus",
   "default_weights": {
-    "value": 25,
-    "transport": 20,
+    "value": 30,
+    "transport": 15,
     "schools": 20,
     "environment": 15,
     "crime": 12.5,

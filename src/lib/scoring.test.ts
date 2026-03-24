@@ -27,19 +27,18 @@ describe('computeWeightedScore', () => {
 
   it('normalizes equivalent scaled weights to same score', () => {
     const resultA = computeWeightedScore(componentScores, DEFAULT_WEIGHTS, 0.9)
+    const scaledWeights = {
+      value: DEFAULT_WEIGHTS.value * 2,
+      transport: DEFAULT_WEIGHTS.transport * 2,
+      schools: DEFAULT_WEIGHTS.schools * 2,
+      environment: DEFAULT_WEIGHTS.environment * 2,
+      crime: DEFAULT_WEIGHTS.crime * 2,
+      proximity: DEFAULT_WEIGHTS.proximity * 2,
+      planningRisk: DEFAULT_WEIGHTS.planningRisk * 2,
+    }
     const resultB = computeWeightedScore(
-      {
-        ...componentScores,
-      },
-      {
-        value: 50,
-        transport: 40,
-        schools: 40,
-        environment: 30,
-        crime: 25,
-        proximity: 10,
-        planningRisk: 5,
-      },
+      componentScores,
+      scaledWeights,
       0.9,
     )
 

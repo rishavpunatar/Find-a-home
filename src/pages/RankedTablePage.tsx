@@ -40,7 +40,7 @@ export const RankedTablePage = () => {
   const sourceMetadata = dataset.config.sourceMetadata ?? {}
   const propertyReferencePeriod =
     sourceMetadata.property?.referencePeriod ??
-    'mixed fixture composite; a single source-traceable national cut date is not yet wired for all stations'
+    '12-month rolling transaction window from HM Land Registry PPD stratified catchment samples (with prior-year comparison window for trend proxy)'
   const schoolsReferencePeriod =
     sourceMetadata.schools?.referencePeriod ??
     'mixed-year composite proxy (no single source-traceable national cut date wired yet)'
@@ -87,7 +87,8 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-slate-600">
                 Station with direct property record: use station median semi-detached sold price
-                from the property adapter (`status = available`).
+                from HM Land Registry Price Paid Data using a stratified postcode sample inside the
+                800m catchment (`status = available`).
               </p>
               <p className="mt-1 text-slate-600">
                 Station without direct property record: estimate using inverse-distance weighting
@@ -96,12 +97,12 @@ export const RankedTablePage = () => {
                 estimated`).
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Source:</span> HM Land Registry Price Paid Data via
-                fixture-backed station property metrics in this MVP pipeline.
+                <span className="font-semibold">Source:</span> HM Land Registry Price Paid Data
+                (semi-detached, standard transactions) + postcodes.io catchment postcode sampling.
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Data reference period:</span> mixed fixture
-                composite; {propertyReferencePeriod}.
+                <span className="font-semibold">Data reference period:</span>{' '}
+                {propertyReferencePeriod}.
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Median is shown instead of average in the table because it is less sensitive to a

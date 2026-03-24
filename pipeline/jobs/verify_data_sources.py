@@ -102,19 +102,23 @@ def load_dataset(dataset_path: Path) -> dict[str, Any]:
 def source_matrix() -> dict[str, dict[str, str]]:
     return {
         'property': {
-            'status': 'not_live_verified',
+            'status': 'source_applied_not_live_verified',
             'primarySource': 'HM Land Registry Price Paid Data',
             'secondarySource': 'ONS UK House Price Index (planned cross-check)',
             'note': (
-                'Current MVP uses fixture-backed sample property metrics. '
-                'Live adapter and secondary statistical reconciliation still required.'
+                'Station-level property metrics use HM Land Registry PPD semi-detached '
+                'transactions with 12-month stratified catchment sampling. '
+                'Secondary statistical reconciliation is still pending.'
             ),
         },
         'transport': {
             'status': 'not_live_verified',
             'primarySource': 'TfL/National Rail journey-time feeds (planned)',
             'secondarySource': 'Google/other routing benchmark (planned)',
-            'note': 'Current commute and frequency metrics are fixture-backed estimates.',
+            'note': (
+                'Current commute/frequency metrics are source-applied where available, with '
+                'documented fallback estimates when APIs are unavailable.'
+            ),
         },
         'schools': {
             'status': 'not_live_verified',

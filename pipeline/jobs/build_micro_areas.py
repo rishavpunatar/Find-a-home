@@ -513,10 +513,10 @@ def score_components(
     frequency_score = forward_score(peak_tph, min_value=4, max_value=18)
     interchange_score = inverse_score(interchange_count, best=0, worst=3)
     transport_score = mean([
-        commute_score * 0.45,
+        commute_score * 0.30,
         peak_score * 0.2,
-        frequency_score * 0.2,
-        interchange_score * 0.15,
+        frequency_score * 0.3,
+        interchange_score * 0.2,
     ]) * (1 / 0.25)
 
     primary_quality = number_or_default(schools, 'primary_quality_score', 50)
@@ -711,7 +711,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'affordability_score',
                     'value_for_money_score',
                 ],
-                'Estimated by inverse-distance interpolation from nearby fixture-backed station property metrics.',
+                'Estimated by inverse-distance interpolation from nearby station property metrics where direct 12-month stratified samples are unavailable.',
             )
             school_record = school_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
                 station,
@@ -837,14 +837,14 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     property_record,
                     'average_semi_price',
                     unit='GBP',
-                    note='Derived from semi-detached transactions around station catchment.',
+                    note='Average semi-detached sold price from 12-month stratified catchment sample where available.',
                     last_updated=property_last_updated,
                 ),
                 'medianSemiDetachedPrice': metric_from_record(
                     property_record,
                     'median_semi_price',
                     unit='GBP',
-                    note='Median semi-detached sold price from fixture-backed transaction sample.',
+                    note='Median semi-detached sold price from 12-month stratified catchment sample.',
                     last_updated=property_last_updated,
                 ),
                 'semiPriceTrendPct5y': metric_from_record(
@@ -1132,6 +1132,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'londonWideUsesDriveToPinnerPrefilter': False,
             'londonWideSourceStationCount': len(london_wide_all_deduped),
             'londonWideExcludedByCommuteCount': len(london_wide_excluded_by_commute),
+            'defaultWeights': config.default_weights,
             'boroughQolSource': wellbeing_adapter.source,
             'sourceMetadata': source_metadata,
             'stationUniverse': {

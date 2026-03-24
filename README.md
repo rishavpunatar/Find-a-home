@@ -80,6 +80,12 @@ npm run pipeline:wellbeing
 npm run pipeline:transport
 ```
 
+### 2f) Refresh property metrics from public 12-month transaction samples
+
+```bash
+npm run pipeline:property
+```
+
 ### 3) Start the app
 
 ```bash
@@ -140,6 +146,12 @@ Refresh transport metrics (TfL Journey Planner + OSRM with fallback):
 npm run pipeline:transport
 ```
 
+Refresh property metrics (HM Land Registry PPD + stratified catchment sampling):
+
+```bash
+npm run pipeline:property
+```
+
 Run strict processed-dataset validation:
 
 ```bash
@@ -158,7 +170,8 @@ Optional London high-resolution mode:
    - drive to Pinner <= configured max
 3. Deduplicate highly overlapping station micro-areas.
 4. Build per-micro-area metrics via adapters.
-   - If a station has no direct fixture record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchored stations.
+   - Property metrics use HM Land Registry PPD semi-detached transactions sampled over a rolling 12-month window from postcode strata inside each 800m catchment.
+   - If a station has no direct source record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchored stations.
 5. Compute component scores and weighted overall rank.
 6. Persist `data/processed/micro_areas.json` and `data/processed/summary.json`.
 7. Run strict quality checks and persist `data/processed/data_quality_report.json`.
@@ -187,7 +200,7 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - planning
 - borough QoL (ONS APS personal well-being)
 
-Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Other domains remain fixture/interpolated in this MVP.
+Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics use HM Land Registry PPD + stratified catchment postcode sampling. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Some other domains remain fixture/interpolated in this MVP.
 
 ## Data quality model (no fake precision)
 
@@ -212,8 +225,8 @@ Critical failures stop the pipeline; warnings are surfaced in `data_quality_repo
 
 ## Default scoring weights
 
-- value for money: 25%
-- transport / commute: 20%
+- value for money: 30%
+- transport / commute: 15%
 - schools: 20%
 - environment: 15%
 - crime / safety: 12.5%
@@ -252,7 +265,7 @@ UI weights always normalize to 100%.
 - `test.yml`: frontend + pipeline tests
 - `build.yml`: pipeline build + frontend production build
 - `data-refresh.yml`: scheduled regeneration of `data/processed` and PR creation
-- `data-refresh-heavy.yml`: monthly heavy refresh of station fixture, transport metrics, pollution, wellbeing, and processed outputs
+- `data-refresh-heavy.yml`: monthly heavy refresh of station fixture, transport metrics, property metrics, pollution, wellbeing, and processed outputs
 - `deploy.yml`: GitHub Pages deployment
 
 ## Deployment (GitHub Pages)
@@ -265,6 +278,6 @@ UI weights always normalize to 100%.
 
 ## Notes and assumptions
 
-- Current pipeline is MVP with fixture-backed data and explicit confidence/status metadata.
+- Current pipeline is MVP with explicit confidence/status metadata and mixed source maturity across domains.
 - Commute and drive times are modelled proxies in this version.
 - Use this as an area-prioritization tool, then validate top areas with live market, school, transport, and planning checks.

@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-03-24T20:24:07+00:00",
+  "generatedAt": "2026-03-24T21:40:04+00:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "attention_required",
-  "verificationCompletenessScore": 0.241,
+  "verificationCompletenessScore": 0.2386,
   "sourceMatrix": {
     "property": {
-      "status": "not_live_verified",
+      "status": "source_applied_not_live_verified",
       "primarySource": "HM Land Registry Price Paid Data",
       "secondarySource": "ONS UK House Price Index (planned cross-check)",
-      "note": "Current MVP uses fixture-backed sample property metrics. Live adapter and secondary statistical reconciliation still required."
+      "note": "Station-level property metrics use HM Land Registry PPD semi-detached transactions with 12-month stratified catchment sampling. Secondary statistical reconciliation is still pending."
     },
     "transport": {
       "status": "not_live_verified",
       "primarySource": "TfL/National Rail journey-time feeds (planned)",
       "secondarySource": "Google/other routing benchmark (planned)",
-      "note": "Current commute and frequency metrics are fixture-backed estimates."
+      "note": "Current commute/frequency metrics are source-applied where available, with documented fallback estimates when APIs are unavailable."
     },
     "schools": {
       "status": "not_live_verified",
@@ -64,12 +64,12 @@
       "count": 660,
       "domains": {
         "property": {
-          "availablePct": 4.09,
+          "availablePct": 1.82,
           "statusCounts": {
-            "available": 27,
-            "estimated": 298,
+            "available": 12,
+            "estimated": 648,
             "placeholder": 0,
-            "missing": 335,
+            "missing": 0,
             "other": 0
           }
         },
@@ -149,12 +149,12 @@
       "count": 605,
       "domains": {
         "property": {
-          "availablePct": 3.47,
+          "availablePct": 1.82,
           "statusCounts": {
-            "available": 21,
-            "estimated": 283,
+            "available": 11,
+            "estimated": 594,
             "placeholder": 0,
-            "missing": 301,
+            "missing": 0,
             "other": 0
           }
         },

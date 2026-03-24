@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-03-24T20:23:58+00:00",
+  "generatedAt": "2026-03-24T21:40:03+00:00",
   "count": 660,
   "londonWideCount": 605,
   "topMicroAreas": [
     {
-      "microAreaId": "ma-holla0ac",
-      "stationName": "Holland Park",
-      "score": 56.14
-    },
-    {
-      "microAreaId": "ma-whitea7f",
-      "stationName": "White City",
-      "score": 55.38
-    },
-    {
-      "microAreaId": "ma-highbbae",
-      "stationName": "Highbury & Islington",
-      "score": 55.37
-    },
-    {
-      "microAreaId": "ma-londo0f0",
-      "stationName": "London Marylebone",
-      "score": 55.21
+      "microAreaId": "ma-harlef99",
+      "stationName": "Harlesden",
+      "score": 54.3
     },
     {
       "microAreaId": "ma-wille265",
       "stationName": "Willesden Green",
-      "score": 55.05
+      "score": 53.41
     },
     {
-      "microAreaId": "ma-marbl6fc",
-      "stationName": "Marble Arch",
-      "score": 55.05
+      "microAreaId": "ma-apsle1dd",
+      "stationName": "Apsley",
+      "score": 52.44
     },
     {
-      "microAreaId": "ma-londo71d",
-      "stationName": "London Paddington",
-      "score": 54.91
+      "microAreaId": "ma-wille9a5",
+      "stationName": "Willesden Junction",
+      "score": 52.07
     },
     {
-      "microAreaId": "ma-bonds5ed",
-      "stationName": "Bond Street",
-      "score": 54.79
+      "microAreaId": "ma-ruisl4fe",
+      "stationName": "Ruislip Gardens",
+      "score": 51.05
     },
     {
-      "microAreaId": "ma-woodl807",
-      "stationName": "Wood Lane",
-      "score": 54.63
+      "microAreaId": "ma-sloug12c",
+      "stationName": "Slough",
+      "score": 50.65
     },
     {
-      "microAreaId": "ma-hwd",
-      "stationName": "Harrow & Wealdstone",
-      "score": 54.62
+      "microAreaId": "ma-stone528",
+      "stationName": "Stonebridge Park",
+      "score": 50.55
+    },
+    {
+      "microAreaId": "ma-westd89a",
+      "stationName": "West Drayton",
+      "score": 50.55
+    },
+    {
+      "microAreaId": "ma-southa9c",
+      "stationName": "South Harrow",
+      "score": 50.5
+    },
+    {
+      "microAreaId": "ma-sri",
+      "stationName": "South Ruislip",
+      "score": 50.4
     }
   ],
   "topLondonWideMicroAreas": [
     {
-      "microAreaId": "ma-holla0ac",
-      "stationName": "Holland Park",
-      "score": 56.14
-    },
-    {
-      "microAreaId": "ma-whitea7f",
-      "stationName": "White City",
-      "score": 55.38
-    },
-    {
-      "microAreaId": "ma-highbbae",
-      "stationName": "Highbury & Islington",
-      "score": 55.37
-    },
-    {
-      "microAreaId": "ma-londo0f0",
-      "stationName": "London Marylebone",
-      "score": 55.21
+      "microAreaId": "ma-harlef99",
+      "stationName": "Harlesden",
+      "score": 54.3
     },
     {
       "microAreaId": "ma-wille265",
       "stationName": "Willesden Green",
-      "score": 55.05
+      "score": 53.41
     },
     {
-      "microAreaId": "ma-marbl6fc",
-      "stationName": "Marble Arch",
-      "score": 55.05
+      "microAreaId": "ma-apsle1dd",
+      "stationName": "Apsley",
+      "score": 52.44
     },
     {
-      "microAreaId": "ma-londo71d",
-      "stationName": "London Paddington",
-      "score": 54.91
+      "microAreaId": "ma-wille9a5",
+      "stationName": "Willesden Junction",
+      "score": 52.07
     },
     {
-      "microAreaId": "ma-bonds5ed",
-      "stationName": "Bond Street",
-      "score": 54.79
+      "microAreaId": "ma-ruisl4fe",
+      "stationName": "Ruislip Gardens",
+      "score": 51.05
     },
     {
-      "microAreaId": "ma-woodl807",
-      "stationName": "Wood Lane",
-      "score": 54.63
+      "microAreaId": "ma-sloug12c",
+      "stationName": "Slough",
+      "score": 50.65
     },
     {
-      "microAreaId": "ma-hwd",
-      "stationName": "Harrow & Wealdstone",
-      "score": 54.62
+      "microAreaId": "ma-stone528",
+      "stationName": "Stonebridge Park",
+      "score": 50.55
+    },
+    {
+      "microAreaId": "ma-westd89a",
+      "stationName": "West Drayton",
+      "score": 50.55
+    },
+    {
+      "microAreaId": "ma-southa9c",
+      "stationName": "South Harrow",
+      "score": 50.5
+    },
+    {
+      "microAreaId": "ma-sri",
+      "stationName": "South Ruislip",
+      "score": 50.4
     }
   ]
 }

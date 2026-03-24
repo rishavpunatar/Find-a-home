@@ -31,6 +31,7 @@ jobs:
         run: |
           python -m pipeline.jobs.generate_station_fixture
           python -m pipeline.jobs.generate_transport_metrics
+          python -m pipeline.jobs.generate_property_metrics
           python -m pipeline.jobs.generate_pollution_metrics --year 2023
           python -m pipeline.jobs.generate_wellbeing_metrics
           python -m pipeline.jobs.build_micro_areas
@@ -44,6 +45,7 @@ jobs:
             Automated monthly heavy refresh:
             - station fixture
             - transport metrics
+            - property metrics (12-month stratified catchment sample)
             - pollution metrics
             - wellbeing metrics
             - processed micro-area outputs
@@ -52,6 +54,7 @@ jobs:
           add-paths: |
             data/raw/stations_transport.json
             data/raw/transport_metrics.json
+            data/raw/property_metrics.json
             data/raw/pollution_metrics.json
             data/raw/wellbeing_metrics.json
             data/raw/source_metadata.json

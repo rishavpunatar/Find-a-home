@@ -14,6 +14,7 @@
     "format:check": "prettier --check .",
     "sync:data": "node scripts/syncData.mjs",
     "pipeline:build": "python3 -m pipeline.jobs.build_micro_areas",
+    "pipeline:property": "python3 -m pipeline.jobs.generate_property_metrics",
     "pipeline:pollution": "python3 -m pipeline.jobs.generate_pollution_metrics --year 2023",
     "pipeline:transport": "python3 -m pipeline.jobs.generate_transport_metrics",
     "pipeline:wellbeing": "python3 -m pipeline.jobs.generate_wellbeing_metrics",
