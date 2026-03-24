@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react'
 import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
 import { Pm25DistanceScatter } from '@/components/charts/Pm25DistanceScatter'
-import { ScoreDistributionChart } from '@/components/charts/ScoreDistributionChart'
 import { TopScoresBarChart } from '@/components/charts/TopScoresBarChart'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
@@ -170,12 +169,6 @@ export const LondonWideRankedPage = () => {
             PM2.5 vs green cover (combined scope)
           </h3>
           <EnvironmentScatter areas={superScopeRanked} />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Score distribution (combined scope)
-          </h3>
-          <ScoreDistributionChart areas={superScopeRanked} />
         </article>
       </section>
 

@@ -167,6 +167,11 @@ export const RankedTablePage = () => {
               <p className="mt-2 text-slate-600">
                 Percentage green cover proxy (`greenCoverPct`) around the station catchment.
               </p>
+              <p className="mt-1 text-slate-600">
+                Method: distance-weighted blend of station green-cover values within a wider radius
+                of 1,600m (2x the 800m walk catchment) so nearby green context beyond the immediate
+                station circle is reflected.
+              </p>
               <p className="mt-1 text-xs text-slate-500">
                 Environment scoring also uses green-space area and nearest park distance, but this
                 table column is the raw green-cover percentage for direct filtering.

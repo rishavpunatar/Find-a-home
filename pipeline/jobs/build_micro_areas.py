@@ -28,6 +28,7 @@ RAW_DIR = ROOT / 'data' / 'raw'
 PROCESSED_DIR = ROOT / 'data' / 'processed'
 CONFIG_PATH = ROOT / 'pipeline' / 'config' / 'search_config.json'
 LONDON_WIDE_MAX_COMMUTE_MINUTES = 60
+GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER = 2.0
 
 
 def load_config(path: Path) -> SearchConfig:
@@ -241,6 +242,68 @@ def synthesize_crime_breakdown(
     return {category: round(max(0.0, crime_rate * proportion), 1) for category, proportion in proportions.items()}
 
 
+def widen_green_cover_pct(
+    target: StationRecord,
+    stations_for_scope: list[StationRecord],
+    green_records_by_station: dict[str, dict[str, Any] | None],
+    walk_catchment_radius_m: int,
+) -> dict[str, Any] | None:
+    base_record = green_records_by_station.get(target.station_code)
+    if not base_record:
+        return None
+
+    expanded_radius_m = walk_catchment_radius_m * GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER
+    weighted_cover_sum = 0.0
+    weighted_confidence_sum = 0.0
+    weight_total = 0.0
+    sample_count = 0
+
+    for neighbour in stations_for_scope:
+        neighbour_record = green_records_by_station.get(neighbour.station_code)
+        if not neighbour_record:
+            continue
+
+        neighbour_cover = neighbour_record.get('green_cover_pct')
+        if neighbour_cover is None:
+            continue
+
+        distance_m = haversine_distance_m(target.coordinate, neighbour.coordinate)
+        if distance_m > expanded_radius_m:
+            continue
+
+        weight = 1.0 / (max(distance_m, 80.0) ** 1.2)
+        weighted_cover_sum += float(neighbour_cover) * weight
+        weighted_confidence_sum += float(neighbour_record.get('confidence', 0.6)) * weight
+        weight_total += weight
+        sample_count += 1
+
+    if weight_total == 0:
+        return base_record
+
+    wider_cover = weighted_cover_sum / weight_total
+    wider_confidence = weighted_confidence_sum / weight_total
+    confidence = clamp(
+        wider_confidence * (0.9 + 0.08 * min(1.0, sample_count / 6.0)),
+        0.25,
+        0.9,
+    )
+
+    status = str(base_record.get('status', 'estimated')) if sample_count <= 1 else 'estimated'
+    catchment_multiplier = int(GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER)
+
+    return {
+        **base_record,
+        'green_cover_pct': round(float(wider_cover), 3),
+        'status': status,
+        'confidence': round(float(confidence), 3),
+        'methodology_note': (
+            'Green-cover percentage uses a wider neighbourhood proxy: distance-weighted mean of '
+            f'nearby station green-cover values within {int(expanded_radius_m)}m '
+            f'({catchment_multiplier}x the walk catchment radius).'
+        ),
+    }
+
+
 def candidate_filter(stations: list[StationRecord], config: SearchConfig) -> list[StationRecord]:
     pinner = config.pinner_coordinate
     within_belt = [
@@ -426,6 +489,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
         scope_label: str,
     ) -> list[dict[str, Any]]:
         micro_areas: list[dict[str, Any]] = []
+        resolved_records_by_station: dict[str, dict[str, dict[str, Any] | None]] = {}
 
         for station in stations_for_scope:
             property_record = property_adapter.get_by_station(
@@ -505,6 +569,40 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     ['planning_risk_score'],
                     'Heuristic planning/development risk estimated by interpolation from nearby placeholder station scores.',
                 ) or planning_record
+
+            resolved_records_by_station[station.station_code] = {
+                'property': property_record,
+                'school': school_record,
+                'pollution': pollution_record,
+                'green': green_record,
+                'crime': crime_record,
+                'population': population_record,
+                'planning': planning_record,
+            }
+
+        base_green_records = {
+            station_code: records['green']
+            for station_code, records in resolved_records_by_station.items()
+        }
+        widened_green_records = {
+            station.station_code: widen_green_cover_pct(
+                station,
+                stations_for_scope,
+                base_green_records,
+                config.micro_area_walk_radius_m,
+            )
+            for station in stations_for_scope
+        }
+
+        for station in stations_for_scope:
+            station_records = resolved_records_by_station.get(station.station_code, {})
+            property_record = station_records.get('property')
+            school_record = station_records.get('school')
+            pollution_record = station_records.get('pollution')
+            green_record = widened_green_records.get(station.station_code) or station_records.get('green')
+            crime_record = station_records.get('crime')
+            population_record = station_records.get('population')
+            planning_record = station_records.get('planning')
 
             components = score_components(
                 station,
@@ -659,7 +757,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     green_record,
                     'green_cover_pct',
                     unit='%',
-                    note='Estimated green cover fraction from land-cover proxy.',
+                    note='Estimated green cover fraction using a wider (2x) catchment neighborhood proxy.',
                     last_updated=config.last_updated_default,
                 ),
                 'nearestParkDistanceM': metric_from_record(
@@ -708,6 +806,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             confidence_notes = [
                 'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
                 'School scoring uses composite indicators and does not rely on a single inspection field.',
+                'Green-cover percentage uses an expanded 2x walk-radius neighborhood blend.',
                 'Planning/development risk is explicitly low-confidence until structured feeds are integrated.',
             ]
 
@@ -773,6 +872,10 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'centralLondonCoordinate': asdict(config.central_london_coordinate),
             'stationSearchRadiusKm': config.station_search_radius_km,
             'microAreaWalkRadiusM': config.micro_area_walk_radius_m,
+            'greenCoverExpandedRadiusM': int(
+                config.micro_area_walk_radius_m * GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER,
+            ),
+            'greenCoverExpandedRadiusMultiplier': GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER,
             'maxCommuteMinutesForCandidate': config.max_commute_minutes,
             'maxDriveMinutesForCandidate': config.max_drive_minutes_to_pinner,
             'londonWideMaxCommuteMinutesForCandidate': LONDON_WIDE_MAX_COMMUTE_MINUTES,
