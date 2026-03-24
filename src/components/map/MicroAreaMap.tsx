@@ -50,7 +50,7 @@ interface LegendBin {
   color: string
 }
 
-const buildLegendBins = (values: number[], binCount: number = LEGEND_COLORS.length): LegendBin[] => {
+const buildRangeLegendBins = (values: number[], binCount: number = LEGEND_COLORS.length): LegendBin[] => {
   if (values.length === 0) {
     return [
       {
@@ -88,6 +88,52 @@ const buildLegendBins = (values: number[], binCount: number = LEGEND_COLORS.leng
   })
 }
 
+const percentileValue = (sortedValues: number[], percentile: number): number => {
+  if (sortedValues.length === 0) {
+    return 0
+  }
+  const clamped = Math.max(0, Math.min(1, percentile))
+  const index = clamped * (sortedValues.length - 1)
+  const lower = Math.floor(index)
+  const upper = Math.ceil(index)
+  if (lower === upper) {
+    return sortedValues[lower] ?? sortedValues[sortedValues.length - 1] ?? 0
+  }
+  const lowerValue = sortedValues[lower] ?? 0
+  const upperValue = sortedValues[upper] ?? lowerValue
+  const fraction = index - lower
+  return lowerValue + (upperValue - lowerValue) * fraction
+}
+
+const buildQuantileLegendBins = (values: number[], binCount: number = LEGEND_COLORS.length): LegendBin[] => {
+  if (values.length === 0) {
+    return [
+      {
+        min: 0,
+        max: 100,
+        color: colorAt(LEGEND_COLORS.length - 1),
+      },
+    ]
+  }
+
+  const sortedValues = [...values].sort((left, right) => left - right)
+  const safeBinCount = Math.max(3, Math.min(binCount, LEGEND_COLORS.length))
+  const bins: LegendBin[] = []
+
+  for (let index = 0; index < safeBinCount; index += 1) {
+    const start = percentileValue(sortedValues, index / safeBinCount)
+    const end = percentileValue(sortedValues, (index + 1) / safeBinCount)
+    const previousMax = bins[index - 1]?.max ?? start
+    bins.push({
+      min: index === 0 ? start : Math.max(start, previousMax),
+      max: index === safeBinCount - 1 ? sortedValues[sortedValues.length - 1] ?? end : Math.max(end, start),
+      color: colorAt(index),
+    })
+  }
+
+  return bins
+}
+
 const colorForValue = (value: number, bins: LegendBin[]): string => {
   for (const [index, bin] of bins.entries()) {
     const isLast = index === bins.length - 1
@@ -106,6 +152,8 @@ interface MicroAreaMapProps {
 
 export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [legendMode, setLegendMode] = useState<'quantile' | 'range'>('quantile')
+  const [showMarkers, setShowMarkers] = useState(false)
 
   const values = useMemo(
     () =>
@@ -115,7 +163,12 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
     [areas, metric],
   )
 
-  const legendBins = useMemo(() => buildLegendBins(values), [values])
+  const legendBins = useMemo(
+    () =>
+      legendMode === 'quantile' ? buildQuantileLegendBins(values) : buildRangeLegendBins(values),
+    [legendMode, values],
+  )
+  const denseLayer = areas.length > 250
 
   const center = useMemo(() => {
     if (areas.length === 0) {
@@ -171,22 +224,58 @@ export const MicroAreaMap = ({ areas, metric }: MicroAreaMapProps) => {
             )
           })}
 
-          {areas.map((area) => (
-            <Marker
-              key={`${area.microAreaId}-marker`}
-              position={[area.centroid.lat, area.centroid.lon]}
-            />
-          ))}
+          {!denseLayer || showMarkers
+            ? areas.map((area) => (
+                <Marker
+                  key={`${area.microAreaId}-marker`}
+                  position={[area.centroid.lat, area.centroid.lon]}
+                />
+              ))
+            : null}
         </MapContainer>
       </div>
 
       <aside className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">Map legend</h3>
         <p className="mt-1 text-sm text-slate-600">Colour scale: {mapMetricLabel[metric]}</p>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setLegendMode('quantile')}
+            className={`rounded-md px-2 py-1 text-xs ${
+              legendMode === 'quantile' ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-700'
+            }`}
+          >
+            Quantile bins
+          </button>
+          <button
+            type="button"
+            onClick={() => setLegendMode('range')}
+            className={`rounded-md px-2 py-1 text-xs ${
+              legendMode === 'range' ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-700'
+            }`}
+          >
+            Equal-range bins
+          </button>
+          {denseLayer ? (
+            <button
+              type="button"
+              onClick={() => setShowMarkers((current) => !current)}
+              className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700"
+            >
+              {showMarkers ? 'Hide markers' : 'Show markers'}
+            </button>
+          ) : null}
+        </div>
         {values.length > 0 ? (
           <p className="mt-1 text-xs text-slate-500">
             Range in current view: {formatNumber(Math.min(...values), 1)} -{' '}
             {formatNumber(Math.max(...values), 1)}
+          </p>
+        ) : null}
+        {denseLayer && !showMarkers ? (
+          <p className="mt-1 text-xs text-slate-500">
+            Marker layer is hidden by default for performance at this density.
           </p>
         ) : null}
         <ul className="mt-3 space-y-1 text-xs text-slate-700">

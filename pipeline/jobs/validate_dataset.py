@@ -95,6 +95,9 @@ def issue(
         'message': message,
     }
     if area is not None:
+        scope = area.get('_scope')
+        if isinstance(scope, str) and scope:
+            payload['scope'] = scope
         payload['microAreaId'] = area.get('microAreaId')
         payload['stationCode'] = area.get('stationCode')
         payload['stationName'] = area.get('stationName')
@@ -402,112 +405,127 @@ def generate_quality_report(
     weights: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     generated_at = datetime.now(ZoneInfo('Europe/London')).isoformat(timespec='seconds')
-    micro_areas = dataset.get('microAreas', [])
+    default_scope = dataset.get('microAreas', [])
+    london_scope = dataset.get('londonWideMicroAreas')
+    scope_payloads: list[tuple[str, list[dict[str, Any]]]] = [
+        ('default', default_scope if isinstance(default_scope, list) else []),
+    ]
+    if london_scope is not None and isinstance(london_scope, list):
+        scope_payloads.append(('londonWide', london_scope))
+
     issues: list[dict[str, Any]] = []
-
-    if not isinstance(micro_areas, list) or not micro_areas:
-        issue(
-            issues,
-            severity='critical',
-            code='dataset_empty',
-            message='microAreas list is empty or invalid.',
-        )
-        micro_areas = []
-
-    seen_micro_ids: set[str] = set()
-    seen_station_codes: set[str] = set()
     pollution_deltas: list[float] = []
+    scope_counts: dict[str, int] = {}
 
-    for area in micro_areas:
-        micro_area_id = area.get('microAreaId')
-        station_code = area.get('stationCode')
-
-        if micro_area_id in seen_micro_ids:
+    for scope_name, micro_areas in scope_payloads:
+        if not micro_areas:
             issue(
                 issues,
                 severity='critical',
-                code='duplicate_micro_area_id',
-                message='Duplicate microAreaId found.',
-                area=area,
-                field='microAreaId',
-                observed=micro_area_id,
+                code='dataset_empty',
+                message=f'{scope_name} scope micro-area list is empty or invalid.',
+                area={'_scope': scope_name},
             )
-        else:
-            seen_micro_ids.add(str(micro_area_id))
+            scope_counts[scope_name] = 0
+            continue
 
-        if station_code in seen_station_codes:
-            issue(
-                issues,
-                severity='warning',
-                code='duplicate_station_code',
-                message='Duplicate stationCode found across micro-areas.',
-                area=area,
-                field='stationCode',
-                observed=station_code,
-            )
-        else:
-            seen_station_codes.add(str(station_code))
+        scope_counts[scope_name] = len(micro_areas)
+        seen_micro_ids: set[str] = set()
+        seen_station_codes: set[str] = set()
+        scoped_rows: list[dict[str, Any]] = []
 
-        if is_finite_number(area.get('overallWeightedScore')):
-            check_bounds(
-                issues,
-                area,
-                'overallWeightedScore',
-                float(area['overallWeightedScore']),
-                NUMERIC_BOUNDS['overallWeightedScore'],
-            )
-        else:
-            issue(
-                issues,
-                severity='critical',
-                code='overall_score_non_numeric',
-                message='overallWeightedScore must be numeric.',
-                area=area,
-                field='overallWeightedScore',
-                observed=area.get('overallWeightedScore'),
-            )
+        for raw_area in micro_areas:
+            area = {**raw_area, '_scope': scope_name}
+            scoped_rows.append(area)
+            micro_area_id = area.get('microAreaId')
+            station_code = area.get('stationCode')
 
-        for root_field in ('overlapConfidence', 'dataConfidenceScore'):
-            value = area.get(root_field)
-            if not is_finite_number(value):
+            if micro_area_id in seen_micro_ids:
                 issue(
                     issues,
                     severity='critical',
-                    code='root_metric_non_numeric',
-                    message=f'{root_field} must be numeric.',
+                    code='duplicate_micro_area_id',
+                    message='Duplicate microAreaId found.',
                     area=area,
-                    field=root_field,
-                    observed=value,
+                    field='microAreaId',
+                    observed=micro_area_id,
                 )
-                continue
-            check_bounds(issues, area, root_field, float(value), NUMERIC_BOUNDS[root_field])
+            else:
+                seen_micro_ids.add(str(micro_area_id))
 
-        validate_components(issues, area)
-        for metric_field in METRIC_FIELDS:
-            validate_metric_field(issues, area, metric_field)
+            if station_code in seen_station_codes:
+                issue(
+                    issues,
+                    severity='warning',
+                    code='duplicate_station_code',
+                    message='Duplicate stationCode found across micro-areas in the same scope.',
+                    area=area,
+                    field='stationCode',
+                    observed=station_code,
+                )
+            else:
+                seen_station_codes.add(str(station_code))
 
-        pollution_record = pollution_records.get(str(station_code))
-        validate_pollution_consistency(issues, area, pollution_record)
-        if pollution_record and is_finite_number(pollution_record.get('no2_delta_vs_secondary')):
-            pollution_deltas.append(abs(float(pollution_record['no2_delta_vs_secondary'])))
+            if is_finite_number(area.get('overallWeightedScore')):
+                check_bounds(
+                    issues,
+                    area,
+                    'overallWeightedScore',
+                    float(area['overallWeightedScore']),
+                    NUMERIC_BOUNDS['overallWeightedScore'],
+                )
+            else:
+                issue(
+                    issues,
+                    severity='critical',
+                    code='overall_score_non_numeric',
+                    message='overallWeightedScore must be numeric.',
+                    area=area,
+                    field='overallWeightedScore',
+                    observed=area.get('overallWeightedScore'),
+                )
 
-        if weights:
-            recomputed = recompute_overall_score(area, weights)
-            observed = area.get('overallWeightedScore')
-            if recomputed is not None and is_finite_number(observed):
-                if abs(float(observed) - float(recomputed)) > 0.05:
+            for root_field in ('overlapConfidence', 'dataConfidenceScore'):
+                value = area.get(root_field)
+                if not is_finite_number(value):
                     issue(
                         issues,
                         severity='critical',
-                        code='overall_score_inconsistent',
-                        message='overallWeightedScore does not match component scores + default weights.',
+                        code='root_metric_non_numeric',
+                        message=f'{root_field} must be numeric.',
                         area=area,
-                        field='overallWeightedScore',
-                        observed=observed,
-                        expected=f'{recomputed:.2f}',
+                        field=root_field,
+                        observed=value,
                     )
+                    continue
+                check_bounds(issues, area, root_field, float(value), NUMERIC_BOUNDS[root_field])
 
-    validate_ranking_order(issues, micro_areas)
+            validate_components(issues, area)
+            for metric_field in METRIC_FIELDS:
+                validate_metric_field(issues, area, metric_field)
+
+            pollution_record = pollution_records.get(str(station_code))
+            validate_pollution_consistency(issues, area, pollution_record)
+            if pollution_record and is_finite_number(pollution_record.get('no2_delta_vs_secondary')):
+                pollution_deltas.append(abs(float(pollution_record['no2_delta_vs_secondary'])))
+
+            if weights:
+                recomputed = recompute_overall_score(area, weights)
+                observed = area.get('overallWeightedScore')
+                if recomputed is not None and is_finite_number(observed):
+                    if abs(float(observed) - float(recomputed)) > 0.05:
+                        issue(
+                            issues,
+                            severity='critical',
+                            code='overall_score_inconsistent',
+                            message='overallWeightedScore does not match component scores + default weights.',
+                            area=area,
+                            field='overallWeightedScore',
+                            observed=observed,
+                            expected=f'{recomputed:.2f}',
+                        )
+
+        validate_ranking_order(issues, scoped_rows)
 
     counts = {
         'critical': sum(1 for item in issues if item['severity'] == 'critical'),
@@ -535,7 +553,8 @@ def generate_quality_report(
         'generatedAt': generated_at,
         'methodologyVersion': dataset.get('methodologyVersion'),
         'overallStatus': overall_status,
-        'microAreasAnalysed': len(micro_areas),
+        'microAreasAnalysed': sum(scope_counts.values()),
+        'scopeCounts': scope_counts,
         'counts': counts,
         'pollutionCrossSourceSummary': pollution_summary,
         'issues': issues[:800],

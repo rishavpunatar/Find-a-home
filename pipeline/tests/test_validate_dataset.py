@@ -3,6 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 
 from pipeline.jobs.validate_dataset import generate_quality_report
+from pipeline.models.scoring import weighted_score
 
 
 def metric(value: float, note: str = 'LAEI 2019 source') -> dict[str, object]:
@@ -17,23 +18,25 @@ def metric(value: float, note: str = 'LAEI 2019 source') -> dict[str, object]:
 
 
 def make_area() -> dict[str, object]:
+    component_scores = {
+        'value': 71.0,
+        'transport': 68.0,
+        'schools': 70.0,
+        'environment': 66.0,
+        'crime': 67.0,
+        'proximity': 72.0,
+        'planningRisk': 63.0,
+    }
+    data_confidence = 0.91
     area: dict[str, object] = {
         'microAreaId': 'ma-1',
         'stationCode': 'STA001',
         'stationName': 'Test Station',
         'countyOrBorough': 'Greater London',
-        'overallWeightedScore': 67.56,
+        'overallWeightedScore': weighted_score(component_scores, default_weights(), confidence=data_confidence),
         'overlapConfidence': 0.82,
-        'dataConfidenceScore': 0.91,
-        'componentScores': {
-            'value': 71.0,
-            'transport': 68.0,
-            'schools': 70.0,
-            'environment': 66.0,
-            'crime': 67.0,
-            'proximity': 72.0,
-            'planningRisk': 63.0,
-        },
+        'dataConfidenceScore': data_confidence,
+        'componentScores': component_scores,
         'averageSemiDetachedPrice': metric(540_000),
         'medianSemiDetachedPrice': metric(525_000),
         'semiPriceTrendPct5y': metric(22.5),

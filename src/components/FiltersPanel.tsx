@@ -45,14 +45,16 @@ const RangeControl = ({
 
 export const FiltersPanel = () => {
   const location = useLocation()
-  const { filters, updateFilter, resetFilters } = useSettings()
+  const { filters, londonFilters, updateFilter, resetFilters } = useSettings()
   const isLondonWideTab = location.pathname === '/ranked-london'
+  const scope: 'default' | 'londonWide' = isLondonWideTab ? 'londonWide' : 'default'
+  const activeFilters = isLondonWideTab ? londonFilters : filters
   const commuteCap = isLondonWideTab ? 60 : 70
   const displayedCommuteLimit = isLondonWideTab
-    ? Math.min(filters.maxCommuteMinutes, commuteCap)
-    : filters.maxCommuteMinutes
+    ? Math.min(activeFilters.maxCommuteMinutes, commuteCap)
+    : activeFilters.maxCommuteMinutes
 
-  const hasCustomFilters = JSON.stringify(filters) !== JSON.stringify(DEFAULT_FILTERS)
+  const hasCustomFilters = JSON.stringify(activeFilters) !== JSON.stringify(DEFAULT_FILTERS)
 
   return (
     <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
@@ -62,7 +64,7 @@ export const FiltersPanel = () => {
         </h2>
         <button
           type="button"
-          onClick={resetFilters}
+          onClick={() => resetFilters(scope)}
           disabled={!hasCustomFilters}
           className="rounded-md border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
@@ -73,7 +75,7 @@ export const FiltersPanel = () => {
         <p className="mb-3 text-xs text-slate-600">
           London {'<=60m'} mode is active: only commute is applied here. Drive-to-Pinner, school,
           crime, PM2.5, green-cover, and price filters are ignored in this tab, and candidates are
-          not prefiltered by the Pinner search radius.
+          not prefiltered by the Pinner search radius. Confidence filter still applies.
         </p>
       ) : null}
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
@@ -84,67 +86,76 @@ export const FiltersPanel = () => {
           max={commuteCap}
           step={1}
           unit=" min"
-          onChange={(next) => updateFilter('maxCommuteMinutes', next)}
+          onChange={(next) => updateFilter('maxCommuteMinutes', next, scope)}
         />
         <RangeControl
           label="Max drive to Pinner"
-          value={filters.maxDriveMinutes}
+          value={activeFilters.maxDriveMinutes}
           min={10}
           max={35}
           step={1}
           unit=" min"
-          onChange={(next) => updateFilter('maxDriveMinutes', next)}
+          onChange={(next) => updateFilter('maxDriveMinutes', next, scope)}
           disabled={isLondonWideTab}
         />
         <RangeControl
           label="Min school score"
-          value={filters.minSchoolScore}
+          value={activeFilters.minSchoolScore}
           min={0}
           max={100}
           step={1}
           unit=""
-          onChange={(next) => updateFilter('minSchoolScore', next)}
+          onChange={(next) => updateFilter('minSchoolScore', next, scope)}
           disabled={isLondonWideTab}
         />
         <RangeControl
           label="Max crime / 1,000"
-          value={filters.maxCrimeRatePerThousand}
+          value={activeFilters.maxCrimeRatePerThousand}
           min={20}
           max={140}
           step={1}
           unit=""
-          onChange={(next) => updateFilter('maxCrimeRatePerThousand', next)}
+          onChange={(next) => updateFilter('maxCrimeRatePerThousand', next, scope)}
           disabled={isLondonWideTab}
         />
         <RangeControl
           label="Max PM2.5"
-          value={filters.maxPm25}
+          value={activeFilters.maxPm25}
           min={5}
           max={25}
           step={0.1}
           unit=" ug/m3"
-          onChange={(next) => updateFilter('maxPm25', next)}
+          onChange={(next) => updateFilter('maxPm25', next, scope)}
           disabled={isLondonWideTab}
         />
         <RangeControl
           label="Min green cover"
-          value={filters.minGreenCoverPct}
+          value={activeFilters.minGreenCoverPct}
           min={5}
           max={80}
           step={1}
           unit="%"
-          onChange={(next) => updateFilter('minGreenCoverPct', next)}
+          onChange={(next) => updateFilter('minGreenCoverPct', next, scope)}
           disabled={isLondonWideTab}
         />
         <RangeControl
           label="Max median semi price"
-          value={filters.maxMedianPrice}
+          value={activeFilters.maxMedianPrice}
           min={300000}
           max={1500000}
           step={10000}
           unit=" GBP"
-          onChange={(next) => updateFilter('maxMedianPrice', next)}
+          onChange={(next) => updateFilter('maxMedianPrice', next, scope)}
           disabled={isLondonWideTab}
+        />
+        <RangeControl
+          label="Min confidence"
+          value={activeFilters.minDataConfidencePct}
+          min={0}
+          max={100}
+          step={1}
+          unit="%"
+          onChange={(next) => updateFilter('minDataConfidencePct', next, scope)}
         />
       </div>
     </section>

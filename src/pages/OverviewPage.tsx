@@ -88,6 +88,19 @@ export const OverviewPage = () => {
             {' '}
             | Live mode: {dataset.verificationSummary.liveMode ? 'on' : 'off'}
           </p>
+          {typeof dataset.verificationSummary.verificationCompletenessScore === 'number' ? (
+            <p className="mt-1 text-xs text-slate-600">
+              Verification completeness score:{' '}
+              {(dataset.verificationSummary.verificationCompletenessScore * 100).toFixed(1)}%
+            </p>
+          ) : null}
+          {dataset.config.stationUniverse ? (
+            <p className="mt-1 text-xs text-slate-600">
+              Station universe: raw {dataset.config.stationUniverse.rawStationCount ?? 'N/A'}, kept{' '}
+              {dataset.config.stationUniverse.keptStationCount ?? 'N/A'}, excluded{' '}
+              {dataset.config.stationUniverse.excludedStationCount ?? 'N/A'}.
+            </p>
+          ) : null}
           <p className="mt-1 text-xs text-slate-600">
             Verification generated {formatDate(dataset.verificationSummary.generatedAt)}. Full
             report:
@@ -179,6 +192,18 @@ export const OverviewPage = () => {
               <div className="flex justify-between gap-2">
                 <dt className="text-slate-600">ONS APS release date</dt>
                 <dd className="font-medium">{dataset.config.boroughQolSource.releaseDate}</dd>
+              </div>
+            ) : null}
+            {dataset.config.sourceMetadata?.transport?.releaseDate ? (
+              <div className="flex justify-between gap-2">
+                <dt className="text-slate-600">Transport source date</dt>
+                <dd className="font-medium">{dataset.config.sourceMetadata.transport.releaseDate}</dd>
+              </div>
+            ) : null}
+            {dataset.config.sourceMetadata?.pollution?.referencePeriod ? (
+              <div className="flex justify-between gap-2">
+                <dt className="text-slate-600">Pollution reference period</dt>
+                <dd className="font-medium">{dataset.config.sourceMetadata.pollution.referencePeriod}</dd>
               </div>
             ) : null}
           </dl>

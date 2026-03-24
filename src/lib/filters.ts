@@ -44,6 +44,10 @@ export const matchesFilters = (
     return false
   }
 
+  if (!isAtLeast(area.dataConfidenceScore * 100, filters.minDataConfidencePct)) {
+    return false
+  }
+
   return true
 }
 

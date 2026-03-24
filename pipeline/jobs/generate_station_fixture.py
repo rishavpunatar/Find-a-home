@@ -23,6 +23,16 @@ ALLOWED_NETWORK_TERMS = (
     'Elizabeth line',
 )
 
+EXCLUDED_NAME_PATTERNS = (
+    re.compile(r'\bminiature\b', re.IGNORECASE),
+    re.compile(r'\bheritage\b', re.IGNORECASE),
+    re.compile(r'\btramway\b', re.IGNORECASE),
+    re.compile(r'\bfunicular\b', re.IGNORECASE),
+    re.compile(r'\bmodel railway\b', re.IGNORECASE),
+    re.compile(r'\baquarium\b', re.IGNORECASE),
+    re.compile(r'\btheme park\b', re.IGNORECASE),
+)
+
 
 def haversine_km(lat_1: float, lon_1: float, lat_2: float, lon_2: float) -> float:
     radius = 6371.0
@@ -62,6 +72,8 @@ out center tags;"""
 
         if not name:
             continue
+        if any(pattern.search(name) for pattern in EXCLUDED_NAME_PATTERNS):
+            continue
 
         network = str(tags.get('network', '')).strip()
         if network and not any(term.lower() in network.lower() for term in ALLOWED_NETWORK_TERMS):
@@ -70,7 +82,13 @@ out center tags;"""
             network = 'National Rail'
 
         station_tag = str(tags.get('station', ''))
-        if station_tag in {'disused', 'abandoned', 'construction', 'proposed'}:
+        if station_tag in {'disused', 'abandoned', 'construction', 'proposed', 'halt', 'miniature'}:
+            continue
+        usage = str(tags.get('usage', '')).strip().lower()
+        if usage in {'tourism', 'industrial'}:
+            continue
+        service = str(tags.get('service', '')).strip().lower()
+        if service in {'siding', 'yard'}:
             continue
 
         lat = element.get('lat') or (element.get('center') or {}).get('lat')
@@ -271,6 +289,8 @@ def build_station_records(radius_m: int) -> list[dict[str, object]]:
         lat = float(station['lat'])
         lon = float(station['lon'])
         geo = postcode_lookup(lat, lon)
+        if geo['admin_district'] == 'Unknown' and not geo['region']:
+            continue
 
         station_name = str(station['name'])
         tags = station['tags']

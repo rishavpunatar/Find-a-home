@@ -73,7 +73,12 @@ const HeaderCell = ({
   current: SortConfig
   onSort: (sortKey: string) => void
 }) => (
-  <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+  <th
+    aria-sort={
+      current.key === sortKey ? (current.direction === 'asc' ? 'ascending' : 'descending') : 'none'
+    }
+    className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600"
+  >
     <button
       type="button"
       onClick={() => onSort(sortKey)}
@@ -148,13 +153,13 @@ export const RankedTable = ({
         </thead>
 
         <tbody className="divide-y divide-teal-50 text-sm">
-          {sortedRows.map((area, index) => {
+          {sortedRows.map((area) => {
             const isPinned = pinnedIds.includes(area.microAreaId)
             const isCompared = compareIds.includes(area.microAreaId)
 
             return (
               <tr key={area.microAreaId} className="hover:bg-teal-50/50">
-                <td className="px-3 py-2 font-medium text-slate-700">{index + 1}</td>
+                <td className="px-3 py-2 font-medium text-slate-700">{area.overallRank}</td>
                 <td className="px-3 py-2">
                   <Link
                     to={`/micro-area/${area.microAreaId}`}

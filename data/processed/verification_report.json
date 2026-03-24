@@ -1,7 +1,8 @@
 {
-  "generatedAt": "2026-03-24T15:17:43+00:00",
+  "generatedAt": "2026-03-24T20:24:07+00:00",
   "methodologyVersion": "2026.1",
-  "overallStatus": "partial",
+  "overallStatus": "attention_required",
+  "verificationCompletenessScore": 0.241,
   "sourceMatrix": {
     "property": {
       "status": "not_live_verified",
@@ -56,6 +57,178 @@
       "primarySource": "ONS APS Personal well-being estimates by local authority",
       "secondarySource": "No secondary cross-check wired yet",
       "note": "Borough QoL uses latest ONS APS means for life satisfaction, worthwhile, happiness, and anxiety (inverted for positive-wellbeing composite)."
+    }
+  },
+  "domainCoverage": {
+    "default": {
+      "count": 660,
+      "domains": {
+        "property": {
+          "availablePct": 4.09,
+          "statusCounts": {
+            "available": 27,
+            "estimated": 298,
+            "placeholder": 0,
+            "missing": 335,
+            "other": 0
+          }
+        },
+        "transport": {
+          "availablePct": 0.0,
+          "statusCounts": {
+            "available": 0,
+            "estimated": 660,
+            "placeholder": 0,
+            "missing": 0,
+            "other": 0
+          }
+        },
+        "schools": {
+          "availablePct": 4.09,
+          "statusCounts": {
+            "available": 27,
+            "estimated": 298,
+            "placeholder": 0,
+            "missing": 335,
+            "other": 0
+          }
+        },
+        "pollution": {
+          "availablePct": 79.85,
+          "statusCounts": {
+            "available": 527,
+            "estimated": 103,
+            "placeholder": 0,
+            "missing": 30,
+            "other": 0
+          }
+        },
+        "greenSpace": {
+          "availablePct": 1.06,
+          "statusCounts": {
+            "available": 7,
+            "estimated": 318,
+            "placeholder": 0,
+            "missing": 335,
+            "other": 0
+          }
+        },
+        "crime": {
+          "availablePct": 4.09,
+          "statusCounts": {
+            "available": 27,
+            "estimated": 298,
+            "placeholder": 0,
+            "missing": 335,
+            "other": 0
+          }
+        },
+        "planning": {
+          "availablePct": 0.0,
+          "statusCounts": {
+            "available": 0,
+            "estimated": 323,
+            "placeholder": 337,
+            "missing": 0,
+            "other": 0
+          }
+        },
+        "wellbeing": {
+          "availablePct": 97.73,
+          "statusCounts": {
+            "available": 645,
+            "estimated": 0,
+            "placeholder": 0,
+            "missing": 15,
+            "other": 0
+          }
+        }
+      }
+    },
+    "londonWide": {
+      "count": 605,
+      "domains": {
+        "property": {
+          "availablePct": 3.47,
+          "statusCounts": {
+            "available": 21,
+            "estimated": 283,
+            "placeholder": 0,
+            "missing": 301,
+            "other": 0
+          }
+        },
+        "transport": {
+          "availablePct": 0.0,
+          "statusCounts": {
+            "available": 0,
+            "estimated": 605,
+            "placeholder": 0,
+            "missing": 0,
+            "other": 0
+          }
+        },
+        "schools": {
+          "availablePct": 3.47,
+          "statusCounts": {
+            "available": 21,
+            "estimated": 283,
+            "placeholder": 0,
+            "missing": 301,
+            "other": 0
+          }
+        },
+        "pollution": {
+          "availablePct": 86.45,
+          "statusCounts": {
+            "available": 523,
+            "estimated": 76,
+            "placeholder": 0,
+            "missing": 6,
+            "other": 0
+          }
+        },
+        "greenSpace": {
+          "availablePct": 0.33,
+          "statusCounts": {
+            "available": 2,
+            "estimated": 302,
+            "placeholder": 0,
+            "missing": 301,
+            "other": 0
+          }
+        },
+        "crime": {
+          "availablePct": 3.47,
+          "statusCounts": {
+            "available": 21,
+            "estimated": 283,
+            "placeholder": 0,
+            "missing": 301,
+            "other": 0
+          }
+        },
+        "planning": {
+          "availablePct": 0.0,
+          "statusCounts": {
+            "available": 0,
+            "estimated": 303,
+            "placeholder": 302,
+            "missing": 0,
+            "other": 0
+          }
+        },
+        "wellbeing": {
+          "availablePct": 97.52,
+          "statusCounts": {
+            "available": 590,
+            "estimated": 0,
+            "placeholder": 0,
+            "missing": 15,
+            "other": 0
+          }
+        }
+      }
     }
   },
   "crossChecks": {

@@ -26,20 +26,20 @@ const LONDON_WIDE_COMMUTE_CAP_MINUTES = 60
 
 export const LondonWideRankedPage = () => {
   const { dataset, loading, error } = useDataContext()
-  const { pinnedIds, compareIds, togglePin, toggleCompare, filters } = useSettings()
+  const { pinnedIds, compareIds, togglePin, toggleCompare, londonFilters } = useSettings()
   const [showTable, setShowTable] = useState(false)
   const { ranked: defaultRanked } = useRankedData()
   const londonWideFilters = useMemo(
     () => ({
-      ...filters,
-      maxCommuteMinutes: LONDON_WIDE_COMMUTE_CAP_MINUTES,
+      ...londonFilters,
+      maxCommuteMinutes: londonFilters.maxCommuteMinutes,
       minSchoolScore: 0,
       maxCrimeRatePerThousand: 10_000,
       maxPm25: 1_000,
       minGreenCoverPct: 0,
       maxMedianPrice: 10_000_000,
     }),
-    [filters],
+    [londonFilters],
   )
   const { filtered, pinned, effectiveFilters } = useRankedData({
     scope: 'londonWide',
@@ -96,8 +96,8 @@ export const LondonWideRankedPage = () => {
           Effective filters in this tab: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
           Candidate generation uses the London-wide scope from all known stations (not the default
           Pinner-focused pipeline search radius). School, crime, PM2.5, green, and price
-          constraints
-          are intentionally not limiting results here.
+          constraints are intentionally not limiting results here. Minimum confidence threshold is
+          still applied.
         </p>
         {dataset.config.londonWideSourceStationCount !== undefined &&
         dataset.config.londonWideExcludedByCommuteCount !== undefined ? (

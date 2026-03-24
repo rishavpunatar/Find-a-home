@@ -14,6 +14,7 @@ export const shortlistToCsv = (areas: DerivedMicroArea[]): string => {
   const header = [
     'micro_area_id',
     'station_name',
+    'overall_rank',
     'overall_score',
     'median_semi_price_gbp',
     'commute_minutes',
@@ -27,6 +28,7 @@ export const shortlistToCsv = (areas: DerivedMicroArea[]): string => {
   const rows = areas.map((area) => [
     area.microAreaId,
     area.stationName,
+    area.overallRank,
     area.dynamicOverallScore.toFixed(2),
     area.medianSemiDetachedPrice.value ?? 'N/A',
     area.commuteTypicalMinutes.value ?? 'N/A',

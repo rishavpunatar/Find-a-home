@@ -1,1 +1,1 @@
-"""Adapters for station, property, school, environment, crime, planning, and wellbeing datasets."""
+"""Adapters for station/transport, property, school, environment, crime, planning, population, and wellbeing datasets."""

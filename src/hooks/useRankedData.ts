@@ -24,10 +24,11 @@ interface RankedDataOptions {
 
 export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult => {
   const { dataset } = useDataContext()
-  const { normalizedWeights, filters, pinnedIds, compareIds } = useSettings()
+  const { normalizedWeights, filters, londonFilters, pinnedIds, compareIds } = useSettings()
 
   return useMemo(() => {
-    const sourceFilters = options.overrideFilters ?? filters
+    const scopedFilters = options.scope === 'londonWide' ? londonFilters : filters
+    const sourceFilters = options.overrideFilters ?? scopedFilters
     const effectiveFilters: Filters = {
       ...sourceFilters,
       maxCommuteMinutes:
@@ -78,6 +79,7 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
     compareIds,
     dataset,
     filters,
+    londonFilters,
     normalizedWeights,
     options.ignoreMaxDriveMinutes,
     options.maxCommuteMinutesCap,

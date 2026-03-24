@@ -1,0 +1,58 @@
+name: Scheduled Data Refresh (Monthly Heavy)
+
+on:
+  schedule:
+    - cron: '30 4 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh-heavy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Refresh heavy raw sources and rebuild processed outputs
+        run: |
+          python -m pipeline.jobs.generate_station_fixture
+          python -m pipeline.jobs.generate_transport_metrics
+          python -m pipeline.jobs.generate_pollution_metrics --year 2023
+          python -m pipeline.jobs.generate_wellbeing_metrics
+          python -m pipeline.jobs.build_micro_areas
+
+      - name: Create Pull Request with refreshed heavy data
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore(data): heavy monthly refresh of raw and processed outputs'
+          title: 'chore(data): monthly heavy data refresh'
+          body: |
+            Automated monthly heavy refresh:
+            - station fixture
+            - transport metrics
+            - pollution metrics
+            - wellbeing metrics
+            - processed micro-area outputs
+          branch: chore/data-refresh-heavy
+          delete-branch: true
+          add-paths: |
+            data/raw/stations_transport.json
+            data/raw/transport_metrics.json
+            data/raw/pollution_metrics.json
+            data/raw/wellbeing_metrics.json
+            data/raw/source_metadata.json
+            data/processed/**

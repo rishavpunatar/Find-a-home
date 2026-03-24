@@ -37,6 +37,22 @@ export const RankedTablePage = () => {
   const qolSource = dataset.config.boroughQolSource
   const qolCoveragePeriod = qolSource?.coveragePeriod ?? 'up to 2022-23'
   const qolReleaseDate = qolSource?.releaseDate ?? '2023-11-28'
+  const sourceMetadata = dataset.config.sourceMetadata ?? {}
+  const propertyReferencePeriod =
+    sourceMetadata.property?.referencePeriod ??
+    'mixed fixture composite; a single source-traceable national cut date is not yet wired for all stations'
+  const schoolsReferencePeriod =
+    sourceMetadata.schools?.referencePeriod ??
+    'mixed-year composite proxy (no single source-traceable national cut date wired yet)'
+  const pollutionReferencePeriod =
+    sourceMetadata.pollution?.referencePeriod ??
+    'LAEI 2019 (London modelled layers) and DEFRA LAQM 2023 extraction for non-London'
+  const crimeReferencePeriod =
+    sourceMetadata.crime?.referencePeriod ??
+    'proxy composite (no single source-traceable annual cut date yet)'
+  const greenReferencePeriod =
+    sourceMetadata.greenSpace?.referencePeriod ??
+    'mixed proxy baseline (single authoritative timestamp not yet wired)'
 
   return (
     <div className="space-y-4">
@@ -85,8 +101,7 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Data reference period:</span> mixed fixture
-                composite; a single source-traceable national cut date is not yet wired for all
-                stations.
+                composite; {propertyReferencePeriod}.
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Median is shown instead of average in the table because it is less sensitive to a
@@ -113,7 +128,7 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Data reference period:</span> mixed-year composite
-                proxy (no single source-traceable national cut date wired yet).
+                proxy ({schoolsReferencePeriod}).
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Inputs come from nearby-school composites; status can be available or estimated.
@@ -171,7 +186,7 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Data reference period:</span> LAEI 2019 (London
-                modelled layers) and DEFRA LAQM 2023 background map extraction for non-London.
+                modelled layers) and DEFRA LAQM extraction for non-London ({pollutionReferencePeriod}).
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 PM2.5 is the primary air-quality filter in this app. NO2 remains available as a
@@ -192,8 +207,8 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Data reference period:</span> proxy composite (no
-                single source-traceable annual cut date yet), with live monthly cross-check
-                available in verification reports.
+                single source-traceable annual cut date yet: {crimeReferencePeriod}), with live
+                monthly cross-check available in verification reports.
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 The ranking model converts this into a score with inverse scaling (lower incident
@@ -220,7 +235,7 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Data reference period:</span> mixed proxy baseline
-                (single authoritative timestamp not yet wired).
+                ({greenReferencePeriod}).
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Environment scoring also uses green-space area and nearest park distance, but this

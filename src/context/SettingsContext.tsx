@@ -17,12 +17,17 @@ interface SettingsContextValue {
   rawWeights: Weights
   normalizedWeights: Weights
   filters: Filters
+  londonFilters: Filters
   pinnedIds: string[]
   compareIds: string[]
   updateWeight: (key: keyof Weights, nextValue: number) => void
   resetWeights: () => void
-  updateFilter: <K extends keyof Filters>(key: K, value: Filters[K]) => void
-  resetFilters: () => void
+  updateFilter: <K extends keyof Filters>(
+    key: K,
+    value: Filters[K],
+    scope?: 'default' | 'londonWide',
+  ) => void
+  resetFilters: (scope?: 'default' | 'londonWide') => void
   togglePin: (id: string) => void
   toggleCompare: (id: string) => void
 }
@@ -80,6 +85,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<Filters>(() =>
     parseLocalStorage<Filters>(STORAGE_KEYS.filters, DEFAULT_FILTERS),
   )
+  const [londonFilters, setLondonFilters] = useState<Filters>(() =>
+    parseLocalStorage<Filters>(STORAGE_KEYS.filtersLondon, DEFAULT_FILTERS),
+  )
   const [pinnedIds, setPinnedIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.pinned))
   const [compareIds, setCompareIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.compare))
 
@@ -92,6 +100,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.filters, JSON.stringify(filters))
   }, [filters])
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.filtersLondon, JSON.stringify(londonFilters))
+  }, [londonFilters])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.pinned, JSON.stringify(pinnedIds))
@@ -109,11 +121,26 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     setRawWeights(DEFAULT_WEIGHTS)
   }, [])
 
-  const updateFilter = useCallback(<K extends keyof Filters>(key: K, value: Filters[K]) => {
-    setFilters((current) => ({ ...current, [key]: value }))
-  }, [])
+  const updateFilter = useCallback(
+    <K extends keyof Filters>(
+      key: K,
+      value: Filters[K],
+      scope: 'default' | 'londonWide' = 'default',
+    ) => {
+      if (scope === 'londonWide') {
+        setLondonFilters((current) => ({ ...current, [key]: value }))
+        return
+      }
+      setFilters((current) => ({ ...current, [key]: value }))
+    },
+    [],
+  )
 
-  const resetFilters = useCallback(() => {
+  const resetFilters = useCallback((scope: 'default' | 'londonWide' = 'default') => {
+    if (scope === 'londonWide') {
+      setLondonFilters(DEFAULT_FILTERS)
+      return
+    }
     setFilters(DEFAULT_FILTERS)
   }, [])
 
@@ -142,6 +169,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       rawWeights,
       normalizedWeights,
       filters,
+      londonFilters,
       pinnedIds,
       compareIds,
       updateWeight,
@@ -154,6 +182,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     [
       compareIds,
       filters,
+      londonFilters,
       normalizedWeights,
       pinnedIds,
       rawWeights,

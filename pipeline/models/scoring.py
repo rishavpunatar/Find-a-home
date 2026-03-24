@@ -34,7 +34,7 @@ def normalize_weights(raw_weights: dict[str, float]) -> dict[str, float]:
 def weighted_score(scores: dict[str, float], weights: dict[str, float], confidence: float) -> float:
     normalized = normalize_weights(weights)
     raw = sum(clamp(scores.get(key, 0.0)) * normalized.get(key, 0.0) for key in normalized) / 100
-    confidence_factor = 0.8 + clamp(confidence, 0.0, 1.0) * 0.2
+    confidence_factor = 0.5 + clamp(confidence, 0.0, 1.0) * 0.5
     return round(raw * confidence_factor, 2)
 
 

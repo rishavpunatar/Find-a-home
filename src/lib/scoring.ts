@@ -25,13 +25,13 @@ export const computeWeightedScore = (
     0,
   )
 
-  const confidenceFactor = 0.8 + Math.max(0, Math.min(1, confidenceScore)) * 0.2
+  const confidenceFactor = 0.5 + Math.max(0, Math.min(1, confidenceScore)) * 0.5
 
   return Number(((weighted / 100) * confidenceFactor).toFixed(2))
 }
 
-export const rankMicroAreas = (areas: MicroArea[], weights: Weights): DerivedMicroArea[] =>
-  [...areas]
+export const rankMicroAreas = (areas: MicroArea[], weights: Weights): DerivedMicroArea[] => {
+  const sorted = [...areas]
     .map((area) => ({
       ...area,
       dynamicOverallScore: computeWeightedScore(
@@ -41,6 +41,12 @@ export const rankMicroAreas = (areas: MicroArea[], weights: Weights): DerivedMic
       ),
     }))
     .sort((a, b) => b.dynamicOverallScore - a.dynamicOverallScore)
+
+  return sorted.map((area, index) => ({
+    ...area,
+    overallRank: index + 1,
+  }))
+}
 
 export const buildRankingExplanation = (area: MicroArea): string[] => {
   const scorePairs: Array<{ key: keyof ComponentScores; value: number; label: string }> = [

@@ -221,6 +221,7 @@ const baseArea: DerivedMicroArea = {
   },
   overallWeightedScore: 71,
   dynamicOverallScore: 69,
+  overallRank: 1,
   rankingExplanationRules: ['Test'],
 }
 
@@ -278,5 +279,20 @@ describe('matchesFilters', () => {
         },
       ),
     ).toBe(true)
+  })
+
+  it('returns false when confidence is below minimum threshold', () => {
+    expect(
+      matchesFilters(
+        {
+          ...baseArea,
+          dataConfidenceScore: 0.42,
+        },
+        {
+          ...DEFAULT_FILTERS,
+          minDataConfidencePct: 60,
+        },
+      ),
+    ).toBe(false)
   })
 })

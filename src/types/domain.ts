@@ -97,6 +97,7 @@ export interface ProcessedDataset {
   }>
   verificationSummary?: {
     overallStatus: string
+    verificationCompletenessScore?: number
     crimeCrossCheckStatus: string
     dataQualityStatus?: string
     qualityCriticalIssues?: number
@@ -126,6 +127,24 @@ export interface ProcessedDataset {
       coveragePeriod?: string
       generatedAt?: string
     }
+    sourceMetadata?: Record<
+      string,
+      {
+        source?: string
+        referencePeriod?: string
+        releaseDate?: string
+      }
+    >
+    stationUniverse?: {
+      rawStationCount?: number
+      keptStationCount?: number
+      excludedStationCount?: number
+      excludedSample?: Array<{
+        stationCode?: string
+        stationName?: string
+        reason?: string
+      }>
+    }
   }
   microAreas: MicroArea[]
   londonWideMicroAreas?: MicroArea[]
@@ -149,6 +168,7 @@ export interface Filters {
   maxPm25: number
   minGreenCoverPct: number
   maxMedianPrice: number
+  minDataConfidencePct: number
 }
 
 export type SortDirection = 'asc' | 'desc'
@@ -160,4 +180,5 @@ export interface SortConfig {
 
 export interface DerivedMicroArea extends MicroArea {
   dynamicOverallScore: number
+  overallRank: number
 }

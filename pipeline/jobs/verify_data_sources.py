@@ -308,23 +308,86 @@ def build_crime_cross_check(dataset: dict[str, Any], live_mode: bool) -> dict[st
     return base_result
 
 
+def compute_domain_coverage(dataset: dict[str, Any]) -> dict[str, Any]:
+    domain_metric_keys = {
+        'property': 'medianSemiDetachedPrice',
+        'transport': 'commuteTypicalMinutes',
+        'schools': 'primaryQualityScore',
+        'pollution': 'annualPm25',
+        'greenSpace': 'greenCoverPct',
+        'crime': 'crimeRatePerThousand',
+        'planning': 'planningRiskHeuristic',
+        'wellbeing': 'boroughQolScore',
+    }
+    scopes = {
+        'default': dataset.get('microAreas', []),
+        'londonWide': dataset.get('londonWideMicroAreas', []),
+    }
+
+    coverage: dict[str, Any] = {}
+    for scope_name, areas in scopes.items():
+        if not isinstance(areas, list):
+            continue
+        scope_result: dict[str, Any] = {'count': len(areas), 'domains': {}}
+        for domain, metric_key in domain_metric_keys.items():
+            status_counts = {'available': 0, 'estimated': 0, 'placeholder': 0, 'missing': 0, 'other': 0}
+            for area in areas:
+                status = (
+                    ((area.get(metric_key) or {}).get('status'))
+                    if isinstance(area.get(metric_key), dict)
+                    else None
+                )
+                status_key = str(status) if status in status_counts else 'other'
+                status_counts[status_key] += 1
+
+            total = len(areas) if areas else 1
+            available_ratio = status_counts['available'] / total
+            scope_result['domains'][domain] = {
+                'availablePct': round(available_ratio * 100, 2),
+                'statusCounts': status_counts,
+            }
+        coverage[scope_name] = scope_result
+    return coverage
+
+
+def coverage_completeness_score(coverage: dict[str, Any]) -> float:
+    ratios: list[float] = []
+    for scope_payload in coverage.values():
+        domains = scope_payload.get('domains', {})
+        if not isinstance(domains, dict):
+            continue
+        for domain_payload in domains.values():
+            available_pct = domain_payload.get('availablePct')
+            if isinstance(available_pct, (int, float)):
+                ratios.append(float(available_pct) / 100.0)
+    if not ratios:
+        return 0.0
+    return round(sum(ratios) / len(ratios), 4)
+
+
 def generate_verification_report(dataset: dict[str, Any], live_mode: bool = False) -> dict[str, Any]:
     generated_at = datetime.now(ZoneInfo('Europe/London')).isoformat(timespec='seconds')
 
     matrix = source_matrix()
     crime_check = build_crime_cross_check(dataset, live_mode=live_mode)
+    domain_coverage = compute_domain_coverage(dataset)
+    completeness_score = coverage_completeness_score(domain_coverage)
 
     overall_status = 'partial'
     if crime_check['status'] in {'strong_alignment', 'moderate_alignment'}:
         overall_status = 'partial_with_live_signal'
     if crime_check['status'] in {'weak_alignment', 'error'}:
         overall_status = 'attention_required'
+    if completeness_score < 0.45:
+        overall_status = 'attention_required'
 
     return {
         'generatedAt': generated_at,
         'methodologyVersion': dataset.get('methodologyVersion'),
         'overallStatus': overall_status,
+        'verificationCompletenessScore': completeness_score,
         'sourceMatrix': matrix,
+        'domainCoverage': domain_coverage,
         'crossChecks': {
             'crime': crime_check,
         },

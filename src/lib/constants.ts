@@ -18,13 +18,15 @@ export const DEFAULT_FILTERS: Filters = {
   maxPm25: 12,
   minGreenCoverPct: 22,
   maxMedianPrice: 825000,
+  minDataConfidencePct: 60,
 }
 
 export const MAX_COMPARE_ITEMS = 5
 
 export const STORAGE_KEYS = {
   weights: 'find-a-home.weights',
-  filters: 'find-a-home.filters',
+  filters: 'find-a-home.filters.default',
+  filtersLondon: 'find-a-home.filters.london',
   pinned: 'find-a-home.pinned',
   compare: 'find-a-home.compare',
 } as const

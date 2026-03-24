@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
@@ -17,6 +18,7 @@ from pipeline.adapters.population_adapter import FixturePopulationAdapter
 from pipeline.adapters.property_adapter import FixturePropertyAdapter
 from pipeline.adapters.school_adapter import FixtureSchoolAdapter
 from pipeline.adapters.station_transport_adapter import FixtureStationTransportAdapter
+from pipeline.adapters.transport_metrics_adapter import FixtureTransportMetricsAdapter
 from pipeline.adapters.wellbeing_adapter import FixtureWellbeingAdapter
 from pipeline.jobs.validate_dataset import generate_quality_report, write_quality_report
 from pipeline.jobs.verify_data_sources import generate_verification_report, write_report
@@ -28,8 +30,28 @@ ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / 'data' / 'raw'
 PROCESSED_DIR = ROOT / 'data' / 'processed'
 CONFIG_PATH = ROOT / 'pipeline' / 'config' / 'search_config.json'
+SOURCE_METADATA_PATH = RAW_DIR / 'source_metadata.json'
+TRANSPORT_METRICS_PATH = RAW_DIR / 'transport_metrics.json'
 LONDON_WIDE_MAX_COMMUTE_MINUTES = 60
 GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER = 2.0
+MAX_ANCHOR_DISTANCE_FOR_ESTIMATION_KM = 15.0
+
+EXCLUDED_STATION_NAME_PATTERNS = [
+    re.compile(pattern, re.IGNORECASE)
+    for pattern in (
+        r'\bminiature\b',
+        r'\bheritage\b',
+        r'\btramway\b',
+        r'\bfunicular\b',
+        r'\bmodel railway\b',
+        r'\bpark station\b',
+        r'\brailway museum\b',
+        r'\bjunction railway\b',
+        r'\bhalt\b',
+        r'\baquarium\b',
+        r'\btheme park\b',
+    )
+]
 
 
 def load_config(path: Path) -> SearchConfig:
@@ -58,6 +80,55 @@ def load_config(path: Path) -> SearchConfig:
         default_weights=payload['default_weights'],
         last_updated_default=payload['last_updated_default'],
     )
+
+
+def load_source_metadata(path: Path) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding='utf-8'))
+    return payload if isinstance(payload, dict) else {}
+
+
+def source_date(metadata: dict[str, dict[str, str]], domain: str, fallback: str) -> str:
+    record = metadata.get(domain, {})
+    value = record.get('releaseDate') or record.get('referencePeriod')
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return fallback
+
+
+def station_exclusion_reason(station: StationRecord) -> str | None:
+    name = station.station_name.strip()
+    lower_name = name.lower()
+    for pattern in EXCLUDED_STATION_NAME_PATTERNS:
+        if pattern.search(lower_name):
+            return f'Name pattern excluded: {pattern.pattern}'
+
+    if station.local_authority.strip().lower() == 'unknown':
+        return 'Local authority unresolved'
+    if station.county_or_borough.strip().lower() == 'unknown':
+        return 'County/borough unresolved'
+    return None
+
+
+def sanitize_station_universe(stations: list[StationRecord]) -> tuple[list[StationRecord], list[dict[str, str]]]:
+    kept: list[StationRecord] = []
+    excluded: list[dict[str, str]] = []
+
+    for station in stations:
+        reason = station_exclusion_reason(station)
+        if reason:
+            excluded.append(
+                {
+                    'stationCode': station.station_code,
+                    'stationName': station.station_name,
+                    'reason': reason,
+                },
+            )
+            continue
+        kept.append(station)
+
+    return kept, excluded
 
 
 def haversine_distance_m(a: Coordinate, b: Coordinate) -> float:
@@ -193,6 +264,9 @@ def synthesize_record_from_anchors(
     samples = nearest_anchor_samples(target, stations_by_code, anchor_records)
     if not samples:
         return None
+    nearest_distance_km = samples[0][0] / 1000.0
+    if nearest_distance_km > MAX_ANCHOR_DISTANCE_FOR_ESTIMATION_KM:
+        return None
 
     synthesized: dict[str, Any] = {}
     for key in value_keys:
@@ -305,7 +379,32 @@ def widen_green_cover_pct(
     }
 
 
-def candidate_filter(stations: list[StationRecord], config: SearchConfig) -> list[StationRecord]:
+def transport_metric_or_fallback(
+    station: StationRecord,
+    transport_records: dict[str, dict[str, Any]],
+    key: str,
+) -> float:
+    record = transport_records.get(station.station_code)
+    raw_value = (record or {}).get(key)
+    if isinstance(raw_value, (int, float)):
+        return float(raw_value)
+
+    fallback_mapping = {
+        'typical_commute_min': station.typical_commute_min,
+        'peak_commute_min': station.peak_commute_min,
+        'offpeak_commute_min': station.offpeak_commute_min,
+        'peak_tph': station.peak_tph,
+        'interchange_count': float(station.interchange_count),
+        'drive_to_pinner_min': station.drive_to_pinner_min,
+    }
+    return float(fallback_mapping[key])
+
+
+def candidate_filter(
+    stations: list[StationRecord],
+    config: SearchConfig,
+    transport_records: dict[str, dict[str, Any]],
+) -> list[StationRecord]:
     pinner = config.pinner_coordinate
     within_belt = [
         station
@@ -316,8 +415,10 @@ def candidate_filter(stations: list[StationRecord], config: SearchConfig) -> lis
     return [
         station
         for station in within_belt
-        if station.typical_commute_min <= config.max_commute_minutes
-        and station.drive_to_pinner_min <= config.max_drive_minutes_to_pinner
+        if transport_metric_or_fallback(station, transport_records, 'typical_commute_min')
+        <= config.max_commute_minutes
+        and transport_metric_or_fallback(station, transport_records, 'drive_to_pinner_min')
+        <= config.max_drive_minutes_to_pinner
     ]
 
 
@@ -363,6 +464,7 @@ def overlap_confidence(station: StationRecord, all_stations: list[StationRecord]
 
 def score_components(
     station: StationRecord,
+    transport: dict[str, Any] | None,
     price: dict[str, Any] | None,
     schools: dict[str, Any] | None,
     pollution: dict[str, Any] | None,
@@ -370,14 +472,46 @@ def score_components(
     crime: dict[str, Any] | None,
     planning: dict[str, Any] | None,
 ) -> dict[str, float]:
-    affordability = float(price.get('affordability_score', 45)) if price else 45
-    value_for_money = float(price.get('value_for_money_score', 45)) if price else 45
+    def number_or_default(record: dict[str, Any] | None, key: str, default: float) -> float:
+        if not record:
+            return float(default)
+        value = record.get(key)
+        return float(value) if isinstance(value, (int, float)) else float(default)
+
+    commute_typical = (
+        float(transport.get('typical_commute_min'))
+        if transport and transport.get('typical_commute_min') is not None
+        else float(station.typical_commute_min)
+    )
+    commute_peak = (
+        float(transport.get('peak_commute_min'))
+        if transport and transport.get('peak_commute_min') is not None
+        else float(station.peak_commute_min)
+    )
+    peak_tph = (
+        float(transport.get('peak_tph'))
+        if transport and transport.get('peak_tph') is not None
+        else float(station.peak_tph)
+    )
+    interchange_count = (
+        float(transport.get('interchange_count'))
+        if transport and transport.get('interchange_count') is not None
+        else float(station.interchange_count)
+    )
+    drive_to_pinner = (
+        float(transport.get('drive_to_pinner_min'))
+        if transport and transport.get('drive_to_pinner_min') is not None
+        else float(station.drive_to_pinner_min)
+    )
+
+    affordability = number_or_default(price, 'affordability_score', 45)
+    value_for_money = number_or_default(price, 'value_for_money_score', 45)
     value_score = mean([affordability, value_for_money])
 
-    commute_score = inverse_score(station.typical_commute_min, best=20, worst=60)
-    peak_score = inverse_score(station.peak_commute_min, best=22, worst=70)
-    frequency_score = forward_score(station.peak_tph, min_value=4, max_value=18)
-    interchange_score = inverse_score(station.interchange_count, best=0, worst=3)
+    commute_score = inverse_score(commute_typical, best=20, worst=60)
+    peak_score = inverse_score(commute_peak, best=22, worst=70)
+    frequency_score = forward_score(peak_tph, min_value=4, max_value=18)
+    interchange_score = inverse_score(interchange_count, best=0, worst=3)
     transport_score = mean([
         commute_score * 0.45,
         peak_score * 0.2,
@@ -385,21 +519,21 @@ def score_components(
         interchange_score * 0.15,
     ]) * (1 / 0.25)
 
-    primary_quality = float(schools.get('primary_quality_score', 50)) if schools else 50
-    secondary_quality = float(schools.get('secondary_quality_score', 50)) if schools else 50
-    primary_count = float(schools.get('nearby_primary_count', 0)) if schools else 0
-    secondary_count = float(schools.get('nearby_secondary_count', 0)) if schools else 0
+    primary_quality = number_or_default(schools, 'primary_quality_score', 50)
+    secondary_quality = number_or_default(schools, 'secondary_quality_score', 50)
+    primary_count = number_or_default(schools, 'nearby_primary_count', 0)
+    secondary_count = number_or_default(schools, 'nearby_secondary_count', 0)
     school_count_score = mean(
         [forward_score(primary_count, min_value=1, max_value=18), forward_score(secondary_count, 1, 8)],
     )
     school_quality_score = mean([primary_quality, secondary_quality])
     schools_score = school_quality_score * 0.72 + school_count_score * 0.28
 
-    no2 = float(pollution.get('annual_no2', 30)) if pollution else 30
-    pm25 = float(pollution.get('annual_pm25', 14)) if pollution else 14
-    green_cover = float(green.get('green_cover_pct', 20)) if green else 20
-    green_area = float(green.get('green_space_area_km2_within_1km', 0.8)) if green else 0.8
-    park_distance = float(green.get('nearest_park_distance_m', 900)) if green else 900
+    no2 = number_or_default(pollution, 'annual_no2', 30)
+    pm25 = number_or_default(pollution, 'annual_pm25', 14)
+    green_cover = number_or_default(green, 'green_cover_pct', 20)
+    green_area = number_or_default(green, 'green_space_area_km2_within_1km', 0.8)
+    park_distance = number_or_default(green, 'nearest_park_distance_m', 900)
     environment_score = (
         inverse_score(pm25, 7, 18) * 0.34
         + inverse_score(no2, 10, 40) * 0.16
@@ -408,12 +542,12 @@ def score_components(
         + inverse_score(park_distance, 120, 1500) * 0.12
     )
 
-    crime_rate = float(crime.get('crime_rate_per_1000', 95)) if crime else 95
+    crime_rate = number_or_default(crime, 'crime_rate_per_1000', 95)
     crime_score = inverse_score(crime_rate, best=25, worst=130)
 
-    proximity_score = inverse_score(station.drive_to_pinner_min, best=2, worst=30)
+    proximity_score = inverse_score(drive_to_pinner, best=2, worst=30)
 
-    planning_risk = float(planning.get('planning_risk_score', 55)) if planning else 55
+    planning_risk = number_or_default(planning, 'planning_risk_score', 55)
     planning_score = inverse_score(planning_risk, best=15, worst=80)
 
     return {
@@ -455,7 +589,21 @@ def ranking_rules(component_scores: dict[str, float]) -> list[str]:
 
 
 def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
+    source_metadata = load_source_metadata(SOURCE_METADATA_PATH)
+    property_last_updated = source_date(source_metadata, 'property', config.last_updated_default)
+    schools_last_updated = source_date(source_metadata, 'schools', config.last_updated_default)
+    pollution_last_updated = source_date(source_metadata, 'pollution', config.last_updated_default)
+    green_last_updated = source_date(source_metadata, 'greenSpace', config.last_updated_default)
+    crime_last_updated = source_date(source_metadata, 'crime', config.last_updated_default)
+    planning_last_updated = source_date(source_metadata, 'planning', config.last_updated_default)
+    transport_last_updated = source_date(source_metadata, 'transport', config.last_updated_default)
+
     station_adapter = FixtureStationTransportAdapter(RAW_DIR / 'stations_transport.json')
+    transport_adapter = (
+        FixtureTransportMetricsAdapter(TRANSPORT_METRICS_PATH)
+        if TRANSPORT_METRICS_PATH.exists()
+        else None
+    )
     property_adapter = FixturePropertyAdapter(RAW_DIR / 'property_metrics.json')
     school_adapter = FixtureSchoolAdapter(RAW_DIR / 'schools_metrics.json')
     pollution_adapter = FixturePollutionAdapter(RAW_DIR / 'pollution_metrics.json')
@@ -468,6 +616,11 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
         wellbeing_adapter.source.get('releaseDate') or config.last_updated_default,
     )
 
+    transport_anchor_records = (
+        json.loads(TRANSPORT_METRICS_PATH.read_text(encoding='utf-8'))
+        if TRANSPORT_METRICS_PATH.exists()
+        else {}
+    )
     property_anchor_records = json.loads((RAW_DIR / 'property_metrics.json').read_text(encoding='utf-8'))
     school_anchor_records = json.loads((RAW_DIR / 'schools_metrics.json').read_text(encoding='utf-8'))
     pollution_anchor_records = json.loads((RAW_DIR / 'pollution_metrics.json').read_text(encoding='utf-8'))
@@ -476,24 +629,31 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     population_anchor_records = json.loads((RAW_DIR / 'population_metrics.json').read_text(encoding='utf-8'))
     planning_anchor_records = json.loads((RAW_DIR / 'planning_metrics.json').read_text(encoding='utf-8'))
 
-    all_stations = station_adapter.fetch_stations()
+    raw_stations = station_adapter.fetch_stations()
+    all_stations, excluded_stations = sanitize_station_universe(raw_stations)
     stations_by_code = {station.station_code: station for station in all_stations}
-    scoped_stations = candidate_filter(all_stations, config)
+    scoped_stations = candidate_filter(all_stations, config, transport_anchor_records)
     deduped_stations = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
     london_wide_all_deduped = dedupe_micro_areas(all_stations, config.station_distance_threshold_m)
     london_wide_deduped = [
         station
         for station in london_wide_all_deduped
-        if station.typical_commute_min <= LONDON_WIDE_MAX_COMMUTE_MINUTES
+        if transport_metric_or_fallback(station, transport_anchor_records, 'typical_commute_min')
+        <= LONDON_WIDE_MAX_COMMUTE_MINUTES
     ]
     london_wide_excluded_by_commute = [
         {
             'stationCode': station.station_code,
             'stationName': station.station_name,
-            'typicalCommuteMinutes': station.typical_commute_min,
+            'typicalCommuteMinutes': transport_metric_or_fallback(
+                station,
+                transport_anchor_records,
+                'typical_commute_min',
+            ),
         }
         for station in london_wide_all_deduped
-        if station.typical_commute_min > LONDON_WIDE_MAX_COMMUTE_MINUTES
+        if transport_metric_or_fallback(station, transport_anchor_records, 'typical_commute_min')
+        > LONDON_WIDE_MAX_COMMUTE_MINUTES
     ]
 
     def build_scope(
@@ -506,6 +666,38 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
         resolved_records_by_station: dict[str, dict[str, dict[str, Any] | None]] = {}
 
         for station in stations_for_scope:
+            transport_record = (
+                transport_adapter.get_by_station(station.station_code) if transport_adapter else None
+            ) or transport_anchor_records.get(station.station_code) or synthesize_record_from_anchors(
+                station,
+                stations_by_code,
+                transport_anchor_records,
+                [
+                    'typical_commute_min',
+                    'peak_commute_min',
+                    'offpeak_commute_min',
+                    'peak_tph',
+                    'interchange_count',
+                    'drive_to_pinner_min',
+                ],
+                'Estimated by inverse-distance interpolation from nearby station transport metrics.',
+            )
+            if transport_record is None:
+                transport_record = {
+                    'typical_commute_min': round(float(station.typical_commute_min), 3),
+                    'peak_commute_min': round(float(station.peak_commute_min), 3),
+                    'offpeak_commute_min': round(float(station.offpeak_commute_min), 3),
+                    'peak_tph': round(float(station.peak_tph), 3),
+                    'interchange_count': int(station.interchange_count),
+                    'drive_to_pinner_min': round(float(station.drive_to_pinner_min), 3),
+                    'status': 'estimated',
+                    'confidence': 0.55,
+                    'methodology_note': (
+                        'Fallback transport heuristic from station profile because no direct '
+                        'transport source or reliable nearby-anchor transport estimates were available.'
+                    ),
+                }
+
             property_record = property_adapter.get_by_station(
                 station.station_code,
             ) or synthesize_record_from_anchors(
@@ -586,6 +778,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             wellbeing_record = wellbeing_adapter.get_by_local_authority(station.local_authority)
 
             resolved_records_by_station[station.station_code] = {
+                'transport': transport_record,
                 'property': property_record,
                 'school': school_record,
                 'pollution': pollution_record,
@@ -612,6 +805,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
 
         for station in stations_for_scope:
             station_records = resolved_records_by_station.get(station.station_code, {})
+            transport_record = station_records.get('transport')
             property_record = station_records.get('property')
             school_record = station_records.get('school')
             pollution_record = station_records.get('pollution')
@@ -623,6 +817,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
 
             components = score_components(
                 station,
+                transport_record,
                 property_record,
                 school_record,
                 pollution_record,
@@ -643,160 +838,172 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'average_semi_price',
                     unit='GBP',
                     note='Derived from semi-detached transactions around station catchment.',
-                    last_updated=config.last_updated_default,
+                    last_updated=property_last_updated,
                 ),
                 'medianSemiDetachedPrice': metric_from_record(
                     property_record,
                     'median_semi_price',
                     unit='GBP',
                     note='Median semi-detached sold price from fixture-backed transaction sample.',
-                    last_updated=config.last_updated_default,
+                    last_updated=property_last_updated,
                 ),
                 'semiPriceTrendPct5y': metric_from_record(
                     property_record,
                     'price_trend_pct_5y',
                     unit='%',
                     note='Approximate 5-year trend in sold price levels.',
-                    last_updated=config.last_updated_default,
+                    last_updated=property_last_updated,
                 ),
                 'affordabilityScore': metric_from_record(
                     property_record,
                     'affordability_score',
                     unit='score',
                     note='Affordability proxy from local median prices and commuting context.',
-                    last_updated=config.last_updated_default,
+                    last_updated=property_last_updated,
                 ),
                 'valueForMoneyScore': metric_from_record(
                     property_record,
                     'value_for_money_score',
                     unit='score',
                     note='Composite balancing median semi prices against commute and schools.',
-                    last_updated=config.last_updated_default,
+                    last_updated=property_last_updated,
                 ),
-                'commuteTypicalMinutes': metric(
-                    station.typical_commute_min,
-                    'minutes',
-                    'estimated',
-                    0.8,
-                    'Typical journey time to configured central destination from timetable profile.',
-                    config.last_updated_default,
+                'commuteTypicalMinutes': metric_from_record(
+                    transport_record,
+                    'typical_commute_min',
+                    unit='minutes',
+                    note='Typical journey time to configured central destination.',
+                    last_updated=transport_last_updated,
+                    fallback_value=float(station.typical_commute_min),
+                    fallback_status='estimated',
+                    fallback_confidence=0.55,
                 ),
-                'commutePeakMinutes': metric(
-                    station.peak_commute_min,
-                    'minutes',
-                    'estimated',
-                    0.8,
-                    'Peak journey time approximation from station profile.',
-                    config.last_updated_default,
+                'commutePeakMinutes': metric_from_record(
+                    transport_record,
+                    'peak_commute_min',
+                    unit='minutes',
+                    note='Peak journey time estimate to configured central destination.',
+                    last_updated=transport_last_updated,
+                    fallback_value=float(station.peak_commute_min),
+                    fallback_status='estimated',
+                    fallback_confidence=0.55,
                 ),
-                'commuteOffPeakMinutes': metric(
-                    station.offpeak_commute_min,
-                    'minutes',
-                    'estimated',
-                    0.8,
-                    'Off-peak journey time approximation from station profile.',
-                    config.last_updated_default,
+                'commuteOffPeakMinutes': metric_from_record(
+                    transport_record,
+                    'offpeak_commute_min',
+                    unit='minutes',
+                    note='Off-peak journey time estimate to configured central destination.',
+                    last_updated=transport_last_updated,
+                    fallback_value=float(station.offpeak_commute_min),
+                    fallback_status='estimated',
+                    fallback_confidence=0.55,
                 ),
-                'serviceFrequencyPeakTph': metric(
-                    station.peak_tph,
-                    'tph',
-                    'estimated',
-                    0.75,
-                    'Peak frequency estimate from fixture timetable profile.',
-                    config.last_updated_default,
+                'serviceFrequencyPeakTph': metric_from_record(
+                    transport_record,
+                    'peak_tph',
+                    unit='tph',
+                    note='Peak service frequency estimate.',
+                    last_updated=transport_last_updated,
+                    fallback_value=float(station.peak_tph),
+                    fallback_status='estimated',
+                    fallback_confidence=0.5,
                 ),
-                'interchangeCount': metric(
-                    float(station.interchange_count),
-                    'count',
-                    'estimated',
-                    0.72,
-                    'Interchange count to central destination from route pattern heuristics.',
-                    config.last_updated_default,
+                'interchangeCount': metric_from_record(
+                    transport_record,
+                    'interchange_count',
+                    unit='count',
+                    note='Interchange count to configured central destination.',
+                    last_updated=transport_last_updated,
+                    fallback_value=float(station.interchange_count),
+                    fallback_status='estimated',
+                    fallback_confidence=0.5,
                 ),
-                'driveTimeToPinnerMinutes': metric(
-                    station.drive_to_pinner_min,
-                    'minutes',
-                    'estimated',
-                    0.75,
-                    'Drive-time estimate from station centroid to Pinner reference point.',
-                    config.last_updated_default,
+                'driveTimeToPinnerMinutes': metric_from_record(
+                    transport_record,
+                    'drive_to_pinner_min',
+                    unit='minutes',
+                    note='Drive-time estimate from station centroid to Pinner reference point.',
+                    last_updated=transport_last_updated,
+                    fallback_value=float(station.drive_to_pinner_min),
+                    fallback_status='estimated',
+                    fallback_confidence=0.55,
                 ),
                 'nearbyPrimaryCount': metric_from_record(
                     school_record,
                     'nearby_primary_count',
                     unit='count',
                     note='Nearby primary schools in and around 1km catchment proxy.',
-                    last_updated=config.last_updated_default,
+                    last_updated=schools_last_updated,
                 ),
                 'nearbySecondaryCount': metric_from_record(
                     school_record,
                     'nearby_secondary_count',
                     unit='count',
                     note='Nearby secondary schools in and around 1.5km proxy zone.',
-                    last_updated=config.last_updated_default,
+                    last_updated=schools_last_updated,
                 ),
                 'primaryQualityScore': metric_from_record(
                     school_record,
                     'primary_quality_score',
                     unit='score',
                     note='Primary school quality composite.',
-                    last_updated=config.last_updated_default,
+                    last_updated=schools_last_updated,
                 ),
                 'secondaryQualityScore': metric_from_record(
                     school_record,
                     'secondary_quality_score',
                     unit='score',
                     note='Secondary school quality composite.',
-                    last_updated=config.last_updated_default,
+                    last_updated=schools_last_updated,
                 ),
                 'annualNo2': metric_from_record(
                     pollution_record,
                     'annual_no2',
                     unit='ug/m3',
                     note='Annual NO2 mean from area-level pollution proxy grid.',
-                    last_updated=config.last_updated_default,
+                    last_updated=pollution_last_updated,
                 ),
                 'annualPm25': metric_from_record(
                     pollution_record,
                     'annual_pm25',
                     unit='ug/m3',
                     note='Annual PM2.5 mean from area-level pollution proxy grid.',
-                    last_updated=config.last_updated_default,
+                    last_updated=pollution_last_updated,
                 ),
                 'greenSpaceAreaKm2Within1km': metric_from_record(
                     green_record,
                     'green_space_area_km2_within_1km',
                     unit='km2',
                     note='Estimated publicly accessible green space within 1km.',
-                    last_updated=config.last_updated_default,
+                    last_updated=green_last_updated,
                 ),
                 'greenCoverPct': metric_from_record(
                     green_record,
                     'green_cover_pct',
                     unit='%',
                     note='Estimated green cover fraction using a wider (2x) catchment neighborhood proxy.',
-                    last_updated=config.last_updated_default,
+                    last_updated=green_last_updated,
                 ),
                 'nearestParkDistanceM': metric_from_record(
                     green_record,
                     'nearest_park_distance_m',
                     unit='m',
                     note='Distance to nearest substantial park entry point.',
-                    last_updated=config.last_updated_default,
+                    last_updated=green_last_updated,
                 ),
                 'crimeRatePerThousand': metric_from_record(
                     crime_record,
                     'crime_rate_per_1000',
                     unit='per_1000',
                     note='Annualised crime incidents per 1,000 residents proxy.',
-                    last_updated=config.last_updated_default,
+                    last_updated=crime_last_updated,
                 ),
                 'planningRiskHeuristic': metric_from_record(
                     planning_record,
                     'planning_risk_score',
                     unit='score',
                     note='Low-confidence planning/development pressure heuristic.',
-                    last_updated=config.last_updated_default,
+                    last_updated=planning_last_updated,
                     fallback_value=55,
                     fallback_status='placeholder',
                     fallback_confidence=0.2,
@@ -926,6 +1133,13 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'londonWideSourceStationCount': len(london_wide_all_deduped),
             'londonWideExcludedByCommuteCount': len(london_wide_excluded_by_commute),
             'boroughQolSource': wellbeing_adapter.source,
+            'sourceMetadata': source_metadata,
+            'stationUniverse': {
+                'rawStationCount': len(raw_stations),
+                'keptStationCount': len(all_stations),
+                'excludedStationCount': len(excluded_stations),
+                'excludedSample': excluded_stations[:50],
+            },
         },
         'microAreas': micro_areas,
         'londonWideMicroAreas': london_wide_micro_areas,
@@ -980,6 +1194,7 @@ def main() -> None:
     verification_report = generate_verification_report(dataset, live_mode=live_verification)
     dataset['verificationSummary'] = {
         'overallStatus': verification_report['overallStatus'],
+        'verificationCompletenessScore': verification_report.get('verificationCompletenessScore'),
         'crimeCrossCheckStatus': verification_report['crossChecks']['crime']['status'],
         'dataQualityStatus': quality_report['overallStatus'],
         'qualityCriticalIssues': quality_report['counts']['critical'],

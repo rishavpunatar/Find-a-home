@@ -22,6 +22,7 @@ Build and maintain a static-first web app that ranks UK station-centred micro-ar
 - Generate live verification report: `python3 -m pipeline.jobs.verify_data_sources --live`
 - Run strict dataset quality audit: `python3 -m pipeline.jobs.validate_dataset --fail-on-critical`
 - Refresh ONS borough QoL metrics: `python3 -m pipeline.jobs.generate_wellbeing_metrics`
+- Refresh transport metrics (TfL + OSRM with fallback): `python3 -m pipeline.jobs.generate_transport_metrics`
 - Run pipeline tests: `python3 -m pytest`
 
 ## Data flow
@@ -44,6 +45,7 @@ Adapters live in `pipeline/adapters/` with one adapter per data domain:
 - `population_adapter.py`
 - `planning_adapter.py`
 - `wellbeing_adapter.py`
+- `transport_metrics_adapter.py`
 
 To add a real data source:
 

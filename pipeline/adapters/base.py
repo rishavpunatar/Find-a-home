@@ -12,6 +12,12 @@ class StationTransportAdapter(ABC):
         raise NotImplementedError
 
 
+class TransportMetricsAdapter(ABC):
+    @abstractmethod
+    def get_by_station(self, station_code: str) -> dict[str, Any] | None:
+        raise NotImplementedError
+
+
 class PropertyAdapter(ABC):
     @abstractmethod
     def get_by_station(self, station_code: str) -> dict[str, Any] | None:

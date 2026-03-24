@@ -74,6 +74,12 @@ npm run pipeline:quality
 npm run pipeline:wellbeing
 ```
 
+### 2e) Refresh transport metrics from live routing sources
+
+```bash
+npm run pipeline:transport
+```
+
 ### 3) Start the app
 
 ```bash
@@ -128,6 +134,12 @@ Refresh borough QoL (ONS APS) metrics:
 npm run pipeline:wellbeing
 ```
 
+Refresh transport metrics (TfL Journey Planner + OSRM with fallback):
+
+```bash
+npm run pipeline:transport
+```
+
 Run strict processed-dataset validation:
 
 ```bash
@@ -165,6 +177,7 @@ UI note:
 Adapters are isolated per data domain in `pipeline/adapters/`:
 
 - station / transport
+- transport metrics (commute/drive/source-linked)
 - property
 - schools
 - pollution
@@ -239,6 +252,7 @@ UI weights always normalize to 100%.
 - `test.yml`: frontend + pipeline tests
 - `build.yml`: pipeline build + frontend production build
 - `data-refresh.yml`: scheduled regeneration of `data/processed` and PR creation
+- `data-refresh-heavy.yml`: monthly heavy refresh of station fixture, transport metrics, pollution, wellbeing, and processed outputs
 - `deploy.yml`: GitHub Pages deployment
 
 ## Deployment (GitHub Pages)
