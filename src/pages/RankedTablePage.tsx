@@ -179,12 +179,26 @@ export const RankedTablePage = () => {
                 Confidence shown here is `dataConfidenceScore * 100`.
               </p>
               <p className="mt-1 text-slate-600">
-                `dataConfidenceScore` is calculated as the mean of metric-level confidences plus
-                overlap confidence (how distinct the station catchment is from nearby candidates).
+                Formula: `dataConfidenceScore = mean(all metric confidences + overlapConfidence)`.
+              </p>
+              <p className="mt-1 text-slate-600">
+                `overlapConfidence` = `min(1, nearestStationDistanceM / (2 * walkCatchmentRadiusM))`.
+                With an 800m catchment, areas very close to another station get lower overlap
+                confidence, while more distinct catchments get higher values.
+              </p>
+              <p className="mt-1 text-slate-600">
+                Metric confidence is inherited from each metric source record:
+                `available` keeps source confidence, `estimated` uses interpolation confidence, and
+                `missing/placeholder` defaults to low confidence (typically 0.2).
+              </p>
+              <p className="mt-1 text-slate-600">
+                Interpolated metrics use distance-aware confidence:
+                `clamp(0.28 + 0.42*exp(-nearestKm/18) + 0.2*(anchorConfidenceMean-0.5), 0.2, 0.75)`.
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                Confidence reflects data robustness and overlap ambiguity; it is not a value
-                judgment on the area itself.
+                Confidence reflects data robustness/coverage and overlap ambiguity, not how
+                desirable an area is. Dataset-wide quality checks are reported separately in
+                `data_quality_report.json` on the Overview page.
               </p>
             </details>
           </div>
