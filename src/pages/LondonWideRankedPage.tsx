@@ -1,5 +1,10 @@
 import { useMemo } from 'react'
 
+import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
+import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
+import { Pm25DistanceScatter } from '@/components/charts/Pm25DistanceScatter'
+import { ScoreDistributionChart } from '@/components/charts/ScoreDistributionChart'
+import { TopScoresBarChart } from '@/components/charts/TopScoresBarChart'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { RankedTable } from '@/components/table/RankedTable'
@@ -21,8 +26,9 @@ const downloadCsv = (filename: string, data: string) => {
 const LONDON_WIDE_COMMUTE_CAP_MINUTES = 60
 
 export const LondonWideRankedPage = () => {
-  const { loading, error } = useDataContext()
+  const { dataset, loading, error } = useDataContext()
   const { pinnedIds, compareIds, togglePin, toggleCompare, filters } = useSettings()
+  const { ranked: defaultRanked } = useRankedData()
   const londonWideFilters = useMemo(
     () => ({
       ...filters,
@@ -40,13 +46,32 @@ export const LondonWideRankedPage = () => {
     ignoreMaxDriveMinutes: true,
     overrideFilters: londonWideFilters,
   })
+  const { ranked: londonWideRanked } = useRankedData({ scope: 'londonWide' })
+
+  const superScopeRanked = useMemo(() => {
+    const byId = new Map<string, (typeof londonWideRanked)[number]>()
+    for (const area of londonWideRanked) {
+      byId.set(area.microAreaId, area)
+    }
+    for (const area of defaultRanked) {
+      if (!byId.has(area.microAreaId)) {
+        byId.set(area.microAreaId, area)
+      }
+    }
+    return [...byId.values()].sort((left, right) => right.dynamicOverallScore - left.dynamicOverallScore)
+  }, [defaultRanked, londonWideRanked])
 
   if (loading) {
     return <LoadingState title="Building London-wide ranked table" />
   }
 
-  if (error) {
-    return <ErrorState title="London-wide ranked table unavailable" detail={error} />
+  if (error || !dataset) {
+    return (
+      <ErrorState
+        title="London-wide ranked table unavailable"
+        detail={error ?? 'Dataset is missing. Run the pipeline and sync processed files.'}
+      />
+    )
   }
 
   return (
@@ -90,6 +115,63 @@ export const LondonWideRankedPage = () => {
         onTogglePin={togglePin}
         onToggleCompare={toggleCompare}
       />
+
+      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+          Super scope charts (default + London-wide)
+        </h2>
+        <p className="mt-2 text-sm text-slate-700">
+          These charts combine all unique micro-areas from both the default Pinner-focused scope
+          and the London-wide scope, so you can inspect the full hundreds-of-points distribution in
+          one place.
+        </p>
+        <p className="mt-1 text-xs text-slate-600">
+          Combined unique micro-areas: {superScopeRanked.length}. Tooltips show station names on
+          hover.
+        </p>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-2">
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Top 20 by weighted score (combined scope)
+          </h3>
+          <TopScoresBarChart areas={superScopeRanked} />
+        </article>
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Commute time vs median semi price (combined scope)
+          </h3>
+          <CommutePriceScatter areas={superScopeRanked} />
+        </article>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-2">
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            PM2.5 vs green cover (combined scope)
+          </h3>
+          <EnvironmentScatter areas={superScopeRanked} />
+        </article>
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Score distribution (combined scope)
+          </h3>
+          <ScoreDistributionChart areas={superScopeRanked} />
+        </article>
+      </section>
+
+      <section className="grid gap-4">
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            PM2.5 vs distance from central London (combined scope)
+          </h3>
+          <Pm25DistanceScatter
+            areas={superScopeRanked}
+            centralCoordinate={dataset.config.centralLondonCoordinate}
+          />
+        </article>
+      </section>
     </div>
   )
 }
