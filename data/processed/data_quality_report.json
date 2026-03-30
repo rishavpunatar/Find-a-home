@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-24T15:18:00+00:00",
+  "generatedAt": "2026-03-30T07:59:59+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "warning",
   "microAreasAnalysed": 707,
@@ -1546,18 +1546,18 @@
       "severity": "warning",
       "code": "pollution_source_missing",
       "message": "No raw pollution source record found for station.",
-      "microAreaId": "ma-bagsh9cd",
-      "stationCode": "BAGSH9CD",
-      "stationName": "Bagshot",
+      "microAreaId": "ma-brackf78",
+      "stationCode": "BRACKF78",
+      "stationName": "Bracknell",
       "field": "annualNo2"
     },
     {
       "severity": "warning",
       "code": "pollution_source_missing",
       "message": "No raw pollution source record found for station.",
-      "microAreaId": "ma-brackf78",
-      "stationCode": "BRACKF78",
-      "stationName": "Bracknell",
+      "microAreaId": "ma-bagsh9cd",
+      "stationCode": "BAGSH9CD",
+      "stationName": "Bagshot",
       "field": "annualNo2"
     },
     {
