@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-03-31T20:29:00+01:00",
+  "generatedAt": "2026-03-31T23:51:54+01:00",
   "count": 660,
   "londonWideCount": 605,
   "topMicroAreas": [
     {
-      "microAreaId": "ma-harlef99",
-      "stationName": "Harlesden",
-      "score": 54.07
-    },
-    {
       "microAreaId": "ma-wille265",
       "stationName": "Willesden Green",
-      "score": 53.02
+      "score": 53.18
     },
     {
-      "microAreaId": "ma-hanwe3e0",
-      "stationName": "Hanwell",
-      "score": 52.86
-    },
-    {
-      "microAreaId": "ma-wille9a5",
-      "stationName": "Willesden Junction",
-      "score": 51.59
-    },
-    {
-      "microAreaId": "ma-wembl900",
-      "stationName": "Wembley Stadium",
-      "score": 51.56
+      "microAreaId": "ma-fulwe7c3",
+      "stationName": "Fulwell",
+      "score": 51.95
     },
     {
       "microAreaId": "ma-ruisl4fe",
       "stationName": "Ruislip Gardens",
-      "score": 51.54
+      "score": 51.69
     },
     {
       "microAreaId": "ma-sri",
       "stationName": "South Ruislip",
-      "score": 51.44
-    },
-    {
-      "microAreaId": "ma-apsle1dd",
-      "stationName": "Apsley",
-      "score": 51.08
+      "score": 51.55
     },
     {
       "microAreaId": "ma-sloug12c",
       "stationName": "Slough",
-      "score": 50.61
+      "score": 51.54
     },
     {
-      "microAreaId": "ma-stone528",
-      "stationName": "Stonebridge Park",
-      "score": 50.2
+      "microAreaId": "ma-uxb",
+      "stationName": "Uxbridge",
+      "score": 51.27
+    },
+    {
+      "microAreaId": "ma-wembl900",
+      "stationName": "Wembley Stadium",
+      "score": 51.23
+    },
+    {
+      "microAreaId": "ma-wam",
+      "stationName": "Watford (Met)",
+      "score": 51.11
+    },
+    {
+      "microAreaId": "ma-amh",
+      "stationName": "Amersham",
+      "score": 50.83
+    },
+    {
+      "microAreaId": "ma-chesh3fd",
+      "stationName": "Chesham",
+      "score": 50.83
     }
   ],
   "topLondonWideMicroAreas": [
     {
-      "microAreaId": "ma-harlef99",
-      "stationName": "Harlesden",
-      "score": 54.07
-    },
-    {
       "microAreaId": "ma-wille265",
       "stationName": "Willesden Green",
-      "score": 53.02
+      "score": 53.18
     },
     {
-      "microAreaId": "ma-hanwe3e0",
-      "stationName": "Hanwell",
-      "score": 52.86
-    },
-    {
-      "microAreaId": "ma-wille9a5",
-      "stationName": "Willesden Junction",
-      "score": 51.59
-    },
-    {
-      "microAreaId": "ma-wembl900",
-      "stationName": "Wembley Stadium",
-      "score": 51.56
+      "microAreaId": "ma-fulwe7c3",
+      "stationName": "Fulwell",
+      "score": 51.95
     },
     {
       "microAreaId": "ma-ruisl4fe",
       "stationName": "Ruislip Gardens",
-      "score": 51.54
+      "score": 51.69
     },
     {
       "microAreaId": "ma-sri",
       "stationName": "South Ruislip",
-      "score": 51.44
-    },
-    {
-      "microAreaId": "ma-apsle1dd",
-      "stationName": "Apsley",
-      "score": 51.08
+      "score": 51.55
     },
     {
       "microAreaId": "ma-sloug12c",
       "stationName": "Slough",
-      "score": 50.61
+      "score": 51.54
+    },
+    {
+      "microAreaId": "ma-wembl900",
+      "stationName": "Wembley Stadium",
+      "score": 51.23
+    },
+    {
+      "microAreaId": "ma-wam",
+      "stationName": "Watford (Met)",
+      "score": 51.11
+    },
+    {
+      "microAreaId": "ma-southa9c",
+      "stationName": "South Harrow",
+      "score": 50.23
+    },
+    {
+      "microAreaId": "ma-hemel124",
+      "stationName": "Hemel Hempstead",
+      "score": 50.17
     },
     {
       "microAreaId": "ma-stone528",
       "stationName": "Stonebridge Park",
-      "score": 50.2
+      "score": 50.15
     }
   ]
 }

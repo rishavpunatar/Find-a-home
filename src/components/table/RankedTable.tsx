@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 import type { DerivedMicroArea, SortConfig } from '@/types/domain'
@@ -116,9 +116,62 @@ export const RankedTable = ({
   const [sort, setSort] = useState<SortConfig>({ key: 'score', direction: 'desc' })
   const [scrollTop, setScrollTop] = useState(0)
   const [viewportHeight, setViewportHeight] = useState(560)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [maxPriceFilter, setMaxPriceFilter] = useState('')
+  const [maxCommuteFilter, setMaxCommuteFilter] = useState('')
+  const [minSchoolFilter, setMinSchoolFilter] = useState('')
+  const [pinnedOnly, setPinnedOnly] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement | null>(null)
+  const deferredSearchTerm = useDeferredValue(searchTerm)
 
-  const sortedRows = useMemo(() => sortRows(areas, sort), [areas, sort])
+  const locallyFilteredRows = useMemo(() => {
+    const normalizedSearch = deferredSearchTerm.trim().toLowerCase()
+    const maxPrice = Number(maxPriceFilter)
+    const maxCommute = Number(maxCommuteFilter)
+    const minSchool = Number(minSchoolFilter)
+
+    return areas.filter((area) => {
+      if (pinnedOnly && !pinnedIds.includes(area.microAreaId)) {
+        return false
+      }
+
+      if (normalizedSearch) {
+        const haystack = [
+          area.stationName,
+          area.localAuthority,
+          area.countyOrBorough,
+        ]
+          .join(' ')
+          .toLowerCase()
+        if (!haystack.includes(normalizedSearch)) {
+          return false
+        }
+      }
+
+      if (maxPriceFilter && (area.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY) > maxPrice) {
+        return false
+      }
+
+      if (maxCommuteFilter && (area.commuteTypicalMinutes.value ?? Number.POSITIVE_INFINITY) > maxCommute) {
+        return false
+      }
+
+      if (minSchoolFilter && area.componentScores.schools < minSchool) {
+        return false
+      }
+
+      return true
+    })
+  }, [
+    areas,
+    deferredSearchTerm,
+    maxCommuteFilter,
+    maxPriceFilter,
+    minSchoolFilter,
+    pinnedIds,
+    pinnedOnly,
+  ])
+  const sortedRows = useMemo(() => sortRows(locallyFilteredRows, sort), [locallyFilteredRows, sort])
   const fromPath = `${location.pathname}${location.search}`
 
   useEffect(() => {
@@ -135,7 +188,16 @@ export const RankedTable = ({
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = 0
     }
-  }, [areas.length, sort.direction, sort.key])
+  }, [
+    locallyFilteredRows.length,
+    pinnedOnly,
+    searchTerm,
+    maxPriceFilter,
+    maxCommuteFilter,
+    minSchoolFilter,
+    sort.direction,
+    sort.key,
+  ])
 
   const toggleSort = (key: string) => {
     setSort((current) => {
@@ -167,6 +229,82 @@ export const RankedTable = ({
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-teal-100 bg-white shadow-panel">
+      <div className="border-b border-teal-100 bg-teal-50/80 px-4 py-3">
+        <div className="flex flex-wrap items-end gap-3">
+          <label className="flex min-w-[220px] flex-1 flex-col gap-1 text-xs font-medium text-slate-600">
+            Search station or borough
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Pinner, Harrow, Hillingdon..."
+              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+            />
+          </label>
+          <label className="flex w-36 flex-col gap-1 text-xs font-medium text-slate-600">
+            Max price
+            <input
+              type="number"
+              min="0"
+              step="5000"
+              value={maxPriceFilter}
+              onChange={(event) => setMaxPriceFilter(event.target.value)}
+              placeholder="Any"
+              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+            />
+          </label>
+          <label className="flex w-32 flex-col gap-1 text-xs font-medium text-slate-600">
+            Max commute
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={maxCommuteFilter}
+              onChange={(event) => setMaxCommuteFilter(event.target.value)}
+              placeholder="Any"
+              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+            />
+          </label>
+          <label className="flex w-32 flex-col gap-1 text-xs font-medium text-slate-600">
+            Min school
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              value={minSchoolFilter}
+              onChange={(event) => setMinSchoolFilter(event.target.value)}
+              placeholder="Any"
+              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+            />
+          </label>
+          <label className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={pinnedOnly}
+              onChange={(event) => setPinnedOnly(event.target.checked)}
+            />
+            Pinned only
+          </label>
+          <button
+            type="button"
+            onClick={() => {
+              setSearchTerm('')
+              setMaxPriceFilter('')
+              setMaxCommuteFilter('')
+              setMinSchoolFilter('')
+              setPinnedOnly(false)
+            }}
+            className="rounded-md bg-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
+          >
+            Reset table filters
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-slate-600">
+          Showing <span className="font-semibold">{locallyFilteredRows.length}</span> of{' '}
+          <span className="font-semibold">{areas.length}</span> rows in this table view.
+        </p>
+      </div>
       <div
         ref={scrollContainerRef}
         className="max-h-[72vh] overflow-y-auto"
@@ -208,13 +346,13 @@ export const RankedTable = ({
               </tr>
             ) : null}
 
-            {visibleRows.map((area) => {
+            {visibleRows.map((area, index) => {
               const isPinned = pinnedIds.includes(area.microAreaId)
               const isCompared = compareIds.includes(area.microAreaId)
 
               return (
                 <tr key={area.microAreaId} className="h-[88px] hover:bg-teal-50/50">
-                  <td className="px-3 py-2 font-medium text-slate-700">{area.overallRank}</td>
+                  <td className="px-3 py-2 font-medium text-slate-700">{startIndex + index + 1}</td>
                   <td className="px-3 py-2">
                     <Link
                       to={`/micro-area/${area.microAreaId}`}

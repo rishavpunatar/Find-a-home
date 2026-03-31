@@ -269,7 +269,8 @@ export const MicroAreaDetailPage = () => {
           </dl>
           <p className="mt-3 text-xs text-slate-600">
             Count and quality inputs use state-funded-only DfE school data, so private schools
-            are excluded from both the nearby totals and the quality component.
+            are excluded from both the nearby totals and the quality component. School access here
+            is based on roughly 20 minutes drive from the area anchor.
           </p>
           <p className="mt-3 text-xs text-slate-600">{area.schoolMethodologyNotes}</p>
         </article>

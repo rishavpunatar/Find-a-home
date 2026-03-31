@@ -103,12 +103,13 @@ def source_matrix() -> dict[str, dict[str, str]]:
     return {
         'property': {
             'status': 'source_applied_not_live_verified',
-            'primarySource': 'HM Land Registry Price Paid Data',
-            'secondarySource': 'ONS UK House Price Index (planned cross-check)',
+            'primarySource': 'OnTheMarket current asking-price search results',
+            'secondarySource': 'HM Land Registry Price Paid Data fallback',
             'note': (
-                'Station-level property metrics use HM Land Registry PPD semi-detached '
-                'transactions with 12-month stratified catchment sampling. '
-                'Secondary statistical reconciliation is still pending.'
+                'Station-level property metrics now prefer current asking prices for semi-detached '
+                'homes with 3+ bedrooms and 2+ bathrooms from public locality search results. '
+                'If live listing coverage is too thin, the pipeline falls back to recent HM Land '
+                'Registry semi-detached transactions.'
             ),
         },
         'transport': {
@@ -126,7 +127,8 @@ def source_matrix() -> dict[str, dict[str, str]]:
             'secondarySource': 'DfE Explore Education Statistics school performance data',
             'note': (
                 'Nearby school counts and quality now use official state-funded DfE sources. '
-                'Private schools are excluded from both the count and quality side. '
+                'Private schools are excluded from both the count and quality side, and the school '
+                'catchment now reflects roughly 20 minutes drive from each area anchor. '
                 'A secondary cross-check source has not yet been wired for live verification.'
             ),
         },

@@ -40,7 +40,7 @@ export const RankedTablePage = () => {
   const sourceMetadata = dataset.config.sourceMetadata ?? {}
   const propertyReferencePeriod =
     sourceMetadata.property?.referencePeriod ??
-    '12-month rolling transaction window from HM Land Registry PPD stratified catchment samples (with prior-year comparison window for trend proxy)'
+    'Current asking-price snapshot for semi-detached 3+ bed / 2+ bath listings, with latest sold-price fallback where live coverage is thin'
   const schoolsReferencePeriod =
     sourceMetadata.schools?.referencePeriod ??
     'mixed-year composite proxy (no single source-traceable national cut date wired yet)'
@@ -86,24 +86,22 @@ export const RankedTablePage = () => {
                 value/affordability scoring.
               </p>
               <p className="mt-1 text-slate-600">
-                Station with direct property record: use station median semi-detached sold price
-                from HM Land Registry Price Paid Data using a stratified postcode sample inside the
-                800m catchment (`status = available`).
+                Station with direct property record: use station median asking price from current
+                locality listings for semi-detached homes with at least 3 bedrooms and 2
+                bathrooms.
               </p>
               <p className="mt-1 text-slate-600">
-                Median is distance-and-recency weighted: nearer catchment bands and newer
-                transactions have higher influence (inner band weighted highest, outer band lowest)
-                so the figure tracks current local pricing more closely.
+                Listings are distance-weighted back to the station area so nearer qualifying homes
+                have more influence on the median and average.
               </p>
               <p className="mt-1 text-slate-600">
-                Station without direct property record: estimate using inverse-distance weighting
-                over nearby property anchors (`weight = 1 / max(distance_m, 120)^1.8`, up to 8
-                nearest stations), then `median = sum(value * weight) / sum(weight)` (`status =
-                estimated`).
+                If current listing coverage is too thin, the pipeline falls back to recent HM Land
+                Registry semi-detached transactions; if a station still has no direct property
+                record, it is estimated from nearby property anchors.
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Source:</span> HM Land Registry Price Paid Data
-                (semi-detached, standard transactions) + postcodes.io catchment postcode sampling.
+                <span className="font-semibold">Source:</span> OnTheMarket current locality search
+                results + HM Land Registry Price Paid Data fallback.
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Data reference period:</span>{' '}
@@ -111,7 +109,7 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Median is shown instead of average in the table because it is less sensitive to a
-                few unusually expensive transactions.
+                few unusually expensive listings.
               </p>
             </details>
 
@@ -138,7 +136,8 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Both nearby-school counts and school-quality scores now use state-funded-only DfE
-                data, so private schools are excluded from both sides of the school component.
+                data, so private schools are excluded from both sides of the school component. The
+                school catchment is based on roughly 20 minutes drive from the area anchor.
               </p>
             </details>
 
@@ -300,7 +299,15 @@ export const RankedTablePage = () => {
               rel="noreferrer"
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
-              HM Land Registry (price paid)
+              OnTheMarket (current listings)
+            </a>
+            <a
+              href="https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              HM Land Registry (fallback sold prices)
             </a>
             <a
               href="https://data.police.uk/docs/"

@@ -1,8 +1,8 @@
 {
   "property": {
-    "source": "HM Land Registry PPD + postcodes.io catchment postcode sampling",
-    "referencePeriod": "12-month stratified sample window 2025-03-24 to 2026-03-24 (with prior-year comparison window for trend proxy)",
-    "releaseDate": "2026-03-24"
+    "source": "OnTheMarket current asking-price snapshot + HM Land Registry PPD fallback",
+    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-03-31 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-03-31 to 2026-03-31 (with prior-year comparison window for trend proxy)",
+    "releaseDate": "2026-03-31"
   },
   "transport": {
     "source": "TfL Journey Planner + OSRM (with station-profile fallback)",

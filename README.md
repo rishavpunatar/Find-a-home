@@ -124,7 +124,7 @@ npm run pipeline:transport
 npm run pipeline:schools
 ```
 
-### 2g) Refresh property metrics from public 12-month transaction samples
+### 2g) Refresh property metrics from current asking prices
 
 ```bash
 npm run pipeline:property
@@ -202,7 +202,7 @@ Refresh school metrics (DfE GIAS state-funded establishments + DfE EES KS2/KS4 p
 npm run pipeline:schools
 ```
 
-Refresh property metrics (HM Land Registry PPD + stratified catchment sampling):
+Refresh property metrics (current asking prices for semi-detached 3+ bed / 2+ bath homes, with sold-price fallback):
 
 ```bash
 npm run pipeline:property
@@ -226,7 +226,7 @@ Optional London high-resolution mode:
    - drive to Pinner <= configured max
 3. Deduplicate highly overlapping station micro-areas.
 4. Build per-micro-area metrics via adapters.
-   - Property metrics use HM Land Registry PPD semi-detached transactions sampled over a rolling 12-month window from postcode strata inside each 800m catchment; median/average values are distance-and-recency weighted so nearer and newer catchment transactions influence the indicator more strongly.
+   - Property metrics now prefer current asking prices for semi-detached homes with at least 3 bedrooms and 2 bathrooms, using public locality listing snapshots and distance-weighting back to the station area. When current listing coverage is too thin, the pipeline falls back to recent HM Land Registry semi-detached transactions.
    - If a station has no direct source record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchored stations.
 5. Compute component scores and weighted overall rank.
 6. Persist `data/processed/micro_areas.json` and `data/processed/summary.json`.
@@ -258,9 +258,9 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - planning
 - borough QoL (ONS APS personal well-being)
 
-Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics use HM Land Registry PPD + stratified catchment postcode sampling with distance/recency weighting for the displayed median and average indicators. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Some other domains remain fixture/interpolated in this MVP.
+Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics now prefer current asking prices for semi-detached homes with at least 3 bedrooms and 2 bathrooms, with recent sold-price fallback when live listing coverage is too thin. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Some other domains remain fixture/interpolated in this MVP.
 
-School counts and school quality now both exclude private schools. Nearby primary and secondary totals come from DfE GIAS open state-funded establishment exports, and the quality composites come from DfE Explore Education Statistics school-level KS2 and KS4 results for state-funded schools only.
+School counts and school quality now both exclude private schools. Nearby primary and secondary totals and the school-quality composites come from state-funded-only DfE sources, and the school catchment is based on schools reachable within roughly 20 minutes drive from each area anchor.
 
 ## Data quality model (no fake precision)
 

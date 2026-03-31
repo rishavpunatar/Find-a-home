@@ -5,6 +5,7 @@ import csv
 import io
 import json
 import math
+import re
 import statistics
 import time
 from collections import defaultdict
@@ -15,20 +16,37 @@ from typing import Any
 
 import requests
 
+from pipeline.adapters.station_transport_adapter import FixtureStationTransportAdapter
+from pipeline.jobs.build_micro_areas import (
+    LONDON_WIDE_MAX_COMMUTE_MINUTES,
+    candidate_filter,
+    dedupe_micro_areas,
+    load_config,
+    sanitize_station_universe,
+    transport_metric_or_fallback,
+)
+
 
 ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / 'data' / 'raw'
 STATIONS_PATH = RAW_DIR / 'stations_transport.json'
+TRANSPORT_METRICS_PATH = RAW_DIR / 'transport_metrics.json'
 OUTPUT_PATH = RAW_DIR / 'property_metrics.json'
 SOURCE_METADATA_PATH = RAW_DIR / 'source_metadata.json'
+CONFIG_PATH = ROOT / 'pipeline' / 'config' / 'search_config.json'
 
 POSTCODES_API_URL = 'https://api.postcodes.io/postcodes'
 PPD_CSV_URL = 'https://landregistry.data.gov.uk/app/ppd/ppd_data.csv'
+OTM_BASE_URL = 'https://www.onthemarket.com'
+OTM_NEXT_DATA_PATTERN = re.compile(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>')
 
 CATCHMENT_RADIUS_M = 800
 POSTCODE_LIMIT_PER_STATION = 100
 MAX_POSTCODES_PER_BAND = 30
 MAX_TRANSACTIONS_PER_BAND = 40
+OTM_TARGET_LISTINGS = 18
+OTM_MAX_PAGES = 4
+OTM_MIN_LISTINGS_FOR_DIRECT_RECORD = 3
 
 BANDS: list[tuple[str, float, float]] = [
     ('inner', 0.0, 300.0),
@@ -41,6 +59,24 @@ BAND_PRICE_WEIGHTS: dict[str, float] = {
     'middle': 1.0,
     'outer': 0.75,
 }
+
+
+def candidate_scope_station_codes() -> set[str]:
+    config = load_config(CONFIG_PATH)
+    raw_stations = FixtureStationTransportAdapter(STATIONS_PATH).fetch_stations()
+    all_stations, _excluded = sanitize_station_universe(raw_stations)
+    transport_records = json.loads(TRANSPORT_METRICS_PATH.read_text(encoding='utf-8'))
+
+    scoped_stations = candidate_filter(all_stations, config, transport_records)
+    deduped_default = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
+    london_wide_all = dedupe_micro_areas(all_stations, config.station_distance_threshold_m)
+    london_wide = [
+        station
+        for station in london_wide_all
+        if transport_metric_or_fallback(station, transport_records, 'typical_commute_min')
+        <= LONDON_WIDE_MAX_COMMUTE_MINUTES
+    ]
+    return {station.station_code for station in deduped_default + london_wide}
 
 
 def clamp(value: float, minimum: float, maximum: float) -> float:
@@ -86,6 +122,191 @@ def window_dates(reference_day: date) -> tuple[date, date, date, date]:
 def load_stations(path: Path) -> list[dict[str, Any]]:
     payload = json.loads(path.read_text(encoding='utf-8'))
     return payload if isinstance(payload, list) else []
+
+
+def slugify_location_name(raw_name: str) -> str:
+    normalized = raw_name.lower().replace('&', ' and ')
+    normalized = normalized.replace("'", '')
+    normalized = normalized.replace('.', '')
+    normalized = re.sub(r'\([^)]*\)', ' ', normalized)
+    normalized = re.sub(r'[^a-z0-9]+', '-', normalized)
+    return normalized.strip('-')
+
+
+def parse_price_to_number(raw_price: str | None) -> float | None:
+    if not raw_price:
+        return None
+    normalized = raw_price.strip().lower().replace(',', '').replace('£', '')
+    multiplier = 1.0
+    if normalized.endswith('m'):
+        multiplier = 1_000_000.0
+        normalized = normalized[:-1]
+    elif normalized.endswith('k'):
+        multiplier = 1_000.0
+        normalized = normalized[:-1]
+    try:
+        return float(normalized) * multiplier
+    except ValueError:
+        return None
+
+
+def fetch_otm_page_results(location_slug: str, page: int) -> tuple[list[dict[str, Any]], int | None]:
+    try:
+        response = requests.get(
+            f'{OTM_BASE_URL}/for-sale/property/{location_slug}/',
+            params={'page': page},
+            timeout=12,
+            headers={'User-Agent': 'Mozilla/5.0'},
+        )
+    except requests.RequestException:
+        return [], None
+
+    if response.status_code != 200:
+        return [], None
+
+    match = OTM_NEXT_DATA_PATTERN.search(response.text)
+    if not match:
+        return [], None
+
+    try:
+        payload = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return [], None
+
+    state = payload.get('props', {}).get('initialReduxState', {})
+    results = state.get('results', {})
+    listings = results.get('list')
+    total_results = results.get('totalResults')
+    if not isinstance(listings, list):
+        return [], None
+    return listings, int(total_results) if isinstance(total_results, int) else None
+
+
+def filter_otm_listings(
+    listings: list[dict[str, Any]],
+    *,
+    station_lat: float,
+    station_lon: float,
+) -> list[dict[str, Any]]:
+    selected: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+
+    for listing in listings:
+        if not isinstance(listing, dict):
+            continue
+        listing_id = listing.get('id')
+        if not isinstance(listing_id, str) or listing_id in seen_ids:
+            continue
+
+        property_type = str(listing.get('humanised-property-type') or '').lower()
+        bedrooms = listing.get('bedrooms')
+        bathrooms = listing.get('bathrooms')
+        location = listing.get('location') or {}
+        lat = location.get('lat')
+        lon = location.get('lon')
+        price = parse_price_to_number(str(listing.get('price') or listing.get('short-price') or ''))
+
+        if 'semi-detached' not in property_type and 'semi detached' not in property_type:
+            continue
+        if not isinstance(bedrooms, int) or bedrooms < 3:
+            continue
+        if not isinstance(bathrooms, int) or bathrooms < 2:
+            continue
+        if price is None or not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
+            continue
+
+        seen_ids.add(listing_id)
+        selected.append(
+            {
+                'id': listing_id,
+                'price': price,
+                'distance_m': haversine_distance_m(station_lat, station_lon, float(lat), float(lon)),
+            },
+        )
+
+    return selected
+
+
+def listing_distance_weight(distance_m: float) -> float:
+    return 1.0 / max(350.0, distance_m) ** 0.35
+
+
+def fetch_live_listing_sample(station: dict[str, Any]) -> tuple[list[dict[str, Any]], int]:
+    location_slug = slugify_location_name(str(station['station_name']))
+    station_lat = float(station['lat'])
+    station_lon = float(station['lon'])
+
+    listings: list[dict[str, Any]] = []
+    total_pages = OTM_MAX_PAGES
+    for page in range(1, OTM_MAX_PAGES + 1):
+        page_results, total_results = fetch_otm_page_results(location_slug, page)
+        if not page_results and total_results in (None, 0):
+            break
+        listings.extend(
+            filter_otm_listings(
+                page_results,
+                station_lat=station_lat,
+                station_lon=station_lon,
+            ),
+        )
+        if total_results is not None:
+            total_pages = min(OTM_MAX_PAGES, max(1, math.ceil(total_results / 30)))
+        if len(listings) >= OTM_TARGET_LISTINGS or page >= total_pages:
+            break
+
+    listings.sort(key=lambda item: (item['distance_m'], item['price']))
+    deduped: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for listing in listings:
+        if listing['id'] in seen_ids:
+            continue
+        seen_ids.add(listing['id'])
+        deduped.append(listing)
+
+    return deduped, min(OTM_MAX_PAGES, total_pages)
+
+
+def build_live_listing_property_record(
+    station: dict[str, Any],
+    *,
+    snapshot_date: date,
+) -> dict[str, Any] | None:
+    live_listings, pages_scanned = fetch_live_listing_sample(station)
+    if len(live_listings) < OTM_MIN_LISTINGS_FOR_DIRECT_RECORD:
+        return None
+
+    prices = [float(item['price']) for item in live_listings]
+    weights = [listing_distance_weight(float(item['distance_m'])) for item in live_listings]
+    median_price = weighted_median(prices, weights)
+    average_price = weighted_mean(prices, weights)
+
+    commute_score = commute_value_score(float(station.get('typical_commute_min', 55)))
+    afford_score = affordability_score(median_price)
+    value_for_money = round(afford_score * 0.68 + commute_score * 0.32, 2)
+
+    confidence = 0.52
+    confidence += min(0.26, len(live_listings) / 20 * 0.26)
+    confidence += 0.1 if len(live_listings) >= 8 else 0.0
+    confidence = round(clamp(confidence, 0.45, 0.9), 3)
+    status = 'available' if len(live_listings) >= 8 else 'estimated'
+
+    methodology_note = (
+        'Current OnTheMarket asking-price snapshot for the locality generated from public search results. '
+        'Listings are filtered client-side to semi-detached homes with at least 3 bedrooms and 2 bathrooms. '
+        'Median/average ask prices are lightly distance-weighted back to the station area using listing coordinates. '
+        f'Run date {snapshot_date.isoformat()}, pages scanned={pages_scanned}, qualifying listings={len(live_listings)}.'
+    )
+
+    return {
+        'average_semi_price': round(average_price, 2),
+        'median_semi_price': round(median_price, 2),
+        'price_trend_pct_5y': None,
+        'affordability_score': afford_score,
+        'value_for_money_score': value_for_money,
+        'status': status,
+        'confidence': confidence,
+        'methodology_note': methodology_note,
+    }
 
 
 def fetch_nearby_postcodes(lat: float, lon: float) -> list[dict[str, Any]]:
@@ -399,6 +620,7 @@ def build_property_record(
     current_start, current_end = current_window
     prior_start, prior_end = prior_window
     methodology_note = (
+        'Fallback property metric when current 3-bed / 2-bath asking-price coverage is too thin. '
         'HM Land Registry PPD semi-detached standard transactions. '
         f'Catchment postcode sample from postcodes.io within {CATCHMENT_RADIUS_M}m '
         'using distance strata (0-300m, 300-550m, 550-800m) and capped per-stratum sampling. '
@@ -430,7 +652,7 @@ def update_source_metadata(reference_period: str, release_date: str) -> None:
             payload = existing
 
     payload['property'] = {
-        'source': 'HM Land Registry PPD + postcodes.io catchment postcode sampling',
+        'source': 'OnTheMarket current asking-price snapshot + HM Land Registry PPD fallback',
         'referencePeriod': reference_period,
         'releaseDate': release_date,
     }
@@ -440,6 +662,8 @@ def update_source_metadata(reference_period: str, release_date: str) -> None:
 
 def run(max_workers: int = 8, max_stations: int | None = None) -> dict[str, Any]:
     stations = load_stations(STATIONS_PATH)
+    scope_station_codes = candidate_scope_station_codes()
+    stations = [station for station in stations if str(station.get('station_code')) in scope_station_codes]
     if max_stations is not None:
         stations = stations[:max_stations]
 
@@ -503,24 +727,35 @@ def run(max_workers: int = 8, max_stations: int | None = None) -> dict[str, Any]
                 print(f'  Prior-window outcodes fetched: {idx}/{len(prior_futures)}', flush=True)
 
     output: dict[str, Any] = {}
-    for station in stations:
+    def build_station_record(station: dict[str, Any]) -> tuple[str, dict[str, Any] | None]:
         station_code = str(station['station_code'])
         selected = station_postcodes.get(station_code, [])
-        record = build_property_record(
-            station,
-            current_by_outcode,
-            prior_by_outcode,
-            selected,
-            current_window=current_window,
-            prior_window=prior_window,
-        )
-        if record is not None:
-            output[station_code] = record
+        record = build_live_listing_property_record(station, snapshot_date=today)
+        if record is None:
+            record = build_property_record(
+                station,
+                current_by_outcode,
+                prior_by_outcode,
+                selected,
+                current_window=current_window,
+                prior_window=prior_window,
+            )
+        return station_code, record
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(build_station_record, station) for station in stations]
+        for idx, future in enumerate(as_completed(futures), start=1):
+            station_code, record = future.result()
+            if record is not None:
+                output[station_code] = record
+            if idx % 100 == 0 or idx == len(futures):
+                print(f'  Property records built: {idx}/{len(futures)}', flush=True)
 
     OUTPUT_PATH.write_text(json.dumps(output, indent=2, ensure_ascii=True), encoding='utf-8')
 
     reference_period = (
-        f'12-month stratified sample window {current_start.isoformat()} to {current_end.isoformat()} '
+        f'Current 2026 OnTheMarket asking-price snapshot on {today.isoformat()} for semi-detached homes with 3+ bedrooms and 2+ bathrooms; '
+        f'fallback uses HM Land Registry 12-month stratified transaction window {current_start.isoformat()} to {current_end.isoformat()} '
         '(with prior-year comparison window for trend proxy)'
     )
     update_source_metadata(reference_period=reference_period, release_date=today.isoformat())

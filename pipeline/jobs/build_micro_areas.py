@@ -711,7 +711,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'affordability_score',
                     'value_for_money_score',
                 ],
-                'Estimated by inverse-distance interpolation from nearby station property metrics where direct 12-month stratified samples are unavailable.',
+                'Estimated by inverse-distance interpolation from nearby station asking-price metrics where direct current listing samples are unavailable.',
             )
             school_record = school_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
                 station,
@@ -723,7 +723,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'primary_quality_score',
                     'secondary_quality_score',
                 ],
-                'Estimated by inverse-distance interpolation from nearby station school composites. Both count and quality inputs inherit state-funded-only DfE school data, so private schools are excluded. No single inspection label is used.',
+                'Estimated by inverse-distance interpolation from nearby station school composites built from state-funded-only schools within an approximately 20-minute drive catchment. Private schools are excluded from both count and quality inputs. No single inspection label is used.',
             )
             pollution_record = pollution_adapter.get_by_station(
                 station.station_code,
@@ -837,14 +837,14 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     property_record,
                     'average_semi_price',
                     unit='GBP',
-                    note='Average semi-detached sold price from 12-month stratified catchment sample where available.',
+                    note='Average asking price for semi-detached homes with 3+ bedrooms and 2+ bathrooms where current listing coverage is available; otherwise sold-price fallback.',
                     last_updated=property_last_updated,
                 ),
                 'medianSemiDetachedPrice': metric_from_record(
                     property_record,
                     'median_semi_price',
                     unit='GBP',
-                    note='Median semi-detached sold price from 12-month stratified catchment sample.',
+                    note='Median asking price for semi-detached homes with 3+ bedrooms and 2+ bathrooms where current listing coverage is available; otherwise latest sold-price fallback.',
                     last_updated=property_last_updated,
                 ),
                 'semiPriceTrendPct5y': metric_from_record(
@@ -932,28 +932,28 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     school_record,
                     'nearby_primary_count',
                     unit='count',
-                    note='Nearby open state-funded primary schools using calibrated catchment + fringe footprint; private schools excluded from count input.',
+                    note='Open state-funded primary schools reachable within roughly 20 minutes drive from the area anchor; private schools excluded.',
                     last_updated=schools_last_updated,
                 ),
                 'nearbySecondaryCount': metric_from_record(
                     school_record,
                     'nearby_secondary_count',
                     unit='count',
-                    note='Nearby open state-funded secondary schools using calibrated catchment + fringe footprint; private schools excluded from count input.',
+                    note='Open state-funded secondary schools reachable within roughly 20 minutes drive from the area anchor; private schools excluded.',
                     last_updated=schools_last_updated,
                 ),
                 'primaryQualityScore': metric_from_record(
                     school_record,
                     'primary_quality_score',
                     unit='score',
-                    note='Primary school quality composite from official state-funded KS2 school performance results.',
+                    note='Primary school quality composite from official state-funded KS2 results across schools reachable within roughly 20 minutes drive.',
                     last_updated=schools_last_updated,
                 ),
                 'secondaryQualityScore': metric_from_record(
                     school_record,
                     'secondary_quality_score',
                     unit='score',
-                    note='Secondary school quality composite from official state-funded KS4 school performance results.',
+                    note='Secondary school quality composite from official state-funded KS4 results across schools reachable within roughly 20 minutes drive.',
                     last_updated=schools_last_updated,
                 ),
                 'annualNo2': metric_from_record(

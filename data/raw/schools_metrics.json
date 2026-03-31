@@ -1,245 +1,245 @@
 {
   "PIN": {
-    "nearby_primary_count": 12,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 76.1,
-    "secondary_quality_score": 69.4,
+    "nearby_primary_count": 195,
+    "nearby_secondary_count": 58,
+    "primary_quality_score": 66.6,
+    "secondary_quality_score": 71.6,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "ECT": {
-    "nearby_primary_count": 16,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 79.1,
-    "secondary_quality_score": 80.6,
+    "nearby_primary_count": 191,
+    "nearby_secondary_count": 62,
+    "primary_quality_score": 65.7,
+    "secondary_quality_score": 71.1,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "RYN": {
-    "nearby_primary_count": 19,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 73.8,
-    "secondary_quality_score": 79.0,
+    "nearby_primary_count": 213,
+    "nearby_secondary_count": 63,
+    "primary_quality_score": 66.0,
+    "secondary_quality_score": 72.5,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "RUI": {
-    "nearby_primary_count": 14,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 68.6,
-    "secondary_quality_score": 79.3,
+    "nearby_primary_count": 178,
+    "nearby_secondary_count": 50,
+    "primary_quality_score": 63.9,
+    "secondary_quality_score": 69.5,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "RUM": {
-    "nearby_primary_count": 17,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 69.9,
-    "secondary_quality_score": 78.2,
+    "nearby_primary_count": 183,
+    "nearby_secondary_count": 56,
+    "primary_quality_score": 65.1,
+    "secondary_quality_score": 70.2,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "WRU": {
-    "nearby_primary_count": 9,
-    "nearby_secondary_count": 4,
-    "primary_quality_score": 68.3,
-    "secondary_quality_score": 81.4,
+    "nearby_primary_count": 155,
+    "nearby_secondary_count": 46,
+    "primary_quality_score": 63.9,
+    "secondary_quality_score": 68.3,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "ICK": {
-    "nearby_primary_count": 8,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 68.5,
-    "secondary_quality_score": 80.2,
+    "nearby_primary_count": 145,
+    "nearby_secondary_count": 43,
+    "primary_quality_score": 62.8,
+    "secondary_quality_score": 68.3,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "UXB": {
-    "nearby_primary_count": 7,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 68.8,
-    "secondary_quality_score": 70.8,
+    "nearby_primary_count": 132,
+    "nearby_secondary_count": 41,
+    "primary_quality_score": 62.8,
+    "secondary_quality_score": 65.7,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "NWH": {
-    "nearby_primary_count": 9,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 59.5,
-    "secondary_quality_score": 56.6,
+    "nearby_primary_count": 161,
+    "nearby_secondary_count": 47,
+    "primary_quality_score": 66.0,
+    "secondary_quality_score": 68.3,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "NWD": {
-    "nearby_primary_count": 8,
-    "nearby_secondary_count": 3,
-    "primary_quality_score": 69.1,
-    "secondary_quality_score": 50.4,
+    "nearby_primary_count": 140,
+    "nearby_secondary_count": 38,
+    "primary_quality_score": 66.1,
+    "secondary_quality_score": 66.4,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "MOP": {
-    "nearby_primary_count": 6,
-    "nearby_secondary_count": 4,
-    "primary_quality_score": 75.5,
-    "secondary_quality_score": 67.6,
+    "nearby_primary_count": 125,
+    "nearby_secondary_count": 32,
+    "primary_quality_score": 66.8,
+    "secondary_quality_score": 67.8,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "RKM": {
-    "nearby_primary_count": 8,
-    "nearby_secondary_count": 3,
-    "primary_quality_score": 69.1,
-    "secondary_quality_score": 76.7,
+    "nearby_primary_count": 99,
+    "nearby_secondary_count": 23,
+    "primary_quality_score": 66.9,
+    "secondary_quality_score": 65.0,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "CRX": {
-    "nearby_primary_count": 8,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 79.0,
-    "secondary_quality_score": 72.8,
+    "nearby_primary_count": 108,
+    "nearby_secondary_count": 26,
+    "primary_quality_score": 66.6,
+    "secondary_quality_score": 67.3,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "WAM": {
-    "nearby_primary_count": 18,
-    "nearby_secondary_count": 4,
-    "primary_quality_score": 69.6,
-    "secondary_quality_score": 80.3,
+    "nearby_primary_count": 106,
+    "nearby_secondary_count": 27,
+    "primary_quality_score": 64.7,
+    "secondary_quality_score": 67.7,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "HAH": {
-    "nearby_primary_count": 11,
-    "nearby_secondary_count": 8,
-    "primary_quality_score": 63.1,
-    "secondary_quality_score": 80.4,
+    "nearby_primary_count": 231,
+    "nearby_secondary_count": 67,
+    "primary_quality_score": 65.4,
+    "secondary_quality_score": 75.7,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "NHR": {
-    "nearby_primary_count": 14,
-    "nearby_secondary_count": 9,
-    "primary_quality_score": 74.0,
-    "secondary_quality_score": 78.7,
+    "nearby_primary_count": 212,
+    "nearby_secondary_count": 64,
+    "primary_quality_score": 66.2,
+    "secondary_quality_score": 73.4,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "SRI": {
-    "nearby_primary_count": 16,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 71.0,
-    "secondary_quality_score": 74.2,
+    "nearby_primary_count": 191,
+    "nearby_secondary_count": 60,
+    "primary_quality_score": 64.4,
+    "secondary_quality_score": 72.3,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "NOR": {
-    "nearby_primary_count": 15,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 57.5,
-    "secondary_quality_score": 60.8,
+    "nearby_primary_count": 221,
+    "nearby_secondary_count": 75,
+    "primary_quality_score": 63.5,
+    "secondary_quality_score": 73.5,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "WBP": {
-    "nearby_primary_count": 19,
-    "nearby_secondary_count": 10,
-    "primary_quality_score": 69.9,
-    "secondary_quality_score": 84.8,
+    "nearby_primary_count": 296,
+    "nearby_secondary_count": 83,
+    "primary_quality_score": 67.4,
+    "secondary_quality_score": 77.8,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "STM": {
-    "nearby_primary_count": 9,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 74.1,
-    "secondary_quality_score": 82.5,
+    "nearby_primary_count": 208,
+    "nearby_secondary_count": 58,
+    "primary_quality_score": 67.0,
+    "secondary_quality_score": 75.7,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "BSH": {
-    "nearby_primary_count": 18,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 72.0,
-    "secondary_quality_score": 62.0,
+    "nearby_primary_count": 141,
+    "nearby_secondary_count": 35,
+    "primary_quality_score": 64.3,
+    "secondary_quality_score": 65.9,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "HWD": {
-    "nearby_primary_count": 14,
-    "nearby_secondary_count": 9,
-    "primary_quality_score": 57.9,
-    "secondary_quality_score": 72.2,
+    "nearby_primary_count": 225,
+    "nearby_secondary_count": 63,
+    "primary_quality_score": 64.6,
+    "secondary_quality_score": 75.2,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "HSL": {
-    "nearby_primary_count": 10,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 53.2,
-    "secondary_quality_score": 65.6,
+    "nearby_primary_count": 199,
+    "nearby_secondary_count": 55,
+    "primary_quality_score": 66.1,
+    "secondary_quality_score": 73.2,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "HEN": {
-    "nearby_primary_count": 9,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 60.2,
-    "secondary_quality_score": 62.9,
+    "nearby_primary_count": 187,
+    "nearby_secondary_count": 49,
+    "primary_quality_score": 66.3,
+    "secondary_quality_score": 71.7,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "WFJ": {
-    "nearby_primary_count": 20,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 63.6,
-    "secondary_quality_score": 74.1,
+    "nearby_primary_count": 111,
+    "nearby_secondary_count": 30,
+    "primary_quality_score": 62.9,
+    "secondary_quality_score": 67.4,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "KNG": {
-    "nearby_primary_count": 6,
-    "nearby_secondary_count": 1,
-    "primary_quality_score": 44.5,
-    "secondary_quality_score": 64.4,
+    "nearby_primary_count": 104,
+    "nearby_secondary_count": 21,
+    "primary_quality_score": 56.9,
+    "secondary_quality_score": 59.8,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   },
   "AMH": {
-    "nearby_primary_count": 7,
-    "nearby_secondary_count": 3,
-    "primary_quality_score": 86.4,
-    "secondary_quality_score": 94.7,
+    "nearby_primary_count": 57,
+    "nearby_secondary_count": 13,
+    "primary_quality_score": 74.7,
+    "secondary_quality_score": 78.3,
     "status": "available",
     "confidence": 0.88,
-    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Catchment is based on schools reachable within roughly 20 minutes drive from the area anchor, using OSRM drive-time routing with straight-line fallback only if route lookup fails. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse drive-time weighting across the reachable state-funded schools."
   }
 }

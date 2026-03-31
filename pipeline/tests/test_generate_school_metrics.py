@@ -1,7 +1,9 @@
 from pipeline.jobs.generate_school_metrics import (
+    count_drive_catchment_schools,
+    drive_time_weighted_quality,
+    estimate_drive_minutes_from_distance,
     percentile_quality_scores,
     percentile_rank_map,
-    proximity_weighted_quality,
     safe_float,
     weighted_average,
 )
@@ -37,23 +39,44 @@ def test_percentile_quality_scores_combines_available_metrics() -> None:
     assert scores['s1'] < scores['s2'] < scores['s3']
 
 
-def test_proximity_weighted_quality_uses_nearest_supplement_when_radius_too_small() -> None:
+def test_estimate_drive_minutes_from_distance_grows_with_distance() -> None:
+    assert estimate_drive_minutes_from_distance(0.0) == 2.0
+    assert estimate_drive_minutes_from_distance(5_000.0) > estimate_drive_minutes_from_distance(1_000.0)
+
+
+def test_drive_time_weighted_quality_only_uses_reachable_schools() -> None:
     school_records = {
-        'near': {'phase': 'Secondary', 'easting': 100.0, 'northing': 0.0},
-        'mid': {'phase': 'Secondary', 'easting': 600.0, 'northing': 0.0},
-        'far': {'phase': 'Secondary', 'easting': 1200.0, 'northing': 0.0},
+        'near': {'phase': 'Secondary'},
+        'mid': {'phase': 'Secondary'},
+        'far': {'phase': 'Secondary'},
     }
     quality_scores = {'near': 80.0, 'mid': 60.0, 'far': 40.0}
+    drive_minutes = {'near': 8.0, 'mid': 18.0, 'far': 26.0}
 
-    quality = proximity_weighted_quality(
-        0.0,
-        0.0,
+    quality = drive_time_weighted_quality(
+        drive_minutes,
         school_records,
         quality_scores,
         allowed_phases={'Secondary'},
-        radius_meters=150.0,
-        minimum_inputs=3,
     )
 
     assert quality is not None
     assert 60.0 < quality < 80.0
+
+
+def test_count_drive_catchment_schools_only_counts_schools_inside_drive_window() -> None:
+    school_records = {
+        'p1': {'phase': 'Primary'},
+        'p2': {'phase': 'Primary'},
+        's1': {'phase': 'Secondary'},
+    }
+    drive_minutes = {'p1': 9.0, 'p2': 24.0, 's1': 14.0}
+
+    assert (
+        count_drive_catchment_schools(
+            drive_minutes,
+            school_records,
+            allowed_phases={'Primary'},
+        )
+        == 1
+    )
