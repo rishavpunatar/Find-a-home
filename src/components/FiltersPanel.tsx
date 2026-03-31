@@ -1,11 +1,19 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import type { Filters } from '@/types/domain'
+import type { Filters, QualityMode } from '@/types/domain'
 
 import { useSettings } from '@/context/SettingsContext'
 import { useRankedData } from '@/hooks/useRankedData'
-import { DEFAULT_FILTERS } from '@/lib/constants'
+import {
+  DEFAULT_FILTERS,
+  DEFAULT_QUALITY_MODE,
+  FILTER_PRESETS,
+  FILTER_PRESET_ORDER,
+  HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT,
+} from '@/lib/constants'
+import { isHighConfidenceArea } from '@/lib/dataQuality'
+import { matchesFilters } from '@/lib/filters'
 
 interface RangeControlProps {
   label: string
@@ -83,12 +91,27 @@ const formatFilterValue = (key: keyof Filters, value: number): string => {
 const excludedLabel = (count: number, total: number): string =>
   `${count.toLocaleString('en-GB')} excluded (${total.toLocaleString('en-GB')} total)`
 
+const qualityModeLabel: Record<QualityMode, string> = {
+  all: 'All ranked areas',
+  highConfidence: 'High-confidence only',
+}
+
 export const FiltersPanel = () => {
   const location = useLocation()
-  const { filters, londonFilters, updateFilter, resetFilters } = useSettings()
+  const {
+    filters,
+    londonFilters,
+    qualityMode,
+    londonQualityMode,
+    updateFilter,
+    applyFilterPreset,
+    resetRankingView,
+    setQualityMode,
+  } = useSettings()
   const isLondonWideTab = location.pathname === '/ranked-london'
   const scope: 'default' | 'londonWide' = isLondonWideTab ? 'londonWide' : 'default'
   const activeFilters = isLondonWideTab ? londonFilters : filters
+  const activeQualityMode = isLondonWideTab ? londonQualityMode : qualityMode
   const commuteCap = isLondonWideTab ? 60 : 70
   const displayedCommuteLimit = isLondonWideTab
     ? Math.min(activeFilters.maxCommuteMinutes, commuteCap)
@@ -98,9 +121,11 @@ export const FiltersPanel = () => {
     ? ({ scope: 'londonWide', maxCommuteMinutesCap: 60 } as const)
     : ({ scope: 'default' } as const)
 
-  const { ranked } = useRankedData(rankedOptions)
+  const { ranked, filtered } = useRankedData(rankedOptions)
 
-  const hasCustomFilters = JSON.stringify(activeFilters) !== JSON.stringify(DEFAULT_FILTERS)
+  const hasCustomFilters =
+    JSON.stringify(activeFilters) !== JSON.stringify(DEFAULT_FILTERS) ||
+    activeQualityMode !== DEFAULT_QUALITY_MODE
   const totalAreaCount = ranked.length
 
   const exclusionCounts = useMemo(() => {
@@ -166,6 +191,19 @@ export const FiltersPanel = () => {
     [activeFilters],
   )
 
+  const presetCounts = useMemo(
+    () =>
+      FILTER_PRESET_ORDER.reduce<Record<string, number>>((counts, presetKey) => {
+        const baseCount = ranked.filter((area) => matchesFilters(area, FILTER_PRESETS[presetKey].filters))
+        counts[presetKey] =
+          activeQualityMode === 'highConfidence'
+            ? baseCount.filter((area) => isHighConfidenceArea(area)).length
+            : baseCount.length
+        return counts
+      }, {}),
+    [activeQualityMode, ranked],
+  )
+
   return (
     <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
       <div className="mb-3 flex items-center justify-between">
@@ -174,12 +212,17 @@ export const FiltersPanel = () => {
         </h2>
         <button
           type="button"
-          onClick={() => resetFilters(scope)}
+          onClick={() => resetRankingView(scope)}
           disabled={!hasCustomFilters}
           className="rounded-md border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Reset
+          Reset view
         </button>
+      </div>
+      <div className="mb-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+        Showing <span className="font-semibold">{filtered.length}</span> of{' '}
+        <span className="font-semibold">{totalAreaCount}</span> ranked micro-areas in{' '}
+        <span className="font-semibold">{qualityModeLabel[activeQualityMode]}</span> mode.
       </div>
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
@@ -188,6 +231,56 @@ export const FiltersPanel = () => {
           not prefiltered by the Pinner search radius. Confidence filter still applies.
         </p>
       ) : null}
+
+      {!isLondonWideTab ? (
+        <div className="mb-3">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Presets
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {FILTER_PRESET_ORDER.map((presetKey) => (
+              <button
+                key={presetKey}
+                type="button"
+                onClick={() => applyFilterPreset(presetKey, scope)}
+                className="rounded-lg border border-slate-300 px-3 py-2 text-left text-xs text-slate-700 hover:border-teal-300 hover:bg-teal-50"
+                title={FILTER_PRESETS[presetKey].description}
+              >
+                <span className="block font-semibold">{FILTER_PRESETS[presetKey].label}</span>
+                <span className="block text-slate-500">
+                  {presetCounts[presetKey]?.toLocaleString('en-GB') ?? 0} matches
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mb-3">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          Trust mode
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {(['all', 'highConfidence'] as QualityMode[]).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setQualityMode(mode, scope)}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium ${
+                activeQualityMode === mode
+                  ? 'bg-teal-600 text-white'
+                  : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              {qualityModeLabel[mode]}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-slate-600">
+          High-confidence mode keeps only areas at or above {HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT}%
+          confidence. Use it when you want a cleaner shortlist rather than maximum coverage.
+        </p>
+      </div>
 
       <div className="mb-3 flex flex-wrap gap-2">
         {activeFilterChips.length > 0 ? (
@@ -205,6 +298,15 @@ export const FiltersPanel = () => {
         ) : (
           <p className="text-xs text-slate-500">No active filter overrides.</p>
         )}
+        {activeQualityMode !== DEFAULT_QUALITY_MODE ? (
+          <button
+            type="button"
+            onClick={() => setQualityMode(DEFAULT_QUALITY_MODE, scope)}
+            className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs text-amber-900 hover:bg-amber-100"
+          >
+            Trust mode: {qualityModeLabel[activeQualityMode]} ✕
+          </button>
+        ) : null}
       </div>
 
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
@@ -222,7 +324,7 @@ export const FiltersPanel = () => {
           label="Max drive to Pinner"
           value={activeFilters.maxDriveMinutes}
           min={10}
-          max={35}
+          max={80}
           step={1}
           unit=" min"
           onChange={(next) => updateFilter('maxDriveMinutes', next, scope)}
@@ -252,7 +354,7 @@ export const FiltersPanel = () => {
           label="Max crime / 1,000"
           value={activeFilters.maxCrimeRatePerThousand}
           min={20}
-          max={140}
+          max={160}
           step={1}
           unit=""
           onChange={(next) => updateFilter('maxCrimeRatePerThousand', next, scope)}
@@ -267,7 +369,7 @@ export const FiltersPanel = () => {
           label="Max PM2.5"
           value={activeFilters.maxPm25}
           min={5}
-          max={25}
+          max={20}
           step={0.1}
           unit=" ug/m3"
           onChange={(next) => updateFilter('maxPm25', next, scope)}
@@ -281,7 +383,7 @@ export const FiltersPanel = () => {
         <RangeControl
           label="Min green cover"
           value={activeFilters.minGreenCoverPct}
-          min={5}
+          min={0}
           max={80}
           step={1}
           unit="%"
@@ -297,7 +399,7 @@ export const FiltersPanel = () => {
           label="Max median semi price"
           value={activeFilters.maxMedianPrice}
           min={300000}
-          max={1500000}
+          max={2000000}
           step={10000}
           unit=" GBP"
           onChange={(next) => updateFilter('maxMedianPrice', next, scope)}

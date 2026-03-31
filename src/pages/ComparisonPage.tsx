@@ -9,6 +9,7 @@ import {
   YAxis,
 } from 'recharts'
 
+import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
 import { ErrorState } from '@/components/ErrorState'
@@ -76,6 +77,9 @@ export const ComparisonPage = () => {
             <p className="text-sm text-slate-600">
               Overall score: {area.dynamicOverallScore.toFixed(1)}
             </p>
+            <div className="mt-2">
+              <AreaTrustSummary area={area} />
+            </div>
             <SubscoreRadarChart area={area} />
           </article>
         ))}

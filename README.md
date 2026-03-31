@@ -2,6 +2,40 @@
 
 Static-first web app and pipeline that precomputes and ranks UK station-centred micro-areas around Pinner for buying a semi-detached house.
 
+## Start here if you just want to use the tool
+
+You do not need to install anything if you only want to use the app.
+
+Use this project for:
+
+- narrowing down areas around Pinner for a semi-detached house search
+- comparing tradeoffs between commute, price, schools, greenery, crime, and confidence in the data
+- building a shortlist before you spend time on Rightmove, Zoopla, or in-person visits
+
+Use the website like this:
+
+1. Open the live site linked from this repo.
+2. Leave the filter preset on `Balanced` to start, or switch to `High-confidence only` if you want a stricter shortlist.
+3. Go to `Ranked Table` to see the strongest candidates.
+4. Use `Map` to understand where they sit geographically.
+5. Pin the areas you like and compare them side by side.
+
+This project is most useful as a shortlist tool. It is not a guarantee that an area is right for you.
+
+## What this is and is not
+
+This project is:
+
+- a decision-support tool for house hunting
+- a way to compare micro-areas around stations, not just whole towns or boroughs
+- transparent about where the data is strong and where it is estimated
+
+This project is not:
+
+- mortgage, legal, school-admissions, or investment advice
+- a replacement for viewing homes, checking listings, or speaking to agents
+- a promise that every metric is sourced from a live verified feed
+
 ## What this app does
 
 - Analyses all candidate station-centred micro-areas in a configurable search belt around Pinner.
@@ -10,10 +44,13 @@ Static-first web app and pipeline that precomputes and ranks UK station-centred 
 - Computes value, transport, schools, environment, crime, proximity, and planning-risk component scores.
 - Links each micro-area to borough-level QoL from ONS APS personal well-being data.
 - Produces an overall weighted ranking with confidence and data-status metadata.
-- Lets you adjust weights and filters in the UI and inspect results in table, map, and chart views.
+- Lets you adjust weights and filters in the UI, switch between broader and high-confidence views, and inspect results in table, map, and chart views.
+- Ships with `Focus`, `Balanced`, and `Explore` filter presets so the first-run experience is useful instead of nearly empty.
 - Includes a London-wide tab that prioritizes breadth (commute-only filter, capped at 60 minutes).
 
 ## Stack
+
+If you are a developer or want to run the project locally, the rest of this README covers the technical setup.
 
 - Frontend: React + TypeScript + Vite
 - Styling: Tailwind CSS
@@ -32,6 +69,7 @@ Static-first web app and pipeline that precomputes and ranks UK station-centred 
 - Comparison view (up to 5 micro-areas)
 - Micro-area detail page (raw metrics, statuses, confidence, explanations)
 - Weight settings panel (local persistence + normalization)
+- Trust mode toggle and per-area trust/domain-availability badges
 
 ## Quick start
 
@@ -80,7 +118,13 @@ npm run pipeline:wellbeing
 npm run pipeline:transport
 ```
 
-### 2f) Refresh property metrics from public 12-month transaction samples
+### 2f) Refresh school metrics from official state-funded DfE school data
+
+```bash
+npm run pipeline:schools
+```
+
+### 2g) Refresh property metrics from public 12-month transaction samples
 
 ```bash
 npm run pipeline:property
@@ -120,6 +164,12 @@ Current verification coverage:
 
 This is intentional transparency so the app does not claim precision where full cross-source automation is not yet complete.
 
+The UI now exposes this more directly via:
+
+- `All ranked areas` mode for broader exploration
+- `High-confidence only` mode for a cleaner shortlist
+- per-area trust badges and domain availability summaries
+
 ## Data pipeline
 
 Pipeline entrypoint:
@@ -144,6 +194,12 @@ Refresh transport metrics (TfL Journey Planner + OSRM with fallback):
 
 ```bash
 npm run pipeline:transport
+```
+
+Refresh school metrics (DfE GIAS state-funded establishments + DfE EES KS2/KS4 performance):
+
+```bash
+npm run pipeline:schools
 ```
 
 Refresh property metrics (HM Land Registry PPD + stratified catchment sampling):
@@ -184,6 +240,8 @@ UI note:
 
 - `/ranked` keeps the standard Pinner-focused filtering model.
 - `/ranked-london` uses a separate London-wide candidate scope (no Pinner-radius prefilter, no drive-to-Pinner candidate prefilter), then applies commute-only filtering in the UI (slider capped at 60 minutes).
+- The filter panel includes `Focus`, `Balanced`, and `Explore` presets. `Balanced` is the default first-run mode.
+- Static GitHub Pages deployments keep clean URLs and copy `index.html` to `404.html` during build so deep links like `/micro-area/<id>` still boot the SPA correctly on refresh.
 
 ## Adapter architecture
 
@@ -201,6 +259,8 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - borough QoL (ONS APS personal well-being)
 
 Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics use HM Land Registry PPD + stratified catchment postcode sampling with distance/recency weighting for the displayed median and average indicators. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Some other domains remain fixture/interpolated in this MVP.
+
+School counts and school quality now both exclude private schools. Nearby primary and secondary totals come from DfE GIAS open state-funded establishment exports, and the quality composites come from DfE Explore Education Statistics school-level KS2 and KS4 results for state-funded schools only.
 
 ## Data quality model (no fake precision)
 
@@ -222,6 +282,18 @@ In addition to per-metric metadata, a dataset-level audit runs on every build:
 - London pollution cross-source delta checks (LAEI vs DEFRA background)
 
 Critical failures stop the pipeline; warnings are surfaced in `data_quality_report.json` and the Overview page.
+
+## CI / deploy gates
+
+GitHub Actions now runs quality checks in the build/test/deploy path:
+
+- `npm run lint`
+- `npm run test`
+- `python3 -m pytest`
+- `npm run pipeline:quality`
+- `npm run build`
+
+Pages deploys only after those checks pass in the deploy workflow.
 
 ## Default scoring weights
 

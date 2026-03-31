@@ -1,14 +1,27 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
+import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { StatusPill } from '@/components/StatusPill'
 import { SubscoreRadarChart } from '@/components/charts/SubscoreRadarChart'
 import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
+import { getAreaDomainStatuses } from '@/lib/dataQuality'
 import { buildRankingExplanation } from '@/lib/scoring'
 import { formatCurrency, formatDate, formatNumber, formatPercent } from '@/lib/format'
+
+const domainLabelMap = {
+  property: 'Property',
+  transport: 'Transport',
+  schools: 'Schools',
+  pollution: 'Pollution',
+  greenSpace: 'Green',
+  crime: 'Crime',
+  planning: 'Planning',
+  wellbeing: 'Wellbeing',
+} as const
 
 const MetricRow = ({
   label,
@@ -75,6 +88,7 @@ export const MicroAreaDetailPage = () => {
   const explanation = area.rankingExplanationRules.length
     ? area.rankingExplanationRules
     : buildRankingExplanation(area)
+  const domainStatuses = getAreaDomainStatuses(area)
 
   return (
     <div className="space-y-4">
@@ -91,6 +105,9 @@ export const MicroAreaDetailPage = () => {
           <span className="font-semibold text-surge">{area.dynamicOverallScore.toFixed(1)}</span>
           {' · '}Data confidence: {(area.dataConfidenceScore * 100).toFixed(0)}%
         </p>
+        <div className="mt-3">
+          <AreaTrustSummary area={area} />
+        </div>
         <button
           type="button"
           onClick={() => {
@@ -119,6 +136,20 @@ export const MicroAreaDetailPage = () => {
                 <li key={note}>{note}</li>
               ))}
             </ul>
+          </div>
+          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+            <p className="font-semibold">Domain availability snapshot</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {Object.entries(domainStatuses).map(([key, status]) => (
+                <span
+                  key={key}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1"
+                >
+                  <span className="text-slate-700">{domainLabelMap[key as keyof typeof domainLabelMap]}</span>
+                  <StatusPill status={status} />
+                </span>
+              ))}
+            </div>
           </div>
         </article>
 
@@ -236,6 +267,10 @@ export const MicroAreaDetailPage = () => {
               <dd className="font-medium">{formatNumber(area.secondaryQualityScore.value, 1)}</dd>
             </div>
           </dl>
+          <p className="mt-3 text-xs text-slate-600">
+            Count and quality inputs use state-funded-only DfE school data, so private schools
+            are excluded from both the nearby totals and the quality component.
+          </p>
           <p className="mt-3 text-xs text-slate-600">{area.schoolMethodologyNotes}</p>
         </article>
 

@@ -1,0 +1,137 @@
+{
+  "PIN": {
+    "station_name": "Pinner",
+    "easting": 512273.048,
+    "northing": 189443.036
+  },
+  "ECT": {
+    "station_name": "Eastcote",
+    "easting": 511212.508,
+    "northing": 187639.69
+  },
+  "RYN": {
+    "station_name": "Rayners Lane",
+    "easting": 512951.379,
+    "northing": 187516.786
+  },
+  "RUI": {
+    "station_name": "Ruislip",
+    "easting": 509504.744,
+    "northing": 187017.525
+  },
+  "RUM": {
+    "station_name": "Ruislip Manor",
+    "easting": 510160.845,
+    "northing": 187253.584
+  },
+  "WRU": {
+    "station_name": "West Ruislip",
+    "easting": 508420.685,
+    "northing": 186783.07
+  },
+  "ICK": {
+    "station_name": "Ickenham",
+    "easting": 508071.754,
+    "northing": 185892.785
+  },
+  "UXB": {
+    "station_name": "Uxbridge",
+    "easting": 505669.141,
+    "northing": 184182.792
+  },
+  "NWH": {
+    "station_name": "Northwood Hills",
+    "easting": 510327.738,
+    "northing": 190234.115
+  },
+  "NWD": {
+    "station_name": "Northwood",
+    "easting": 509246.053,
+    "northing": 191394.829
+  },
+  "MOP": {
+    "station_name": "Moor Park",
+    "easting": 508615.614,
+    "northing": 193493.332
+  },
+  "RKM": {
+    "station_name": "Rickmansworth",
+    "easting": 505720.924,
+    "northing": 194594.596
+  },
+  "CRX": {
+    "station_name": "Croxley",
+    "easting": 507956.004,
+    "northing": 195459.992
+  },
+  "WAM": {
+    "station_name": "Watford (Met)",
+    "easting": 509494.894,
+    "northing": 196563.181
+  },
+  "HAH": {
+    "station_name": "Harrow-on-the-Hill",
+    "easting": 515353.235,
+    "northing": 188022.469
+  },
+  "NHR": {
+    "station_name": "North Harrow",
+    "easting": 513501.055,
+    "northing": 188636.241
+  },
+  "SRI": {
+    "station_name": "South Ruislip",
+    "easting": 511083.349,
+    "northing": 185448.349
+  },
+  "NOR": {
+    "station_name": "Northolt",
+    "easting": 513152.201,
+    "northing": 184544.647
+  },
+  "WBP": {
+    "station_name": "Wembley Park",
+    "easting": 519316.019,
+    "northing": 186373.929
+  },
+  "STM": {
+    "station_name": "Stanmore",
+    "easting": 517608.81,
+    "northing": 192478.574
+  },
+  "BSH": {
+    "station_name": "Bushey",
+    "easting": 511846.485,
+    "northing": 195310.965
+  },
+  "HWD": {
+    "station_name": "Harrow & Wealdstone",
+    "easting": 515443.844,
+    "northing": 189465.193
+  },
+  "HSL": {
+    "station_name": "Headstone Lane",
+    "easting": 513888.782,
+    "northing": 190579.93
+  },
+  "HEN": {
+    "station_name": "Hatch End",
+    "easting": 513051.953,
+    "northing": 191342.818
+  },
+  "WFJ": {
+    "station_name": "Watford Junction",
+    "easting": 511027.06,
+    "northing": 197347.057
+  },
+  "KNG": {
+    "station_name": "Kings Langley",
+    "easting": 508041.311,
+    "northing": 202007.427
+  },
+  "AMH": {
+    "station_name": "Amersham",
+    "easting": 496395.296,
+    "northing": 198175.282
+  }
+}

@@ -42,6 +42,9 @@ export const AppLayout = () => {
               <h1 className="text-xl font-semibold sm:text-2xl">
                 Station-Centred Micro-Area Ranking Around Pinner
               </h1>
+              <p className="text-sm text-slate-700">
+                Use this to shortlist areas around Pinner for a semi-detached house search.
+              </p>
               <p className="text-sm text-slate-600">{generatedLabel}</p>
             </div>
 

@@ -122,11 +122,12 @@ def source_matrix() -> dict[str, dict[str, str]]:
         },
         'schools': {
             'status': 'not_live_verified',
-            'primarySource': 'DfE GIAS data exports',
-            'secondarySource': 'Ofsted reports and CSCP performance feeds',
+            'primarySource': 'DfE GIAS open state-funded establishment exports',
+            'secondarySource': 'DfE Explore Education Statistics school performance data',
             'note': (
-                'Current school metrics are fixture-backed composites. '
-                'Ofsted grading/report-card transition requires careful mapping.'
+                'Nearby school counts and quality now use official state-funded DfE sources. '
+                'Private schools are excluded from both the count and quality side. '
+                'A secondary cross-check source has not yet been wired for live verification.'
             ),
         },
         'pollution': {

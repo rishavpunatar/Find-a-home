@@ -1,12 +1,29 @@
+import { Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { AppLayout } from '@/components/AppLayout'
-import { ComparisonPage } from '@/pages/ComparisonPage'
-import { LondonWideRankedPage } from '@/pages/LondonWideRankedPage'
-import { MapPage } from '@/pages/MapPage'
-import { MicroAreaDetailPage } from '@/pages/MicroAreaDetailPage'
-import { OverviewPage } from '@/pages/OverviewPage'
-import { RankedTablePage } from '@/pages/RankedTablePage'
+import { LoadingState } from '@/components/LoadingState'
+
+const OverviewPage = lazy(() =>
+  import('@/pages/OverviewPage').then((module) => ({ default: module.OverviewPage })),
+)
+const RankedTablePage = lazy(() =>
+  import('@/pages/RankedTablePage').then((module) => ({ default: module.RankedTablePage })),
+)
+const LondonWideRankedPage = lazy(() =>
+  import('@/pages/LondonWideRankedPage').then((module) => ({
+    default: module.LondonWideRankedPage,
+  })),
+)
+const MapPage = lazy(() => import('@/pages/MapPage').then((module) => ({ default: module.MapPage })))
+const ComparisonPage = lazy(() =>
+  import('@/pages/ComparisonPage').then((module) => ({ default: module.ComparisonPage })),
+)
+const MicroAreaDetailPage = lazy(() =>
+  import('@/pages/MicroAreaDetailPage').then((module) => ({
+    default: module.MicroAreaDetailPage,
+  })),
+)
 
 const NotFoundPage = () => (
   <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-900">
@@ -16,18 +33,20 @@ const NotFoundPage = () => (
 )
 
 const App = () => (
-  <Routes>
-    <Route path="/" element={<AppLayout />}>
-      <Route index element={<OverviewPage />} />
-      <Route path="ranked" element={<RankedTablePage />} />
-      <Route path="ranked-london" element={<LondonWideRankedPage />} />
-      <Route path="map" element={<MapPage />} />
-      <Route path="compare" element={<ComparisonPage />} />
-      <Route path="micro-area/:microAreaId" element={<MicroAreaDetailPage />} />
-      <Route path="home" element={<Navigate to="/" replace />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Route>
-  </Routes>
+  <Suspense fallback={<LoadingState title="Loading view" />}>
+    <Routes>
+      <Route path="/" element={<AppLayout />}>
+        <Route index element={<OverviewPage />} />
+        <Route path="ranked" element={<RankedTablePage />} />
+        <Route path="ranked-london" element={<LondonWideRankedPage />} />
+        <Route path="map" element={<MapPage />} />
+        <Route path="compare" element={<ComparisonPage />} />
+        <Route path="micro-area/:microAreaId" element={<MicroAreaDetailPage />} />
+        <Route path="home" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  </Suspense>
 )
 
 export default App

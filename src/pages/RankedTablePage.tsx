@@ -129,15 +129,16 @@ export const RankedTablePage = () => {
                 school score = quality * 0.72 + count * 0.28.
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Source:</span> DfE GIAS + fixture-backed local
-                school composites.
+                <span className="font-semibold">Source:</span> DfE GIAS open state-funded school
+                records + DfE Explore Education Statistics school performance data.
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Data reference period:</span> mixed-year composite
-                proxy ({schoolsReferencePeriod}).
+                <span className="font-semibold">Data reference period:</span>{' '}
+                {schoolsReferencePeriod}.
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                Inputs come from nearby-school composites; status can be available or estimated.
+                Both nearby-school counts and school-quality scores now use state-funded-only DfE
+                data, so private schools are excluded from both sides of the school component.
               </p>
             </details>
 
@@ -332,6 +333,14 @@ export const RankedTablePage = () => {
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
               DfE GIAS (schools)
+            </a>
+            <a
+              href="https://explore-education-statistics.service.gov.uk/find-statistics"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              DfE EES (school performance)
             </a>
             <a
               href="https://www.ordnancesurvey.co.uk/opengreenspace"

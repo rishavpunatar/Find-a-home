@@ -10,9 +10,9 @@
     "releaseDate": "2026-03-24"
   },
   "schools": {
-    "source": "DfE GIAS + fixture-backed school composites",
-    "referencePeriod": "Proxy composite (mixed-year; no single source-traceable cut date wired yet)",
-    "releaseDate": "2026-03-01"
+    "source": "DfE GIAS open state-funded establishment exports + DfE Explore Education Statistics school performance data",
+    "referencePeriod": "Counts refreshed from GIAS open state-funded export dated 2026-03-31; primary quality from KS2 202425 Revised; secondary quality from KS4 202324 Final",
+    "releaseDate": "2026-03-31"
   },
   "pollution": {
     "source": "London Datastore LAEI + DEFRA UK-AIR LAQM background maps",

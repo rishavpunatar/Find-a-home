@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 import type { DerivedMicroArea, SortConfig } from '@/types/domain'
 
+import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { formatCurrency, formatNumber } from '@/lib/format'
 
 interface RankedTableProps {
@@ -13,7 +14,7 @@ interface RankedTableProps {
   onToggleCompare: (id: string) => void
 }
 
-const ROW_HEIGHT = 66
+const ROW_HEIGHT = 88
 const OVERSCAN_ROWS = 10
 
 const getSortValue = (area: DerivedMicroArea, key: string): number | string => {
@@ -212,7 +213,7 @@ export const RankedTable = ({
               const isCompared = compareIds.includes(area.microAreaId)
 
               return (
-                <tr key={area.microAreaId} className="h-[66px] hover:bg-teal-50/50">
+                <tr key={area.microAreaId} className="h-[88px] hover:bg-teal-50/50">
                   <td className="px-3 py-2 font-medium text-slate-700">{area.overallRank}</td>
                   <td className="px-3 py-2">
                     <Link
@@ -223,6 +224,9 @@ export const RankedTable = ({
                       {area.stationName}
                     </Link>
                     <div className="text-xs text-slate-500">{area.localAuthority}</div>
+                    <div className="mt-1">
+                      <AreaTrustSummary area={area} compact />
+                    </div>
                   </td>
                   <td className="px-3 py-2 font-semibold">{area.dynamicOverallScore.toFixed(1)}</td>
                   <td className="px-3 py-2">{formatNumber(area.commuteTypicalMinutes.value)} min</td>

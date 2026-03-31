@@ -1,245 +1,245 @@
 {
   "PIN": {
-    "nearby_primary_count": 16,
+    "nearby_primary_count": 12,
     "nearby_secondary_count": 7,
-    "primary_quality_score": 81.2,
-    "secondary_quality_score": 77.3,
+    "primary_quality_score": 76.1,
+    "secondary_quality_score": 69.4,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "ECT": {
     "nearby_primary_count": 16,
     "nearby_secondary_count": 7,
-    "primary_quality_score": 80.6,
-    "secondary_quality_score": 77.0,
+    "primary_quality_score": 79.1,
+    "secondary_quality_score": 80.6,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "RYN": {
-    "nearby_primary_count": 16,
+    "nearby_primary_count": 19,
     "nearby_secondary_count": 7,
-    "primary_quality_score": 80.5,
-    "secondary_quality_score": 77.0,
+    "primary_quality_score": 73.8,
+    "secondary_quality_score": 79.0,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "RUI": {
     "nearby_primary_count": 14,
     "nearby_secondary_count": 6,
-    "primary_quality_score": 76.0,
-    "secondary_quality_score": 73.1,
+    "primary_quality_score": 68.6,
+    "secondary_quality_score": 79.3,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "RUM": {
-    "nearby_primary_count": 13,
+    "nearby_primary_count": 17,
     "nearby_secondary_count": 5,
-    "primary_quality_score": 74.3,
-    "secondary_quality_score": 71.6,
+    "primary_quality_score": 69.9,
+    "secondary_quality_score": 78.2,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "WRU": {
-    "nearby_primary_count": 12,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 72.2,
-    "secondary_quality_score": 69.8,
+    "nearby_primary_count": 9,
+    "nearby_secondary_count": 4,
+    "primary_quality_score": 68.3,
+    "secondary_quality_score": 81.4,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "ICK": {
-    "nearby_primary_count": 12,
+    "nearby_primary_count": 8,
     "nearby_secondary_count": 5,
-    "primary_quality_score": 71.8,
-    "secondary_quality_score": 69.5,
+    "primary_quality_score": 68.5,
+    "secondary_quality_score": 80.2,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "UXB": {
-    "nearby_primary_count": 12,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 71.1,
-    "secondary_quality_score": 69.1,
+    "nearby_primary_count": 7,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 68.8,
+    "secondary_quality_score": 70.8,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "NWH": {
-    "nearby_primary_count": 16,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 80.3,
-    "secondary_quality_score": 76.6,
+    "nearby_primary_count": 9,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 59.5,
+    "secondary_quality_score": 56.6,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "NWD": {
-    "nearby_primary_count": 15,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 77.3,
-    "secondary_quality_score": 74.1,
+    "nearby_primary_count": 8,
+    "nearby_secondary_count": 3,
+    "primary_quality_score": 69.1,
+    "secondary_quality_score": 50.4,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "MOP": {
-    "nearby_primary_count": 14,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 74.8,
-    "secondary_quality_score": 72.0,
+    "nearby_primary_count": 6,
+    "nearby_secondary_count": 4,
+    "primary_quality_score": 75.5,
+    "secondary_quality_score": 67.6,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "RKM": {
-    "nearby_primary_count": 13,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 72.5,
-    "secondary_quality_score": 70.2,
+    "nearby_primary_count": 8,
+    "nearby_secondary_count": 3,
+    "primary_quality_score": 69.1,
+    "secondary_quality_score": 76.7,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "CRX": {
-    "nearby_primary_count": 12,
-    "nearby_secondary_count": 4,
-    "primary_quality_score": 70.9,
-    "secondary_quality_score": 68.8,
+    "nearby_primary_count": 8,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 79.0,
+    "secondary_quality_score": 72.8,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "WAM": {
-    "nearby_primary_count": 11,
+    "nearby_primary_count": 18,
     "nearby_secondary_count": 4,
-    "primary_quality_score": 69.2,
-    "secondary_quality_score": 67.3,
+    "primary_quality_score": 69.6,
+    "secondary_quality_score": 80.3,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "HAH": {
-    "nearby_primary_count": 17,
+    "nearby_primary_count": 11,
     "nearby_secondary_count": 8,
-    "primary_quality_score": 82.0,
-    "secondary_quality_score": 78.6,
+    "primary_quality_score": 63.1,
+    "secondary_quality_score": 80.4,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "NHR": {
-    "nearby_primary_count": 16,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 80.2,
-    "secondary_quality_score": 76.6,
+    "nearby_primary_count": 14,
+    "nearby_secondary_count": 9,
+    "primary_quality_score": 74.0,
+    "secondary_quality_score": 78.7,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "SRI": {
-    "nearby_primary_count": 13,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 73.4,
-    "secondary_quality_score": 70.9,
+    "nearby_primary_count": 16,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 71.0,
+    "secondary_quality_score": 74.2,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "NOR": {
     "nearby_primary_count": 15,
     "nearby_secondary_count": 6,
-    "primary_quality_score": 77.8,
-    "secondary_quality_score": 75.0,
+    "primary_quality_score": 57.5,
+    "secondary_quality_score": 60.8,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "WBP": {
-    "nearby_primary_count": 17,
-    "nearby_secondary_count": 8,
-    "primary_quality_score": 81.8,
-    "secondary_quality_score": 79.1,
+    "nearby_primary_count": 19,
+    "nearby_secondary_count": 10,
+    "primary_quality_score": 69.9,
+    "secondary_quality_score": 84.8,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "STM": {
-    "nearby_primary_count": 14,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 75.5,
-    "secondary_quality_score": 73.2,
-    "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
-  },
-  "BSH": {
-    "nearby_primary_count": 13,
+    "nearby_primary_count": 9,
     "nearby_secondary_count": 5,
     "primary_quality_score": 74.1,
-    "secondary_quality_score": 71.7,
+    "secondary_quality_score": 82.5,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
+  },
+  "BSH": {
+    "nearby_primary_count": 18,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 72.0,
+    "secondary_quality_score": 62.0,
+    "status": "available",
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "HWD": {
-    "nearby_primary_count": 15,
-    "nearby_secondary_count": 7,
-    "primary_quality_score": 78.7,
-    "secondary_quality_score": 75.7,
+    "nearby_primary_count": 14,
+    "nearby_secondary_count": 9,
+    "primary_quality_score": 57.9,
+    "secondary_quality_score": 72.2,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "HSL": {
-    "nearby_primary_count": 13,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 72.8,
-    "secondary_quality_score": 70.1,
+    "nearby_primary_count": 10,
+    "nearby_secondary_count": 6,
+    "primary_quality_score": 53.2,
+    "secondary_quality_score": 65.6,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "HEN": {
-    "nearby_primary_count": 13,
-    "nearby_secondary_count": 5,
-    "primary_quality_score": 73.2,
-    "secondary_quality_score": 70.4,
+    "nearby_primary_count": 9,
+    "nearby_secondary_count": 7,
+    "primary_quality_score": 60.2,
+    "secondary_quality_score": 62.9,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "WFJ": {
-    "nearby_primary_count": 14,
-    "nearby_secondary_count": 6,
-    "primary_quality_score": 75.5,
-    "secondary_quality_score": 73.2,
+    "nearby_primary_count": 20,
+    "nearby_secondary_count": 5,
+    "primary_quality_score": 63.6,
+    "secondary_quality_score": 74.1,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "KNG": {
-    "nearby_primary_count": 8,
-    "nearby_secondary_count": 2,
-    "primary_quality_score": 62.1,
-    "secondary_quality_score": 61.6,
+    "nearby_primary_count": 6,
+    "nearby_secondary_count": 1,
+    "primary_quality_score": 44.5,
+    "secondary_quality_score": 64.4,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   },
   "AMH": {
-    "nearby_primary_count": 8,
-    "nearby_secondary_count": 2,
-    "primary_quality_score": 62.9,
-    "secondary_quality_score": 62.4,
+    "nearby_primary_count": 7,
+    "nearby_secondary_count": 3,
+    "primary_quality_score": 86.4,
+    "secondary_quality_score": 94.7,
     "status": "available",
-    "confidence": 0.8,
-    "methodology_note": "Composite from recent inspection outcomes, KS2/KS4 attainment signals, and proximity weighting. No single inspection label is used as the sole score input."
+    "confidence": 0.88,
+    "methodology_note": "Nearby school counts and quality now use state-funded-only DfE sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Primary quality is a percentile-based composite from KS2 202425 Revised official school-level results (expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). Secondary quality is a percentile-based composite from KS4 202324 Final official school-level results (Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). Station-level quality uses inverse-distance weighting across the surrounding state-funded schools."
   }
 }

@@ -8,9 +8,17 @@ import {
   type ReactNode,
 } from 'react'
 
-import type { Filters, Weights } from '@/types/domain'
+import type { Filters, QualityMode, Weights } from '@/types/domain'
 
-import { DEFAULT_FILTERS, DEFAULT_WEIGHTS, MAX_COMPARE_ITEMS, STORAGE_KEYS } from '@/lib/constants'
+import {
+  DEFAULT_FILTERS,
+  DEFAULT_QUALITY_MODE,
+  DEFAULT_WEIGHTS,
+  FILTER_PRESETS,
+  type FilterPresetKey,
+  MAX_COMPARE_ITEMS,
+  STORAGE_KEYS,
+} from '@/lib/constants'
 import { clampWeight, normalizeWeights } from '@/lib/weights'
 
 interface SettingsContextValue {
@@ -18,6 +26,8 @@ interface SettingsContextValue {
   normalizedWeights: Weights
   filters: Filters
   londonFilters: Filters
+  qualityMode: QualityMode
+  londonQualityMode: QualityMode
   pinnedIds: string[]
   compareIds: string[]
   updateWeight: (key: keyof Weights, nextValue: number) => void
@@ -27,66 +37,98 @@ interface SettingsContextValue {
     value: Filters[K],
     scope?: 'default' | 'londonWide',
   ) => void
+  applyFilterPreset: (preset: FilterPresetKey, scope?: 'default' | 'londonWide') => void
   resetFilters: (scope?: 'default' | 'londonWide') => void
+  resetRankingView: (scope?: 'default' | 'londonWide') => void
+  setQualityMode: (mode: QualityMode, scope?: 'default' | 'londonWide') => void
   togglePin: (id: string) => void
   toggleCompare: (id: string) => void
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
 
-const parseLocalStorage = <T,>(key: string, fallback: T): T => {
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const parseLocalStorageValue = (key: string): unknown => {
   if (typeof window === 'undefined') {
-    return fallback
+    return null
   }
 
   const stored = window.localStorage.getItem(key)
 
   if (!stored) {
-    return fallback
+    return null
   }
 
   try {
-    const parsed: unknown = JSON.parse(stored)
-    if (typeof parsed !== 'object' || parsed === null) {
-      return fallback
-    }
-
-    return { ...fallback, ...(parsed as Partial<T>) }
+    return JSON.parse(stored) as unknown
   } catch {
-    return fallback
+    return null
   }
 }
 
 const parseArray = (key: string): string[] => {
-  if (typeof window === 'undefined') {
+  const parsed = parseLocalStorageValue(key)
+  if (!Array.isArray(parsed)) {
     return []
   }
 
-  const stored = window.localStorage.getItem(key)
+  return [...new Set(parsed.filter((value): value is string => typeof value === 'string'))]
+}
 
-  if (!stored) {
-    return []
+const parseWeights = (): Weights => {
+  const parsed = parseLocalStorageValue(STORAGE_KEYS.weights)
+  if (!isRecord(parsed)) {
+    return DEFAULT_WEIGHTS
   }
 
-  try {
-    const parsed = JSON.parse(stored) as unknown
-    return Array.isArray(parsed)
-      ? parsed.filter((value): value is string => typeof value === 'string')
-      : []
-  } catch {
-    return []
+  return (Object.keys(DEFAULT_WEIGHTS) as (keyof Weights)[]).reduce(
+    (weights, key) => ({
+      ...weights,
+      [key]:
+        typeof parsed[key] === 'number' && Number.isFinite(parsed[key])
+          ? clampWeight(parsed[key])
+          : DEFAULT_WEIGHTS[key],
+    }),
+    { ...DEFAULT_WEIGHTS },
+  )
+}
+
+const parseFilters = (key: typeof STORAGE_KEYS.filters | typeof STORAGE_KEYS.filtersLondon): Filters => {
+  const parsed = parseLocalStorageValue(key)
+  if (!isRecord(parsed)) {
+    return DEFAULT_FILTERS
   }
+
+  return (Object.keys(DEFAULT_FILTERS) as (keyof Filters)[]).reduce(
+    (filters, filterKey) => ({
+      ...filters,
+      [filterKey]:
+        typeof parsed[filterKey] === 'number' && Number.isFinite(parsed[filterKey])
+          ? Number(parsed[filterKey])
+          : DEFAULT_FILTERS[filterKey],
+    }),
+    { ...DEFAULT_FILTERS },
+  )
+}
+
+const parseQualityMode = (
+  key: typeof STORAGE_KEYS.qualityMode | typeof STORAGE_KEYS.qualityModeLondon,
+): QualityMode => {
+  const parsed = parseLocalStorageValue(key)
+  return parsed === 'highConfidence' ? 'highConfidence' : DEFAULT_QUALITY_MODE
 }
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-  const [rawWeights, setRawWeights] = useState<Weights>(() =>
-    parseLocalStorage<Weights>(STORAGE_KEYS.weights, DEFAULT_WEIGHTS),
+  const [rawWeights, setRawWeights] = useState<Weights>(parseWeights)
+  const [filters, setFilters] = useState<Filters>(() => parseFilters(STORAGE_KEYS.filters))
+  const [londonFilters, setLondonFilters] = useState<Filters>(() => parseFilters(STORAGE_KEYS.filtersLondon))
+  const [qualityMode, setQualityModeState] = useState<QualityMode>(() =>
+    parseQualityMode(STORAGE_KEYS.qualityMode),
   )
-  const [filters, setFilters] = useState<Filters>(() =>
-    parseLocalStorage<Filters>(STORAGE_KEYS.filters, DEFAULT_FILTERS),
-  )
-  const [londonFilters, setLondonFilters] = useState<Filters>(() =>
-    parseLocalStorage<Filters>(STORAGE_KEYS.filtersLondon, DEFAULT_FILTERS),
+  const [londonQualityMode, setLondonQualityModeState] = useState<QualityMode>(() =>
+    parseQualityMode(STORAGE_KEYS.qualityModeLondon),
   )
   const [pinnedIds, setPinnedIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.pinned))
   const [compareIds, setCompareIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.compare))
@@ -104,6 +146,14 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.filtersLondon, JSON.stringify(londonFilters))
   }, [londonFilters])
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.qualityMode, JSON.stringify(qualityMode))
+  }, [qualityMode])
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.qualityModeLondon, JSON.stringify(londonQualityMode))
+  }, [londonQualityMode])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.pinned, JSON.stringify(pinnedIds))
@@ -136,13 +186,44 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     [],
   )
 
+  const applyFilterPreset = useCallback(
+    (preset: FilterPresetKey, scope: 'default' | 'londonWide' = 'default') => {
+      const nextFilters = { ...FILTER_PRESETS[preset].filters }
+      if (scope === 'londonWide') {
+        setLondonFilters(nextFilters)
+        return
+      }
+      setFilters(nextFilters)
+    },
+    [],
+  )
+
   const resetFilters = useCallback((scope: 'default' | 'londonWide' = 'default') => {
     if (scope === 'londonWide') {
-      setLondonFilters(DEFAULT_FILTERS)
+      setLondonFilters({ ...DEFAULT_FILTERS })
       return
     }
-    setFilters(DEFAULT_FILTERS)
+    setFilters({ ...DEFAULT_FILTERS })
   }, [])
+
+  const setQualityMode = useCallback(
+    (mode: QualityMode, scope: 'default' | 'londonWide' = 'default') => {
+      if (scope === 'londonWide') {
+        setLondonQualityModeState(mode)
+        return
+      }
+      setQualityModeState(mode)
+    },
+    [],
+  )
+
+  const resetRankingView = useCallback(
+    (scope: 'default' | 'londonWide' = 'default') => {
+      resetFilters(scope)
+      setQualityMode(DEFAULT_QUALITY_MODE, scope)
+    },
+    [resetFilters, setQualityMode],
+  )
 
   const togglePin = useCallback((id: string) => {
     setPinnedIds((current) =>
@@ -170,24 +251,34 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       normalizedWeights,
       filters,
       londonFilters,
+      qualityMode,
+      londonQualityMode,
       pinnedIds,
       compareIds,
       updateWeight,
       resetWeights,
       updateFilter,
+      applyFilterPreset,
       resetFilters,
+      resetRankingView,
+      setQualityMode,
       togglePin,
       toggleCompare,
     }),
     [
+      applyFilterPreset,
       compareIds,
       filters,
+      londonQualityMode,
       londonFilters,
       normalizedWeights,
       pinnedIds,
+      qualityMode,
       rawWeights,
       resetFilters,
+      resetRankingView,
       resetWeights,
+      setQualityMode,
       toggleCompare,
       togglePin,
       updateFilter,

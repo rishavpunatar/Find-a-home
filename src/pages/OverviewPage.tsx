@@ -1,7 +1,9 @@
 import { Link, useLocation } from 'react-router-dom'
 
+import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
+import { MetricDistributionCard } from '@/components/charts/MetricDistributionCard'
 import { Pm25DistanceScatter } from '@/components/charts/Pm25DistanceScatter'
 import { QolDistanceScatter } from '@/components/charts/QolDistanceScatter'
 import { TopScoresBarChart } from '@/components/charts/TopScoresBarChart'
@@ -9,7 +11,20 @@ import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
-import { formatDate } from '@/lib/format'
+import { isHighConfidenceArea, summarizeDatasetDomainCoverage } from '@/lib/dataQuality'
+import { formatCurrency, formatDate, formatNumber, formatPercent } from '@/lib/format'
+import type { DerivedMicroArea } from '@/types/domain'
+
+const coverageLabelMap = {
+  property: 'Property',
+  transport: 'Transport',
+  schools: 'Schools',
+  pollution: 'Pollution',
+  greenSpace: 'Green',
+  crime: 'Crime',
+  planning: 'Planning',
+  wellbeing: 'Wellbeing',
+} as const
 
 const StatCard = ({ label, value, hint }: { label: string; value: string; hint?: string }) => (
   <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
@@ -18,6 +33,18 @@ const StatCard = ({ label, value, hint }: { label: string; value: string; hint?:
     {hint ? <p className="mt-1 text-xs text-slate-600">{hint}</p> : null}
   </article>
 )
+
+const collectValues = (
+  areas: DerivedMicroArea[],
+  getValue: (area: DerivedMicroArea) => number | null,
+): number[] =>
+  areas.flatMap((area) => {
+    const value = getValue(area)
+    return value === null || Number.isNaN(value) ? [] : [value]
+  })
+
+const formatConfidencePct = (value: number) => `${Math.round(value * 100)}%`
+const formatCompactCurrency = (value: number) => `GBP ${Math.round(value / 1000)}k`
 
 export const OverviewPage = () => {
   const location = useLocation()
@@ -40,14 +67,189 @@ export const OverviewPage = () => {
 
   const topFive = filtered.slice(0, 5)
   const londonWideCount = dataset.londonWideMicroAreas?.length ?? ranked.length
+  const highConfidenceCount = ranked.filter((area) => isHighConfidenceArea(area)).length
+  const domainCoverage = summarizeDatasetDomainCoverage(dataset.microAreas)
   const averageScore = filtered.length
     ? (filtered.reduce((sum, area) => sum + area.dynamicOverallScore, 0) / filtered.length).toFixed(
         1,
       )
     : '0.0'
+  const scoreDistributions = [
+    {
+      key: 'overall-weighted-score',
+      title: 'Overall weighted score',
+      description: 'All default-scope areas using your active weighting model.',
+      values: ranked.map((area) => area.dynamicOverallScore),
+      barColor: '#0f766e',
+    },
+    {
+      key: 'value-score',
+      title: 'Value score',
+      description: 'Spread of the value-for-money component across all areas.',
+      values: ranked.map((area) => area.componentScores.value),
+      barColor: '#0d9488',
+    },
+    {
+      key: 'transport-score',
+      title: 'Transport score',
+      description: 'How varied the commute and transport component is across the full set.',
+      values: ranked.map((area) => area.componentScores.transport),
+      barColor: '#0284c7',
+    },
+    {
+      key: 'schools-score',
+      title: 'School score',
+      description: 'Spread of the current school component across all default-scope areas.',
+      values: ranked.map((area) => area.componentScores.schools),
+      barColor: '#65a30d',
+    },
+    {
+      key: 'environment-score',
+      title: 'Environment score',
+      description: 'Variation in pollution and green-space strength across all areas.',
+      values: ranked.map((area) => area.componentScores.environment),
+      barColor: '#16a34a',
+    },
+    {
+      key: 'crime-score',
+      title: 'Crime score',
+      description: 'Relative safety spread across the default search universe.',
+      values: ranked.map((area) => area.componentScores.crime),
+      barColor: '#0891b2',
+    },
+    {
+      key: 'proximity-score',
+      title: 'Proximity score',
+      description: 'How much the proximity-to-Pinner component varies by area.',
+      values: ranked.map((area) => area.componentScores.proximity),
+      barColor: '#f59e0b',
+    },
+    {
+      key: 'planning-score',
+      title: 'Planning-risk score',
+      description: 'Current heuristic planning-risk spread across all areas.',
+      values: ranked.map((area) => area.componentScores.planningRisk),
+      barColor: '#7c3aed',
+    },
+  ]
+  const marketAndTransportDistributions = [
+    {
+      key: 'median-semi-price',
+      title: 'Median semi price',
+      description: 'All-area price spread for semi-detached transactions.',
+      values: collectValues(ranked, (area) => area.medianSemiDetachedPrice.value),
+      barColor: '#0f766e',
+      valueFormatter: formatCurrency,
+      axisFormatter: formatCompactCurrency,
+    },
+    {
+      key: 'typical-commute',
+      title: 'Typical commute',
+      description: 'How varied commute time is across all default-scope areas.',
+      values: collectValues(ranked, (area) => area.commuteTypicalMinutes.value),
+      barColor: '#0284c7',
+      valueFormatter: (value: number) => `${formatNumber(value, 1)} min`,
+      axisFormatter: (value: number) => `${formatNumber(value, 0)}m`,
+    },
+    {
+      key: 'drive-to-pinner',
+      title: 'Drive time to Pinner',
+      description: 'Spread of drive-time estimates from each micro-area back to Pinner.',
+      values: collectValues(ranked, (area) => area.driveTimeToPinnerMinutes.value),
+      barColor: '#06b6d4',
+      valueFormatter: (value: number) => `${formatNumber(value, 1)} min`,
+      axisFormatter: (value: number) => `${formatNumber(value, 0)}m`,
+    },
+  ]
+  const schoolAndEnvironmentDistributions = [
+    {
+      key: 'nearby-primary-count',
+      title: 'Nearby primary count',
+      description: 'State-funded primary counts across all areas after interpolation.',
+      values: collectValues(ranked, (area) => area.nearbyPrimaryCount.value),
+      barColor: '#84cc16',
+      valueFormatter: (value: number) => formatNumber(value, 0),
+      axisFormatter: (value: number) => formatNumber(value, 0),
+    },
+    {
+      key: 'nearby-secondary-count',
+      title: 'Nearby secondary count',
+      description: 'State-funded secondary counts across all areas after interpolation.',
+      values: collectValues(ranked, (area) => area.nearbySecondaryCount.value),
+      barColor: '#65a30d',
+      valueFormatter: (value: number) => formatNumber(value, 0),
+      axisFormatter: (value: number) => formatNumber(value, 0),
+    },
+    {
+      key: 'primary-quality-score',
+      title: 'Primary quality score',
+      description: 'Current primary school quality proxy spread.',
+      values: collectValues(ranked, (area) => area.primaryQualityScore.value),
+      barColor: '#4d7c0f',
+    },
+    {
+      key: 'secondary-quality-score',
+      title: 'Secondary quality score',
+      description: 'Current secondary school quality proxy spread.',
+      values: collectValues(ranked, (area) => area.secondaryQualityScore.value),
+      barColor: '#3f6212',
+    },
+    {
+      key: 'pm25',
+      title: 'PM2.5 annual mean',
+      description: 'Distribution of fine-particle pollution across all areas.',
+      values: collectValues(ranked, (area) => area.annualPm25.value),
+      barColor: '#2563eb',
+      valueFormatter: (value: number) => `${formatNumber(value, 1)} ug/m3`,
+      axisFormatter: (value: number) => formatNumber(value, 1),
+    },
+    {
+      key: 'green-cover',
+      title: 'Green cover',
+      description: 'How green cover varies across the full search universe.',
+      values: collectValues(ranked, (area) => area.greenCoverPct.value),
+      barColor: '#16a34a',
+      valueFormatter: (value: number) => formatPercent(value),
+      axisFormatter: (value: number) => `${formatNumber(value, 0)}%`,
+    },
+  ]
+  const riskAndConfidenceDistributions = [
+    {
+      key: 'crime-rate',
+      title: 'Crime rate per 1,000',
+      description: 'All-area spread of the crime-rate proxy.',
+      values: collectValues(ranked, (area) => area.crimeRatePerThousand.value),
+      barColor: '#0f766e',
+      valueFormatter: (value: number) => formatNumber(value, 1),
+      axisFormatter: (value: number) => formatNumber(value, 0),
+    },
+    {
+      key: 'data-confidence',
+      title: 'Data confidence',
+      description: 'How widely confidence varies across the current dataset.',
+      values: ranked.map((area) => area.dataConfidenceScore),
+      barColor: '#f59e0b',
+      valueFormatter: formatConfidencePct,
+      axisFormatter: formatConfidencePct,
+    },
+  ]
 
   return (
     <div className="space-y-6">
+      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+        <h2 className="text-lg font-semibold">How to use this app</h2>
+        <p className="mt-2 text-sm text-slate-700">
+          This tool helps you narrow down places around Pinner before you spend time on listings,
+          calls, and viewings.
+        </p>
+        <ol className="mt-3 space-y-2 text-sm text-slate-700">
+          <li>1. Start with the `Balanced` preset in the filter panel.</li>
+          <li>2. Switch to `High-confidence only` if you want a stricter shortlist.</li>
+          <li>3. Open `Ranked Table` to pin the areas you like most.</li>
+          <li>4. Use `Map` and `Compare` to sense-check the shortlist before property viewings.</li>
+        </ol>
+      </section>
+
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Total micro-areas analysed" value={String(ranked.length)} />
         <StatCard label="London-wide candidates" value={String(londonWideCount)} />
@@ -127,6 +329,33 @@ export const OverviewPage = () => {
         </section>
       ) : null}
 
+      <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-panel">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-amber-950">
+          Trust and coverage
+        </h2>
+        <p className="mt-2 text-sm text-amber-950">
+          The current dataset is intentionally estimate-heavy.{' '}
+          <span className="font-semibold">{highConfidenceCount}</span> of{' '}
+          <span className="font-semibold">{ranked.length}</span> default-scope areas meet the
+          app&apos;s high-confidence threshold today.
+        </p>
+        <p className="mt-1 text-xs text-amber-900">
+          Use the filter panel&apos;s <span className="font-semibold">High-confidence only</span>{' '}
+          mode when you want a cleaner shortlist. Use the broader mode when you want coverage and
+          are comfortable with more interpolation.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {domainCoverage.map((domain) => (
+            <span
+              key={domain.key}
+              className="rounded-full border border-amber-300 bg-white/70 px-3 py-1 text-xs text-amber-950"
+            >
+              {coverageLabelMap[domain.key]}: {domain.availablePct}% direct
+            </span>
+          ))}
+        </div>
+      </section>
+
       <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h2 className="text-lg font-semibold">Top ranked micro-areas</h2>
@@ -144,6 +373,9 @@ export const OverviewPage = () => {
                     Commute {area.commuteTypicalMinutes.value ?? 'N/A'} min | Drive{' '}
                     {area.driveTimeToPinnerMinutes.value ?? 'N/A'} min
                   </p>
+                  <div className="mt-1">
+                    <AreaTrustSummary area={area} compact />
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="text-lg font-semibold text-surge">
@@ -253,6 +485,113 @@ export const OverviewPage = () => {
             centralCoordinate={dataset.config.centralLondonCoordinate}
           />
         </article>
+      </section>
+
+      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+        <h2 className="text-lg font-semibold">All-area spread and standard deviation</h2>
+        <p className="mt-2 text-sm text-slate-700">
+          These charts use all <span className="font-semibold">{ranked.length}</span> default-scope
+          micro-areas, not just the currently passing shortlist. Use them to see which metrics are
+          tightly clustered and which ones vary much more across the search universe.
+        </p>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Score distributions
+          </h3>
+          <p className="mt-1 text-xs text-slate-500">
+            Score-based spreads use the current weighting model for the overall score and the
+            stored component scores for each area.
+          </p>
+        </div>
+        <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+          {scoreDistributions.map((metric) => (
+            <MetricDistributionCard
+              key={metric.key}
+              title={metric.title}
+              description={metric.description}
+              values={metric.values}
+              barColor={metric.barColor}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Market and transport spread
+          </h3>
+          <p className="mt-1 text-xs text-slate-500">
+            Raw metric views are useful when you want to understand absolute spread rather than
+            normalized score spread.
+          </p>
+        </div>
+        <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+          {marketAndTransportDistributions.map((metric) => (
+            <MetricDistributionCard
+              key={metric.key}
+              title={metric.title}
+              description={metric.description}
+              values={metric.values}
+              barColor={metric.barColor}
+              {...(metric.valueFormatter ? { valueFormatter: metric.valueFormatter } : {})}
+              {...(metric.axisFormatter ? { axisFormatter: metric.axisFormatter } : {})}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            School and environment spread
+          </h3>
+          <p className="mt-1 text-xs text-slate-500">
+            Nearby school counts and quality scores now both come from state-funded-only DfE
+            school data, so the school spread excludes private schools entirely.
+          </p>
+        </div>
+        <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+          {schoolAndEnvironmentDistributions.map((metric) => (
+            <MetricDistributionCard
+              key={metric.key}
+              title={metric.title}
+              description={metric.description}
+              values={metric.values}
+              barColor={metric.barColor}
+              {...(metric.valueFormatter ? { valueFormatter: metric.valueFormatter } : {})}
+              {...(metric.axisFormatter ? { axisFormatter: metric.axisFormatter } : {})}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Risk and confidence spread
+          </h3>
+          <p className="mt-1 text-xs text-slate-500">
+            These give you a quick read on whether the dataset itself is tightly trusted or highly
+            uneven by area.
+          </p>
+        </div>
+        <div className="grid gap-4 xl:grid-cols-2">
+          {riskAndConfidenceDistributions.map((metric) => (
+            <MetricDistributionCard
+              key={metric.key}
+              title={metric.title}
+              description={metric.description}
+              values={metric.values}
+              barColor={metric.barColor}
+              {...(metric.valueFormatter ? { valueFormatter: metric.valueFormatter } : {})}
+              {...(metric.axisFormatter ? { axisFormatter: metric.axisFormatter } : {})}
+            />
+          ))}
+        </div>
       </section>
     </div>
   )

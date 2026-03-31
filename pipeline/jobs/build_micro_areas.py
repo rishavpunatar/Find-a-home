@@ -723,7 +723,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'primary_quality_score',
                     'secondary_quality_score',
                 ],
-                'Estimated by inverse-distance interpolation from nearby station school composites. No single inspection label is used.',
+                'Estimated by inverse-distance interpolation from nearby station school composites. Both count and quality inputs inherit state-funded-only DfE school data, so private schools are excluded. No single inspection label is used.',
             )
             pollution_record = pollution_adapter.get_by_station(
                 station.station_code,
@@ -932,28 +932,28 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     school_record,
                     'nearby_primary_count',
                     unit='count',
-                    note='Nearby primary schools in and around 1km catchment proxy.',
+                    note='Nearby open state-funded primary schools using calibrated catchment + fringe footprint; private schools excluded from count input.',
                     last_updated=schools_last_updated,
                 ),
                 'nearbySecondaryCount': metric_from_record(
                     school_record,
                     'nearby_secondary_count',
                     unit='count',
-                    note='Nearby secondary schools in and around 1.5km proxy zone.',
+                    note='Nearby open state-funded secondary schools using calibrated catchment + fringe footprint; private schools excluded from count input.',
                     last_updated=schools_last_updated,
                 ),
                 'primaryQualityScore': metric_from_record(
                     school_record,
                     'primary_quality_score',
                     unit='score',
-                    note='Primary school quality composite.',
+                    note='Primary school quality composite from official state-funded KS2 school performance results.',
                     last_updated=schools_last_updated,
                 ),
                 'secondaryQualityScore': metric_from_record(
                     school_record,
                     'secondary_quality_score',
                     unit='score',
-                    note='Secondary school quality composite.',
+                    note='Secondary school quality composite from official state-funded KS4 school performance results.',
                     last_updated=schools_last_updated,
                 ),
                 'annualNo2': metric_from_record(

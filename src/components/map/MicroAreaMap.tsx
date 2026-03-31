@@ -17,6 +17,7 @@ import {
 
 import type { ComponentScores, Coordinate, DerivedMicroArea } from '@/types/domain'
 
+import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { formatCurrency, formatNumber } from '@/lib/format'
 
 L.Icon.Default.mergeOptions({
@@ -316,6 +317,9 @@ const MapPopupContent = ({ area, fromPath }: { area: DerivedMicroArea; fromPath:
     <p>Score: {area.dynamicOverallScore.toFixed(1)}</p>
     <p>Commute: {formatNumber(area.commuteTypicalMinutes.value)} min</p>
     <p>Drive to Pinner: {formatNumber(area.driveTimeToPinnerMinutes.value)} min</p>
+    <div className="mt-2">
+      <AreaTrustSummary area={area} compact />
+    </div>
     <Link
       to={`/micro-area/${area.microAreaId}`}
       state={{ from: fromPath }}
@@ -602,6 +606,9 @@ export const MicroAreaMap = ({
             <p>Median semi: {formatCurrency(selected.medianSemiDetachedPrice.value)}</p>
             <p>Commute: {formatNumber(selected.commuteTypicalMinutes.value)} min</p>
             <p>Drive to Pinner: {formatNumber(selected.driveTimeToPinnerMinutes.value)} min</p>
+            <div className="mt-2">
+              <AreaTrustSummary area={selected} />
+            </div>
             <Link
               to={`/micro-area/${selected.microAreaId}`}
               state={{ from: fromPath }}
