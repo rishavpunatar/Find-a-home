@@ -5,9 +5,7 @@ import { CommutePm25Scatter } from '@/components/charts/CommutePm25Scatter'
 import { DistanceMetricScatter } from '@/components/charts/DistanceMetricScatter'
 import { MetricScoreDiagnosticScatter } from '@/components/charts/MetricScoreDiagnosticScatter'
 import { OverallConfidenceEvidenceScatter } from '@/components/charts/OverallConfidenceEvidenceScatter'
-import { PricePm25ServiceScatter } from '@/components/charts/PricePm25ServiceScatter'
 import { SchoolAccessQualityScatter } from '@/components/charts/SchoolAccessQualityScatter'
-import { ValueTransportFrontierChart } from '@/components/charts/ValueTransportFrontierChart'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { RankedTable } from '@/components/table/RankedTable'
@@ -195,16 +193,6 @@ export const LondonWideRankedPage = () => {
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Value vs transport frontier
-          </h3>
-          <p className="mt-2 text-xs text-slate-600">
-            Red frontier points are the areas that cannot be improved on both value and transport at
-            the same time.
-          </p>
-          <ValueTransportFrontierChart areas={filtered} />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
             Commute vs PM2.5
           </h3>
           <p className="mt-2 text-xs text-slate-600">
@@ -216,16 +204,6 @@ export const LondonWideRankedPage = () => {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Price vs PM2.5 sized by peak service
-          </h3>
-          <p className="mt-2 text-xs text-slate-600">
-            Bubble size reflects peak trains per hour, which helps separate expensive-and-well-served
-            areas from expensive-but-thinner ones.
-          </p>
-          <PricePm25ServiceScatter areas={filtered} />
-        </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
             School access vs school quality
@@ -298,15 +276,19 @@ export const LondonWideRankedPage = () => {
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Peak service vs distance from central London
+            School quality vs distance from central London
           </h3>
           <DistanceMetricScatter
             areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
-            label="Peak service"
+            label="School quality"
             fill="#0f766e"
-            formatValue={(value) => `${value.toFixed(1)} tph`}
-            getValue={(area) => area.serviceFrequencyPeakTph.value}
+            formatValue={(value) => value.toFixed(1)}
+            getValue={(area) =>
+              area.primaryQualityScore.value !== null && area.secondaryQualityScore.value !== null
+                ? (area.primaryQualityScore.value + area.secondaryQualityScore.value) / 2
+                : null
+            }
           />
         </article>
       </section>
