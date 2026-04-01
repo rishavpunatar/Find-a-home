@@ -237,6 +237,25 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
                 </option>
               ))}
             </select>
+            <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+              <div>
+                <p className="text-sm font-medium text-slate-800">Blue teardrop pins</p>
+                <p className="text-xs text-slate-600">
+                  Turn off the Leaflet station pins if you only want the score circles.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowMarkers((current) => !current)}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium ${
+                  showMarkers
+                    ? 'bg-teal-600 text-white'
+                    : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                {showMarkers ? 'Hide blue pins' : 'Show blue pins'}
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col justify-end gap-2">

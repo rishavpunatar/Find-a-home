@@ -645,7 +645,7 @@ export const MicroAreaMap = ({
             onClick={toggleMarkers}
             className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700"
           >
-            {markerLayerVisible ? 'Hide station markers' : 'Show station markers'}
+            {markerLayerVisible ? 'Hide blue teardrop pins' : 'Show blue teardrop pins'}
           </button>
         </div>
         {values.length > 0 ? (
@@ -685,7 +685,7 @@ export const MicroAreaMap = ({
           </div>
         ) : (
           <p className="mt-5 text-sm text-slate-500">
-            Hover a catchment circle or station pin to inspect score details. Click to keep an area
+            Hover a catchment circle or blue pin to inspect score details. Click to keep an area
             selected.
           </p>
         )}
