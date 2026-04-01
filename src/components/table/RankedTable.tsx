@@ -13,9 +13,7 @@ import { formatCurrency, formatNumber } from '@/lib/format'
 interface RankedTableProps {
   areas: DerivedMicroArea[]
   pinnedIds: string[]
-  compareIds: string[]
   onTogglePin: (id: string) => void
-  onToggleCompare: (id: string) => void
 }
 
 const ROW_HEIGHT = 96
@@ -112,9 +110,7 @@ const HeaderCell = ({
 export const RankedTable = ({
   areas,
   pinnedIds,
-  compareIds,
   onTogglePin,
-  onToggleCompare,
 }: RankedTableProps) => {
   const location = useLocation()
   const [sort, setSort] = useState<SortConfig>({ key: 'score', direction: 'desc' })
@@ -371,7 +367,6 @@ export const RankedTable = ({
 
             {visibleRows.map((area, index) => {
               const isPinned = pinnedIds.includes(area.microAreaId)
-              const isCompared = compareIds.includes(area.microAreaId)
               const propertyEvidence = getAreaPropertyEvidenceLabel(area)
 
               return (
@@ -416,17 +411,8 @@ export const RankedTable = ({
                       >
                         {isPinned ? 'Pinned' : 'Pin'}
                       </button>
-                      <button
-                        type="button"
-                        className={`rounded-md px-2 py-1 text-xs ${
-                          isCompared ? 'bg-cyan-100 text-cyan-900' : 'bg-slate-100 text-slate-700'
-                        }`}
-                        onClick={() => onToggleCompare(area.microAreaId)}
-                      >
-                        {isCompared ? 'Compared' : 'Compare'}
-                      </button>
                       <Link
-                        to={`/map?sel=${area.microAreaId}`}
+                        to={`/filtered?sel=${area.microAreaId}#filtered-map`}
                         className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700 hover:bg-slate-200"
                       >
                         Map

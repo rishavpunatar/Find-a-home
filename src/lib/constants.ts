@@ -69,6 +69,7 @@ export const FILTER_PRESET_ORDER: FilterPresetKey[] = ['focus', 'balanced', 'exp
 
 export const STORAGE_KEYS = {
   weights: 'find-a-home.weights',
+  weightingMode: 'find-a-home.weighting-mode',
   filters: 'find-a-home.v3.filters.default',
   filtersLondon: 'find-a-home.v3.filters.london',
   qualityMode: 'find-a-home.v2.quality.default',

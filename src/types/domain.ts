@@ -166,6 +166,8 @@ export interface Weights {
   planningRisk: number
 }
 
+export type WeightingMode = 'manual' | 'varianceAwareDefaults'
+
 export interface Filters {
   maxCommuteMinutes: number
   maxDriveMinutes: number

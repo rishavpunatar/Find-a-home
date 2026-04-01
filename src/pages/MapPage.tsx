@@ -54,7 +54,11 @@ const parseBoolean = (value: string | null, fallback: boolean): boolean => {
 
 const fromPathString = (pathname: string, search: string) => `${pathname}${search}`
 
-export const MapPage = () => {
+interface MapPageProps {
+  showResultsList?: boolean
+}
+
+export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
   const { loading, error } = useDataContext()
   const { filtered } = useRankedData()
   const location = useLocation()
@@ -186,7 +190,7 @@ export const MapPage = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div id="filtered-map" className="space-y-4">
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
           <form onSubmit={handleSearch} className="space-y-2">
@@ -283,86 +287,88 @@ export const MapPage = () => {
         onViewportChange={setViewport}
       />
 
-      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Map Results List (Keyboard Accessible)
-        </h2>
-        <p className="mt-2 text-sm text-slate-600">
-          Tab into rows, press Enter/Space to focus that area on the map. Hover/focus states are
-          synchronized with the map highlight.
-        </p>
-        <div className="mt-3 max-h-[420px] overflow-auto rounded-xl border border-slate-200">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="sticky top-0 bg-slate-50">
-              <tr>
-                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Area
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Score
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Commute
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Median Semi
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filtered.map((area) => {
-                const isSelected = area.microAreaId === effectiveSelectedAreaId
-                const isHovered = area.microAreaId === hoveredAreaId
-                return (
-                  <tr
-                    key={area.microAreaId}
-                    className={
-                      isSelected
-                        ? 'bg-teal-100/60'
-                        : isHovered
-                          ? 'bg-teal-50'
-                          : 'hover:bg-slate-50'
-                    }
-                  >
-                    <td className="px-3 py-2">
-                      <button
-                        type="button"
-                        className="text-left font-medium text-slate-800 hover:text-surge hover:underline"
-                        onClick={() => {
-                          setSelectedAreaId(area.microAreaId)
-                          setFocusAreaId(area.microAreaId)
-                        }}
-                        onMouseEnter={() => setHoveredAreaId(area.microAreaId)}
-                        onMouseLeave={() => setHoveredAreaId(null)}
-                        onFocus={() => setHoveredAreaId(area.microAreaId)}
-                        onBlur={() => setHoveredAreaId(null)}
-                      >
-                        {area.stationName}
-                      </button>
-                      <p className="text-xs text-slate-500">{area.localAuthority}</p>
-                    </td>
-                    <td className="px-3 py-2">{area.dynamicOverallScore.toFixed(1)}</td>
-                    <td className="px-3 py-2">{formatNumber(area.commuteTypicalMinutes.value)} min</td>
-                    <td className="px-3 py-2">{formatCurrency(area.medianSemiDetachedPrice.value)}</td>
-                    <td className="px-3 py-2">
-                      <Link
-                        to={`/micro-area/${area.microAreaId}`}
-                        state={{ from: fromPath }}
-                        className="text-surge hover:underline"
-                      >
-                        Detail
-                      </Link>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      {showResultsList ? (
+        <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Map Results List (Keyboard Accessible)
+          </h2>
+          <p className="mt-2 text-sm text-slate-600">
+            Tab into rows, press Enter/Space to focus that area on the map. Hover/focus states are
+            synchronized with the map highlight.
+          </p>
+          <div className="mt-3 max-h-[420px] overflow-auto rounded-xl border border-slate-200">
+            <table className="min-w-full divide-y divide-slate-200 text-sm">
+              <thead className="sticky top-0 bg-slate-50">
+                <tr>
+                  <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    Area
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    Score
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    Commute
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    Median Semi
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filtered.map((area) => {
+                  const isSelected = area.microAreaId === effectiveSelectedAreaId
+                  const isHovered = area.microAreaId === hoveredAreaId
+                  return (
+                    <tr
+                      key={area.microAreaId}
+                      className={
+                        isSelected
+                          ? 'bg-teal-100/60'
+                          : isHovered
+                            ? 'bg-teal-50'
+                            : 'hover:bg-slate-50'
+                      }
+                    >
+                      <td className="px-3 py-2">
+                        <button
+                          type="button"
+                          className="text-left font-medium text-slate-800 hover:text-surge hover:underline"
+                          onClick={() => {
+                            setSelectedAreaId(area.microAreaId)
+                            setFocusAreaId(area.microAreaId)
+                          }}
+                          onMouseEnter={() => setHoveredAreaId(area.microAreaId)}
+                          onMouseLeave={() => setHoveredAreaId(null)}
+                          onFocus={() => setHoveredAreaId(area.microAreaId)}
+                          onBlur={() => setHoveredAreaId(null)}
+                        >
+                          {area.stationName}
+                        </button>
+                        <p className="text-xs text-slate-500">{area.localAuthority}</p>
+                      </td>
+                      <td className="px-3 py-2">{area.dynamicOverallScore.toFixed(1)}</td>
+                      <td className="px-3 py-2">{formatNumber(area.commuteTypicalMinutes.value)} min</td>
+                      <td className="px-3 py-2">{formatCurrency(area.medianSemiDetachedPrice.value)}</td>
+                      <td className="px-3 py-2">
+                        <Link
+                          to={`/micro-area/${area.microAreaId}`}
+                          state={{ from: fromPath }}
+                          className="text-surge hover:underline"
+                        >
+                          Detail
+                        </Link>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
     </div>
   )
 }

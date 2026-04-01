@@ -4,9 +4,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '@/components/AppLayout'
 import { LoadingState } from '@/components/LoadingState'
 
-const OverviewPage = lazy(() =>
-  import('@/pages/OverviewPage').then((module) => ({ default: module.OverviewPage })),
-)
 const RankedTablePage = lazy(() =>
   import('@/pages/RankedTablePage').then((module) => ({ default: module.RankedTablePage })),
 )
@@ -14,10 +11,6 @@ const LondonWideRankedPage = lazy(() =>
   import('@/pages/LondonWideRankedPage').then((module) => ({
     default: module.LondonWideRankedPage,
   })),
-)
-const MapPage = lazy(() => import('@/pages/MapPage').then((module) => ({ default: module.MapPage })))
-const ComparisonPage = lazy(() =>
-  import('@/pages/ComparisonPage').then((module) => ({ default: module.ComparisonPage })),
 )
 const SummaryPage = lazy(() =>
   import('@/pages/SummaryPage').then((module) => ({ default: module.SummaryPage })),
@@ -39,13 +32,15 @@ const App = () => (
   <Suspense fallback={<LoadingState title="Loading view" />}>
     <Routes>
       <Route path="/" element={<AppLayout />}>
-        <Route index element={<OverviewPage />} />
-        <Route path="summary" element={<SummaryPage />} />
-        <Route path="ranked" element={<RankedTablePage />} />
-        <Route path="ranked-london" element={<LondonWideRankedPage />} />
-        <Route path="map" element={<MapPage />} />
-        <Route path="compare" element={<ComparisonPage />} />
+        <Route index element={<SummaryPage />} />
+        <Route path="filtered" element={<RankedTablePage />} />
+        <Route path="trends" element={<LondonWideRankedPage />} />
         <Route path="micro-area/:microAreaId" element={<MicroAreaDetailPage />} />
+        <Route path="summary" element={<Navigate to="/" replace />} />
+        <Route path="ranked" element={<Navigate to="/filtered" replace />} />
+        <Route path="ranked-london" element={<Navigate to="/trends" replace />} />
+        <Route path="map" element={<Navigate to="/filtered" replace />} />
+        <Route path="compare" element={<Navigate to="/filtered" replace />} />
         <Route path="home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

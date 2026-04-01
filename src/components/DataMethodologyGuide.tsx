@@ -10,10 +10,10 @@ const InfoCard = ({
   title: string
   children: ReactNode
 }) => (
-  <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-    <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+  <details className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel" open>
+    <summary className="cursor-pointer text-base font-semibold text-slate-900">{title}</summary>
     <div className="mt-2 space-y-2 text-sm text-slate-700">{children}</div>
-  </article>
+  </details>
 )
 
 const DetailBlock = ({
@@ -133,8 +133,9 @@ export const DataMethodologyGuide = ({
                 compared in one model.
               </p>
               <p>
-                Your weight settings decide how much each axis matters, and the app then softens
-                the total score when the underlying evidence is weaker.
+                Your weight settings are still the main control. If you switch on the optional
+                spread-aware default mode, the app only makes a mild adjustment to the default
+                weights using dataset-wide spread and confidence.
               </p>
             </InfoCard>
           </section>
@@ -142,8 +143,7 @@ export const DataMethodologyGuide = ({
           <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
             <h2 className="text-lg font-semibold text-slate-900">What each score axis means</h2>
             <p className="mt-2 text-sm text-slate-700">
-              These are the main score axes you see across the app, including the compare view and
-              the overall ranking logic.
+              These are the main score axes you see across the app and in the overall ranking logic.
             </p>
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {scoreAxes.map((axis) => (

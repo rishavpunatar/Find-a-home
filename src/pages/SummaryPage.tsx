@@ -9,13 +9,13 @@ export const SummaryPage = () => {
   const { loading, error, dataset } = useDataContext()
 
   if (loading) {
-    return <LoadingState title="Loading methodology guide" />
+    return <LoadingState title="Loading overview" />
   }
 
   if (error || !dataset) {
     return (
       <ErrorState
-        title="Methodology guide unavailable"
+        title="Overview unavailable"
         detail={error ?? 'Dataset is missing. Run the pipeline and sync processed files.'}
       />
     )
@@ -25,10 +25,10 @@ export const SummaryPage = () => {
     <div className="space-y-4">
       <section className="rounded-2xl border border-teal-100 bg-white p-5 shadow-panel">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-surge">
-          How The Data Works
+          Overview
         </p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-900">
-          A plain-English guide to what this app is measuring
+          A plain-English guide to what this app is measuring and how to use it
         </h2>
         <div className="mt-3 max-w-4xl space-y-2 text-sm text-slate-700">
           <p>
@@ -38,18 +38,14 @@ export const SummaryPage = () => {
           </p>
           <p>
             If you want the shortest practical workflow, start on{' '}
-            <Link to="/" className="font-medium text-surge hover:underline">
-              Overview
+            <Link to="/filtered" className="font-medium text-surge hover:underline">
+              Filtered View
             </Link>
-            , use the filters, then move to{' '}
-            <Link to="/ranked" className="font-medium text-surge hover:underline">
-              Ranked Table
+            , use the filters and map to make a shortlist, then switch to{' '}
+            <Link to="/trends" className="font-medium text-surge hover:underline">
+              Trends
             </Link>{' '}
-            and{' '}
-            <Link to="/compare" className="font-medium text-surge hover:underline">
-              Compare
-            </Link>
-            .
+            if you want to inspect how metrics vary across the wider London dataset.
           </p>
         </div>
       </section>

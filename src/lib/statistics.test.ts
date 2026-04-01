@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { summarizeDistribution } from './statistics'
+import {
+  interquartileRange,
+  median,
+  medianAbsoluteDeviation,
+  quantile,
+  summarizeDistribution,
+} from './statistics'
 
 describe('summarizeDistribution', () => {
   it('returns null for empty input', () => {
@@ -24,5 +30,14 @@ describe('summarizeDistribution', () => {
     const summary = summarizeDistribution([7, 7, 7])
 
     expect(summary?.bins).toEqual([{ start: 7, end: 7, count: 3 }])
+  })
+
+  it('computes robust quantiles and spread measures', () => {
+    const values = [10, 12, 14, 16, 100]
+
+    expect(quantile(values, 0.25)).toBe(12)
+    expect(median(values)).toBe(14)
+    expect(interquartileRange(values)).toBe(4)
+    expect(medianAbsoluteDeviation(values)).toBe(2)
   })
 })

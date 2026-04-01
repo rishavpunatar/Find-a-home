@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 
-import type { Filters, QualityMode, Weights } from '@/types/domain'
+import type { Filters, QualityMode, WeightingMode, Weights } from '@/types/domain'
 
 import {
   DEFAULT_FILTERS,
@@ -19,11 +19,14 @@ import {
   MAX_COMPARE_ITEMS,
   STORAGE_KEYS,
 } from '@/lib/constants'
-import { clampWeight, normalizeWeights } from '@/lib/weights'
+import { clampWeight, buildVarianceAwareDefaultWeights, normalizeWeights } from '@/lib/weights'
+import { useDataContext } from './DataContext'
 
 interface SettingsContextValue {
   rawWeights: Weights
+  activeWeights: Weights
   normalizedWeights: Weights
+  weightingMode: WeightingMode
   filters: Filters
   londonFilters: Filters
   qualityMode: QualityMode
@@ -32,6 +35,7 @@ interface SettingsContextValue {
   compareIds: string[]
   updateWeight: (key: keyof Weights, nextValue: number) => void
   resetWeights: () => void
+  setWeightingMode: (mode: WeightingMode) => void
   updateFilter: <K extends keyof Filters>(
     key: K,
     value: Filters[K],
@@ -120,8 +124,15 @@ const parseQualityMode = (
   return parsed === 'highConfidence' ? 'highConfidence' : DEFAULT_QUALITY_MODE
 }
 
+const parseWeightingMode = (): WeightingMode => {
+  const parsed = parseLocalStorageValue(STORAGE_KEYS.weightingMode)
+  return parsed === 'varianceAwareDefaults' ? 'varianceAwareDefaults' : 'manual'
+}
+
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
+  const { dataset } = useDataContext()
   const [rawWeights, setRawWeights] = useState<Weights>(parseWeights)
+  const [weightingMode, setWeightingModeState] = useState<WeightingMode>(parseWeightingMode)
   const [filters, setFilters] = useState<Filters>(() => parseFilters(STORAGE_KEYS.filters))
   const [londonFilters, setLondonFilters] = useState<Filters>(() => parseFilters(STORAGE_KEYS.filtersLondon))
   const [qualityMode, setQualityModeState] = useState<QualityMode>(() =>
@@ -133,11 +144,26 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [pinnedIds, setPinnedIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.pinned))
   const [compareIds, setCompareIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.compare))
 
-  const normalizedWeights = useMemo(() => normalizeWeights(rawWeights), [rawWeights])
+  const varianceAwareDefaultWeights = useMemo(
+    () =>
+      buildVarianceAwareDefaultWeights(dataset?.londonWideMicroAreas ?? dataset?.microAreas ?? []),
+    [dataset],
+  )
+
+  const activeWeights = useMemo(
+    () => (weightingMode === 'varianceAwareDefaults' ? varianceAwareDefaultWeights : rawWeights),
+    [rawWeights, varianceAwareDefaultWeights, weightingMode],
+  )
+
+  const normalizedWeights = useMemo(() => normalizeWeights(activeWeights), [activeWeights])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.weights, JSON.stringify(rawWeights))
   }, [rawWeights])
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.weightingMode, JSON.stringify(weightingMode))
+  }, [weightingMode])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.filters, JSON.stringify(filters))
@@ -163,12 +189,25 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     window.localStorage.setItem(STORAGE_KEYS.compare, JSON.stringify(compareIds))
   }, [compareIds])
 
-  const updateWeight = useCallback((key: keyof Weights, nextValue: number) => {
-    setRawWeights((current) => ({ ...current, [key]: clampWeight(nextValue) }))
-  }, [])
+  const updateWeight = useCallback(
+    (key: keyof Weights, nextValue: number) => {
+      setRawWeights((current) => {
+        const base =
+          weightingMode === 'varianceAwareDefaults' ? varianceAwareDefaultWeights : current
+        return { ...base, [key]: clampWeight(nextValue) }
+      })
+      setWeightingModeState('manual')
+    },
+    [varianceAwareDefaultWeights, weightingMode],
+  )
 
   const resetWeights = useCallback(() => {
     setRawWeights(DEFAULT_WEIGHTS)
+    setWeightingModeState('manual')
+  }, [])
+
+  const setWeightingMode = useCallback((mode: WeightingMode) => {
+    setWeightingModeState(mode)
   }, [])
 
   const updateFilter = useCallback(
@@ -248,7 +287,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo(
     () => ({
       rawWeights,
+      activeWeights,
       normalizedWeights,
+      weightingMode,
       filters,
       londonFilters,
       qualityMode,
@@ -257,6 +298,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       compareIds,
       updateWeight,
       resetWeights,
+      setWeightingMode,
       updateFilter,
       applyFilterPreset,
       resetFilters,
@@ -275,14 +317,17 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       pinnedIds,
       qualityMode,
       rawWeights,
+      activeWeights,
       resetFilters,
       resetRankingView,
       resetWeights,
+      setWeightingMode,
       setQualityMode,
       toggleCompare,
       togglePin,
       updateFilter,
       updateWeight,
+      weightingMode,
     ],
   )
 

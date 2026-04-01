@@ -67,8 +67,8 @@ export const MicroAreaDetailPage = () => {
   const { ranked } = useRankedData()
   const fromPath =
     typeof (location.state as { from?: unknown } | null)?.from === 'string'
-      ? ((location.state as { from?: string }).from ?? '/ranked')
-      : '/ranked'
+      ? ((location.state as { from?: string }).from ?? '/filtered')
+      : '/filtered'
 
   const area = useMemo(
     () => ranked.find((item) => item.microAreaId === microAreaId),

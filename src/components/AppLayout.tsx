@@ -1,27 +1,26 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 
 import { useDataContext } from '@/context/DataContext'
 import { useSettings } from '@/context/SettingsContext'
 import { formatDate } from '@/lib/format'
 
-import { FiltersPanel } from './FiltersPanel'
 import { SettingsPanel } from './SettingsPanel'
 import { ShortlistTray } from './ShortlistTray'
 
 const navItems = [
   { to: '/', label: 'Overview' },
-  { to: '/summary', label: 'How It Works' },
-  { to: '/ranked', label: 'Ranked Table' },
-  { to: '/ranked-london', label: 'Coverage View' },
-  { to: '/map', label: 'Map' },
-  { to: '/compare', label: 'Compare' },
+  { to: '/filtered', label: 'Filtered View' },
+  { to: '/trends', label: 'Trends' },
 ]
 
 export const AppLayout = () => {
+  const location = useLocation()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const { dataset } = useDataContext()
-  const { pinnedIds, compareIds } = useSettings()
+  const { pinnedIds } = useSettings()
+  const showWeightControls =
+    location.pathname === '/filtered' || location.pathname === '/trends'
 
   const generatedLabel = useMemo(() => {
     if (!dataset) {
@@ -54,16 +53,15 @@ export const AppLayout = () => {
               <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-medium text-slate-700">
                 Pinned: {pinnedIds.length}
               </span>
-              <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-medium text-slate-700">
-                Compare: {compareIds.length}/5
-              </span>
-              <button
-                type="button"
-                onClick={() => setSettingsOpen((current) => !current)}
-                className="rounded-lg bg-ink px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
-              >
-                {settingsOpen ? 'Close Weights' : 'Weights'}
-              </button>
+              {showWeightControls ? (
+                <button
+                  type="button"
+                  onClick={() => setSettingsOpen((current) => !current)}
+                  className="rounded-lg bg-ink px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+                >
+                  {settingsOpen ? 'Close Weights' : 'Weights'}
+                </button>
+              ) : null}
             </div>
           </div>
 
@@ -90,8 +88,7 @@ export const AppLayout = () => {
       </header>
 
       <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 pb-44 sm:px-6 lg:px-8">
-        <FiltersPanel />
-        {settingsOpen ? <SettingsPanel onClose={() => setSettingsOpen(false)} /> : null}
+        {showWeightControls && settingsOpen ? <SettingsPanel onClose={() => setSettingsOpen(false)} /> : null}
         <Outlet />
       </main>
       <ShortlistTray />

@@ -2,9 +2,8 @@ import { useMemo, useState } from 'react'
 
 import { CommutePriceScatter } from '@/components/charts/CommutePriceScatter'
 import { EnvironmentScatter } from '@/components/charts/EnvironmentScatter'
-import { Pm25DistanceScatter } from '@/components/charts/Pm25DistanceScatter'
+import { GreenCoverDistanceScatter } from '@/components/charts/GreenCoverDistanceScatter'
 import { QolDistanceScatter } from '@/components/charts/QolDistanceScatter'
-import { TopScoresBarChart } from '@/components/charts/TopScoresBarChart'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { RankedTable } from '@/components/table/RankedTable'
@@ -12,6 +11,7 @@ import { useDataContext } from '@/context/DataContext'
 import { useSettings } from '@/context/SettingsContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import { shortlistToCsv } from '@/lib/csv'
+import { DEFAULT_FILTERS, HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT } from '@/lib/constants'
 
 const downloadCsv = (filename: string, data: string) => {
   const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' })
@@ -27,41 +27,28 @@ const LONDON_WIDE_COMMUTE_CAP_MINUTES = 70
 
 export const LondonWideRankedPage = () => {
   const { dataset, loading, error } = useDataContext()
-  const { pinnedIds, compareIds, togglePin, toggleCompare, londonFilters } = useSettings()
+  const { pinnedIds, togglePin, londonQualityMode, setQualityMode } = useSettings()
   const [showTable, setShowTable] = useState(false)
-  const { ranked: defaultRanked } = useRankedData()
-  const londonWideFilters = useMemo(
+  const relaxedTrendFilters = useMemo(
     () => ({
-      ...londonFilters,
-      maxCommuteMinutes: londonFilters.maxCommuteMinutes,
+      ...DEFAULT_FILTERS,
+      maxCommuteMinutes: LONDON_WIDE_COMMUTE_CAP_MINUTES,
+      maxDriveMinutes: 180,
       minSchoolScore: 0,
       maxCrimeRatePerThousand: 10_000,
       maxPm25: 1_000,
       minGreenCoverPct: 0,
       maxMedianPrice: 10_000_000,
+      minDataConfidencePct: 0,
     }),
-    [londonFilters],
+    [],
   )
   const { filtered, pinned, effectiveFilters } = useRankedData({
     scope: 'londonWide',
     maxCommuteMinutesCap: LONDON_WIDE_COMMUTE_CAP_MINUTES,
     ignoreMaxDriveMinutes: true,
-    overrideFilters: londonWideFilters,
+    overrideFilters: relaxedTrendFilters,
   })
-  const { ranked: londonWideRanked } = useRankedData({ scope: 'londonWide' })
-
-  const superScopeRanked = useMemo(() => {
-    const byId = new Map<string, (typeof londonWideRanked)[number]>()
-    for (const area of londonWideRanked) {
-      byId.set(area.microAreaId, area)
-    }
-    for (const area of defaultRanked) {
-      if (!byId.has(area.microAreaId)) {
-        byId.set(area.microAreaId, area)
-      }
-    }
-    return [...byId.values()].sort((left, right) => right.dynamicOverallScore - left.dynamicOverallScore)
-  }, [defaultRanked, londonWideRanked])
   const brightonExclusion = useMemo(
     () =>
       dataset?.londonWideExcludedByCommute?.find(
@@ -71,13 +58,13 @@ export const LondonWideRankedPage = () => {
   )
 
   if (loading) {
-    return <LoadingState title="Building coverage view" />
+    return <LoadingState title="Building trends view" />
   }
 
   if (error || !dataset) {
     return (
       <ErrorState
-        title="London-wide ranked table unavailable"
+        title="Trends view unavailable"
         detail={error ?? 'Dataset is missing. Run the pipeline and sync processed files.'}
       />
     )
@@ -87,18 +74,18 @@ export const LondonWideRankedPage = () => {
     <div className="space-y-4">
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Coverage view
+          Trends
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          The primary app now already uses a <span className="font-semibold">Greater London, up to
-          70-minute commute</span> source universe. This page exists to relax most non-commute
-          constraints and make it easier to inspect the broader coverage set.
+          This page is for understanding how the wider London station universe behaves, not for
+          tightening a shortlist. It keeps the <span className="font-semibold">70-minute commute</span>{' '}
+          ceiling but otherwise relaxes the ranking filters so you can inspect variance, outliers,
+          and broad relationships between the metrics.
         </p>
         <p className="mt-1 text-xs text-slate-600">
-          Effective filters in this tab: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
-          School, crime, PM2.5, green, price, and Pinner-access filters are intentionally relaxed
-          here so you can inspect the wider ranked universe. Minimum confidence threshold still
-          applies.
+          Effective scope in this page: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
+          School, crime, PM2.5, green cover, price, and Pinner-access constraints are deliberately
+          relaxed here. Use Filtered View when you want the stricter shortlist logic.
         </p>
         {dataset.config.londonWideSourceStationCount !== undefined &&
         dataset.config.londonWideExcludedByCommuteCount !== undefined ? (
@@ -118,11 +105,30 @@ export const LondonWideRankedPage = () => {
       </section>
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-        <p className="text-sm text-slate-700">
-          {filtered.length} micro-areas match coverage view. Pin rows, then export your
-          shortlist. Use table toggle to focus on charts.
-        </p>
+        <div>
+          <p className="text-sm text-slate-700">
+            {filtered.length} micro-areas are currently in the trends universe.
+          </p>
+          <p className="mt-1 text-xs text-slate-600">
+            High-confidence mode keeps only areas at or above {HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT}%
+            confidence.
+          </p>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
+          {(['all', 'highConfidence'] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setQualityMode(mode, 'londonWide')}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium ${
+                londonQualityMode === mode
+                  ? 'bg-teal-600 text-white'
+                  : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              {mode === 'all' ? 'All trend areas' : 'High-confidence only'}
+            </button>
+          ))}
           <button
             type="button"
             onClick={() => setShowTable((current) => !current)}
@@ -134,83 +140,69 @@ export const LondonWideRankedPage = () => {
             type="button"
             disabled={pinned.length === 0}
             onClick={() =>
-              downloadCsv('micro-area-shortlist-london-wide.csv', shortlistToCsv(pinned))
+              downloadCsv('micro-area-shortlist-trends.csv', shortlistToCsv(pinned))
             }
             className="rounded-lg bg-surge px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Export pinned coverage CSV ({pinned.length})
+            Export pinned CSV ({pinned.length})
           </button>
         </div>
       </div>
 
       {showTable ? (
-        <RankedTable
-          areas={filtered}
-          pinnedIds={pinnedIds}
-          compareIds={compareIds}
-          onTogglePin={togglePin}
-          onToggleCompare={toggleCompare}
-        />
+        <RankedTable areas={filtered} pinnedIds={pinnedIds} onTogglePin={togglePin} />
       ) : (
         <section className="rounded-2xl border border-teal-100 bg-white p-4 text-sm text-slate-700 shadow-panel">
-          London-wide table is hidden. Scroll down to view the full combined-scope charts.
+          Trends table is hidden. Scroll down to focus on the charts.
         </section>
       )}
 
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Cross-scope charts
+          Trend charts
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          These charts combine all unique micro-areas from both ranked views, so you can inspect
-          the full distribution in one place.
+          These charts are meant to show spread and relationships across the broader London
+          station-area universe. They are more useful for understanding variance than for picking
+          winners directly.
         </p>
         <p className="mt-1 text-xs text-slate-600">
-          Combined unique micro-areas: {superScopeRanked.length}. Tooltips show station names on
-          hover.
+          Tooltips show station names on hover. Switch to high-confidence mode if you want a
+          cleaner, lower-noise subset.
         </p>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Top 20 by weighted score (combined scope)
+            Commute time vs median semi price
           </h3>
-          <TopScoresBarChart areas={superScopeRanked} />
+          <CommutePriceScatter areas={filtered} />
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Commute time vs median semi price (combined scope)
+            Green cover vs PM2.5
           </h3>
-          <CommutePriceScatter areas={superScopeRanked} />
-        </article>
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-2">
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            PM2.5 vs green cover (combined scope)
-          </h3>
-          <EnvironmentScatter areas={superScopeRanked} />
+          <EnvironmentScatter areas={filtered} />
         </article>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            PM2.5 vs distance from central London (combined scope)
+            Green cover vs distance from central London
           </h3>
-          <Pm25DistanceScatter
-            areas={superScopeRanked}
+          <GreenCoverDistanceScatter
+            areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
           />
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Borough QoL vs distance from central London (combined scope)
+            Borough QoL vs distance from central London
           </h3>
           <QolDistanceScatter
-            areas={superScopeRanked}
+            areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
           />
         </article>
