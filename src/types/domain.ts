@@ -26,8 +26,6 @@ export interface ComponentScores {
   schools: number
   environment: number
   crime: number
-  proximity: number
-  planningRisk: number
 }
 
 export interface MicroArea {
@@ -76,8 +74,6 @@ export interface MicroArea {
   crimeCategoryBreakdown?: Record<string, number>
   populationDenominator?: number | null
 
-  planningRiskHeuristic: NumericMetric
-  planningRiskMethodology: string
   boroughQolScore: NumericMetric
   boroughQolAuthority: string
   boroughQolPeriod: string
@@ -163,8 +159,6 @@ export interface Weights {
   schools: number
   environment: number
   crime: number
-  proximity: number
-  planningRisk: number
 }
 
 export type WeightingMode = 'manual' | 'varianceAwareDefaults'

@@ -9,7 +9,6 @@ export type DomainKey =
   | 'pollution'
   | 'greenSpace'
   | 'crime'
-  | 'planning'
   | 'wellbeing'
 
 export type TrustTier = 'high' | 'medium' | 'low'
@@ -96,7 +95,6 @@ export const getAreaDomainStatuses = (
   pollution: area.annualPm25.status,
   greenSpace: area.greenCoverPct.status,
   crime: area.crimeRatePerThousand.status,
-  planning: area.planningRiskHeuristic.status,
   wellbeing: area.boroughQolScore.status,
 })
 
@@ -125,7 +123,6 @@ export const getAreaDomainSourceBuckets = (
     getSourceBucket(area.nearestParkDistanceM.provenance),
   ]),
   crime: getSourceBucket(area.crimeRatePerThousand.provenance),
-  planning: getSourceBucket(area.planningRiskHeuristic.provenance),
   wellbeing: getSourceBucket(area.boroughQolScore.provenance),
 })
 
@@ -190,7 +187,6 @@ export const summarizeDatasetDomainCoverage = (areas: DerivedMicroArea[] | Micro
     pollution: countStatuses(areas.map((area) => getAreaDomainStatuses(area).pollution)),
     greenSpace: countStatuses(areas.map((area) => getAreaDomainStatuses(area).greenSpace)),
     crime: countStatuses(areas.map((area) => getAreaDomainStatuses(area).crime)),
-    planning: countStatuses(areas.map((area) => getAreaDomainStatuses(area).planning)),
     wellbeing: countStatuses(areas.map((area) => getAreaDomainStatuses(area).wellbeing)),
   }
 
@@ -201,7 +197,6 @@ export const summarizeDatasetDomainCoverage = (areas: DerivedMicroArea[] | Micro
     pollution: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).pollution)),
     greenSpace: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).greenSpace)),
     crime: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).crime)),
-    planning: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).planning)),
     wellbeing: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).wellbeing)),
   }
 

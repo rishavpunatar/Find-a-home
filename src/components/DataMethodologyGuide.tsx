@@ -79,24 +79,6 @@ const scoreAxes = [
       'The raw crime metric is annualised crime incidents per 1,000 residents. Lower raw crime rates are converted into higher-is-better safety scores for ranking.',
     formula: 'Crime score = inverse transform of crime rate per 1,000 residents',
   },
-  {
-    key: 'proximity',
-    label: 'Proximity',
-    detail:
-      'A higher proximity score means easier access back to Pinner. This is optional and can matter a lot or not at all depending on your own situation.',
-    recipe:
-      'This uses drive time back to Pinner as an optional personal-access signal. Lower drive times give higher scores.',
-    formula: 'Proximity score = inverse transform of drive time back to Pinner',
-  },
-  {
-    key: 'planningRisk',
-    label: 'Planning Risk',
-    detail:
-      'A higher planning-risk score means lower nearby development-pressure risk under the app’s rule-based planning signal.',
-    recipe:
-      'This comes from the planning-risk heuristic. Lower raw planning-risk values are turned into higher-is-better planning scores.',
-    formula: 'Planning score = inverse transform of planning-risk heuristic',
-  },
 ] as const
 
 interface DataMethodologyGuideProps {
@@ -131,7 +113,7 @@ export const DataMethodologyGuide = ({
   const qolCoveragePeriod = qolSource?.coveragePeriod ?? 'up to 2022-23'
   const qolReleaseDate = qolSource?.releaseDate ?? '2023-11-28'
   const centralDestination = dataset?.destinationStation ?? 'central London core'
-  const overallFormula = `((Value x ${normalizedWeights.value.toFixed(1)}) + (Transport x ${normalizedWeights.transport.toFixed(1)}) + (Schools x ${normalizedWeights.schools.toFixed(1)}) + (Environment x ${normalizedWeights.environment.toFixed(1)}) + (Crime x ${normalizedWeights.crime.toFixed(1)}) + (Proximity x ${normalizedWeights.proximity.toFixed(1)}) + (Planning x ${normalizedWeights.planningRisk.toFixed(1)})) / 100 x confidence factor`
+  const overallFormula = `((Value x ${normalizedWeights.value.toFixed(1)}) + (Transport x ${normalizedWeights.transport.toFixed(1)}) + (Schools x ${normalizedWeights.schools.toFixed(1)}) + (Environment x ${normalizedWeights.environment.toFixed(1)}) + (Crime x ${normalizedWeights.crime.toFixed(1)})) / 100 x confidence factor`
 
   return (
     <div className="space-y-4">
@@ -146,7 +128,7 @@ export const DataMethodologyGuide = ({
               </p>
               <p>
                 The ranking works by combining housing, commute, schools, air quality, green
-                space, crime, planning, and optional Pinner access into one shortlist model.
+                space, and crime into one shortlist model.
               </p>
             </InfoCard>
 
@@ -579,14 +561,6 @@ export const DataMethodologyGuide = ({
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
               Overpass / OpenStreetMap
-            </a>
-            <a
-              href="https://www.planning.data.gov.uk/"
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
-            >
-              planning.data.gov.uk
             </a>
             <a
               href="https://www.ons.gov.uk/datasets/wellbeing-local-authority"

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-02T00:26:48+01:00",
+  "generatedAt": "2026-04-02T00:56:10+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "strong_source_coverage",
-  "sourceCoverageScore": 0.8956,
-  "verificationStrengthScore": 0.6782,
-  "verificationCompletenessScore": 0.8956,
+  "sourceCoverageScore": 0.8807,
+  "verificationStrengthScore": 0.678,
+  "verificationCompletenessScore": 0.8807,
   "sourceMatrix": {
     "property": {
       "status": "source_applied_not_live_verified",
@@ -131,17 +131,6 @@
             "other": 0
           }
         },
-        "planning": {
-          "availablePct": 100.0,
-          "sourceAppliedPct": 100.0,
-          "statusCounts": {
-            "available": 534,
-            "estimated": 0,
-            "placeholder": 0,
-            "missing": 0,
-            "other": 0
-          }
-        },
         "wellbeing": {
           "availablePct": 97.19,
           "sourceAppliedPct": 97.19,
@@ -214,17 +203,6 @@
           }
         },
         "crime": {
-          "availablePct": 100.0,
-          "sourceAppliedPct": 100.0,
-          "statusCounts": {
-            "available": 534,
-            "estimated": 0,
-            "placeholder": 0,
-            "missing": 0,
-            "other": 0
-          }
-        },
-        "planning": {
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {

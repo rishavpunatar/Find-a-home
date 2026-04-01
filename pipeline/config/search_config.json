@@ -20,13 +20,11 @@
   },
   "destination_station": "Central London core (Oxford Circus / Bank / Victoria / Waterloo)",
   "default_weights": {
-    "value": 31,
-    "transport": 19,
-    "schools": 22,
+    "value": 32,
+    "transport": 20,
+    "schools": 23,
     "environment": 15,
-    "crime": 10,
-    "proximity": 0,
-    "planningRisk": 3
+    "crime": 10
   },
   "last_updated_default": "2026-03-01"
 }

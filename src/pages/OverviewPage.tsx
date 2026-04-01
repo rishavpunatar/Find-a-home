@@ -22,7 +22,6 @@ const coverageLabelMap = {
   pollution: 'Pollution',
   greenSpace: 'Green',
   crime: 'Crime',
-  planning: 'Planning',
   wellbeing: 'QoL (borough wellbeing)',
 } as const
 
@@ -116,20 +115,6 @@ export const OverviewPage = () => {
       description: 'Relative safety spread across the default search universe.',
       values: ranked.map((area) => area.componentScores.crime),
       barColor: '#0891b2',
-    },
-    {
-      key: 'proximity-score',
-      title: 'Pinner access score',
-      description: 'How much optional access back to Pinner varies across the full area set.',
-      values: ranked.map((area) => area.componentScores.proximity),
-      barColor: '#f59e0b',
-    },
-    {
-      key: 'planning-score',
-      title: 'Planning-risk score',
-      description: 'Current heuristic planning-risk spread across all areas.',
-      values: ranked.map((area) => area.componentScores.planningRisk),
-      barColor: '#7c3aed',
     },
   ]
   const marketAndTransportDistributions = [

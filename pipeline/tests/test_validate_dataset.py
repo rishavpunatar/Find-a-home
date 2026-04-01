@@ -25,8 +25,6 @@ def make_area() -> dict[str, object]:
         'schools': 70.0,
         'environment': 66.0,
         'crime': 67.0,
-        'proximity': 72.0,
-        'planningRisk': 63.0,
     }
     data_confidence = 0.91
     area: dict[str, object] = {
@@ -59,7 +57,6 @@ def make_area() -> dict[str, object]:
         'greenCoverPct': metric(29.4),
         'nearestParkDistanceM': metric(210.0),
         'crimeRatePerThousand': metric(62.0),
-        'planningRiskHeuristic': metric(44.0),
         'boroughQolScore': metric(72.3),
     }
     return area
@@ -67,13 +64,11 @@ def make_area() -> dict[str, object]:
 
 def default_weights() -> dict[str, float]:
     return {
-        'value': 25,
+        'value': 32,
         'transport': 20,
-        'schools': 20,
+        'schools': 23,
         'environment': 15,
-        'crime': 12.5,
-        'proximity': 5,
-        'planningRisk': 2.5,
+        'crime': 10,
     }
 
 

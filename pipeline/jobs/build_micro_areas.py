@@ -12,7 +12,6 @@ from zoneinfo import ZoneInfo
 
 from pipeline.adapters.crime_adapter import FixtureCrimeAdapter
 from pipeline.adapters.green_space_adapter import FixtureGreenSpaceAdapter
-from pipeline.adapters.planning_adapter import FixturePlanningAdapter
 from pipeline.adapters.pollution_adapter import FixturePollutionAdapter
 from pipeline.adapters.population_adapter import FixturePopulationAdapter
 from pipeline.adapters.property_adapter import FixturePropertyAdapter
@@ -525,7 +524,6 @@ def score_components(
     pollution: dict[str, Any] | None,
     green: dict[str, Any] | None,
     crime: dict[str, Any] | None,
-    planning: dict[str, Any] | None,
 ) -> dict[str, float]:
     default_population_denominator = 25_650.0
 
@@ -560,12 +558,6 @@ def score_components(
         if transport and transport.get('interchange_count') is not None
         else float(station.interchange_count)
     )
-    drive_to_pinner = (
-        float(transport.get('drive_to_pinner_min'))
-        if transport and transport.get('drive_to_pinner_min') is not None
-        else float(station.drive_to_pinner_min)
-    )
-
     affordability = number_or_default(price, 'affordability_score', 45)
     value_for_money = number_or_default(price, 'value_for_money_score', 45)
     value_score = mean([affordability, value_for_money])
@@ -615,19 +607,12 @@ def score_components(
     crime_rate = number_or_default(crime, 'crime_rate_per_1000', 95)
     crime_score = inverse_score(crime_rate, best=25, worst=130)
 
-    proximity_score = inverse_score(drive_to_pinner, best=2, worst=30)
-
-    planning_risk = number_or_default(planning, 'planning_risk_score', 55)
-    planning_score = inverse_score(planning_risk, best=15, worst=80)
-
     return {
         'value': round(clamp(value_score), 1),
         'transport': round(clamp(transport_score), 1),
         'schools': round(clamp(schools_score), 1),
         'environment': round(clamp(environment_score), 1),
         'crime': round(clamp(crime_score), 1),
-        'proximity': round(clamp(proximity_score), 1),
-        'planningRisk': round(clamp(planning_score), 1),
     }
 
 
@@ -642,11 +627,14 @@ def ranking_rules(component_scores: dict[str, float]) -> list[str]:
         'schools': 'school quality and access',
         'environment': 'air quality and green space',
         'crime': 'safety',
-        'proximity': 'Pinner access',
-        'planningRisk': 'planning risk exposure',
     }
 
-    sorted_pairs = sorted(component_scores.items(), key=lambda item: item[1], reverse=True)
+    ranked_keys = ['value', 'transport', 'schools', 'environment', 'crime']
+    sorted_pairs = sorted(
+        [(key, component_scores[key]) for key in ranked_keys],
+        key=lambda item: item[1],
+        reverse=True,
+    )
     strengths = sorted_pairs[:2]
     weaknesses = sorted_pairs[-2:]
 
@@ -665,7 +653,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     pollution_last_updated = source_date(source_metadata, 'pollution', config.last_updated_default)
     green_last_updated = source_date(source_metadata, 'greenSpace', config.last_updated_default)
     crime_last_updated = source_date(source_metadata, 'crime', config.last_updated_default)
-    planning_last_updated = source_date(source_metadata, 'planning', config.last_updated_default)
     transport_last_updated = source_date(source_metadata, 'transport', config.last_updated_default)
 
     station_adapter = FixtureStationTransportAdapter(RAW_DIR / 'stations_transport.json')
@@ -680,7 +667,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     green_adapter = FixtureGreenSpaceAdapter(RAW_DIR / 'green_space_metrics.json')
     crime_adapter = FixtureCrimeAdapter(RAW_DIR / 'crime_metrics.json')
     population_adapter = FixturePopulationAdapter(RAW_DIR / 'population_metrics.json')
-    planning_adapter = FixturePlanningAdapter(RAW_DIR / 'planning_metrics.json')
     wellbeing_adapter = FixtureWellbeingAdapter(RAW_DIR / 'wellbeing_metrics.json')
     wellbeing_last_updated = str(
         wellbeing_adapter.source.get('releaseDate') or config.last_updated_default,
@@ -697,7 +683,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     green_anchor_records = json.loads((RAW_DIR / 'green_space_metrics.json').read_text(encoding='utf-8'))
     crime_anchor_records = json.loads((RAW_DIR / 'crime_metrics.json').read_text(encoding='utf-8'))
     population_anchor_records = json.loads((RAW_DIR / 'population_metrics.json').read_text(encoding='utf-8'))
-    planning_anchor_records = json.loads((RAW_DIR / 'planning_metrics.json').read_text(encoding='utf-8'))
 
     raw_stations = station_adapter.fetch_stations()
     all_stations, excluded_stations = sanitize_station_universe(raw_stations)
@@ -870,15 +855,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 ['population_in_reference_zone'],
                 'Estimated by inverse-distance interpolation from nearby station denominator proxies.',
             )
-            planning_record = planning_adapter.get_by_station(station.station_code)
-            if not planning_record or planning_record.get('planning_risk_score') is None:
-                planning_record = synthesize_record_from_anchors(
-                    station,
-                    stations_by_code,
-                planning_anchor_records,
-                ['planning_risk_score'],
-                'Heuristic planning/development risk estimated by interpolation from nearby structured planning scores.',
-            ) or planning_record
             wellbeing_record = wellbeing_adapter.get_by_local_authority(station.local_authority)
 
             resolved_records_by_station[station.station_code] = {
@@ -889,7 +865,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 'green': green_record,
                 'crime': crime_record,
                 'population': population_record,
-                'planning': planning_record,
                 'wellbeing': wellbeing_record,
             }
 
@@ -916,7 +891,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             green_record = widened_green_records.get(station.station_code) or station_records.get('green')
             crime_record = station_records.get('crime')
             population_record = station_records.get('population')
-            planning_record = station_records.get('planning')
             wellbeing_record = station_records.get('wellbeing')
 
             components = score_components(
@@ -928,7 +902,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 pollution_record,
                 green_record,
                 crime_record,
-                planning_record,
             )
 
             overlap_conf = overlap_confidence(
@@ -1109,17 +1082,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     note='Annualised recent police incidents per 1,000 residents using direct data.police.uk station-area pulls and the local denominator.',
                     last_updated=crime_last_updated,
                 ),
-                'planningRiskHeuristic': metric_from_record(
-                    planning_record,
-                    'planning_risk_score',
-                    unit='score',
-                    note='Rule-based planning and development pressure score from structured planning layers.',
-                    last_updated=planning_last_updated,
-                    fallback_value=55,
-                    fallback_status='placeholder',
-                    fallback_confidence=0.2,
-                    fallback_provenance='heuristic',
-                ),
                 'boroughQolScore': metric_from_record(
                     wellbeing_record,
                     'qol_score_0_100',
@@ -1140,8 +1102,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             overall = weighted_score(components, config.default_weights, confidence)
 
             flags: list[str] = []
-            if metrics['planningRiskHeuristic'].confidence < 0.5:
-                flags.append('Planning risk fell back to a low-confidence placeholder because direct structured planning data was unavailable.')
             if scope_label == 'londonWide':
                 flags.append(
                     'Included in the broader London coverage view for this dataset refresh.',
@@ -1166,7 +1126,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
                 'School scoring is now primary-only and blends an admissions-aware access heuristic, a 3-year KS2 attainment basket, a light attendance supplement, and an Ofsted warning overlay rather than a single inspection label.',
                 'Green-cover percentage uses an expanded 2x walk-radius neighborhood blend.',
-                'Planning risk is now derived from structured planning layers, but it remains a rule-based signal rather than a direct planning outcome forecast.',
             ]
 
             micro_area = {
@@ -1192,12 +1151,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     (school_record or {}).get(
                         'methodology_note',
                         'Composite score from multiple indicators with explicit confidence weighting.',
-                    ),
-                ),
-                'planningRiskMethodology': str(
-                    (planning_record or {}).get(
-                        'methodology_note',
-                        'No structured planning feed was available for this area, so the score fell back to a placeholder.',
                     ),
                 ),
                 'boroughQolAuthority': str(

@@ -15,7 +15,7 @@ import {
   useMapEvents,
 } from 'react-leaflet'
 
-import type { ComponentScores, Coordinate, DerivedMicroArea } from '@/types/domain'
+import type { Coordinate, DerivedMicroArea, Weights } from '@/types/domain'
 
 import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { formatCurrency, formatNumber } from '@/lib/format'
@@ -26,7 +26,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 })
 
-export type ColorMetric = 'overall' | keyof ComponentScores
+export type ColorMetric =
+  | 'overall'
+  | 'value'
+  | 'transport'
+  | 'schools'
+  | 'environment'
+  | 'crime'
 
 export interface MapViewport {
   lat: number
@@ -41,8 +47,6 @@ const mapMetricLabel: Record<ColorMetric, string> = {
   schools: 'School score',
   environment: 'Environment score',
   crime: 'Crime score',
-  proximity: 'Pinner access score',
-  planningRisk: 'Planning risk score',
 }
 
 const LEGEND_COLORS = [
@@ -310,14 +314,12 @@ interface MicroAreaMapProps {
   onViewportChange?: (viewport: MapViewport) => void
 }
 
-const componentScoreRows: Array<{ key: keyof ComponentScores; label: string }> = [
+const componentScoreRows: Array<{ key: keyof Weights; label: string }> = [
   { key: 'value', label: 'Value' },
   { key: 'transport', label: 'Transport' },
   { key: 'schools', label: 'Schools' },
   { key: 'environment', label: 'Environment' },
   { key: 'crime', label: 'Crime' },
-  { key: 'proximity', label: 'Pinner' },
-  { key: 'planningRisk', label: 'Planning' },
 ]
 
 const MapDetailContent = ({

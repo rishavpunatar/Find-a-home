@@ -19,8 +19,6 @@ const metricOptions: Array<{ value: ColorMetric; label: string }> = [
   { value: 'schools', label: 'Schools' },
   { value: 'environment', label: 'Environment' },
   { value: 'crime', label: 'Crime' },
-  { value: 'proximity', label: 'Pinner access' },
-  { value: 'planningRisk', label: 'Planning risk' },
 ]
 
 const DEFAULT_VIEWPORT: MapViewport = {

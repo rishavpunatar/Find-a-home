@@ -341,7 +341,6 @@ def compute_domain_coverage(dataset: dict[str, Any]) -> dict[str, Any]:
         'pollution': ['annualNo2', 'annualPm25'],
         'greenSpace': ['greenSpaceAreaKm2Within1km', 'greenCoverPct', 'nearestParkDistanceM'],
         'crime': ['crimeRatePerThousand'],
-        'planning': ['planningRiskHeuristic'],
         'wellbeing': ['boroughQolScore'],
     }
     status_priority = {'available': 0, 'estimated': 1, 'placeholder': 2, 'missing': 3, 'other': 4}

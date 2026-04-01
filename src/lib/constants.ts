@@ -1,13 +1,11 @@
 import type { Filters, QualityMode, Weights } from '@/types/domain'
 
 export const DEFAULT_WEIGHTS: Weights = {
-  value: 31,
-  transport: 19,
-  schools: 22,
+  value: 32,
+  transport: 20,
+  schools: 23,
   environment: 15,
   crime: 10,
-  proximity: 0,
-  planningRisk: 3,
 }
 
 export const DEFAULT_FILTERS: Filters = {
@@ -30,7 +28,7 @@ export const DEFAULT_QUALITY_MODE: QualityMode = 'all'
 export const FILTER_PRESETS = {
   focus: {
     label: 'Focus',
-    description: 'Tighter shortlist with stronger commute, schools, and optional Pinner access.',
+    description: 'Tighter shortlist with stronger commute, schools, and cleaner core ranking signals.',
     filters: {
       maxCommuteMinutes: 60,
       maxDriveMinutes: 50,
@@ -68,8 +66,8 @@ export type FilterPresetKey = keyof typeof FILTER_PRESETS
 export const FILTER_PRESET_ORDER: FilterPresetKey[] = ['focus', 'balanced', 'explore']
 
 export const STORAGE_KEYS = {
-  weights: 'find-a-home.weights',
-  weightingMode: 'find-a-home.weighting-mode',
+  weights: 'find-a-home.v2.weights',
+  weightingMode: 'find-a-home.v2.weighting-mode',
   filters: 'find-a-home.v3.filters.default',
   filtersLondon: 'find-a-home.v3.filters.london',
   qualityMode: 'find-a-home.v2.quality.default',

@@ -13,6 +13,3 @@ export const crimeDiagnosticScore = (crimeRatePerThousand: number): number =>
 
 export const proximityDiagnosticScore = (driveToPinnerMinutes: number): number =>
   inverseScore(driveToPinnerMinutes, 2, 30)
-
-export const planningDiagnosticScore = (planningRisk: number): number =>
-  inverseScore(planningRisk, 15, 80)

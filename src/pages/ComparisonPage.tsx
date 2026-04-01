@@ -53,8 +53,6 @@ export const ComparisonPage = () => {
     schools: area.componentScores.schools,
     environment: area.componentScores.environment,
     crime: area.componentScores.crime,
-    proximity: area.componentScores.proximity,
-    planningRisk: area.componentScores.planningRisk,
   }))
 
   return (
@@ -102,8 +100,6 @@ export const ComparisonPage = () => {
               <Bar dataKey="schools" fill="#65a30d" />
               <Bar dataKey="environment" fill="#16a34a" />
               <Bar dataKey="crime" fill="#0891b2" />
-              <Bar dataKey="proximity" fill="#f59e0b" />
-              <Bar dataKey="planningRisk" fill="#7c3aed" />
             </BarChart>
           </ResponsiveContainer>
         </div>

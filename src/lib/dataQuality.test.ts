@@ -197,15 +197,6 @@ const baseArea: DerivedMicroArea = {
     methodologyNote: 'Test',
     lastUpdated: '2026-03-01',
   },
-  planningRiskHeuristic: {
-    value: 32,
-    unit: 'score',
-    status: 'estimated',
-    confidence: 0.55,
-    methodologyNote: 'Test',
-    lastUpdated: '2026-03-01',
-  },
-  planningRiskMethodology: 'Test',
   boroughQolScore: {
     value: 72.3,
     unit: 'score',
@@ -223,8 +214,6 @@ const baseArea: DerivedMicroArea = {
     schools: 78,
     environment: 67,
     crime: 70,
-    proximity: 80,
-    planningRisk: 45,
   },
   overallWeightedScore: 71,
   dynamicOverallScore: 69,
@@ -244,7 +233,7 @@ describe('dataQuality helpers', () => {
   it('counts domain statuses for summary badges', () => {
     expect(getAreaDomainStatusCounts(baseArea)).toEqual({
       available: 3,
-      estimated: 4,
+      estimated: 3,
       placeholder: 1,
       missing: 0,
     })
@@ -334,10 +323,6 @@ describe('dataQuality helpers', () => {
         ...baseArea.crimeRatePerThousand,
         provenance: 'direct',
       },
-      planningRiskHeuristic: {
-        ...baseArea.planningRiskHeuristic,
-        provenance: 'direct',
-      },
       boroughQolScore: {
         ...baseArea.boroughQolScore,
         provenance: 'direct',
@@ -345,7 +330,7 @@ describe('dataQuality helpers', () => {
     }
 
     expect(getAreaDomainSourceCounts(area)).toEqual({
-      sourceApplied: 7,
+      sourceApplied: 6,
       modelled: 1,
       missing: 0,
     })

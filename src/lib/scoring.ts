@@ -8,9 +8,7 @@ const scoreKeys = [
   'schools',
   'environment',
   'crime',
-  'proximity',
-  'planningRisk',
-] satisfies (keyof ComponentScores)[]
+] satisfies (keyof Weights)[]
 
 const clampScore = (value: number): number => Math.max(0, Math.min(100, value))
 
@@ -49,14 +47,12 @@ export const rankMicroAreas = (areas: MicroArea[], weights: Weights): DerivedMic
 }
 
 export const buildRankingExplanation = (area: MicroArea): string[] => {
-  const scorePairs: Array<{ key: keyof ComponentScores; value: number; label: string }> = [
+  const scorePairs: Array<{ key: keyof Weights; value: number; label: string }> = [
     { key: 'value', value: area.componentScores.value, label: 'value for money' },
     { key: 'transport', value: area.componentScores.transport, label: 'transport' },
     { key: 'schools', value: area.componentScores.schools, label: 'schools' },
     { key: 'environment', value: area.componentScores.environment, label: 'environment' },
     { key: 'crime', value: area.componentScores.crime, label: 'safety' },
-    { key: 'proximity', value: area.componentScores.proximity, label: 'Pinner access' },
-    { key: 'planningRisk', value: area.componentScores.planningRisk, label: 'planning risk' },
   ]
 
   const sorted = [...scorePairs].sort((a, b) => b.value - a.value)

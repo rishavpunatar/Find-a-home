@@ -21,8 +21,6 @@ export const SubscoreRadarChart = ({ area }: SubscoreRadarChartProps) => {
     { metric: 'Schools', score: area.componentScores.schools },
     { metric: 'Environment', score: area.componentScores.environment },
     { metric: 'Crime', score: area.componentScores.crime },
-    { metric: 'Pinner', score: area.componentScores.proximity },
-    { metric: 'Planning', score: area.componentScores.planningRisk },
   ]
 
   return (

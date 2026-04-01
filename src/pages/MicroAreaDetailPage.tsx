@@ -23,7 +23,6 @@ const domainLabelMap = {
   pollution: 'Pollution',
   greenSpace: 'Green',
   crime: 'Crime',
-  planning: 'Planning',
   wellbeing: 'QoL (borough wellbeing)',
 } as const
 
@@ -294,10 +293,6 @@ export const MicroAreaDetailPage = () => {
               <dd className="font-medium">{formatNumber(area.nearestParkDistanceM.value)} m</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Planning risk heuristic</dt>
-              <dd className="font-medium">{formatNumber(area.planningRiskHeuristic.value, 1)}</dd>
-            </div>
-            <div className="flex justify-between">
               <dt className="text-slate-600">Borough QoL (borough wellbeing) authority link</dt>
               <dd className="font-medium">{area.boroughQolAuthority || 'N/A'}</dd>
             </div>
@@ -306,7 +301,6 @@ export const MicroAreaDetailPage = () => {
               <dd className="font-medium">{area.boroughQolPeriod || 'N/A'}</dd>
             </div>
           </dl>
-          <p className="mt-3 text-xs text-slate-600">{area.planningRiskMethodology}</p>
         </article>
       </section>
 
