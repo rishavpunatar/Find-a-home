@@ -19,6 +19,9 @@ const MapPage = lazy(() => import('@/pages/MapPage').then((module) => ({ default
 const ComparisonPage = lazy(() =>
   import('@/pages/ComparisonPage').then((module) => ({ default: module.ComparisonPage })),
 )
+const SummaryPage = lazy(() =>
+  import('@/pages/SummaryPage').then((module) => ({ default: module.SummaryPage })),
+)
 const MicroAreaDetailPage = lazy(() =>
   import('@/pages/MicroAreaDetailPage').then((module) => ({
     default: module.MicroAreaDetailPage,
@@ -37,6 +40,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route index element={<OverviewPage />} />
+        <Route path="summary" element={<SummaryPage />} />
         <Route path="ranked" element={<RankedTablePage />} />
         <Route path="ranked-london" element={<LondonWideRankedPage />} />
         <Route path="map" element={<MapPage />} />

@@ -243,10 +243,11 @@ export const OverviewPage = () => {
           central London before you spend time on listings, calls, and viewings.
         </p>
         <ol className="mt-3 space-y-2 text-sm text-slate-700">
-          <li>1. Start with the `Balanced` preset in the filter panel.</li>
-          <li>2. Use the Pinner drive filter only if access back to Pinner matters to you.</li>
-          <li>3. Switch to `High-confidence only` if you want a stricter shortlist.</li>
-          <li>4. Open `Ranked Table` to pin areas, then use `Map` and `Compare` to sense-check them.</li>
+          <li>1. Open `How It Works` once if you want a plain-English explanation of the data.</li>
+          <li>2. Start with the `Balanced` preset in the filter panel.</li>
+          <li>3. Use the Pinner drive filter only if access back to Pinner matters to you.</li>
+          <li>4. Switch to `High-confidence only` if you want a stricter shortlist.</li>
+          <li>5. Open `Ranked Table` to pin areas, then use `Map` and `Compare` to sense-check them.</li>
         </ol>
       </section>
 

@@ -11,6 +11,7 @@ import { ShortlistTray } from './ShortlistTray'
 
 const navItems = [
   { to: '/', label: 'Overview' },
+  { to: '/summary', label: 'How It Works' },
   { to: '/ranked', label: 'Ranked Table' },
   { to: '/ranked-london', label: 'Coverage View' },
   { to: '/map', label: 'Map' },
