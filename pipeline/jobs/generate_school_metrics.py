@@ -32,10 +32,19 @@ PRIMARY_PERFORMANCE_URL = (
     'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/'
     'f6cb50e9-0eca-4b1e-ac1a-6f6bb9d21a07/csv'
 )
+PRIMARY_ABSENCE_URL = (
+    'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/'
+    '1ef1689a-070a-4e0b-9314-512db23a3cc9/csv'
+)
+OFSTED_OUTCOMES_URL = (
+    'https://assets.publishing.service.gov.uk/media/691ee0612a687551bd8153da/'
+    'State-funded_schools_inspections_and_outcomes_as_at_31_August_2025.csv'
+)
 SECONDARY_PERFORMANCE_URL = (
     'https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/'
     'c8f753ef-b76f-41a3-8949-13382e131054/csv'
 )
+OFSTED_REFERENCE_DATE = '2025-08-31'
 
 USER_AGENT = (
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
@@ -51,16 +60,29 @@ STATE_FUNDED_TAG = 'all.open.state-funded.schools'
 DRIVE_CATCHMENT_MINUTES = 20.0
 STRAIGHT_LINE_PREFILTER_METERS = 15_000.0
 DRIVE_TIME_WEIGHT_FLOOR_MINUTES = 4.0
+PRIMARY_DISTANCE_WEIGHT_STEPS: list[tuple[float, float]] = [
+    (6.0, 1.0),
+    (10.0, 0.82),
+    (14.0, 0.55),
+    (DRIVE_CATCHMENT_MINUTES, 0.25),
+]
+FAITH_ACCESS_FACTOR = 0.62
+ALL_THROUGH_ACCESS_FACTOR = 0.9
+PRIMARY_OFSTED_MAX_PENALTY = 10.0
+PRIMARY_WARNING_SHARE_FOR_FULL_PENALTY = 0.45
+NON_RESTRICTIVE_RELIGIOUS_CHARACTER_VALUES = {'', 'None', 'Does not apply'}
 
 PRIMARY_PHASES = {'Primary', 'Middle deemed primary', 'All-through'}
 SECONDARY_PHASES = {'Secondary', 'Middle deemed secondary', 'All-through'}
 PRIMARY_QUALITY_WEIGHTS = {
-    'expected': 0.45,
-    'higher': 0.15,
-    'reading_progress': 0.15,
-    'maths_progress': 0.15,
-    'reading_scaled': 0.05,
-    'maths_scaled': 0.05,
+    'expected': 0.4,
+    'higher': 0.2,
+    'reading_scaled': 0.2,
+    'maths_scaled': 0.2,
+}
+PRIMARY_ATTENDANCE_WEIGHTS = {
+    'overall_attendance': 0.55,
+    'persistent_attendance': 0.45,
 }
 SECONDARY_QUALITY_WEIGHTS = {
     'p8': 0.50,
@@ -83,12 +105,28 @@ def write_json(path: Path, payload: Any) -> None:
 
 
 def safe_float(raw_value: str | None) -> float | None:
-    if raw_value in (None, '', 'z', 'x', 'u', 'c', 'SUPP', 'NA'):
+    if raw_value in (None, '', 'z', 'x', 'u', 'c', 'SUPP', 'NA', 'NULL', 'Not set'):
         return None
     try:
         return float(raw_value)
     except ValueError:
         return None
+
+
+def safe_int(raw_value: str | None) -> int | None:
+    numeric_value = safe_float(raw_value)
+    return None if numeric_value is None else int(numeric_value)
+
+
+def clamp(value: float, minimum: float, maximum: float) -> float:
+    return max(minimum, min(maximum, value))
+
+
+def average_available(values: list[float | None]) -> float | None:
+    available_values = [value for value in values if value is not None]
+    if not available_values:
+        return None
+    return sum(available_values) / len(available_values)
 
 
 def percentile_rank_map(metric_values: dict[str, float | None]) -> dict[str, float]:
@@ -368,6 +406,9 @@ def gias_school_records() -> tuple[dict[str, dict[str, Any]], str]:
                 school_records[urn] = {
                     'name': row['EstablishmentName'],
                     'phase': row['PhaseOfEducation (name)'],
+                    'admissions_policy': row.get('AdmissionsPolicy (name)', ''),
+                    'religious_character': row.get('ReligiousCharacter (name)', ''),
+                    'school_capacity': safe_int(row.get('SchoolCapacity')),
                     'easting': easting,
                     'northing': northing,
                     'lon': float(OSGB_TO_WGS84.transform(easting, northing)[0]),
@@ -380,43 +421,231 @@ def gias_school_records() -> tuple[dict[str, dict[str, Any]], str]:
 def csv_rows(url: str) -> list[dict[str, str]]:
     response = requests.get(url, headers={'User-Agent': USER_AGENT}, timeout=REQUEST_TIMEOUT_SECONDS)
     response.raise_for_status()
-    return list(csv.DictReader(io.StringIO(response.text)))
+    for encoding in ('utf-8-sig', 'cp1252'):
+        try:
+            return list(csv.DictReader(io.StringIO(response.content.decode(encoding))))
+        except UnicodeDecodeError:
+            continue
+    raise UnicodeDecodeError('csv_rows', b'', 0, 0, f'Unsupported CSV encoding for {url}')
 
 
 def primary_quality_scores(school_records: dict[str, dict[str, Any]]) -> tuple[dict[str, float], str]:
     rows = csv_rows(PRIMARY_PERFORMANCE_URL)
-
     filtered_rows = [row for row in rows if row['geographic_level'] == 'School']
-    latest_time_period = max(row['time_period'] for row in filtered_rows)
     version_priority = {'Revised': 3, 'Final': 2, 'Provisional': 1}
-    latest_version = max(
-        (row['version'] for row in filtered_rows if row['time_period'] == latest_time_period),
-        key=lambda value: version_priority.get(value, 0),
-    )
+    latest_periods = sorted({row['time_period'] for row in filtered_rows if row['time_period']})[-3:]
+    selected_versions = {
+        period: max(
+            (row['version'] for row in filtered_rows if row['time_period'] == period),
+            key=lambda value: version_priority.get(value, 0),
+        )
+        for period in latest_periods
+    }
 
-    metrics_by_urn: dict[str, dict[str, float | None]] = {}
+    yearly_metrics_by_urn: dict[str, dict[str, list[float | None]]] = {}
     for row in filtered_rows:
-        if row['time_period'] != latest_time_period or row['version'] != latest_version:
+        period = row['time_period']
+        if period not in selected_versions or row['version'] != selected_versions[period]:
             continue
         if row['breakdown_topic'] != 'All pupils' or row['breakdown'] != 'Total':
             continue
+
         urn = row['school_urn']
         if urn not in school_records:
             continue
 
-        metrics = metrics_by_urn.setdefault(urn, {})
+        metrics = yearly_metrics_by_urn.setdefault(urn, {})
         subject = row['subject']
         if subject == 'Reading, writing and maths':
-            metrics['expected'] = safe_float(row['expected_standard_pupil_percent'])
-            metrics['higher'] = safe_float(row['higher_standard_pupil_percent'])
+            metrics.setdefault('expected', []).append(safe_float(row['expected_standard_pupil_percent']))
+            metrics.setdefault('higher', []).append(safe_float(row['higher_standard_pupil_percent']))
         elif subject == 'Reading':
-            metrics['reading_progress'] = safe_float(row['progress_measure_score'])
-            metrics['reading_scaled'] = safe_float(row['average_scaled_score'])
+            metrics.setdefault('reading_scaled', []).append(safe_float(row['average_scaled_score']))
         elif subject == 'Mathematics':
-            metrics['maths_progress'] = safe_float(row['progress_measure_score'])
-            metrics['maths_scaled'] = safe_float(row['average_scaled_score'])
+            metrics.setdefault('maths_scaled', []).append(safe_float(row['average_scaled_score']))
 
-    return percentile_quality_scores(metrics_by_urn, PRIMARY_QUALITY_WEIGHTS), f'{latest_time_period} {latest_version}'
+    averaged_metrics_by_urn = {
+        urn: {
+            metric_name: average_available(metric_values)
+            for metric_name, metric_values in metrics.items()
+        }
+        for urn, metrics in yearly_metrics_by_urn.items()
+    }
+
+    return percentile_quality_scores(averaged_metrics_by_urn, PRIMARY_QUALITY_WEIGHTS), (
+        f'{latest_periods[0]}-{latest_periods[-1]}'
+    )
+
+
+def primary_attendance_scores(school_records: dict[str, dict[str, Any]]) -> tuple[dict[str, float], str]:
+    rows = csv_rows(PRIMARY_ABSENCE_URL)
+
+    filtered_rows = [
+        row
+        for row in rows
+        if row['geographic_level'] == 'School' and row['education_phase'] == 'State-funded primary'
+    ]
+    latest_periods = sorted({row['time_period'] for row in filtered_rows if row['time_period']})[-3:]
+
+    yearly_metrics_by_urn: dict[str, dict[str, list[float | None]]] = {}
+    for row in filtered_rows:
+        if row['time_period'] not in latest_periods:
+            continue
+
+        urn = row['school_urn']
+        if urn not in school_records:
+            continue
+
+        metrics = yearly_metrics_by_urn.setdefault(urn, {})
+        metrics.setdefault('overall_attendance', []).append(
+            None
+            if safe_float(row['sess_overall_percent']) is None
+            else -float(safe_float(row['sess_overall_percent']) or 0.0)
+        )
+        metrics.setdefault('persistent_attendance', []).append(
+            None
+            if safe_float(row['enrolments_pa_10_exact_percent']) is None
+            else -float(safe_float(row['enrolments_pa_10_exact_percent']) or 0.0)
+        )
+
+    averaged_metrics_by_urn = {
+        urn: {
+            metric_name: average_available(metric_values)
+            for metric_name, metric_values in metrics.items()
+        }
+        for urn, metrics in yearly_metrics_by_urn.items()
+    }
+
+    return percentile_quality_scores(averaged_metrics_by_urn, PRIMARY_ATTENDANCE_WEIGHTS), (
+        f'{latest_periods[0]}-{latest_periods[-1]}'
+    )
+
+
+def parse_ofsted_grade(raw_value: str | None) -> int | None:
+    numeric_value = safe_int(raw_value)
+    if numeric_value in {1, 2, 3, 4}:
+        return numeric_value
+    return None
+
+
+def primary_ofsted_warning_severity(row: dict[str, str]) -> float:
+    severity = 0.0
+
+    overall = parse_ofsted_grade(row.get('Overall effectiveness'))
+    if overall == 4:
+        severity = max(severity, 1.0)
+    elif overall == 3:
+        severity = max(severity, 0.6)
+
+    for field_name in [
+        'Quality of education',
+        'Behaviour and attitudes',
+        'Effectiveness of leadership and management',
+    ]:
+        grade = parse_ofsted_grade(row.get(field_name))
+        if grade == 4:
+            severity = max(severity, 0.8)
+        elif grade == 3:
+            severity = max(severity, 0.4)
+
+    if (row.get('Safeguarding is effective?') or '').strip().lower() == 'no':
+        severity = max(severity, 1.0)
+
+    warning_notices = safe_int(row.get('Number of warning notices issued in 2024/25 academic year'))
+    if warning_notices and warning_notices > 0:
+        severity = max(severity, min(1.0, 0.45 + warning_notices * 0.2))
+
+    return severity
+
+
+def primary_ofsted_warning_scores() -> tuple[dict[str, float], str]:
+    rows = csv_rows(OFSTED_OUTCOMES_URL)
+    return (
+        {
+            row['URN']: primary_ofsted_warning_severity(row)
+            for row in rows
+            if row.get('URN')
+        },
+        OFSTED_REFERENCE_DATE,
+    )
+
+
+def admissions_policy_factor(admissions_policy: str | None) -> float:
+    normalized = (admissions_policy or '').strip()
+    if normalized == 'Selective':
+        return 0.2
+    if normalized in {'', 'Unknown'}:
+        return 0.85
+    return 1.0
+
+
+def faith_access_factor(religious_character: str | None) -> float:
+    normalized = (religious_character or '').strip()
+    return 1.0 if normalized in NON_RESTRICTIVE_RELIGIOUS_CHARACTER_VALUES else FAITH_ACCESS_FACTOR
+
+
+def capacity_access_factor(capacity: int | None) -> float:
+    if capacity is None or capacity <= 0:
+        return 1.0
+    return clamp(math.sqrt(capacity / 300.0), 0.85, 1.15)
+
+
+def distance_access_factor(drive_minutes: float) -> float:
+    for max_minutes, weight in PRIMARY_DISTANCE_WEIGHT_STEPS:
+        if drive_minutes <= max_minutes:
+            return weight
+    return 0.0
+
+
+def primary_accessibility_weight(drive_minutes: float, school_record: dict[str, Any]) -> float:
+    if drive_minutes > DRIVE_CATCHMENT_MINUTES or school_record['phase'] not in PRIMARY_PHASES:
+        return 0.0
+
+    phase_factor = ALL_THROUGH_ACCESS_FACTOR if school_record['phase'] == 'All-through' else 1.0
+    return (
+        distance_access_factor(drive_minutes)
+        * admissions_policy_factor(school_record.get('admissions_policy'))
+        * faith_access_factor(school_record.get('religious_character'))
+        * capacity_access_factor(school_record.get('school_capacity'))
+        * phase_factor
+    )
+
+
+def primary_access_equivalent_count(
+    drive_minutes_by_urn: dict[str, float],
+    school_records: dict[str, dict[str, Any]],
+) -> float:
+    return sum(
+        primary_accessibility_weight(drive_minutes, school_records[urn])
+        for urn, drive_minutes in drive_minutes_by_urn.items()
+    )
+
+
+def primary_access_weighted_average(
+    drive_minutes_by_urn: dict[str, float],
+    school_records: dict[str, dict[str, Any]],
+    metric_scores: dict[str, float],
+) -> float | None:
+    weighted_parts = [
+        (metric_scores[urn], primary_accessibility_weight(drive_minutes, school_records[urn]))
+        for urn, drive_minutes in drive_minutes_by_urn.items()
+        if urn in metric_scores
+    ]
+    weighted_parts = [(value, weight) for value, weight in weighted_parts if weight > 0]
+    return weighted_average(weighted_parts)
+
+
+def primary_ofsted_warning_share(
+    drive_minutes_by_urn: dict[str, float],
+    school_records: dict[str, dict[str, Any]],
+    warning_scores: dict[str, float],
+) -> float | None:
+    weighted_parts = [
+        (warning_scores.get(urn, 0.0), primary_accessibility_weight(drive_minutes, school_records[urn]))
+        for urn, drive_minutes in drive_minutes_by_urn.items()
+    ]
+    weighted_parts = [(value, weight) for value, weight in weighted_parts if weight > 0]
+    return weighted_average(weighted_parts)
 
 
 def secondary_quality_scores(school_records: dict[str, dict[str, Any]]) -> tuple[dict[str, float], str]:
@@ -456,29 +685,43 @@ def secondary_quality_scores(school_records: dict[str, dict[str, Any]]) -> tuple
     return percentile_quality_scores(metrics_by_urn, SECONDARY_QUALITY_WEIGHTS), f'{latest_time_period} {latest_version}'
 
 
-def methodology_note(primary_period: str, secondary_period: str) -> str:
+def methodology_note(
+    primary_period: str,
+    attendance_period: str,
+    ofsted_period: str,
+) -> str:
     return (
-        'Nearby school counts and quality now use state-funded-only DfE sources. '
+        'The current school model is primary-only and uses state-funded-only official sources. '
         'Counts come from open state-funded GIAS establishment exports, excluding private schools. '
-        f'Catchment is based on schools reachable within roughly {DRIVE_CATCHMENT_MINUTES:.0f} minutes drive from the area anchor, '
-        'using a road-adjusted drive-time proxy from school and station coordinates. '
-        'Primary quality is a percentile-based composite from '
-        f'KS2 {primary_period} official school-level results '
-        '(expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). '
-        'Secondary quality is a percentile-based composite from '
-        f'KS4 {secondary_period} official school-level results '
-        '(Progress 8, Attainment 8, grade 4+ English and maths, and EBacc grade 4+). '
-        'Station-level quality uses inverse drive-time weighting across the reachable state-funded schools.'
+        f'Reachable-primary access still starts from an approximate {DRIVE_CATCHMENT_MINUTES:.0f}-minute road-adjusted drive proxy, '
+        'but schools are now downweighted when open admissions are less likely in practice: distance matters most, '
+        'faith-designated schools are discounted, larger schools get a modest capacity uplift, and all-through schools get a small penalty. '
+        'National open data does not directly expose sibling or feeder priorities, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. '
+        f'Primary quality is now a 3-year KS2 attainment basket from {primary_period} '
+        '(combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). '
+        f'Attendance is a separate light-touch supplement from {attendance_period} official primary absence data '
+        '(overall absence and persistent absence). '
+        f'Ofsted is not the main driver: latest published inspection outcomes as at {ofsted_period} are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness.'
     )
 
 
-def refresh_source_metadata(gias_release_date: str, primary_period: str, secondary_period: str) -> None:
+def refresh_source_metadata(
+    gias_release_date: str,
+    primary_period: str,
+    attendance_period: str,
+    ofsted_period: str,
+) -> None:
     source_metadata = read_json(SOURCE_METADATA_PATH)
     source_metadata['schools'] = {
-        'source': 'DfE GIAS open state-funded establishment exports + DfE Explore Education Statistics school performance data',
+        'source': (
+            'DfE GIAS open state-funded establishment exports + DfE Explore Education Statistics '
+            'KS2 and absence data + Ofsted state-funded schools inspections and outcomes'
+        ),
         'referencePeriod': (
             f'Counts refreshed from GIAS open state-funded export dated {gias_release_date}; '
-            f'primary quality from KS2 {primary_period}; secondary quality from KS4 {secondary_period}'
+            f'primary attainment basket from KS2 {primary_period}; '
+            f'attendance supplement from primary absence {attendance_period}; '
+            f'Ofsted overlay as at {ofsted_period}'
         ),
         'releaseDate': gias_release_date,
     }
@@ -489,8 +732,9 @@ def generate_school_metrics() -> dict[str, dict[str, Any]]:
     stations = candidate_scope_stations()
     school_records, gias_release_date = gias_school_records()
     primary_scores, primary_period = primary_quality_scores(school_records)
-    secondary_scores, secondary_period = secondary_quality_scores(school_records)
-    note = methodology_note(primary_period, secondary_period)
+    attendance_scores, attendance_period = primary_attendance_scores(school_records)
+    ofsted_warning_scores, ofsted_period = primary_ofsted_warning_scores()
+    note = methodology_note(primary_period, attendance_period, ofsted_period)
 
     output: dict[str, dict[str, Any]] = {}
     for station in stations:
@@ -506,41 +750,62 @@ def generate_school_metrics() -> dict[str, dict[str, Any]]:
             school_records,
         )
 
-        nearby_primary_count = count_drive_catchment_schools(
+        nearby_primary_count = primary_access_equivalent_count(drive_minutes_by_urn, school_records)
+        primary_quality = primary_access_weighted_average(drive_minutes_by_urn, school_records, primary_scores)
+        primary_attendance = primary_access_weighted_average(
             drive_minutes_by_urn,
             school_records,
-            allowed_phases=PRIMARY_PHASES,
+            attendance_scores,
         )
-        nearby_secondary_count = count_drive_catchment_schools(
+        ofsted_warning_share = primary_ofsted_warning_share(
             drive_minutes_by_urn,
             school_records,
-            allowed_phases=SECONDARY_PHASES,
+            ofsted_warning_scores,
         )
-        primary_quality = drive_time_weighted_quality(
-            drive_minutes_by_urn,
-            school_records,
-            primary_scores,
-            allowed_phases=PRIMARY_PHASES,
-        )
-        secondary_quality = drive_time_weighted_quality(
-            drive_minutes_by_urn,
-            school_records,
-            secondary_scores,
-            allowed_phases=SECONDARY_PHASES,
+        ofsted_penalty = (
+            None
+            if ofsted_warning_share is None
+            else min(
+                PRIMARY_OFSTED_MAX_PENALTY,
+                (ofsted_warning_share / PRIMARY_WARNING_SHARE_FOR_FULL_PENALTY) * PRIMARY_OFSTED_MAX_PENALTY,
+            )
         )
 
         output[station.station_code] = {
-            'nearby_primary_count': nearby_primary_count,
-            'nearby_secondary_count': nearby_secondary_count,
+            'nearby_primary_count': round(nearby_primary_count, 1),
+            'nearby_secondary_count': None,
             'primary_quality_score': None if primary_quality is None else round(primary_quality, 1),
-            'secondary_quality_score': None if secondary_quality is None else round(secondary_quality, 1),
+            'primary_attendance_score': None if primary_attendance is None else round(primary_attendance, 1),
+            'primary_ofsted_warning_share': (
+                None if ofsted_warning_share is None else round(ofsted_warning_share * 100.0, 1)
+            ),
+            'primary_ofsted_penalty': None if ofsted_penalty is None else round(ofsted_penalty, 1),
+            'secondary_quality_score': None,
             'status': 'available',
-            'confidence': 0.82,
+            'confidence': 0.84,
             'provenance': 'direct',
+            'field_statuses': {
+                'nearby_primary_count': 'available',
+                'nearby_secondary_count': 'missing',
+                'primary_quality_score': 'available',
+                'secondary_quality_score': 'missing',
+            },
+            'field_confidences': {
+                'nearby_primary_count': 0.82,
+                'nearby_secondary_count': 0.2,
+                'primary_quality_score': 0.87,
+                'secondary_quality_score': 0.2,
+            },
+            'field_provenance': {
+                'nearby_primary_count': 'direct',
+                'nearby_secondary_count': 'missing',
+                'primary_quality_score': 'direct',
+                'secondary_quality_score': 'missing',
+            },
             'methodology_note': note,
         }
 
-    refresh_source_metadata(gias_release_date, primary_period, secondary_period)
+    refresh_source_metadata(gias_release_date, primary_period, attendance_period, ofsted_period)
     return output
 
 

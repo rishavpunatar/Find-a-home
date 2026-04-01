@@ -51,9 +51,7 @@ const componentMetricGroups = {
   ],
   schools: (area: MicroArea) => [
     area.nearbyPrimaryCount,
-    area.nearbySecondaryCount,
     area.primaryQualityScore,
-    area.secondaryQualityScore,
   ],
   environment: (area: MicroArea) => [
     area.annualPm25,

@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-04-01T17:54:22+01:00",
+  "generatedAt": "2026-04-02T00:26:48+01:00",
   "count": 534,
   "londonWideCount": 534,
   "topMicroAreas": [
     {
       "microAreaId": "ma-westhd1f",
       "stationName": "West Ham",
-      "score": 61.81
+      "score": 58.66
     },
     {
       "microAreaId": "ma-plaisaf0",
       "stationName": "Plaistow",
-      "score": 61.22
+      "score": 58.11
     },
     {
       "microAreaId": "ma-harlef99",
       "stationName": "Harlesden",
-      "score": 61.06
-    },
-    {
-      "microAreaId": "ma-stepn23c",
-      "stationName": "Stepney Green",
-      "score": 58.76
-    },
-    {
-      "microAreaId": "ma-canade89",
-      "stationName": "Canada Water",
-      "score": 58.33
-    },
-    {
-      "microAreaId": "ma-tooti8a5",
-      "stationName": "Tooting",
-      "score": 58.26
+      "score": 57.38
     },
     {
       "microAreaId": "ma-eastc7c4",
       "stationName": "East Croydon",
-      "score": 57.94
+      "score": 55.42
     },
     {
-      "microAreaId": "ma-westf8b2",
-      "stationName": "Westferry",
-      "score": 57.86
+      "microAreaId": "ma-stepn23c",
+      "stationName": "Stepney Green",
+      "score": 55.04
     },
     {
-      "microAreaId": "ma-white3c1",
-      "stationName": "Whitechapel",
-      "score": 57.78
+      "microAreaId": "ma-tooti8a5",
+      "stationName": "Tooting",
+      "score": 54.87
+    },
+    {
+      "microAreaId": "ma-abbey3a8",
+      "stationName": "Abbey Wood",
+      "score": 54.77
     },
     {
       "microAreaId": "ma-bowch62c",
       "stationName": "Bow Church",
-      "score": 57.78
+      "score": 54.59
+    },
+    {
+      "microAreaId": "ma-canade89",
+      "stationName": "Canada Water",
+      "score": 54.54
+    },
+    {
+      "microAreaId": "ma-easta300",
+      "stationName": "East Acton",
+      "score": 54.42
     }
   ],
   "topLondonWideMicroAreas": [
     {
       "microAreaId": "ma-westhd1f",
       "stationName": "West Ham",
-      "score": 61.81
+      "score": 58.66
     },
     {
       "microAreaId": "ma-plaisaf0",
       "stationName": "Plaistow",
-      "score": 61.22
+      "score": 58.11
     },
     {
       "microAreaId": "ma-harlef99",
       "stationName": "Harlesden",
-      "score": 61.06
-    },
-    {
-      "microAreaId": "ma-stepn23c",
-      "stationName": "Stepney Green",
-      "score": 58.76
-    },
-    {
-      "microAreaId": "ma-canade89",
-      "stationName": "Canada Water",
-      "score": 58.33
-    },
-    {
-      "microAreaId": "ma-tooti8a5",
-      "stationName": "Tooting",
-      "score": 58.26
+      "score": 57.38
     },
     {
       "microAreaId": "ma-eastc7c4",
       "stationName": "East Croydon",
-      "score": 57.94
+      "score": 55.42
     },
     {
-      "microAreaId": "ma-westf8b2",
-      "stationName": "Westferry",
-      "score": 57.86
+      "microAreaId": "ma-stepn23c",
+      "stationName": "Stepney Green",
+      "score": 55.04
     },
     {
-      "microAreaId": "ma-white3c1",
-      "stationName": "Whitechapel",
-      "score": 57.78
+      "microAreaId": "ma-tooti8a5",
+      "stationName": "Tooting",
+      "score": 54.87
+    },
+    {
+      "microAreaId": "ma-abbey3a8",
+      "stationName": "Abbey Wood",
+      "score": 54.77
     },
     {
       "microAreaId": "ma-bowch62c",
       "stationName": "Bow Church",
-      "score": 57.78
+      "score": 54.59
+    },
+    {
+      "microAreaId": "ma-canade89",
+      "stationName": "Canada Water",
+      "score": 54.54
+    },
+    {
+      "microAreaId": "ma-easta300",
+      "stationName": "East Acton",
+      "score": 54.42
     }
   ]
 }

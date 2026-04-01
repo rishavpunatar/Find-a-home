@@ -582,24 +582,22 @@ def score_components(
     ]) * (1 / 0.25)
 
     primary_quality = number_or_default(schools, 'primary_quality_score', 50)
-    secondary_quality = number_or_default(schools, 'secondary_quality_score', 50)
+    primary_attendance = number_or_default(schools, 'primary_attendance_score', 50)
+    primary_ofsted_penalty = number_or_default(schools, 'primary_ofsted_penalty', 0)
     primary_count = number_or_default(schools, 'nearby_primary_count', 0)
-    secondary_count = number_or_default(schools, 'nearby_secondary_count', 0)
     population_denominator = number_or_default(
         population,
         'population_in_reference_zone',
         default_population_denominator,
     )
     primary_count_per_10k = per_10k(primary_count, population_denominator) or 0.0
-    secondary_count_per_10k = per_10k(secondary_count, population_denominator) or 0.0
-    school_count_score = mean(
-        [
-            forward_score(primary_count_per_10k, min_value=35, max_value=150),
-            forward_score(secondary_count_per_10k, 10, 40),
-        ],
+    school_access_score = forward_score(primary_count_per_10k, min_value=18, max_value=90)
+    schools_score = (
+        primary_quality * 0.68
+        + school_access_score * 0.22
+        + primary_attendance * 0.10
+        - primary_ofsted_penalty
     )
-    school_quality_score = mean([primary_quality, secondary_quality])
-    schools_score = school_quality_score * 0.72 + school_count_score * 0.28
 
     no2 = number_or_default(pollution, 'annual_no2', 30)
     pm25 = number_or_default(pollution, 'annual_pm25', 14)
@@ -824,11 +822,12 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 school_anchor_records,
                 [
                     'nearby_primary_count',
-                    'nearby_secondary_count',
                     'primary_quality_score',
-                    'secondary_quality_score',
+                    'primary_attendance_score',
+                    'primary_ofsted_penalty',
+                    'primary_ofsted_warning_share',
                 ],
-                'Estimated by inverse-distance interpolation from nearby station school composites built from state-funded-only schools within an approximately 20-minute drive catchment. Private schools are excluded from both count and quality inputs. No single inspection label is used.',
+                'Estimated by inverse-distance interpolation from nearby station primary-school composites built from state-funded-only schools using an admissions-aware reachability heuristic. Private schools are excluded and Ofsted remains an overlay rather than the main score driver.',
             )
             pollution_record = pollution_adapter.get_by_station(
                 station.station_code,
@@ -1044,28 +1043,28 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     school_record,
                     'nearby_primary_count',
                     unit='count',
-                    note='Open state-funded primary schools reachable within an approximately 20-minute road-adjusted drive-time proxy from the area anchor; private schools excluded.',
+                    note='Admissions-adjusted equivalent count of state-funded primary schools that look realistically reachable from the area anchor after distance, faith-designation, and capacity weighting; private schools excluded.',
                     last_updated=schools_last_updated,
                 ),
                 'nearbySecondaryCount': metric_from_record(
                     school_record,
                     'nearby_secondary_count',
                     unit='count',
-                    note='Open state-funded secondary schools reachable within an approximately 20-minute road-adjusted drive-time proxy from the area anchor; private schools excluded.',
+                    note='Secondary phase is intentionally excluded from the current school ranking model.',
                     last_updated=schools_last_updated,
                 ),
                 'primaryQualityScore': metric_from_record(
                     school_record,
                     'primary_quality_score',
                     unit='score',
-                    note='Primary school quality composite from official state-funded KS2 results across schools reachable within an approximately 20-minute road-adjusted drive-time proxy.',
+                    note='Primary school attainment basket from 3-year official KS2 results across realistically reachable state-funded schools (combined expected standard, combined higher standard, reading scaled score, maths scaled score).',
                     last_updated=schools_last_updated,
                 ),
                 'secondaryQualityScore': metric_from_record(
                     school_record,
                     'secondary_quality_score',
                     unit='score',
-                    note='Secondary school quality composite from official state-funded KS4 results across schools reachable within an approximately 20-minute road-adjusted drive-time proxy.',
+                    note='Secondary phase is intentionally excluded from the current school ranking model.',
                     last_updated=schools_last_updated,
                 ),
                 'annualNo2': metric_from_record(
@@ -1147,6 +1146,15 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 flags.append(
                     'Included in the broader London coverage view for this dataset refresh.',
                 )
+            primary_ofsted_warning_share = (
+                float(school_record.get('primary_ofsted_warning_share'))
+                if school_record and isinstance(school_record.get('primary_ofsted_warning_share'), (int, float))
+                else None
+            )
+            if primary_ofsted_warning_share is not None and primary_ofsted_warning_share >= 18:
+                flags.append(
+                    'Primary-school overlay warning: a meaningful share of the realistically reachable primary-school pool carries current Ofsted caution signals.'
+                )
 
             for metric_name, metric_value in metrics.items():
                 if metric_value.status != 'available':
@@ -1156,7 +1164,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
 
             confidence_notes = [
                 'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
-                'School scoring uses official state-funded performance composites and a road-adjusted drive-time accessibility proxy rather than a single inspection field.',
+                'School scoring is now primary-only and blends an admissions-aware access heuristic, a 3-year KS2 attainment basket, a light attendance supplement, and an Ofsted warning overlay rather than a single inspection label.',
                 'Green-cover percentage uses an expanded 2x walk-radius neighborhood blend.',
                 'Planning risk is now derived from structured planning layers, but it remains a rule-based signal rather than a direct planning outcome forecast.',
             ]

@@ -54,11 +54,11 @@ const scoreAxes = [
     key: 'schools',
     label: 'Schools',
     detail:
-      'A higher school score means there are more reachable state-funded schools within the app’s catchment logic and the quality indicators for those schools are stronger.',
+      'A higher school score means there are more realistically reachable state-funded primary schools and the stronger schools among that primary pool perform better in official data.',
     recipe:
-      'This is a blend of school quality and school access. Quality is the average of the primary and secondary quality scores. Access is based on nearby state-funded primary and secondary counts adjusted per 10,000 residents, so dense areas are not rewarded just for having more people around them.',
+      'This is now a primary-only blend of attainment, access, and a small attendance supplement. Access stays population-adjusted, so dense areas are not rewarded just for having more people around them.',
     formula:
-      'School score = school quality 72% + population-adjusted school access 28%',
+      'School score = primary attainment basket 68% + population-adjusted primary access 22% + attendance 10%, with a modest Ofsted warning penalty when relevant',
   },
   {
     key: 'environment',
@@ -351,29 +351,37 @@ export const DataMethodologyGuide = ({
 
             <DetailBlock title="School (0-100, higher is better)">
               <p>
-                The school score combines two ideas: how many state-funded schools are realistically
-                reachable, and how strong those schools look in official performance data.
+                The school score is now explicitly primary-only. It combines how many
+                state-funded primary schools look realistically reachable and how strong those
+                schools look in official data.
               </p>
               <p>
                 The access side is population-adjusted, so areas are not rewarded just for sitting
                 inside a denser part of London with a larger surrounding population base.
               </p>
               <p>
-                In scoring terms, the access subscore averages primary-school access per 10,000
-                residents and secondary-school access per 10,000 residents before blending that
-                access result with the quality result.
+                In scoring terms, the access side no longer treats every school within a 20-minute
+                drive as equally available. It downweights farther schools and discounts schools
+                whose published characteristics make general admission less likely, especially faith
+                designations. National open data does not directly expose sibling or feeder
+                priority, so this remains a cautious heuristic rather than an offer-probability
+                model.
               </p>
               <p>
                 Where a direct catchment population denominator is missing, the app uses a fixed
                 reference-population fallback so the access score still stays on the same basis.
               </p>
               <p>
-                Private schools are excluded from both the count side and the quality side.
+                The quality side is a smoothed KS2 basket using combined expected standard,
+                combined higher standard, average reading scaled score, and average maths scaled
+                score, averaged across the latest 3 years where available.
               </p>
               <p>
-                The school catchment is based on an approximately 20-minute road-adjusted drive
-                proxy from the area anchor, not just schools physically sitting inside the station
-                circle.
+                Attendance is used as one light-touch extra non-attainment signal. Ofsted is kept
+                separate as an overlay or modest penalty flag rather than the main ranking driver.
+              </p>
+              <p>
+                Private schools are excluded from both the access side and the attainment side.
               </p>
               <p>
                 <span className="font-semibold">Source:</span> DfE GIAS open state-funded school

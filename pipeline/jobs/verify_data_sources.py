@@ -127,13 +127,13 @@ def source_matrix() -> dict[str, dict[str, str]]:
         },
         'schools': {
             'status': 'source_applied_not_live_verified',
-            'primarySource': 'DfE GIAS open state-funded establishment exports',
-            'secondarySource': 'DfE Explore Education Statistics school performance data',
+            'primarySource': 'DfE GIAS open state-funded establishment exports + DfE Explore Education Statistics KS2 and absence data',
+            'secondarySource': 'Ofsted state-funded schools inspections and outcomes snapshot',
             'note': (
-                'Nearby school counts and quality now use official state-funded DfE sources. '
-                'Private schools are excluded from both the count and quality side, and the school '
-                'catchment now reflects an approximately 20-minute road-adjusted drive-time proxy from each area anchor. '
-                'A secondary cross-check source has not yet been wired for live verification.'
+                'The school model is now primary-only. Access keeps the population-adjusted concept but '
+                'replaces the old pure drive-time count with an admissions-aware reachability heuristic, '
+                'while quality uses a smoothed KS2 attainment basket plus a light attendance supplement. '
+                'Ofsted is only used as a warning overlay / penalty flag, not the main ranking driver.'
             ),
         },
         'pollution': {
@@ -336,9 +336,7 @@ def compute_domain_coverage(dataset: dict[str, Any]) -> dict[str, Any]:
         ],
         'schools': [
             'nearbyPrimaryCount',
-            'nearbySecondaryCount',
             'primaryQualityScore',
-            'secondaryQualityScore',
         ],
         'pollution': ['annualNo2', 'annualPm25'],
         'greenSpace': ['greenSpaceAreaKm2Within1km', 'greenCoverPct', 'nearestParkDistanceM'],

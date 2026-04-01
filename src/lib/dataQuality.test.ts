@@ -237,16 +237,16 @@ describe('dataQuality helpers', () => {
     const statuses = getAreaDomainStatuses(baseArea)
 
     expect(statuses.property).toBe('estimated')
-    expect(statuses.schools).toBe('missing')
+    expect(statuses.schools).toBe('available')
     expect(statuses.greenSpace).toBe('placeholder')
   })
 
   it('counts domain statuses for summary badges', () => {
     expect(getAreaDomainStatusCounts(baseArea)).toEqual({
-      available: 2,
+      available: 3,
       estimated: 4,
       placeholder: 1,
-      missing: 1,
+      missing: 0,
     })
   })
 
@@ -345,8 +345,8 @@ describe('dataQuality helpers', () => {
     }
 
     expect(getAreaDomainSourceCounts(area)).toEqual({
-      sourceApplied: 6,
-      modelled: 2,
+      sourceApplied: 7,
+      modelled: 1,
       missing: 0,
     })
     expect(getAreaPropertyEvidenceLabel(area)).toBe('Recent sold-price fallback')

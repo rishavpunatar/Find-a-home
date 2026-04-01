@@ -10,7 +10,7 @@ import {
 
 import type { DerivedMicroArea } from '@/types/domain'
 
-import { totalSchoolAccessPerPopulation } from '@/lib/schoolAccess'
+import { schoolAccessPerPopulation } from '@/lib/schoolAccess'
 
 import { computeNumericDomain } from './chartUtils'
 
@@ -22,25 +22,14 @@ export const SchoolAccessQualityScatter = ({ areas }: SchoolAccessQualityScatter
   const data = areas
     .map((area) => {
       const primaryCount = area.nearbyPrimaryCount.value
-      const secondaryCount = area.nearbySecondaryCount.value
       const primaryQuality = area.primaryQualityScore.value
-      const secondaryQuality = area.secondaryQualityScore.value
       const populationDenominator = area.populationDenominator ?? null
 
-      if (
-        primaryCount === null ||
-        secondaryCount === null ||
-        primaryQuality === null ||
-        secondaryQuality === null
-      ) {
+      if (primaryCount === null || primaryQuality === null) {
         return null
       }
 
-      const populationAdjustedAccess = totalSchoolAccessPerPopulation(
-        primaryCount,
-        secondaryCount,
-        populationDenominator,
-      )
+      const populationAdjustedAccess = schoolAccessPerPopulation(primaryCount, populationDenominator)
 
       if (populationAdjustedAccess === null) {
         return null
@@ -48,12 +37,10 @@ export const SchoolAccessQualityScatter = ({ areas }: SchoolAccessQualityScatter
 
       return {
         x: populationAdjustedAccess,
-        y: (primaryQuality + secondaryQuality) / 2,
+        y: primaryQuality,
         station: area.stationName,
         primaryCount,
-        secondaryCount,
         primaryQuality,
-        secondaryQuality,
         populationDenominator,
       }
     })
@@ -65,9 +52,7 @@ export const SchoolAccessQualityScatter = ({ areas }: SchoolAccessQualityScatter
         y: number
         station: string
         primaryCount: number
-        secondaryCount: number
         primaryQuality: number
-        secondaryQuality: number
         populationDenominator: number | null
       } => item !== null,
     )
@@ -81,7 +66,7 @@ export const SchoolAccessQualityScatter = ({ areas }: SchoolAccessQualityScatter
         <ScatterChart margin={{ top: 12, right: 24, bottom: 26, left: 12 }}>
           <CartesianGrid />
           <XAxis type="number" dataKey="x" name="School access per 10,000 residents" domain={xDomain} />
-          <YAxis type="number" dataKey="y" name="Average school quality" domain={yDomain} />
+          <YAxis type="number" dataKey="y" name="Primary attainment basket" domain={yDomain} />
           <Tooltip
             content={({ active, payload }) => {
               if (!active || !payload || payload.length === 0) {
@@ -93,9 +78,7 @@ export const SchoolAccessQualityScatter = ({ areas }: SchoolAccessQualityScatter
                     x: number
                     y: number
                     primaryCount: number
-                    secondaryCount: number
                     primaryQuality: number
-                    secondaryQuality: number
                     populationDenominator: number | null
                   }
                 | undefined
@@ -106,14 +89,11 @@ export const SchoolAccessQualityScatter = ({ areas }: SchoolAccessQualityScatter
                 <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs shadow">
                   <p className="font-semibold text-slate-900">{point.station}</p>
                   <p className="text-slate-700">
-                    School access: {point.x.toFixed(1)} per 10,000 residents
-                  </p>
-                  <p className="text-slate-700">Average quality: {point.y.toFixed(1)}</p>
-                  <p className="text-slate-700">
-                    Primary: {Math.round(point.primaryCount)} schools at {point.primaryQuality.toFixed(1)}
+                    Primary access: {point.x.toFixed(1)} per 10,000 residents
                   </p>
                   <p className="text-slate-700">
-                    Secondary: {Math.round(point.secondaryCount)} schools at {point.secondaryQuality.toFixed(1)}
+                    Primary basket: {Math.round(point.primaryCount)} equivalent schools at{' '}
+                    {point.primaryQuality.toFixed(1)}
                   </p>
                   {point.populationDenominator !== null ? (
                     <p className="text-slate-700">

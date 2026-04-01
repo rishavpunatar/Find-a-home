@@ -4,6 +4,8 @@ from pipeline.jobs.generate_school_metrics import (
     estimate_drive_minutes_from_distance,
     percentile_quality_scores,
     percentile_rank_map,
+    primary_accessibility_weight,
+    primary_ofsted_warning_severity,
     safe_float,
     weighted_average,
 )
@@ -79,4 +81,56 @@ def test_count_drive_catchment_schools_only_counts_schools_inside_drive_window()
             allowed_phases={'Primary'},
         )
         == 1
+    )
+
+
+def test_primary_accessibility_weight_penalizes_faith_and_distance() -> None:
+    community_weight = primary_accessibility_weight(
+        5.0,
+        {
+            'phase': 'Primary',
+            'admissions_policy': 'Not applicable',
+            'religious_character': 'Does not apply',
+            'school_capacity': 360,
+        },
+    )
+    faith_weight = primary_accessibility_weight(
+        12.0,
+        {
+            'phase': 'Primary',
+            'admissions_policy': 'Not applicable',
+            'religious_character': 'Church of England',
+            'school_capacity': 180,
+        },
+    )
+
+    assert community_weight > faith_weight > 0
+
+
+def test_primary_ofsted_warning_severity_escalates_for_weaker_outcomes() -> None:
+    assert (
+        primary_ofsted_warning_severity(
+            {
+                'Overall effectiveness': '2',
+                'Quality of education': '2',
+                'Behaviour and attitudes': '2',
+                'Effectiveness of leadership and management': '2',
+                'Safeguarding is effective?': 'Yes',
+                'Number of warning notices issued in 2024/25 academic year': '0',
+            }
+        )
+        == 0.0
+    )
+    assert (
+        primary_ofsted_warning_severity(
+            {
+                'Overall effectiveness': '4',
+                'Quality of education': '4',
+                'Behaviour and attitudes': '3',
+                'Effectiveness of leadership and management': '4',
+                'Safeguarding is effective?': 'No',
+                'Number of warning notices issued in 2024/25 academic year': '1',
+            }
+        )
+        == 1.0
     )

@@ -99,7 +99,7 @@ export const OverviewPage = () => {
     {
       key: 'schools-score',
       title: 'School score',
-      description: 'Spread of the current school component across all default-scope areas.',
+      description: 'Spread of the current primary-school component across all default-scope areas.',
       values: ranked.map((area) => area.componentScores.schools),
       barColor: '#65a30d',
     },
@@ -164,35 +164,19 @@ export const OverviewPage = () => {
   const schoolAndEnvironmentDistributions = [
     {
       key: 'nearby-primary-count',
-      title: 'Nearby primary count',
-      description: 'State-funded primary counts across all areas after interpolation.',
+      title: 'Reachable primary count',
+      description: 'Admissions-adjusted equivalent primary-school count across all areas.',
       values: collectValues(ranked, (area) => area.nearbyPrimaryCount.value),
       barColor: '#84cc16',
       valueFormatter: (value: number) => formatNumber(value, 0),
       axisFormatter: (value: number) => formatNumber(value, 0),
     },
     {
-      key: 'nearby-secondary-count',
-      title: 'Nearby secondary count',
-      description: 'State-funded secondary counts across all areas after interpolation.',
-      values: collectValues(ranked, (area) => area.nearbySecondaryCount.value),
-      barColor: '#65a30d',
-      valueFormatter: (value: number) => formatNumber(value, 0),
-      axisFormatter: (value: number) => formatNumber(value, 0),
-    },
-    {
       key: 'primary-quality-score',
-      title: 'Primary quality score',
-      description: 'Current primary school quality composite spread.',
+      title: 'Primary attainment basket',
+      description: 'Current primary-school 3-year KS2 attainment basket spread.',
       values: collectValues(ranked, (area) => area.primaryQualityScore.value),
       barColor: '#4d7c0f',
-    },
-    {
-      key: 'secondary-quality-score',
-      title: 'Secondary quality score',
-      description: 'Current secondary school quality composite spread.',
-      values: collectValues(ranked, (area) => area.secondaryQualityScore.value),
-      barColor: '#3f6212',
     },
     {
       key: 'pm25',
@@ -562,8 +546,9 @@ export const OverviewPage = () => {
             School and environment spread
           </h3>
           <p className="mt-1 text-xs text-slate-500">
-            Nearby school counts and quality scores now both come from state-funded-only DfE
-            school data, so the school spread excludes private schools entirely.
+            School spread is now primary-only and excludes private schools entirely. Access is
+            admissions-aware, the attainment side is smoothed across multiple KS2 years, and
+            Ofsted is treated as an overlay rather than the main ranking driver.
           </p>
         </div>
         <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">

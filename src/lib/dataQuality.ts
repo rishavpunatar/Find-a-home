@@ -92,7 +92,7 @@ export const getAreaDomainStatuses = (
 ): Record<DomainKey, MetricStatus> => ({
   property: area.medianSemiDetachedPrice.status,
   transport: area.commuteTypicalMinutes.status,
-  schools: mergeStatuses([area.primaryQualityScore.status, area.secondaryQualityScore.status]),
+  schools: mergeStatuses([area.nearbyPrimaryCount.status, area.primaryQualityScore.status]),
   pollution: area.annualPm25.status,
   greenSpace: area.greenCoverPct.status,
   crime: area.crimeRatePerThousand.status,
@@ -113,9 +113,7 @@ export const getAreaDomainSourceBuckets = (
   ]),
   schools: mergeSourceBuckets([
     getSourceBucket(area.nearbyPrimaryCount.provenance),
-    getSourceBucket(area.nearbySecondaryCount.provenance),
     getSourceBucket(area.primaryQualityScore.provenance),
-    getSourceBucket(area.secondaryQualityScore.provenance),
   ]),
   pollution: mergeSourceBuckets([
     getSourceBucket(area.annualNo2.provenance),

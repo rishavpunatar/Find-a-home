@@ -11,7 +11,7 @@ import { useRankedData } from '@/hooks/useRankedData'
 import { shortlistToCsv } from '@/lib/csv'
 import { DEFAULT_FILTERS, HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT } from '@/lib/constants'
 import { formatNumber } from '@/lib/format'
-import { totalSchoolAccessPerPopulation } from '@/lib/schoolAccess'
+import { schoolAccessPerPopulation } from '@/lib/schoolAccess'
 
 const downloadCsv = (filename: string, data: string) => {
   const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' })
@@ -223,26 +223,23 @@ export const LondonWideRankedPage = () => {
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Overall school score vs distance from central London
+            Primary-school score vs distance from central London
           </h3>
           <DistanceMetricScatter
             areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
-            label="Overall school score"
+            label="Primary-school score"
             fill="#7c3aed"
             formatValue={(value) => value.toFixed(1)}
             getValue={(area) => area.componentScores.schools}
             renderSelectedAreaDetail={(area) => {
               const adjustedSchoolAccess =
-                area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
-                  ? totalSchoolAccessPerPopulation(
+                area.nearbyPrimaryCount.value !== null
+                  ? schoolAccessPerPopulation(
                       area.nearbyPrimaryCount.value,
-                      area.nearbySecondaryCount.value,
                       area.populationDenominator ?? null,
                     )
                   : null
-              const totalReachableSchools =
-                (area.nearbyPrimaryCount.value ?? 0) + (area.nearbySecondaryCount.value ?? 0)
 
               return (
                 <div className="space-y-3">
@@ -255,17 +252,17 @@ export const LondonWideRankedPage = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                        Overall school score
+                        Primary-school score
                       </p>
                       <p className="font-semibold text-slate-900">
                         {area.componentScores.schools.toFixed(1)}
                       </p>
                     </div>
                   </div>
-                  <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                  <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                     <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
                       <p className="text-[11px] uppercase tracking-wide text-slate-500">
-                        School access per 10,000
+                        Primary access per 10,000
                       </p>
                       <p className="font-semibold text-slate-900">
                         {adjustedSchoolAccess === null ? 'N/A' : adjustedSchoolAccess.toFixed(1)}
@@ -273,13 +270,7 @@ export const LondonWideRankedPage = () => {
                     </div>
                     <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
                       <p className="text-[11px] uppercase tracking-wide text-slate-500">
-                        Reachable schools
-                      </p>
-                      <p className="font-semibold text-slate-900">{formatNumber(totalReachableSchools, 0)}</p>
-                    </div>
-                    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
-                      <p className="text-[11px] uppercase tracking-wide text-slate-500">
-                        Reachable primary
+                        Realistically reachable primary
                       </p>
                       <p className="font-semibold text-slate-900">
                         {formatNumber(area.nearbyPrimaryCount.value, 0)}
@@ -287,17 +278,17 @@ export const LondonWideRankedPage = () => {
                     </div>
                     <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
                       <p className="text-[11px] uppercase tracking-wide text-slate-500">
-                        Reachable secondary
+                        Primary attainment basket
                       </p>
                       <p className="font-semibold text-slate-900">
-                        {formatNumber(area.nearbySecondaryCount.value, 0)}
+                        {formatNumber(area.primaryQualityScore.value, 1)}
                       </p>
                     </div>
                   </div>
                   <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
-                    Outstanding-school count is not currently tracked in this dataset. The current
-                    school model uses reachable state-funded school counts plus DfE attainment
-                    performance composites, not Ofsted inspection-history counts.
+                    The current school model is primary-only. Access is admissions-aware rather than
+                    a pure 20-minute-drive count, KS2 attainment is smoothed over multiple years,
+                    and Ofsted is used only as a warning overlay or modest penalty flag.
                   </div>
                 </div>
               )

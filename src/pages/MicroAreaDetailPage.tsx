@@ -200,22 +200,13 @@ export const MicroAreaDetailPage = () => {
           updated={area.driveTimeToPinnerMinutes.lastUpdated}
         />
         <MetricRow
-          label="Primary school quality"
+          label="Primary attainment basket"
           value={formatNumber(area.primaryQualityScore.value, 1)}
           status={area.primaryQualityScore.status}
           confidence={area.primaryQualityScore.confidence}
           provenance={area.primaryQualityScore.provenance}
           note={area.schoolMethodologyNotes}
           updated={area.primaryQualityScore.lastUpdated}
-        />
-        <MetricRow
-          label="Secondary school quality"
-          value={formatNumber(area.secondaryQualityScore.value, 1)}
-          status={area.secondaryQualityScore.status}
-          confidence={area.secondaryQualityScore.confidence}
-          provenance={area.secondaryQualityScore.provenance}
-          note={area.schoolMethodologyNotes}
-          updated={area.secondaryQualityScore.lastUpdated}
         />
         <MetricRow
           label="Crime rate per 1,000"
@@ -267,30 +258,22 @@ export const MicroAreaDetailPage = () => {
       <section className="grid gap-4 lg:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Nearby schools summary
+            Primary-school summary
           </h3>
           <dl className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate-600">Primary schools in catchment + fringe</dt>
+              <dt className="text-slate-600">Realistically reachable primary schools</dt>
               <dd className="font-medium">{formatNumber(area.nearbyPrimaryCount.value)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Secondary schools in catchment + fringe</dt>
-              <dd className="font-medium">{formatNumber(area.nearbySecondaryCount.value)}</dd>
-            </div>
-            <div className="flex justify-between">
-              <dt className="text-slate-600">Primary quality score</dt>
+              <dt className="text-slate-600">Primary attainment basket</dt>
               <dd className="font-medium">{formatNumber(area.primaryQualityScore.value, 1)}</dd>
-            </div>
-            <div className="flex justify-between">
-              <dt className="text-slate-600">Secondary quality score</dt>
-              <dd className="font-medium">{formatNumber(area.secondaryQualityScore.value, 1)}</dd>
             </div>
           </dl>
           <p className="mt-3 text-xs text-slate-600">
-            Count and quality inputs use state-funded-only DfE school data, so private schools
-            are excluded from both the nearby totals and the quality component. School access here
-            is based on roughly 20 minutes drive from the area anchor.
+            School scoring is now primary-only. The access side keeps the population-adjusted
+            concept but uses an admissions-aware reachability heuristic instead of treating every
+            school within a 20-minute drive as equally available.
           </p>
           <p className="mt-3 text-xs text-slate-600">{area.schoolMethodologyNotes}</p>
         </article>
@@ -329,7 +312,7 @@ export const MicroAreaDetailPage = () => {
 
       {area.flags.length ? (
         <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-          <h3 className="font-semibold">Lower-confidence or missing-data flags</h3>
+          <h3 className="font-semibold">Flags and overlays</h3>
           <ul className="mt-2 list-disc pl-5">
             {area.flags.map((flag) => (
               <li key={flag}>{flag}</li>
