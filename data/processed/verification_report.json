@@ -1,22 +1,22 @@
 {
-  "generatedAt": "2026-04-01T13:55:30+01:00",
+  "generatedAt": "2026-04-01T15:45:50+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "strong_source_coverage",
-  "sourceCoverageScore": 0.8802,
-  "verificationStrengthScore": 0.6617,
-  "verificationCompletenessScore": 0.8802,
+  "sourceCoverageScore": 0.8956,
+  "verificationStrengthScore": 0.6782,
+  "verificationCompletenessScore": 0.8956,
   "sourceMatrix": {
     "property": {
       "status": "source_applied_not_live_verified",
       "primarySource": "OnTheMarket current asking-price search results",
       "secondarySource": "HM Land Registry Price Paid Data fallback",
-      "note": "Station-level property metrics now prefer current asking prices for semi-detached homes with 3+ bedrooms and 2+ bathrooms from public locality search results. If live listing coverage is too thin, the pipeline falls back to recent HM Land Registry semi-detached transactions."
+      "note": "Station-level property metrics now prefer current asking prices for semi-detached homes with 3+ bedrooms and 2+ bathrooms from public locality search results, using nearby locality/borough fallbacks only when the resulting listings still fall inside a bounded station-area radius. If live listing coverage is too thin, the pipeline falls back to recent HM Land Registry semi-detached transactions, first at the tighter local catchment and then an explicitly lower-confidence extended-area fallback."
     },
     "transport": {
       "status": "source_applied_partially_live_verified",
-      "primarySource": "TfL Journey Planner + OSRM routing",
+      "primarySource": "TfL Journey Planner central-London core + TfL StopPoint arrivals + OSRM routing",
       "secondarySource": "Station-profile fallback for uncovered routes",
-      "note": "Drive times now use direct OSRM routing where available, and public-transport commute metrics use TfL Journey Planner where it returns journeys. Remaining uncovered stations retain an explicit station-profile heuristic fallback."
+      "note": "Drive times now use direct OSRM routing where available. Public-transport commute metrics use TfL Journey Planner against a small central-London destination set, and service frequency can fall back to live TfL StopPoint arrivals where journey results are too sparse. Remaining uncovered stations retain an explicit station-profile heuristic fallback."
     },
     "schools": {
       "status": "source_applied_not_live_verified",
@@ -66,22 +66,22 @@
       "count": 534,
       "domains": {
         "property": {
-          "availablePct": 51.87,
-          "sourceAppliedPct": 51.87,
+          "availablePct": 52.25,
+          "sourceAppliedPct": 52.25,
           "statusCounts": {
-            "available": 277,
-            "estimated": 257,
+            "available": 279,
+            "estimated": 255,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 12.17,
-          "sourceAppliedPct": 55.27,
+          "availablePct": 41.39,
+          "sourceAppliedPct": 67.23,
           "statusCounts": {
-            "available": 65,
-            "estimated": 469,
+            "available": 221,
+            "estimated": 313,
             "placeholder": 0,
             "missing": 0,
             "other": 0
@@ -159,22 +159,22 @@
       "count": 534,
       "domains": {
         "property": {
-          "availablePct": 51.87,
-          "sourceAppliedPct": 51.87,
+          "availablePct": 52.25,
+          "sourceAppliedPct": 52.25,
           "statusCounts": {
-            "available": 277,
-            "estimated": 257,
+            "available": 279,
+            "estimated": 255,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 12.17,
-          "sourceAppliedPct": 55.27,
+          "availablePct": 41.39,
+          "sourceAppliedPct": 67.23,
           "statusCounts": {
-            "available": 65,
-            "estimated": 469,
+            "available": 221,
+            "estimated": 313,
             "placeholder": 0,
             "missing": 0,
             "other": 0

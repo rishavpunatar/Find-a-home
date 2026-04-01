@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import statistics
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
@@ -18,14 +19,19 @@ OUTPUT_PATH = ROOT / 'data' / 'raw' / 'transport_metrics.json'
 
 PINNER_LAT = 51.5931
 PINNER_LON = -0.3818
-OXFORD_CIRCUS_LAT = 51.5152
-OXFORD_CIRCUS_LON = -0.1419
+CENTRAL_LONDON_DESTINATIONS: tuple[tuple[str, float, float], ...] = (
+    ('Oxford Circus', 51.5152, -0.1419),
+    ('Bank', 51.5133, -0.0890),
+    ('Victoria', 51.4965, -0.1447),
+    ('Waterloo', 51.5033, -0.1147),
+)
 
 PEAK_DATE = '20260325'
 PEAK_TIME = '0830'
 OFFPEAK_DATE = '20260325'
 OFFPEAK_TIME = '1300'
 OSRM_BASE_URL = 'https://router.project-osrm.org'
+STOPPOINT_SEARCH_TYPES = 'NaptanMetroStation,NaptanRailStation'
 
 
 def load_stations(path: Path) -> list[dict[str, Any]]:
@@ -41,10 +47,26 @@ def parse_iso_time(raw_value: str | None) -> datetime | None:
         return None
 
 
-def fetch_tfl_journeys(lat: float, lon: float, date: str, time: str) -> list[dict[str, Any]]:
+def normalize_station_name(raw_value: str) -> str:
+    normalized = re.sub(r'[^a-z0-9]+', ' ', raw_value.lower()).strip()
+    for token in (' underground station', ' rail station', ' dlr station', ' station'):
+        if normalized.endswith(token):
+            normalized = normalized[: -len(token)].strip()
+    return normalized
+
+
+def fetch_tfl_journeys(
+    lat: float,
+    lon: float,
+    date: str,
+    time: str,
+    *,
+    destination: tuple[str, float, float],
+) -> list[dict[str, Any]]:
+    _label, destination_lat, destination_lon = destination
     url = (
         'https://api.tfl.gov.uk/Journey/JourneyResults/'
-        f'{lat:.6f},{lon:.6f}/to/{OXFORD_CIRCUS_LAT:.6f},{OXFORD_CIRCUS_LON:.6f}'
+        f'{lat:.6f},{lon:.6f}/to/{destination_lat:.6f},{destination_lon:.6f}'
     )
     payload = fetch_json_with_curl_fallback(
         url,
@@ -62,6 +84,34 @@ def fetch_tfl_journeys(lat: float, lon: float, date: str, time: str) -> list[dic
         return []
     journeys = payload.get('journeys')
     return journeys if isinstance(journeys, list) else []
+
+
+def fetch_best_tfl_window(
+    lat: float,
+    lon: float,
+    *,
+    date: str,
+    time: str,
+) -> tuple[list[dict[str, Any]], str | None]:
+    best_journeys: list[dict[str, Any]] = []
+    best_duration: float | None = None
+    selected_label: str | None = None
+
+    for idx, destination in enumerate(CENTRAL_LONDON_DESTINATIONS):
+        journeys = fetch_tfl_journeys(lat, lon, date, time, destination=destination)
+        duration = fastest_duration_minutes(journeys)
+        if duration is not None and (best_duration is None or duration < best_duration):
+            best_duration = duration
+            best_journeys = journeys
+            selected_label = destination[0]
+
+        # Keep the first successful Oxford Circus result to limit extra requests.
+        if idx == 0 and duration is not None:
+            break
+        if best_duration is not None:
+            break
+
+    return best_journeys, selected_label
 
 
 def fastest_duration_minutes(journeys: list[dict[str, Any]]) -> float | None:
@@ -118,6 +168,107 @@ def estimate_peak_tph(journeys: list[dict[str, Any]]) -> float | None:
     return max(1.0, min(24.0, tph))
 
 
+def fetch_nearby_station_stoppoints(lat: float, lon: float) -> list[dict[str, Any]]:
+    payload = fetch_json_with_curl_fallback(
+        'https://api.tfl.gov.uk/Stoppoint',
+        params={
+            'lat': f'{lat:.6f}',
+            'lon': f'{lon:.6f}',
+            'stoptypes': STOPPOINT_SEARCH_TYPES,
+        },
+        timeout_seconds=12,
+        cache_namespace='tfl-stoppoints',
+        cache_ttl_hours=24 * 7,
+    )
+    if not isinstance(payload, dict):
+        return []
+    stop_points = payload.get('stopPoints')
+    return stop_points if isinstance(stop_points, list) else []
+
+
+def stoppoint_match_key(station_name: str, stop_point: dict[str, Any]) -> tuple[int, float]:
+    station_normalized = normalize_station_name(station_name)
+    stop_name = normalize_station_name(str(stop_point.get('commonName') or ''))
+    score = 0
+    if stop_name == station_normalized:
+        score += 5
+    elif station_normalized and (station_normalized in stop_name or stop_name in station_normalized):
+        score += 3
+
+    modes = stop_point.get('modes')
+    if isinstance(modes, list):
+        if any(mode in {'tube', 'dlr', 'overground', 'elizabeth-line', 'tram'} for mode in modes):
+            score += 2
+        elif any(mode in {'national-rail'} for mode in modes):
+            score += 1
+
+    distance = stop_point.get('distance')
+    numeric_distance = float(distance) if isinstance(distance, (int, float)) else 999999.0
+    return (-score, numeric_distance)
+
+
+def fetch_station_arrivals(station: dict[str, Any]) -> tuple[list[dict[str, Any]], str | None]:
+    station_name = str(station['station_name'])
+    stop_points = fetch_nearby_station_stoppoints(float(station['lat']), float(station['lon']))
+    candidates = sorted(
+        (stop_point for stop_point in stop_points if isinstance(stop_point, dict)),
+        key=lambda stop_point: stoppoint_match_key(station_name, stop_point),
+    )
+
+    for stop_point in candidates[:4]:
+        stop_id = stop_point.get('id')
+        if not isinstance(stop_id, str):
+            continue
+        payload = fetch_json_with_curl_fallback(
+            f'https://api.tfl.gov.uk/StopPoint/{stop_id}/Arrivals',
+            timeout_seconds=12,
+            cache_namespace='tfl-arrivals',
+            cache_ttl_hours=2,
+        )
+        if isinstance(payload, list) and payload:
+            return payload, str(stop_point.get('commonName') or stop_id)
+
+    return [], None
+
+
+def estimate_tph_from_arrivals(arrivals: list[dict[str, Any]]) -> float | None:
+    by_platform: dict[str, list[float]] = {}
+    for row in arrivals:
+        if not isinstance(row, dict):
+            continue
+        time_to_station = row.get('timeToStation')
+        if not isinstance(time_to_station, (int, float)):
+            continue
+        if time_to_station < 0 or time_to_station > 3600:
+            continue
+        platform = str(row.get('platformName') or row.get('towards') or 'default')
+        by_platform.setdefault(platform, []).append(float(time_to_station) / 60.0)
+
+    if not by_platform:
+        return None
+
+    tph_total = 0.0
+    for arrivals_min in by_platform.values():
+        arrivals_min.sort()
+        if len(arrivals_min) >= 2:
+            headways = [
+                arrivals_min[idx] - arrivals_min[idx - 1]
+                for idx in range(1, len(arrivals_min))
+                if arrivals_min[idx] - arrivals_min[idx - 1] > 0
+            ]
+            if headways:
+                tph_total += 60.0 / statistics.mean(headways)
+                continue
+
+        arrivals_in_30 = sum(1 for minute in arrivals_min if minute <= 30.0)
+        if arrivals_in_30 > 0:
+            tph_total += arrivals_in_30 * 2.0
+
+    if tph_total <= 0:
+        return None
+    return max(1.0, min(24.0, tph_total))
+
+
 def osrm_probe_available(*, timeout_seconds: float = 5.0) -> bool:
     probe_url = (
         f'{OSRM_BASE_URL}/route/v1/driving/'
@@ -168,8 +319,18 @@ def build_transport_record(
     lat = float(station['lat'])
     lon = float(station['lon'])
 
-    peak_journeys = fetch_tfl_journeys(lat, lon, PEAK_DATE, PEAK_TIME)
-    offpeak_journeys = fetch_tfl_journeys(lat, lon, OFFPEAK_DATE, OFFPEAK_TIME)
+    peak_journeys, peak_destination = fetch_best_tfl_window(
+        lat,
+        lon,
+        date=PEAK_DATE,
+        time=PEAK_TIME,
+    )
+    offpeak_journeys, offpeak_destination = fetch_best_tfl_window(
+        lat,
+        lon,
+        date=OFFPEAK_DATE,
+        time=OFFPEAK_TIME,
+    )
 
     peak_commute = fastest_duration_minutes(peak_journeys)
     offpeak_commute = fastest_duration_minutes(offpeak_journeys)
@@ -194,7 +355,13 @@ def build_transport_record(
     else:
         interchange_count = None
 
+    arrivals, arrival_station_name = fetch_station_arrivals(station)
     peak_tph = estimate_peak_tph(peak_journeys)
+    peak_tph_source = 'journeys' if peak_tph is not None else None
+    if peak_tph is None:
+        peak_tph = estimate_tph_from_arrivals(arrivals)
+        if peak_tph is not None:
+            peak_tph_source = 'live_arrivals'
     drive_minutes = fetch_osrm_drive_minutes(lat, lon) if osrm_enabled else None
 
     fallback_typical = float(station.get('typical_commute_min', 60.0))
@@ -208,6 +375,7 @@ def build_transport_record(
     used_osrm = drive_minutes is not None
     used_peak = peak_commute is not None
     used_offpeak = offpeak_commute is not None
+    used_arrivals = peak_tph_source == 'live_arrivals'
 
     typical_value = float(typical_commute if typical_commute is not None else fallback_typical)
     peak_value = float(peak_commute if peak_commute is not None else fallback_peak)
@@ -222,7 +390,7 @@ def build_transport_record(
     elif used_tfl:
         confidence += 0.18
     if peak_tph is not None:
-        confidence += 0.07
+        confidence += 0.04 if used_arrivals else 0.07
     if interchange_count is not None:
         confidence += 0.05
     if used_osrm:
@@ -241,24 +409,35 @@ def build_transport_record(
         'typical_commute_min': round(0.88 if used_peak and used_offpeak else 0.72 if used_tfl else 0.48, 3),
         'peak_commute_min': round(0.84 if used_peak else 0.48, 3),
         'offpeak_commute_min': round(0.84 if used_offpeak else 0.48, 3),
-        'peak_tph': round(0.78 if peak_tph is not None else 0.45, 3),
+        'peak_tph': round(0.68 if used_arrivals else 0.78 if peak_tph is not None else 0.45, 3),
         'interchange_count': round(0.78 if interchange_count is not None else 0.45, 3),
         'drive_to_pinner_min': round(0.88 if used_osrm else 0.5, 3),
     }
-    field_provenance = {
-        key: ('direct' if status_value == 'available' else 'heuristic')
-        for key, status_value in field_statuses.items()
-    }
+    field_provenance = {key: ('direct' if status_value == 'available' else 'heuristic') for key, status_value in field_statuses.items()}
+    if used_arrivals:
+        field_provenance['peak_tph'] = 'direct_live_arrivals'
 
-    status = 'available' if used_tfl or used_osrm else 'estimated'
+    status = 'available' if used_tfl or used_osrm or used_arrivals else 'estimated'
     methodology_parts = [
-        'Commute from TfL Journey Planner (least-time route).'
+        (
+            f'Commute from TfL Journey Planner (least-time route) to {peak_destination or offpeak_destination or "the central London core"}.'
+        )
         if used_tfl
         else 'Commute fallback from station profile heuristic.',
+        (
+            f'Service frequency derived from live TfL StopPoint arrivals at {arrival_station_name}.'
+        )
+        if used_arrivals
+        else 'Service frequency estimated from the returned peak journey headways.'
+        if peak_tph_source == 'journeys'
+        else 'Service frequency fallback from station profile heuristic.',
         'Drive-to-Pinner from OSRM route engine.'
         if used_osrm
         else 'Drive-to-Pinner fallback from station profile heuristic.',
-        f'Peak query window: {PEAK_DATE} {PEAK_TIME}; off-peak query window: {OFFPEAK_DATE} {OFFPEAK_TIME}.',
+        (
+            f'Peak query window: {PEAK_DATE} {PEAK_TIME} (destination {peak_destination or "fallback"}); '
+            f'off-peak query window: {OFFPEAK_DATE} {OFFPEAK_TIME} (destination {offpeak_destination or "fallback"}).'
+        ),
     ]
 
     return (
@@ -277,7 +456,7 @@ def build_transport_record(
             'field_confidences': field_confidences,
             'field_provenance': field_provenance,
             'methodology_note': ' '.join(methodology_parts),
-            'reference_period': 'Snapshot queries to TfL Journey Planner and OSRM routing.',
+            'reference_period': 'Snapshot queries to the TfL Journey Planner central-London core, TfL StopPoint arrivals, and OSRM routing.',
             'source_release_date': datetime.now(ZoneInfo('Europe/London')).date().isoformat(),
         },
     )

@@ -278,9 +278,21 @@ describe('dataQuality helpers', () => {
         ...baseArea.commuteTypicalMinutes,
         provenance: 'heuristic',
       },
-      driveTimeToPinnerMinutes: {
-        ...baseArea.driveTimeToPinnerMinutes,
-        provenance: 'heuristic',
+      commutePeakMinutes: {
+        ...baseArea.commutePeakMinutes,
+        provenance: 'direct',
+      },
+      commuteOffPeakMinutes: {
+        ...baseArea.commuteOffPeakMinutes,
+        provenance: 'direct',
+      },
+      serviceFrequencyPeakTph: {
+        ...baseArea.serviceFrequencyPeakTph,
+        provenance: 'direct_live_arrivals',
+      },
+      interchangeCount: {
+        ...baseArea.interchangeCount,
+        provenance: 'direct',
       },
       nearbyPrimaryCount: {
         ...baseArea.nearbyPrimaryCount,
@@ -339,5 +351,10 @@ describe('dataQuality helpers', () => {
     })
     expect(getAreaPropertyEvidenceLabel(area)).toBe('Recent sold-price fallback')
     expect(describeMetricEvidence('direct_listing')).toBe('Current listings')
+    expect(describeMetricEvidence('direct_listing_extended')).toBe('Current listings (extended area)')
+    expect(describeMetricEvidence('direct_transactions_extended')).toBe(
+      'Recent sold-price fallback (extended area)',
+    )
+    expect(describeMetricEvidence('direct_live_arrivals')).toBe('Live station arrivals')
   })
 })

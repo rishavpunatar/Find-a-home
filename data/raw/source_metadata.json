@@ -1,7 +1,7 @@
 {
   "property": {
     "source": "OnTheMarket current asking-price snapshot + HM Land Registry PPD fallback",
-    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-04-01 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-04-01 to 2026-04-01 (with prior-year comparison window for trend proxy)",
+    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-04-01 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-04-01 to 2026-04-01 with a local 800m catchment first and an explicit 1600m extended-area fallback when the nearer sample is too sparse (with prior-year comparison window for trend proxy)",
     "releaseDate": "2026-04-01"
   },
   "transport": {

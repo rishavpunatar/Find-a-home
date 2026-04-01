@@ -63,8 +63,14 @@ export const describeMetricEvidence = (provenance?: string): string => {
   switch (provenance) {
     case 'direct_listing':
       return 'Current listings'
+    case 'direct_listing_extended':
+      return 'Current listings (extended area)'
     case 'direct_transactions':
       return 'Recent sold-price fallback'
+    case 'direct_transactions_extended':
+      return 'Recent sold-price fallback (extended area)'
+    case 'direct_live_arrivals':
+      return 'Live station arrivals'
     case 'direct_blend':
       return 'Blended direct source'
     case 'direct':
@@ -100,7 +106,10 @@ export const getAreaDomainSourceBuckets = (
   property: getSourceBucket(area.medianSemiDetachedPrice.provenance),
   transport: mergeSourceBuckets([
     getSourceBucket(area.commuteTypicalMinutes.provenance),
-    getSourceBucket(area.driveTimeToPinnerMinutes.provenance),
+    getSourceBucket(area.commutePeakMinutes.provenance),
+    getSourceBucket(area.commuteOffPeakMinutes.provenance),
+    getSourceBucket(area.serviceFrequencyPeakTph.provenance),
+    getSourceBucket(area.interchangeCount.provenance),
   ]),
   schools: mergeSourceBuckets([
     getSourceBucket(area.nearbyPrimaryCount.provenance),

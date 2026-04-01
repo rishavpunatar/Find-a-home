@@ -107,19 +107,22 @@ def source_matrix() -> dict[str, dict[str, str]]:
             'secondarySource': 'HM Land Registry Price Paid Data fallback',
             'note': (
                 'Station-level property metrics now prefer current asking prices for semi-detached '
-                'homes with 3+ bedrooms and 2+ bathrooms from public locality search results. '
-                'If live listing coverage is too thin, the pipeline falls back to recent HM Land '
-                'Registry semi-detached transactions.'
+                'homes with 3+ bedrooms and 2+ bathrooms from public locality search results, '
+                'using nearby locality/borough fallbacks only when the resulting listings still fall '
+                'inside a bounded station-area radius. If live listing coverage is too thin, the pipeline '
+                'falls back to recent HM Land Registry semi-detached transactions, first at the tighter '
+                'local catchment and then an explicitly lower-confidence extended-area fallback.'
             ),
         },
         'transport': {
             'status': 'source_applied_partially_live_verified',
-            'primarySource': 'TfL Journey Planner + OSRM routing',
+            'primarySource': 'TfL Journey Planner central-London core + TfL StopPoint arrivals + OSRM routing',
             'secondarySource': 'Station-profile fallback for uncovered routes',
             'note': (
-                'Drive times now use direct OSRM routing where available, and public-transport commute metrics '
-                'use TfL Journey Planner where it returns journeys. Remaining uncovered stations retain an '
-                'explicit station-profile heuristic fallback.'
+                'Drive times now use direct OSRM routing where available. Public-transport commute metrics '
+                'use TfL Journey Planner against a small central-London destination set, and service frequency '
+                'can fall back to live TfL StopPoint arrivals where journey results are too sparse. Remaining '
+                'uncovered stations retain an explicit station-profile heuristic fallback.'
             ),
         },
         'schools': {
@@ -330,7 +333,6 @@ def compute_domain_coverage(dataset: dict[str, Any]) -> dict[str, Any]:
             'commuteOffPeakMinutes',
             'serviceFrequencyPeakTph',
             'interchangeCount',
-            'driveTimeToPinnerMinutes',
         ],
         'schools': [
             'nearbyPrimaryCount',

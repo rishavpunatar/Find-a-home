@@ -1,22 +1,27 @@
 {
-  "generatedAt": "2026-04-01T13:55:30+01:00",
+  "generatedAt": "2026-04-01T15:45:20+01:00",
   "count": 534,
   "londonWideCount": 534,
   "topMicroAreas": [
     {
-      "microAreaId": "ma-wansta21",
-      "stationName": "Wanstead",
-      "score": 63.6
-    },
-    {
       "microAreaId": "ma-harlef99",
       "stationName": "Harlesden",
-      "score": 63.47
+      "score": 64.07
     },
     {
-      "microAreaId": "ma-black771",
-      "stationName": "Blackheath",
-      "score": 60.98
+      "microAreaId": "ma-westhd1f",
+      "stationName": "West Ham",
+      "score": 62.67
+    },
+    {
+      "microAreaId": "ma-plaisaf0",
+      "stationName": "Plaistow",
+      "score": 62.34
+    },
+    {
+      "microAreaId": "ma-eastc7c4",
+      "stationName": "East Croydon",
+      "score": 61.76
     },
     {
       "microAreaId": "ma-tooti8a5",
@@ -24,51 +29,51 @@
       "score": 60.85
     },
     {
-      "microAreaId": "ma-eastc7c4",
-      "stationName": "East Croydon",
-      "score": 60.27
+      "microAreaId": "ma-easta300",
+      "stationName": "East Acton",
+      "score": 60.56
+    },
+    {
+      "microAreaId": "ma-abbey3a8",
+      "stationName": "Abbey Wood",
+      "score": 60.35
     },
     {
       "microAreaId": "ma-burnt91d",
       "stationName": "Burnt Oak",
-      "score": 59.62
+      "score": 60.19
     },
     {
-      "microAreaId": "ma-periv4f7",
-      "stationName": "Perivale",
-      "score": 59.22
+      "microAreaId": "ma-wembl137",
+      "stationName": "Wembley Central",
+      "score": 60.17
     },
     {
-      "microAreaId": "ma-wille265",
-      "stationName": "Willesden Green",
-      "score": 59.15
-    },
-    {
-      "microAreaId": "ma-stepn23c",
-      "stationName": "Stepney Green",
-      "score": 58.8
-    },
-    {
-      "microAreaId": "ma-canade89",
-      "stationName": "Canada Water",
-      "score": 58.7
+      "microAreaId": "ma-chadwcd5",
+      "stationName": "Chadwell Heath",
+      "score": 60.06
     }
   ],
   "topLondonWideMicroAreas": [
     {
-      "microAreaId": "ma-wansta21",
-      "stationName": "Wanstead",
-      "score": 63.6
-    },
-    {
       "microAreaId": "ma-harlef99",
       "stationName": "Harlesden",
-      "score": 63.47
+      "score": 64.07
     },
     {
-      "microAreaId": "ma-black771",
-      "stationName": "Blackheath",
-      "score": 60.98
+      "microAreaId": "ma-westhd1f",
+      "stationName": "West Ham",
+      "score": 62.67
+    },
+    {
+      "microAreaId": "ma-plaisaf0",
+      "stationName": "Plaistow",
+      "score": 62.34
+    },
+    {
+      "microAreaId": "ma-eastc7c4",
+      "stationName": "East Croydon",
+      "score": 61.76
     },
     {
       "microAreaId": "ma-tooti8a5",
@@ -76,34 +81,29 @@
       "score": 60.85
     },
     {
-      "microAreaId": "ma-eastc7c4",
-      "stationName": "East Croydon",
-      "score": 60.27
+      "microAreaId": "ma-easta300",
+      "stationName": "East Acton",
+      "score": 60.56
+    },
+    {
+      "microAreaId": "ma-abbey3a8",
+      "stationName": "Abbey Wood",
+      "score": 60.35
     },
     {
       "microAreaId": "ma-burnt91d",
       "stationName": "Burnt Oak",
-      "score": 59.62
+      "score": 60.19
     },
     {
-      "microAreaId": "ma-periv4f7",
-      "stationName": "Perivale",
-      "score": 59.22
+      "microAreaId": "ma-wembl137",
+      "stationName": "Wembley Central",
+      "score": 60.17
     },
     {
-      "microAreaId": "ma-wille265",
-      "stationName": "Willesden Green",
-      "score": 59.15
-    },
-    {
-      "microAreaId": "ma-stepn23c",
-      "stationName": "Stepney Green",
-      "score": 58.8
-    },
-    {
-      "microAreaId": "ma-canade89",
-      "stationName": "Canada Water",
-      "score": 58.7
+      "microAreaId": "ma-chadwcd5",
+      "stationName": "Chadwell Heath",
+      "score": 60.06
     }
   ]
 }

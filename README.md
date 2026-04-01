@@ -157,8 +157,8 @@ The pipeline emits:
 
 Current verification coverage:
 
-- Property: current OnTheMarket listing snapshots with recent HM Land Registry sold-price fallback
-- Transport: TfL Journey Planner and OSRM where available, with explicit heuristic gaps where not
+- Property: current OnTheMarket listing snapshots with bounded nearby-locality fallbacks, plus HM Land Registry sold-price fallback when live listing coverage is too thin
+- Transport: TfL Journey Planner against a central-London core, TfL StopPoint arrivals for service-frequency backfill, and OSRM where available
 - Schools: official state-funded DfE sources, using a road-adjusted drive-time accessibility proxy
 - Greenspace: direct OpenStreetMap polygon geometry via Overpass
 - Crime: direct `data.police.uk` area pulls, with a fresh police-feed cross-check available
@@ -193,7 +193,7 @@ Refresh borough QoL (ONS APS) metrics:
 npm run pipeline:wellbeing
 ```
 
-Refresh transport metrics (TfL Journey Planner + OSRM with fallback):
+Refresh transport metrics (TfL Journey Planner central-core + TfL StopPoint arrivals + OSRM with fallback):
 
 ```bash
 npm run pipeline:transport
@@ -227,7 +227,7 @@ Optional London high-resolution mode:
 2. Keep Greater London station areas within the configured central-London commute cap.
 3. Deduplicate highly overlapping station micro-areas.
 4. Build per-micro-area metrics via adapters.
-   - Property metrics now prefer current asking prices for semi-detached homes with at least 3 bedrooms and 2 bathrooms, using public locality listing snapshots and distance-weighting back to the station area. When current listing coverage is too thin, the pipeline falls back to recent HM Land Registry semi-detached transactions.
+   - Property metrics now prefer current asking prices for semi-detached homes with at least 3 bedrooms and 2 bathrooms, using public locality listing snapshots and distance-weighting back to the station area. If the direct station locality page is sparse, the pipeline can fall back to broader nearby locality pages only when the resulting listings still sit inside a bounded station-area radius. When current listing coverage is still too thin, the pipeline falls back to recent HM Land Registry semi-detached transactions, first on the tighter local catchment and then on an explicitly lower-confidence extended-area fallback.
    - If a station has no direct source record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchor stations.
 5. Compute component scores and weighted overall rank.
 6. Persist `data/processed/micro_areas.json` and `data/processed/summary.json`.

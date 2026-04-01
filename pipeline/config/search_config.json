@@ -18,7 +18,7 @@
   "dedupe": {
     "station_distance_threshold_m": 500
   },
-  "destination_station": "Oxford Circus",
+  "destination_station": "Central London core (Oxford Circus / Bank / Victoria / Waterloo)",
   "default_weights": {
     "value": 31,
     "transport": 19,

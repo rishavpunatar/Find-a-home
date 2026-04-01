@@ -96,12 +96,14 @@ export const RankedTablePage = () => {
               </p>
               <p className="mt-1 text-slate-600">
                 If current listing coverage is too thin, the pipeline falls back to recent HM Land
-                Registry semi-detached transactions; if a station still has no direct property
-                record, it is estimated from nearby property anchors.
+                Registry semi-detached transactions, first on the tighter local catchment and then
+                on an explicitly lower-confidence extended nearby area; if a station still has no
+                direct property record, it is estimated from nearby property anchors.
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Source:</span> OnTheMarket current locality search
-                results + HM Land Registry Price Paid Data fallback.
+                results + nearby locality fallbacks within a bounded station-area radius + HM Land
+                Registry Price Paid Data fallback.
               </p>
               <p className="mt-1 text-slate-600">
                 <span className="font-semibold">Data reference period:</span>{' '}
@@ -112,8 +114,9 @@ export const RankedTablePage = () => {
                 few unusually expensive listings.
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                The table also labels each row&apos;s price evidence as either current listings or
-                recent sold-price fallback.
+                The table also labels each row&apos;s price evidence as either current listings,
+                current listings (extended area), recent sold-price fallback, or recent sold-price
+                fallback (extended area).
               </p>
             </details>
 
