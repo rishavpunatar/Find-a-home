@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useDataContext } from '@/context/DataContext'
+import { useSettings } from '@/context/SettingsContext'
 
 const InfoCard = ({
   title,
@@ -31,39 +32,70 @@ const DetailBlock = ({
 
 const scoreAxes = [
   {
+    key: 'value',
     label: 'Value',
     detail:
       'A higher value score means the target home type looks cheaper relative to the rest of the search universe once price and commute are both considered.',
+    recipe:
+      'This starts from the property layer. The app takes the affordability score and the value-for-money score, then averages them into one 0-100 value score.',
+    formula: 'Value score = average of affordability score and value-for-money score',
   },
   {
+    key: 'transport',
     label: 'Transport',
     detail:
       'A higher transport score means the area has a better commute into the central London core, better peak service, fewer changes, or some combination of those.',
+    recipe:
+      'This combines four transformed transport inputs: typical commute, peak commute, peak trains-per-hour, and interchange count. Shorter journeys and fewer changes help; stronger service frequency helps.',
+    formula:
+      'Transport score = typical commute 30% + peak commute 20% + peak service 30% + interchange score 20%',
   },
   {
+    key: 'schools',
     label: 'Schools',
     detail:
       'A higher school score means there are more reachable state-funded schools within the app’s catchment logic and the quality indicators for those schools are stronger.',
+    recipe:
+      'This is a blend of school quality and school access. Quality is the average of the primary and secondary quality scores. Access is based on nearby state-funded primary and secondary counts adjusted per 10,000 residents, so dense areas are not rewarded just for having more people around them.',
+    formula:
+      'School score = school quality 72% + population-adjusted school access 28%',
   },
   {
+    key: 'environment',
     label: 'Environment',
     detail:
       'A higher environment score means cleaner air and better nearby green-space access.',
+    recipe:
+      'This mixes air quality with greenery. Lower PM2.5, lower NO2, higher green cover, more green area within 1 km, and a shorter distance to the nearest park all help.',
+    formula:
+      'Environment score = PM2.5 34% + NO2 16% + green cover 20% + green area 18% + park distance 12%',
   },
   {
+    key: 'crime',
     label: 'Crime',
     detail:
       'A higher crime score means lower recorded crime in the station-area catchment. It is effectively a safety score.',
+    recipe:
+      'The raw crime metric is annualised crime incidents per 1,000 residents. Lower raw crime rates are converted into higher-is-better safety scores for ranking.',
+    formula: 'Crime score = inverse transform of crime rate per 1,000 residents',
   },
   {
+    key: 'proximity',
     label: 'Proximity',
     detail:
       'A higher proximity score means easier access back to Pinner. This is optional and can matter a lot or not at all depending on your own situation.',
+    recipe:
+      'This uses drive time back to Pinner as an optional personal-access signal. Lower drive times give higher scores.',
+    formula: 'Proximity score = inverse transform of drive time back to Pinner',
   },
   {
+    key: 'planningRisk',
     label: 'Planning Risk',
     detail:
       'A higher planning-risk score means lower nearby development-pressure risk under the app’s rule-based planning signal.',
+    recipe:
+      'This comes from the planning-risk heuristic. Lower raw planning-risk values are turned into higher-is-better planning scores.',
+    formula: 'Planning score = inverse transform of planning-risk heuristic',
   },
 ] as const
 
@@ -75,6 +107,7 @@ export const DataMethodologyGuide = ({
   variant = 'compact',
 }: DataMethodologyGuideProps) => {
   const { dataset } = useDataContext()
+  const { normalizedWeights, weightingMode } = useSettings()
   const sourceMetadata = dataset?.config.sourceMetadata ?? {}
   const propertyReferencePeriod =
     sourceMetadata.property?.referencePeriod ??
@@ -98,6 +131,7 @@ export const DataMethodologyGuide = ({
   const qolCoveragePeriod = qolSource?.coveragePeriod ?? 'up to 2022-23'
   const qolReleaseDate = qolSource?.releaseDate ?? '2023-11-28'
   const centralDestination = dataset?.destinationStation ?? 'central London core'
+  const overallFormula = `((Value x ${normalizedWeights.value.toFixed(1)}) + (Transport x ${normalizedWeights.transport.toFixed(1)}) + (Schools x ${normalizedWeights.schools.toFixed(1)}) + (Environment x ${normalizedWeights.environment.toFixed(1)}) + (Crime x ${normalizedWeights.crime.toFixed(1)}) + (Proximity x ${normalizedWeights.proximity.toFixed(1)}) + (Planning x ${normalizedWeights.planningRisk.toFixed(1)})) / 100 x confidence factor`
 
   return (
     <div className="space-y-4">
@@ -133,17 +167,55 @@ export const DataMethodologyGuide = ({
                 compared in one model.
               </p>
               <p>
+                The overall score is then a weighted blend of those axis scores, followed by a
+                confidence adjustment. So the same raw school count or commute number does not
+                flow straight into the final rank on its own.
+              </p>
+              <p>
                 Your weight settings are still the main control. If you switch on the optional
-                spread-aware default mode, the app only makes a mild adjustment to the default
-                weights using dataset-wide spread and confidence.
+                spread-aware default mode, the app only makes a mild adjustment to the default mix
+                using dataset-wide spread and confidence.
               </p>
             </InfoCard>
           </section>
 
           <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+            <h2 className="text-lg font-semibold text-slate-900">What a score actually means</h2>
+            <div className="mt-3 space-y-3 text-sm text-slate-700">
+              <p>
+                A score here is not a percentage chance that you will like an area. It is a
+                ranking number built inside this app&apos;s search universe. A station with a score
+                of 72 is doing better on the weighted mix of metrics than a station with a score
+                of 58, under the current weight settings and confidence adjustment.
+              </p>
+              <p>
+                The component scores are each first put onto a 0-100 basis. The app then applies
+                the current weights, adds those weighted pieces together, and finally scales the
+                result by a confidence factor between 0.5 and 1.0. That means weaker evidence can
+                pull the final overall score down, but it does not automatically zero it out.
+              </p>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Current overall-score formula
+                </p>
+                <p className="mt-2 font-mono text-xs text-slate-700">{overallFormula}</p>
+                <p className="mt-2 text-xs text-slate-600">
+                  Current weighting mode:{' '}
+                  <span className="font-medium">
+                    {weightingMode === 'manual' ? 'Manual weights' : 'Spread-aware defaults'}
+                  </span>
+                  . Confidence factor = 0.5 + (data confidence x 0.5).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
             <h2 className="text-lg font-semibold text-slate-900">What each score axis means</h2>
             <p className="mt-2 text-sm text-slate-700">
-              These are the main score axes you see across the app and in the overall ranking logic.
+              These are the main score axes you see across the app and in the overall ranking
+              logic. Each card shows what the axis means, how it is built, and how much weight it
+              currently carries in the overall rank.
             </p>
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {scoreAxes.map((axis) => (
@@ -151,8 +223,27 @@ export const DataMethodologyGuide = ({
                   key={axis.label}
                   className="rounded-xl border border-slate-200 bg-slate-50 p-3"
                 >
-                  <h3 className="font-semibold text-slate-900">{axis.label}</h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-semibold text-slate-900">{axis.label}</h3>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-slate-600">
+                      Weight {normalizedWeights[axis.key].toFixed(1)}%
+                    </span>
+                  </div>
                   <p className="mt-1 text-sm text-slate-600">{axis.detail}</p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    <span className="font-medium text-slate-700">How it is built:</span>{' '}
+                    {axis.recipe}
+                  </p>
+                  <p className="mt-2 text-xs text-slate-500">
+                    <span className="font-semibold">Formula:</span> {axis.formula}
+                  </p>
+                  <p className="mt-2 text-xs text-slate-500">
+                    In the overall ranking, this axis currently contributes{' '}
+                    <span className="font-semibold">
+                      {normalizedWeights[axis.key].toFixed(1)}%
+                    </span>{' '}
+                    of the pre-confidence weighted score.
+                  </p>
                 </article>
               ))}
             </div>
@@ -266,6 +357,11 @@ export const DataMethodologyGuide = ({
               <p>
                 The access side is population-adjusted, so areas are not rewarded just for sitting
                 inside a denser part of London with a larger surrounding population base.
+              </p>
+              <p>
+                In scoring terms, the access subscore averages primary-school access per 10,000
+                residents and secondary-school access per 10,000 residents before blending that
+                access result with the quality result.
               </p>
               <p>
                 Where a direct catchment population denominator is missing, the app uses a fixed
