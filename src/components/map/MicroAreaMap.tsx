@@ -310,23 +310,91 @@ interface MicroAreaMapProps {
   onViewportChange?: (viewport: MapViewport) => void
 }
 
-const MapPopupContent = ({ area, fromPath }: { area: DerivedMicroArea; fromPath: string }) => (
+const componentScoreRows: Array<{ key: keyof ComponentScores; label: string }> = [
+  { key: 'value', label: 'Value' },
+  { key: 'transport', label: 'Transport' },
+  { key: 'schools', label: 'Schools' },
+  { key: 'environment', label: 'Environment' },
+  { key: 'crime', label: 'Crime' },
+  { key: 'proximity', label: 'Pinner' },
+  { key: 'planningRisk', label: 'Planning' },
+]
+
+const MapDetailContent = ({
+  area,
+  fromPath,
+  hoverMode = false,
+}: {
+  area: DerivedMicroArea
+  fromPath: string
+  hoverMode?: boolean
+}) => (
   <div className="text-sm">
-    <p className="font-semibold">{area.stationName}</p>
-    <p className="text-xs text-slate-600">{area.localAuthority}</p>
-    <p>Score: {area.dynamicOverallScore.toFixed(1)}</p>
-    <p>Commute: {formatNumber(area.commuteTypicalMinutes.value)} min</p>
-    <p>Drive to Pinner: {formatNumber(area.driveTimeToPinnerMinutes.value)} min</p>
-    <div className="mt-2">
+    <p className="font-semibold text-slate-900">{area.stationName}</p>
+    <p className="text-xs text-slate-600">
+      {area.localAuthority}, {area.countyOrBorough}
+    </p>
+    <div className="mt-2 grid gap-2 sm:grid-cols-2">
+      <div className="rounded-md bg-slate-50 px-2 py-1.5">
+        <p className="text-[11px] uppercase tracking-wide text-slate-500">Overall</p>
+        <p className="font-semibold text-slate-900">{area.dynamicOverallScore.toFixed(1)}</p>
+      </div>
+      <div className="rounded-md bg-slate-50 px-2 py-1.5">
+        <p className="text-[11px] uppercase tracking-wide text-slate-500">Confidence</p>
+        <p className="font-semibold text-slate-900">
+          {formatNumber(area.dataConfidenceScore * 100, 0)}%
+        </p>
+      </div>
+      <div className="rounded-md bg-slate-50 px-2 py-1.5">
+        <p className="text-[11px] uppercase tracking-wide text-slate-500">Median Semi</p>
+        <p className="font-semibold text-slate-900">
+          {formatCurrency(area.medianSemiDetachedPrice.value)}
+        </p>
+      </div>
+      <div className="rounded-md bg-slate-50 px-2 py-1.5">
+        <p className="text-[11px] uppercase tracking-wide text-slate-500">Commute</p>
+        <p className="font-semibold text-slate-900">
+          {formatNumber(area.commuteTypicalMinutes.value)} min
+        </p>
+      </div>
+      <div className="rounded-md bg-slate-50 px-2 py-1.5">
+        <p className="text-[11px] uppercase tracking-wide text-slate-500">PM2.5</p>
+        <p className="font-semibold text-slate-900">{formatNumber(area.annualPm25.value, 1)}</p>
+      </div>
+      <div className="rounded-md bg-slate-50 px-2 py-1.5">
+        <p className="text-[11px] uppercase tracking-wide text-slate-500">Green Cover</p>
+        <p className="font-semibold text-slate-900">
+          {formatNumber(area.greenCoverPct.value, 1)}%
+        </p>
+      </div>
+    </div>
+    <div className="mt-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        Score breakdown
+      </p>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        {componentScoreRows.map((row) => (
+          <div key={row.key} className="rounded-md border border-slate-200 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">{row.label}</p>
+            <p className="font-medium text-slate-900">
+              {formatNumber(area.componentScores[row.key], 1)}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div className="mt-3">
       <AreaTrustSummary area={area} compact />
     </div>
-    <Link
-      to={`/micro-area/${area.microAreaId}`}
-      state={{ from: fromPath }}
-      className="mt-1 inline-block text-surge hover:underline"
-    >
-      Open full details
-    </Link>
+    {!hoverMode ? (
+      <Link
+        to={`/micro-area/${area.microAreaId}`}
+        state={{ from: fromPath }}
+        className="mt-2 inline-block text-surge hover:underline"
+      >
+        Open full details
+      </Link>
+    ) : null}
   </div>
 )
 
@@ -389,6 +457,10 @@ export const MicroAreaMap = ({
   const focusCoordinate = focusAreaId
     ? (areas.find((area) => area.microAreaId === focusAreaId)?.centroid ?? null)
     : null
+  const hovered = currentHoveredId
+    ? (areas.find((area) => area.microAreaId === currentHoveredId) ?? null)
+    : null
+  const inspected = hovered ?? selected
 
   const markerClusters = useMemo(() => buildMarkerClusters(areas), [areas])
 
@@ -454,7 +526,7 @@ export const MicroAreaMap = ({
                 }}
               >
                 <Popup>
-                  <MapPopupContent area={area} fromPath={fromPath} />
+                  <MapDetailContent area={area} fromPath={fromPath} />
                 </Popup>
               </Circle>
             )
@@ -479,7 +551,7 @@ export const MicroAreaMap = ({
                         }}
                       >
                         <Popup>
-                          <MapPopupContent area={area} fromPath={fromPath} />
+                          <MapDetailContent area={area} fromPath={fromPath} />
                         </Popup>
                       </Marker>
                     )
@@ -538,7 +610,7 @@ export const MicroAreaMap = ({
                     }}
                   >
                     <Popup>
-                      <MapPopupContent area={area} fromPath={fromPath} />
+                      <MapDetailContent area={area} fromPath={fromPath} />
                     </Popup>
                   </Marker>
                 ))
@@ -582,6 +654,11 @@ export const MicroAreaMap = ({
             {formatNumber(Math.max(...values), 1)}
           </p>
         ) : null}
+        <p className="mt-2 text-xs text-slate-600">
+          {legendMode === 'quantile'
+            ? 'Quantile bins keep roughly the same number of areas in each colour bucket, which is useful for seeing relative ranking even when values are tightly clustered.'
+            : 'Equal-range bins split the full numeric range into equal value steps, which is better when you want the colours to reflect absolute differences in the metric itself.'}
+        </p>
         {denseLayer && markerLayerVisible ? (
           <p className="mt-1 text-xs text-slate-500">
             Marker clustering active ({markerClusters.length} clusters across {areas.length} areas).
@@ -599,27 +676,17 @@ export const MicroAreaMap = ({
           })}
         </ul>
 
-        {selected ? (
+        {inspected ? (
           <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
-            <p className="font-semibold">{selected.stationName}</p>
-            <p>Overall score: {selected.dynamicOverallScore.toFixed(1)}</p>
-            <p>Median semi: {formatCurrency(selected.medianSemiDetachedPrice.value)}</p>
-            <p>Commute: {formatNumber(selected.commuteTypicalMinutes.value)} min</p>
-            <p>Drive to Pinner: {formatNumber(selected.driveTimeToPinnerMinutes.value)} min</p>
-            <div className="mt-2">
-              <AreaTrustSummary area={selected} />
-            </div>
-            <Link
-              to={`/micro-area/${selected.microAreaId}`}
-              state={{ from: fromPath }}
-              className="mt-2 inline-block text-surge hover:underline"
-            >
-              Open full details
-            </Link>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              {hovered ? 'Hovered area' : 'Selected area'}
+            </p>
+            <MapDetailContent area={inspected} fromPath={fromPath} hoverMode />
           </div>
         ) : (
           <p className="mt-5 text-sm text-slate-500">
-            Click a catchment circle, station pin, or list row to inspect area details.
+            Hover a catchment circle or station pin to inspect score details. Click to keep an area
+            selected.
           </p>
         )}
       </aside>
