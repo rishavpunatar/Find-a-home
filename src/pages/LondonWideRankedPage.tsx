@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 
 import { CommutePm25Scatter } from '@/components/charts/CommutePm25Scatter'
 import { DistanceMetricScatter } from '@/components/charts/DistanceMetricScatter'
-import { SchoolAccessQualityScatter } from '@/components/charts/SchoolAccessQualityScatter'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { RankedTable } from '@/components/table/RankedTable'
@@ -189,19 +188,6 @@ export const LondonWideRankedPage = () => {
             usually come with dirtier air.
           </p>
           <CommutePm25Scatter areas={filtered} />
-        </article>
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-2">
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            School access vs school quality
-          </h3>
-          <p className="mt-2 text-xs text-slate-600">
-            This uses population-adjusted school access and raw quality scores rather than the
-            compressed school component score.
-          </p>
-          <SchoolAccessQualityScatter areas={filtered} />
         </article>
       </section>
 
