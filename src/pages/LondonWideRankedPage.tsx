@@ -20,6 +20,7 @@ import {
   proximityDiagnosticScore,
   schoolAccessSubscore,
 } from '@/lib/scoringDiagnostics'
+import { totalSchoolAccessPerPopulation } from '@/lib/schoolAccess'
 
 const downloadCsv = (filename: string, data: string) => {
   const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' })
@@ -209,8 +210,8 @@ export const LondonWideRankedPage = () => {
             School access vs school quality
           </h3>
           <p className="mt-2 text-xs text-slate-600">
-            This uses raw access counts and raw quality scores rather than the compressed school
-            component score.
+            This uses population-adjusted school access and raw quality scores rather than the
+            compressed school component score.
           </p>
           <SchoolAccessQualityScatter areas={filtered} />
         </article>
@@ -259,17 +260,21 @@ export const LondonWideRankedPage = () => {
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            School access vs distance from central London
+            Population-adjusted school access vs distance from central London
           </h3>
           <DistanceMetricScatter
             areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
-            label="School access"
+            label="School access per 10,000 residents"
             fill="#7c3aed"
-            formatValue={(value) => `${Math.round(value)} schools`}
+            formatValue={(value) => `${value.toFixed(1)} per 10,000`}
             getValue={(area) =>
               area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
-                ? area.nearbyPrimaryCount.value + area.nearbySecondaryCount.value
+                ? totalSchoolAccessPerPopulation(
+                    area.nearbyPrimaryCount.value,
+                    area.nearbySecondaryCount.value,
+                    area.populationDenominator ?? null,
+                  )
                 : null
             }
           />
@@ -362,22 +367,30 @@ export const LondonWideRankedPage = () => {
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            School access vs school access subscore
+            Population-adjusted school access vs school access subscore
           </h3>
           <MetricScoreDiagnosticScatter
             areas={filtered}
-            xLabel="Total school access"
+            xLabel="School access per 10,000 residents"
             yLabel="School access subscore"
             fill="#7c3aed"
-            formatRawValue={(value) => `${Math.round(value)} schools`}
+            formatRawValue={(value) => `${value.toFixed(1)} per 10,000`}
             getRawValue={(area) =>
               area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
-                ? area.nearbyPrimaryCount.value + area.nearbySecondaryCount.value
+                ? totalSchoolAccessPerPopulation(
+                    area.nearbyPrimaryCount.value,
+                    area.nearbySecondaryCount.value,
+                    area.populationDenominator ?? null,
+                  )
                 : null
             }
             getScoreValue={(area) =>
               area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
-                ? schoolAccessSubscore(area.nearbyPrimaryCount.value, area.nearbySecondaryCount.value)
+                ? schoolAccessSubscore(
+                    area.nearbyPrimaryCount.value,
+                    area.nearbySecondaryCount.value,
+                    area.populationDenominator ?? null,
+                  )
                 : null
             }
           />

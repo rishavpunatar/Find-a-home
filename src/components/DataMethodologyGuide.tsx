@@ -264,6 +264,14 @@ export const DataMethodologyGuide = ({
                 reachable, and how strong those schools look in official performance data.
               </p>
               <p>
+                The access side is population-adjusted, so areas are not rewarded just for sitting
+                inside a denser part of London with a larger surrounding population base.
+              </p>
+              <p>
+                Where a direct catchment population denominator is missing, the app uses a fixed
+                reference-population fallback so the access score still stays on the same basis.
+              </p>
+              <p>
                 Private schools are excluded from both the count side and the quality side.
               </p>
               <p>

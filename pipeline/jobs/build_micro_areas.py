@@ -521,16 +521,24 @@ def score_components(
     transport: dict[str, Any] | None,
     price: dict[str, Any] | None,
     schools: dict[str, Any] | None,
+    population: dict[str, Any] | None,
     pollution: dict[str, Any] | None,
     green: dict[str, Any] | None,
     crime: dict[str, Any] | None,
     planning: dict[str, Any] | None,
 ) -> dict[str, float]:
+    default_population_denominator = 25_650.0
+
     def number_or_default(record: dict[str, Any] | None, key: str, default: float) -> float:
         if not record:
             return float(default)
         value = record.get(key)
         return float(value) if isinstance(value, (int, float)) else float(default)
+
+    def per_10k(value: float, population_denominator: float) -> float | None:
+        if population_denominator <= 0:
+            return None
+        return (value / population_denominator) * 10_000
 
     commute_typical = (
         float(transport.get('typical_commute_min'))
@@ -577,8 +585,18 @@ def score_components(
     secondary_quality = number_or_default(schools, 'secondary_quality_score', 50)
     primary_count = number_or_default(schools, 'nearby_primary_count', 0)
     secondary_count = number_or_default(schools, 'nearby_secondary_count', 0)
+    population_denominator = number_or_default(
+        population,
+        'population_in_reference_zone',
+        default_population_denominator,
+    )
+    primary_count_per_10k = per_10k(primary_count, population_denominator) or 0.0
+    secondary_count_per_10k = per_10k(secondary_count, population_denominator) or 0.0
     school_count_score = mean(
-        [forward_score(primary_count, min_value=1, max_value=18), forward_score(secondary_count, 1, 8)],
+        [
+            forward_score(primary_count_per_10k, min_value=35, max_value=150),
+            forward_score(secondary_count_per_10k, 10, 40),
+        ],
     )
     school_quality_score = mean([primary_quality, secondary_quality])
     schools_score = school_quality_score * 0.72 + school_count_score * 0.28
@@ -907,6 +925,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 transport_record,
                 property_record,
                 school_record,
+                population_record,
                 pollution_record,
                 green_record,
                 crime_record,

@@ -74,6 +74,7 @@ export interface MicroArea {
 
   crimeRatePerThousand: NumericMetric
   crimeCategoryBreakdown?: Record<string, number>
+  populationDenominator?: number | null
 
   planningRiskHeuristic: NumericMetric
   planningRiskMethodology: string
