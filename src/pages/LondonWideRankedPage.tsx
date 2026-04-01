@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 
-import { BoroughQolBarChart } from '@/components/charts/BoroughQolBarChart'
 import { CommutePm25Scatter } from '@/components/charts/CommutePm25Scatter'
 import { DistanceMetricScatter } from '@/components/charts/DistanceMetricScatter'
 import { SchoolAccessQualityScatter } from '@/components/charts/SchoolAccessQualityScatter'
@@ -12,7 +11,6 @@ import { useSettings } from '@/context/SettingsContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import { shortlistToCsv } from '@/lib/csv'
 import { DEFAULT_FILTERS, HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT } from '@/lib/constants'
-import { totalSchoolAccessPerPopulation } from '@/lib/schoolAccess'
 
 const downloadCsv = (filename: string, data: string) => {
   const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' })
@@ -163,10 +161,8 @@ export const LondonWideRankedPage = () => {
           Trend charts
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          These charts are arranged to emphasize the strongest trade-offs in the current dataset,
-          then separate those from score-diagnostic views. The aim here is to show how the market
-          actually clusters, where the main tensions are, and which score axes are currently
-          compressed.
+          These charts focus on the clearest trade-offs and gradients in the current dataset. The
+          aim here is to show how the market actually clusters and where the main tensions sit.
         </p>
         <p className="mt-1 text-xs text-slate-600">
           Tooltips show station names on hover. Switch to high-confidence mode if you want a
@@ -222,19 +218,6 @@ export const LondonWideRankedPage = () => {
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Commute vs distance from central London
-          </h3>
-          <DistanceMetricScatter
-            areas={filtered}
-            centralCoordinate={dataset.config.centralLondonCoordinate}
-            label="Commute"
-            unit=" min"
-            formatValue={(value) => `${value.toFixed(1)} min`}
-            getValue={(area) => area.commuteTypicalMinutes.value}
-          />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
             PM2.5 vs distance from central London
           </h3>
           <DistanceMetricScatter
@@ -252,60 +235,16 @@ export const LondonWideRankedPage = () => {
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Population-adjusted school access vs distance from central London
+            Overall school score vs distance from central London
           </h3>
           <DistanceMetricScatter
             areas={filtered}
             centralCoordinate={dataset.config.centralLondonCoordinate}
-            label="School access per 10,000 residents"
+            label="Overall school score"
             fill="#7c3aed"
-            formatValue={(value) => `${value.toFixed(1)} per 10,000`}
-            getValue={(area) =>
-              area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
-                ? totalSchoolAccessPerPopulation(
-                    area.nearbyPrimaryCount.value,
-                    area.nearbySecondaryCount.value,
-                    area.populationDenominator ?? null,
-                  )
-                : null
-            }
-          />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            School quality vs distance from central London
-          </h3>
-          <DistanceMetricScatter
-            areas={filtered}
-            centralCoordinate={dataset.config.centralLondonCoordinate}
-            label="School quality"
-            fill="#0f766e"
             formatValue={(value) => value.toFixed(1)}
-            getValue={(area) =>
-              area.primaryQualityScore.value !== null && area.secondaryQualityScore.value !== null
-                ? (area.primaryQualityScore.value + area.secondaryQualityScore.value) / 2
-                : null
-            }
+            getValue={(area) => area.componentScores.schools}
           />
-        </article>
-      </section>
-
-      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Trust And Context
-        </h2>
-        <p className="mt-2 text-sm text-slate-700">
-          These charts are less about choosing winners and more about understanding evidence
-          quality and the broader borough backdrop.
-        </p>
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-2">
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Borough QoL (borough wellbeing) by borough
-          </h3>
-          <BoroughQolBarChart areas={filtered} />
         </article>
       </section>
     </div>
