@@ -23,7 +23,7 @@ const coverageLabelMap = {
   greenSpace: 'Green',
   crime: 'Crime',
   planning: 'Planning',
-  wellbeing: 'Wellbeing',
+  wellbeing: 'QoL (borough wellbeing)',
 } as const
 
 const StatCard = ({ label, value, hint }: { label: string; value: string; hint?: string }) => (
@@ -431,7 +431,7 @@ export const OverviewPage = () => {
             </div>
             {dataset.config.boroughQolSource?.coveragePeriod ? (
               <div className="flex justify-between gap-2">
-                <dt className="text-slate-600">ONS APS QoL coverage</dt>
+                <dt className="text-slate-600">ONS APS QoL (borough wellbeing) coverage</dt>
                 <dd className="font-medium">{dataset.config.boroughQolSource.coveragePeriod}</dd>
               </div>
             ) : null}
@@ -490,7 +490,7 @@ export const OverviewPage = () => {
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Borough QoL vs distance from central London
+            Borough QoL (borough wellbeing) vs distance from central London
           </h3>
           <QolDistanceScatter
             areas={filtered}

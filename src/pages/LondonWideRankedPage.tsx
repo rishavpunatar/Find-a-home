@@ -3,8 +3,6 @@ import { useMemo, useState } from 'react'
 import { BoroughQolBarChart } from '@/components/charts/BoroughQolBarChart'
 import { CommutePm25Scatter } from '@/components/charts/CommutePm25Scatter'
 import { DistanceMetricScatter } from '@/components/charts/DistanceMetricScatter'
-import { MetricScoreDiagnosticScatter } from '@/components/charts/MetricScoreDiagnosticScatter'
-import { OverallConfidenceEvidenceScatter } from '@/components/charts/OverallConfidenceEvidenceScatter'
 import { SchoolAccessQualityScatter } from '@/components/charts/SchoolAccessQualityScatter'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
@@ -14,12 +12,6 @@ import { useSettings } from '@/context/SettingsContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import { shortlistToCsv } from '@/lib/csv'
 import { DEFAULT_FILTERS, HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT } from '@/lib/constants'
-import {
-  crimeDiagnosticScore,
-  planningDiagnosticScore,
-  proximityDiagnosticScore,
-  schoolAccessSubscore,
-} from '@/lib/scoringDiagnostics'
 import { totalSchoolAccessPerPopulation } from '@/lib/schoolAccess'
 
 const downloadCsv = (filename: string, data: string) => {
@@ -300,105 +292,6 @@ export const LondonWideRankedPage = () => {
 
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Score Diagnostics
-        </h2>
-        <p className="mt-2 text-sm text-slate-700">
-          These are deliberately diagnostic rather than decision charts. They show where score
-          formulas flatten or saturate the raw inputs.
-        </p>
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-2">
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Crime rate vs crime score
-          </h3>
-          <MetricScoreDiagnosticScatter
-            areas={filtered}
-            xLabel="Crime rate per 1,000"
-            yLabel="Crime score"
-            fill="#ef4444"
-            formatRawValue={(value) => value.toFixed(1)}
-            getRawValue={(area) => area.crimeRatePerThousand.value}
-            getScoreValue={(area) =>
-              area.crimeRatePerThousand.value === null
-                ? null
-                : crimeDiagnosticScore(area.crimeRatePerThousand.value)
-            }
-          />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Drive to Pinner vs proximity score
-          </h3>
-          <MetricScoreDiagnosticScatter
-            areas={filtered}
-            xLabel="Drive to Pinner"
-            yLabel="Proximity score"
-            fill="#0f766e"
-            formatRawValue={(value) => `${value.toFixed(1)} min`}
-            getRawValue={(area) => area.driveTimeToPinnerMinutes.value}
-            getScoreValue={(area) =>
-              area.driveTimeToPinnerMinutes.value === null
-                ? null
-                : proximityDiagnosticScore(area.driveTimeToPinnerMinutes.value)
-            }
-          />
-        </article>
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-2">
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Planning risk vs planning score
-          </h3>
-          <MetricScoreDiagnosticScatter
-            areas={filtered}
-            xLabel="Planning risk"
-            yLabel="Planning score"
-            fill="#f59e0b"
-            getRawValue={(area) => area.planningRiskHeuristic.value}
-            getScoreValue={(area) =>
-              area.planningRiskHeuristic.value === null
-                ? null
-                : planningDiagnosticScore(area.planningRiskHeuristic.value)
-            }
-          />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Population-adjusted school access vs school access subscore
-          </h3>
-          <MetricScoreDiagnosticScatter
-            areas={filtered}
-            xLabel="School access per 10,000 residents"
-            yLabel="School access subscore"
-            fill="#7c3aed"
-            formatRawValue={(value) => `${value.toFixed(1)} per 10,000`}
-            getRawValue={(area) =>
-              area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
-                ? totalSchoolAccessPerPopulation(
-                    area.nearbyPrimaryCount.value,
-                    area.nearbySecondaryCount.value,
-                    area.populationDenominator ?? null,
-                  )
-                : null
-            }
-            getScoreValue={(area) =>
-              area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
-                ? schoolAccessSubscore(
-                    area.nearbyPrimaryCount.value,
-                    area.nearbySecondaryCount.value,
-                    area.populationDenominator ?? null,
-                  )
-                : null
-            }
-          />
-        </article>
-      </section>
-
-      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
           Trust And Context
         </h2>
         <p className="mt-2 text-sm text-slate-700">
@@ -410,13 +303,7 @@ export const LondonWideRankedPage = () => {
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Overall score vs confidence by property evidence
-          </h3>
-          <OverallConfidenceEvidenceScatter areas={filtered} />
-        </article>
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Borough QoL by borough
+            Borough QoL (borough wellbeing) by borough
           </h3>
           <BoroughQolBarChart areas={filtered} />
         </article>

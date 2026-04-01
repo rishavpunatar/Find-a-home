@@ -341,7 +341,12 @@ export const RankedTable = ({
               <HeaderCell label="Drive" sortKey="drive" current={sort} onSort={toggleSort} />
               <HeaderCell label="Median price" sortKey="price" current={sort} onSort={toggleSort} />
               <HeaderCell label="School" sortKey="schools" current={sort} onSort={toggleSort} />
-              <HeaderCell label="QoL" sortKey="qol" current={sort} onSort={toggleSort} />
+              <HeaderCell
+                label="QoL (borough wellbeing)"
+                sortKey="qol"
+                current={sort}
+                onSort={toggleSort}
+              />
               <HeaderCell label="PM2.5" sortKey="pm25" current={sort} onSort={toggleSort} />
               <HeaderCell label="Crime" sortKey="crime" current={sort} onSort={toggleSort} />
               <HeaderCell label="Green" sortKey="green" current={sort} onSort={toggleSort} />

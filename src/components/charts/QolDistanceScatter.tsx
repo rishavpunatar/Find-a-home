@@ -69,7 +69,12 @@ export const QolDistanceScatter = ({ areas, centralCoordinate }: QolDistanceScat
             unit=" km"
             domain={xDomain}
           />
-          <YAxis type="number" dataKey="y" name="QoL score" domain={yDomain} />
+          <YAxis
+            type="number"
+            dataKey="y"
+            name="QoL (borough wellbeing) score"
+            domain={yDomain}
+          />
           <Tooltip
             content={({ active, payload }) => {
               if (!active || !payload || payload.length === 0) {
@@ -86,7 +91,9 @@ export const QolDistanceScatter = ({ areas, centralCoordinate }: QolDistanceScat
                   <p className="font-semibold text-slate-900">{point.station}</p>
                   <p className="text-slate-700">{point.authority}</p>
                   <p className="text-slate-700">Distance to central London: {point.x.toFixed(1)} km</p>
-                  <p className="text-slate-700">QoL score: {point.y.toFixed(1)}</p>
+                  <p className="text-slate-700">
+                    QoL (borough wellbeing) score: {point.y.toFixed(1)}
+                  </p>
                 </div>
               )
             }}

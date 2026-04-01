@@ -24,7 +24,7 @@ const domainLabelMap = {
   greenSpace: 'Green',
   crime: 'Crime',
   planning: 'Planning',
-  wellbeing: 'Wellbeing',
+  wellbeing: 'QoL (borough wellbeing)',
 } as const
 
 const MetricRow = ({
@@ -254,7 +254,7 @@ export const MicroAreaDetailPage = () => {
           updated={area.greenCoverPct.lastUpdated}
         />
         <MetricRow
-          label="Borough QoL score (ONS APS)"
+          label="Borough QoL (borough wellbeing, ONS APS)"
           value={formatNumber(area.boroughQolScore.value, 1)}
           status={area.boroughQolScore.status}
           confidence={area.boroughQolScore.confidence}
@@ -315,11 +315,11 @@ export const MicroAreaDetailPage = () => {
               <dd className="font-medium">{formatNumber(area.planningRiskHeuristic.value, 1)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Borough QoL authority link</dt>
+              <dt className="text-slate-600">Borough QoL (borough wellbeing) authority link</dt>
               <dd className="font-medium">{area.boroughQolAuthority || 'N/A'}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Borough QoL period</dt>
+              <dt className="text-slate-600">Borough QoL (borough wellbeing) period</dt>
               <dd className="font-medium">{area.boroughQolPeriod || 'N/A'}</dd>
             </div>
           </dl>

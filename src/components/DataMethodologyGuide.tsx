@@ -289,7 +289,7 @@ export const DataMethodologyGuide = ({
               </p>
             </DetailBlock>
 
-            <DetailBlock title="QoL (0-100, borough-level ONS APS, higher is better)">
+            <DetailBlock title="QoL (borough wellbeing, 0-100, borough-level ONS APS, higher is better)">
               <p>
                 This is a borough-wide quality-of-life context score, not a station-level street
                 score.

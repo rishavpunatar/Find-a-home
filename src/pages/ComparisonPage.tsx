@@ -133,7 +133,7 @@ export const ComparisonPage = () => {
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Borough QoL vs distance from central London (filtered set)
+            Borough QoL (borough wellbeing) vs distance from central London (filtered set)
           </h3>
           <QolDistanceScatter
             areas={filtered}
