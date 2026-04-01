@@ -33,6 +33,7 @@ class NumericMetric:
     unit: str
     status: str
     confidence: float
+    provenance: str
     methodology_note: str
     last_updated: str
 
@@ -42,6 +43,7 @@ class NumericMetric:
             "unit": self.unit,
             "status": self.status,
             "confidence": round(max(0.0, min(1.0, self.confidence)), 3),
+            "provenance": self.provenance,
             "methodologyNote": self.methodology_note,
             "lastUpdated": self.last_updated,
         }

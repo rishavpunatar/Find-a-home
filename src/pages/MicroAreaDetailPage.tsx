@@ -8,7 +8,11 @@ import { StatusPill } from '@/components/StatusPill'
 import { SubscoreRadarChart } from '@/components/charts/SubscoreRadarChart'
 import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
-import { getAreaDomainStatuses } from '@/lib/dataQuality'
+import {
+  describeMetricEvidence,
+  getAreaDomainStatuses,
+  getAreaPropertyEvidenceLabel,
+} from '@/lib/dataQuality'
 import { buildRankingExplanation } from '@/lib/scoring'
 import { formatCurrency, formatDate, formatNumber, formatPercent } from '@/lib/format'
 
@@ -28,6 +32,7 @@ const MetricRow = ({
   value,
   status,
   confidence,
+  provenance,
   note,
   updated,
 }: {
@@ -35,6 +40,7 @@ const MetricRow = ({
   value: string
   status: 'available' | 'estimated' | 'placeholder' | 'missing'
   confidence: number
+  provenance: string | undefined
   note: string
   updated: string
 }) => (
@@ -47,6 +53,7 @@ const MetricRow = ({
       <StatusPill status={status} />
     </div>
     <p className="mt-1 text-xs text-slate-600">Confidence: {(confidence * 100).toFixed(0)}%</p>
+    <p className="mt-1 text-xs text-slate-600">Evidence: {describeMetricEvidence(provenance)}</p>
     <p className="mt-1 text-xs text-slate-600">Method: {note}</p>
     <p className="mt-1 text-xs text-slate-500">Last updated: {formatDate(updated)}</p>
   </div>
@@ -104,6 +111,9 @@ export const MicroAreaDetailPage = () => {
           Overall weighted score:{' '}
           <span className="font-semibold text-surge">{area.dynamicOverallScore.toFixed(1)}</span>
           {' · '}Data confidence: {(area.dataConfidenceScore * 100).toFixed(0)}%
+        </p>
+        <p className="mt-1 text-xs text-slate-600">
+          Property evidence: {getAreaPropertyEvidenceLabel(area)}
         </p>
         <div className="mt-3">
           <AreaTrustSummary area={area} />
@@ -167,6 +177,7 @@ export const MicroAreaDetailPage = () => {
           value={formatCurrency(area.medianSemiDetachedPrice.value)}
           status={area.medianSemiDetachedPrice.status}
           confidence={area.medianSemiDetachedPrice.confidence}
+          provenance={area.medianSemiDetachedPrice.provenance}
           note={area.medianSemiDetachedPrice.methodologyNote}
           updated={area.medianSemiDetachedPrice.lastUpdated}
         />
@@ -175,6 +186,7 @@ export const MicroAreaDetailPage = () => {
           value={`${formatNumber(area.commuteTypicalMinutes.value)} min`}
           status={area.commuteTypicalMinutes.status}
           confidence={area.commuteTypicalMinutes.confidence}
+          provenance={area.commuteTypicalMinutes.provenance}
           note={area.commuteTypicalMinutes.methodologyNote}
           updated={area.commuteTypicalMinutes.lastUpdated}
         />
@@ -183,6 +195,7 @@ export const MicroAreaDetailPage = () => {
           value={`${formatNumber(area.driveTimeToPinnerMinutes.value)} min`}
           status={area.driveTimeToPinnerMinutes.status}
           confidence={area.driveTimeToPinnerMinutes.confidence}
+          provenance={area.driveTimeToPinnerMinutes.provenance}
           note={area.driveTimeToPinnerMinutes.methodologyNote}
           updated={area.driveTimeToPinnerMinutes.lastUpdated}
         />
@@ -191,6 +204,7 @@ export const MicroAreaDetailPage = () => {
           value={formatNumber(area.primaryQualityScore.value, 1)}
           status={area.primaryQualityScore.status}
           confidence={area.primaryQualityScore.confidence}
+          provenance={area.primaryQualityScore.provenance}
           note={area.schoolMethodologyNotes}
           updated={area.primaryQualityScore.lastUpdated}
         />
@@ -199,6 +213,7 @@ export const MicroAreaDetailPage = () => {
           value={formatNumber(area.secondaryQualityScore.value, 1)}
           status={area.secondaryQualityScore.status}
           confidence={area.secondaryQualityScore.confidence}
+          provenance={area.secondaryQualityScore.provenance}
           note={area.schoolMethodologyNotes}
           updated={area.secondaryQualityScore.lastUpdated}
         />
@@ -207,6 +222,7 @@ export const MicroAreaDetailPage = () => {
           value={formatNumber(area.crimeRatePerThousand.value, 1)}
           status={area.crimeRatePerThousand.status}
           confidence={area.crimeRatePerThousand.confidence}
+          provenance={area.crimeRatePerThousand.provenance}
           note={area.crimeRatePerThousand.methodologyNote}
           updated={area.crimeRatePerThousand.lastUpdated}
         />
@@ -215,6 +231,7 @@ export const MicroAreaDetailPage = () => {
           value={`${formatNumber(area.annualPm25.value, 1)} ug/m3`}
           status={area.annualPm25.status}
           confidence={area.annualPm25.confidence}
+          provenance={area.annualPm25.provenance}
           note={area.annualPm25.methodologyNote}
           updated={area.annualPm25.lastUpdated}
         />
@@ -223,6 +240,7 @@ export const MicroAreaDetailPage = () => {
           value={`${formatNumber(area.annualNo2.value, 1)} ug/m3`}
           status={area.annualNo2.status}
           confidence={area.annualNo2.confidence}
+          provenance={area.annualNo2.provenance}
           note={area.annualNo2.methodologyNote}
           updated={area.annualNo2.lastUpdated}
         />
@@ -231,6 +249,7 @@ export const MicroAreaDetailPage = () => {
           value={formatPercent(area.greenCoverPct.value)}
           status={area.greenCoverPct.status}
           confidence={area.greenCoverPct.confidence}
+          provenance={area.greenCoverPct.provenance}
           note={area.greenCoverPct.methodologyNote}
           updated={area.greenCoverPct.lastUpdated}
         />
@@ -239,6 +258,7 @@ export const MicroAreaDetailPage = () => {
           value={formatNumber(area.boroughQolScore.value, 1)}
           status={area.boroughQolScore.status}
           confidence={area.boroughQolScore.confidence}
+          provenance={area.boroughQolScore.provenance}
           note={area.boroughQolMethodology}
           updated={area.boroughQolScore.lastUpdated}
         />

@@ -113,22 +113,23 @@ def source_matrix() -> dict[str, dict[str, str]]:
             ),
         },
         'transport': {
-            'status': 'not_live_verified',
-            'primarySource': 'TfL/National Rail journey-time feeds (planned)',
-            'secondarySource': 'Google/other routing benchmark (planned)',
+            'status': 'source_applied_partially_live_verified',
+            'primarySource': 'TfL Journey Planner + OSRM routing',
+            'secondarySource': 'Station-profile fallback for uncovered routes',
             'note': (
-                'Current commute/frequency metrics are source-applied where available, with '
-                'documented fallback estimates when APIs are unavailable.'
+                'Drive times now use direct OSRM routing where available, and public-transport commute metrics '
+                'use TfL Journey Planner where it returns journeys. Remaining uncovered stations retain an '
+                'explicit station-profile heuristic fallback.'
             ),
         },
         'schools': {
-            'status': 'not_live_verified',
+            'status': 'source_applied_not_live_verified',
             'primarySource': 'DfE GIAS open state-funded establishment exports',
             'secondarySource': 'DfE Explore Education Statistics school performance data',
             'note': (
                 'Nearby school counts and quality now use official state-funded DfE sources. '
                 'Private schools are excluded from both the count and quality side, and the school '
-                'catchment now reflects roughly 20 minutes drive from each area anchor. '
+                'catchment now reflects an approximately 20-minute road-adjusted drive-time proxy from each area anchor. '
                 'A secondary cross-check source has not yet been wired for live verification.'
             ),
         },
@@ -142,18 +143,22 @@ def source_matrix() -> dict[str, dict[str, str]]:
             ),
         },
         'greenSpace': {
-            'status': 'not_live_verified',
-            'primarySource': 'OS Open Greenspace',
-            'secondarySource': 'Local authority park inventories (planned)',
-            'note': 'Current greenspace and park-distance values are fixture-backed proxies.',
+            'status': 'source_applied_not_live_verified',
+            'primarySource': 'OpenStreetMap greenspace polygons via Overpass API',
+            'secondarySource': 'OS Open Greenspace / local authority park inventories (planned)',
+            'note': (
+                'Greenspace area, cover, and nearest-park distance are now computed directly from station-level '
+                'polygon geometry pulls rather than anchor-only fixture proxies.'
+            ),
         },
         'crime': {
-            'status': 'live_cross_check_available',
-            'primarySource': 'Fixture-based annualised crime-rate proxy',
+            'status': 'source_applied_live_cross_check_available',
+            'primarySource': 'data.police.uk custom-area street-level crime pulls',
             'secondarySource': 'data.police.uk street-level monthly crime incidents',
             'note': (
-                'Live cross-check compares relative station ordering from monthly incident counts. '
-                'It is not a direct like-for-like per-1,000 replacement metric.'
+                'Crime rates now use direct custom-area pulls from recent police street-level incidents, '
+                'annualised with the station population denominator. Live cross-check still compares the '
+                'resulting ordering against the same underlying police feed for sanity checking.'
             ),
         },
         'population': {
@@ -163,12 +168,13 @@ def source_matrix() -> dict[str, dict[str, str]]:
             'note': 'Current population denominators are fixture-based estimates.',
         },
         'planning': {
-            'status': 'low_confidence_placeholder',
-            'primarySource': 'Heuristic placeholder',
-            'secondarySource': 'planning.data.gov.uk + LA planning application feeds (planned)',
+            'status': 'source_applied_not_live_verified',
+            'primarySource': 'planning.data.gov.uk structured geometry layers',
+            'secondarySource': 'Local planning-application feeds (planned)',
             'note': (
-                'Planning risk remains explicitly low-confidence until authoritative structured '
-                'planning layers are integrated and quality-assured.'
+                'Planning risk now uses brownfield-land pressure plus conservation/article-4 constraint coverage '
+                'from authoritative planning.data.gov.uk geometry layers. It remains a rule-based score rather '
+                'than a direct planning-permission outcome measure.'
             ),
         },
         'wellbeing': {
@@ -211,8 +217,8 @@ def build_crime_cross_check(dataset: dict[str, Any], live_mode: bool) -> dict[st
     base_result: dict[str, Any] = {
         'status': 'not_run',
         'method': (
-            'Spearman rank correlation between fixture annualised crime-rate proxy and '
-            'data.police.uk monthly incidents annualised per 1,000 using local denominator.'
+            'Spearman rank correlation between the stored station-area crime metric and '
+            'a fresh data.police.uk monthly incident pull annualised per 1,000 using the local denominator.'
         ),
         'latestMonth': None,
         'stationSampleSize': 0,
@@ -306,7 +312,7 @@ def build_crime_cross_check(dataset: dict[str, Any], live_mode: bool) -> dict[st
         base_result['notes'].append('Moderate rank alignment; fixture crime ordering is directionally plausible.')
     else:
         base_result['status'] = 'weak_alignment'
-        base_result['notes'].append('Weak alignment; fixture crime proxy should be recalibrated.')
+        base_result['notes'].append('Weak alignment; the stored crime metric should be recalibrated.')
 
     base_result['notes'].append(
         'Live check annualises one month of incidents and is still a partial signal, not a full-year replacement.',
@@ -317,15 +323,32 @@ def build_crime_cross_check(dataset: dict[str, Any], live_mode: bool) -> dict[st
 
 def compute_domain_coverage(dataset: dict[str, Any]) -> dict[str, Any]:
     domain_metric_keys = {
-        'property': 'medianSemiDetachedPrice',
-        'transport': 'commuteTypicalMinutes',
-        'schools': 'primaryQualityScore',
-        'pollution': 'annualPm25',
-        'greenSpace': 'greenCoverPct',
-        'crime': 'crimeRatePerThousand',
-        'planning': 'planningRiskHeuristic',
-        'wellbeing': 'boroughQolScore',
+        'property': ['averageSemiDetachedPrice', 'medianSemiDetachedPrice'],
+        'transport': [
+            'commuteTypicalMinutes',
+            'commutePeakMinutes',
+            'commuteOffPeakMinutes',
+            'serviceFrequencyPeakTph',
+            'interchangeCount',
+            'driveTimeToPinnerMinutes',
+        ],
+        'schools': [
+            'nearbyPrimaryCount',
+            'nearbySecondaryCount',
+            'primaryQualityScore',
+            'secondaryQualityScore',
+        ],
+        'pollution': ['annualNo2', 'annualPm25'],
+        'greenSpace': ['greenSpaceAreaKm2Within1km', 'greenCoverPct', 'nearestParkDistanceM'],
+        'crime': ['crimeRatePerThousand'],
+        'planning': ['planningRiskHeuristic'],
+        'wellbeing': ['boroughQolScore'],
     }
+    status_priority = {'available': 0, 'estimated': 1, 'placeholder': 2, 'missing': 3, 'other': 4}
+    def is_source_applied_provenance(value: Any) -> bool:
+        if not isinstance(value, str):
+            return False
+        return value == 'direct' or value == 'direct_blend' or value.startswith('direct_')
     scopes = {
         'default': dataset.get('microAreas', []),
         'londonWide': dataset.get('londonWideMicroAreas', []),
@@ -336,40 +359,94 @@ def compute_domain_coverage(dataset: dict[str, Any]) -> dict[str, Any]:
         if not isinstance(areas, list):
             continue
         scope_result: dict[str, Any] = {'count': len(areas), 'domains': {}}
-        for domain, metric_key in domain_metric_keys.items():
+        for domain, metric_keys in domain_metric_keys.items():
             status_counts = {'available': 0, 'estimated': 0, 'placeholder': 0, 'missing': 0, 'other': 0}
+            source_applied_slots = 0
+            total_slots = len(areas) * len(metric_keys)
             for area in areas:
-                status = (
-                    ((area.get(metric_key) or {}).get('status'))
-                    if isinstance(area.get(metric_key), dict)
-                    else None
-                )
-                status_key = str(status) if status in status_counts else 'other'
+                metric_statuses: list[str] = []
+                for metric_key in metric_keys:
+                    metric = area.get(metric_key)
+                    if isinstance(metric, dict):
+                        status = metric.get('status')
+                        provenance = metric.get('provenance')
+                        if is_source_applied_provenance(provenance):
+                            source_applied_slots += 1
+                    else:
+                        status = None
+                    metric_statuses.append(str(status) if status in status_counts else 'other')
+
+                status_key = sorted(metric_statuses, key=lambda candidate: status_priority[candidate], reverse=True)[0]
                 status_counts[status_key] += 1
 
             total = len(areas) if areas else 1
             available_ratio = status_counts['available'] / total
+            source_applied_ratio = source_applied_slots / total_slots if total_slots else 0.0
             scope_result['domains'][domain] = {
                 'availablePct': round(available_ratio * 100, 2),
+                'sourceAppliedPct': round(source_applied_ratio * 100, 2),
                 'statusCounts': status_counts,
             }
         coverage[scope_name] = scope_result
     return coverage
 
 
-def coverage_completeness_score(coverage: dict[str, Any]) -> float:
+def source_coverage_score(coverage: dict[str, Any]) -> float:
     ratios: list[float] = []
     for scope_payload in coverage.values():
         domains = scope_payload.get('domains', {})
         if not isinstance(domains, dict):
             continue
         for domain_payload in domains.values():
-            available_pct = domain_payload.get('availablePct')
-            if isinstance(available_pct, (int, float)):
-                ratios.append(float(available_pct) / 100.0)
+            source_applied_pct = domain_payload.get('sourceAppliedPct')
+            if isinstance(source_applied_pct, (int, float)):
+                ratios.append(float(source_applied_pct) / 100.0)
     if not ratios:
         return 0.0
     return round(sum(ratios) / len(ratios), 4)
+
+
+def verification_strength_score(
+    coverage: dict[str, Any],
+    matrix: dict[str, dict[str, str]],
+) -> float:
+    benchmark_weight_by_status = {
+        'source_applied_live_cross_check_available': 1.0,
+        'source_applied_partially_live_verified': 0.88,
+        'source_applied_model_cross_checked': 0.84,
+        'source_applied_not_live_verified': 0.68,
+        'not_live_verified': 0.45,
+    }
+    domain_weight = {
+        'property': 1.15,
+        'transport': 1.2,
+        'schools': 1.1,
+        'pollution': 1.0,
+        'greenSpace': 0.95,
+        'crime': 1.0,
+        'planning': 0.75,
+        'wellbeing': 0.7,
+    }
+
+    weighted_sum = 0.0
+    total_weight = 0.0
+    for scope_payload in coverage.values():
+        domains = scope_payload.get('domains', {})
+        if not isinstance(domains, dict):
+            continue
+        for domain, domain_payload in domains.items():
+            source_applied_pct = domain_payload.get('sourceAppliedPct')
+            if not isinstance(source_applied_pct, (int, float)):
+                continue
+            matrix_status = str(matrix.get(domain, {}).get('status', 'not_live_verified'))
+            verification_weight = benchmark_weight_by_status.get(matrix_status, 0.4)
+            importance = domain_weight.get(domain, 1.0)
+            weighted_sum += (float(source_applied_pct) / 100.0) * verification_weight * importance
+            total_weight += importance
+
+    if total_weight == 0:
+        return 0.0
+    return round(weighted_sum / total_weight, 4)
 
 
 def generate_verification_report(dataset: dict[str, Any], live_mode: bool = False) -> dict[str, Any]:
@@ -378,30 +455,41 @@ def generate_verification_report(dataset: dict[str, Any], live_mode: bool = Fals
     matrix = source_matrix()
     crime_check = build_crime_cross_check(dataset, live_mode=live_mode)
     domain_coverage = compute_domain_coverage(dataset)
-    completeness_score = coverage_completeness_score(domain_coverage)
+    source_score = source_coverage_score(domain_coverage)
+    strength_score = verification_strength_score(domain_coverage, matrix)
 
     overall_status = 'partial'
     if crime_check['status'] in {'strong_alignment', 'moderate_alignment'}:
         overall_status = 'partial_with_live_signal'
     if crime_check['status'] in {'weak_alignment', 'error'}:
         overall_status = 'attention_required'
-    if completeness_score < 0.45:
+    if source_score >= 0.85 and strength_score >= 0.6 and overall_status != 'attention_required':
+        overall_status = 'strong_source_coverage'
+    elif source_score >= 0.65 and strength_score >= 0.45 and overall_status == 'partial':
+        overall_status = 'broad_source_coverage'
+    elif source_score >= 0.75 and overall_status == 'partial':
+        overall_status = 'source_rich_but_lightly_verified'
+    if source_score < 0.45:
         overall_status = 'attention_required'
 
     return {
         'generatedAt': generated_at,
         'methodologyVersion': dataset.get('methodologyVersion'),
         'overallStatus': overall_status,
-        'verificationCompletenessScore': completeness_score,
+        'sourceCoverageScore': source_score,
+        'verificationStrengthScore': strength_score,
+        'verificationCompletenessScore': source_score,
         'sourceMatrix': matrix,
         'domainCoverage': domain_coverage,
         'crossChecks': {
             'crime': crime_check,
         },
         'limitations': [
-            'Property, schools, greenspace, transport, and population are not yet live cross-verified in this MVP.',
+            'Source coverage score reflects direct-source provenance, not independently audited accuracy.',
+            'Verification strength score discounts domains that still lack a strong secondary benchmark or live reconciliation path.',
+            'Property, schools, greenspace, transport, planning, and population still lack a full independent secondary benchmark.',
             'Pollution has model-to-model cross-checks (LAEI vs DEFRA) but still lacks full monitor-network reconciliation.',
-            'Planning risk is intentionally low-confidence placeholder data until structured feeds are integrated.',
+            'Crime rates still depend on the station population denominator, which remains weaker than the new direct incident pull.',
             'Borough QoL currently uses ONS source application without a separate secondary cross-check.',
             'This report improves transparency but is not equivalent to a full production data-audit pipeline.',
         ],

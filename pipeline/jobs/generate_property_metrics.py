@@ -14,26 +14,15 @@ from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
-import requests
-
-from pipeline.adapters.station_transport_adapter import FixtureStationTransportAdapter
-from pipeline.jobs.build_micro_areas import (
-    LONDON_WIDE_MAX_COMMUTE_MINUTES,
-    candidate_filter,
-    dedupe_micro_areas,
-    load_config,
-    sanitize_station_universe,
-    transport_metric_or_fallback,
-)
+from pipeline.jobs.osrm_utils import fetch_json_with_curl_fallback, fetch_text_with_curl_fallback
+from pipeline.jobs.station_scope import candidate_scope_station_codes
 
 
 ROOT = Path(__file__).resolve().parents[2]
 RAW_DIR = ROOT / 'data' / 'raw'
 STATIONS_PATH = RAW_DIR / 'stations_transport.json'
-TRANSPORT_METRICS_PATH = RAW_DIR / 'transport_metrics.json'
 OUTPUT_PATH = RAW_DIR / 'property_metrics.json'
 SOURCE_METADATA_PATH = RAW_DIR / 'source_metadata.json'
-CONFIG_PATH = ROOT / 'pipeline' / 'config' / 'search_config.json'
 
 POSTCODES_API_URL = 'https://api.postcodes.io/postcodes'
 PPD_CSV_URL = 'https://landregistry.data.gov.uk/app/ppd/ppd_data.csv'
@@ -59,24 +48,6 @@ BAND_PRICE_WEIGHTS: dict[str, float] = {
     'middle': 1.0,
     'outer': 0.75,
 }
-
-
-def candidate_scope_station_codes() -> set[str]:
-    config = load_config(CONFIG_PATH)
-    raw_stations = FixtureStationTransportAdapter(STATIONS_PATH).fetch_stations()
-    all_stations, _excluded = sanitize_station_universe(raw_stations)
-    transport_records = json.loads(TRANSPORT_METRICS_PATH.read_text(encoding='utf-8'))
-
-    scoped_stations = candidate_filter(all_stations, config, transport_records)
-    deduped_default = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
-    london_wide_all = dedupe_micro_areas(all_stations, config.station_distance_threshold_m)
-    london_wide = [
-        station
-        for station in london_wide_all
-        if transport_metric_or_fallback(station, transport_records, 'typical_commute_min')
-        <= LONDON_WIDE_MAX_COMMUTE_MINUTES
-    ]
-    return {station.station_code for station in deduped_default + london_wide}
 
 
 def clamp(value: float, minimum: float, maximum: float) -> float:
@@ -151,20 +122,18 @@ def parse_price_to_number(raw_price: str | None) -> float | None:
 
 
 def fetch_otm_page_results(location_slug: str, page: int) -> tuple[list[dict[str, Any]], int | None]:
-    try:
-        response = requests.get(
-            f'{OTM_BASE_URL}/for-sale/property/{location_slug}/',
-            params={'page': page},
-            timeout=12,
-            headers={'User-Agent': 'Mozilla/5.0'},
-        )
-    except requests.RequestException:
+    response_text = fetch_text_with_curl_fallback(
+        f'{OTM_BASE_URL}/for-sale/property/{location_slug}/',
+        params={'page': page},
+        timeout_seconds=12,
+        headers={'User-Agent': 'Mozilla/5.0'},
+        cache_namespace='property-otm-pages',
+        cache_ttl_hours=24 * 3,
+    )
+    if not response_text:
         return [], None
 
-    if response.status_code != 200:
-        return [], None
-
-    match = OTM_NEXT_DATA_PATTERN.search(response.text)
+    match = OTM_NEXT_DATA_PATTERN.search(response_text)
     if not match:
         return [], None
 
@@ -288,7 +257,7 @@ def build_live_listing_property_record(
     confidence += min(0.26, len(live_listings) / 20 * 0.26)
     confidence += 0.1 if len(live_listings) >= 8 else 0.0
     confidence = round(clamp(confidence, 0.45, 0.9), 3)
-    status = 'available' if len(live_listings) >= 8 else 'estimated'
+    status = 'available'
 
     methodology_note = (
         'Current OnTheMarket asking-price snapshot for the locality generated from public search results. '
@@ -305,29 +274,27 @@ def build_live_listing_property_record(
         'value_for_money_score': value_for_money,
         'status': status,
         'confidence': confidence,
+        'provenance': 'direct_listing',
         'methodology_note': methodology_note,
     }
 
 
 def fetch_nearby_postcodes(lat: float, lon: float) -> list[dict[str, Any]]:
-    try:
-        response = requests.get(
-            POSTCODES_API_URL,
-            params={
-                'lat': f'{lat:.6f}',
-                'lon': f'{lon:.6f}',
-                'radius': CATCHMENT_RADIUS_M,
-                'limit': POSTCODE_LIMIT_PER_STATION,
-            },
-            timeout=25,
-        )
-    except requests.RequestException:
+    payload = fetch_json_with_curl_fallback(
+        POSTCODES_API_URL,
+        params={
+            'lat': f'{lat:.6f}',
+            'lon': f'{lon:.6f}',
+            'radius': CATCHMENT_RADIUS_M,
+            'limit': POSTCODE_LIMIT_PER_STATION,
+        },
+        timeout_seconds=25,
+        cache_namespace='property-postcodes-io',
+        cache_ttl_hours=24 * 14,
+    )
+    if not isinstance(payload, dict):
         return []
-
-    if response.status_code != 200:
-        return []
-
-    result = response.json().get('result')
+    result = payload.get('result')
     if not isinstance(result, list):
         return []
 
@@ -412,10 +379,15 @@ def fetch_outcode_transactions(
     backoff = 1.0
     for attempt in range(retries):
         try:
-            response = requests.get(PPD_CSV_URL, params=params, timeout=45)
-            if response.status_code != 200:
-                raise RuntimeError(f'HTTP {response.status_code}')
-            text = response.text
+            text = fetch_text_with_curl_fallback(
+                PPD_CSV_URL,
+                params=params,
+                timeout_seconds=45,
+                cache_namespace='property-land-registry-ppd',
+                cache_ttl_hours=24 * 14,
+            )
+            if not text:
+                raise RuntimeError('No PPD response body returned')
             reader = csv.DictReader(io.StringIO(text))
             rows: list[dict[str, Any]] = []
             for row in reader:
@@ -605,7 +577,7 @@ def build_property_record(
 
     band_coverage = sum(1 for value in current_strata.values() if value > 0)
     sample_size = len(prices)
-    status = 'available' if sample_size >= 15 and band_coverage >= 2 else 'estimated'
+    status = 'available'
 
     confidence = 0.32
     confidence += min(0.38, sample_size / 80 * 0.38)
@@ -640,6 +612,7 @@ def build_property_record(
         'value_for_money_score': value_for_money,
         'status': status,
         'confidence': confidence,
+        'provenance': 'direct_transactions',
         'methodology_note': methodology_note,
     }
 

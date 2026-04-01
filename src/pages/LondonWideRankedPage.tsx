@@ -23,7 +23,7 @@ const downloadCsv = (filename: string, data: string) => {
   URL.revokeObjectURL(url)
 }
 
-const LONDON_WIDE_COMMUTE_CAP_MINUTES = 60
+const LONDON_WIDE_COMMUTE_CAP_MINUTES = 70
 
 export const LondonWideRankedPage = () => {
   const { dataset, loading, error } = useDataContext()
@@ -71,7 +71,7 @@ export const LondonWideRankedPage = () => {
   )
 
   if (loading) {
-    return <LoadingState title="Building London-wide ranked table" />
+    return <LoadingState title="Building coverage view" />
   }
 
   if (error || !dataset) {
@@ -87,18 +87,18 @@ export const LondonWideRankedPage = () => {
     <div className="space-y-4">
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          London-wide commute mode
+          Coverage view
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          This view enforces a <span className="font-semibold">commute cap up to 60 minutes</span>{' '}
-          and intentionally ignores the drive-to-Pinner filter and Pinner-radius candidate prefilter.
+          The primary app now already uses a <span className="font-semibold">Greater London, up to
+          70-minute commute</span> source universe. This page exists to relax most non-commute
+          constraints and make it easier to inspect the broader coverage set.
         </p>
         <p className="mt-1 text-xs text-slate-600">
           Effective filters in this tab: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
-          Candidate generation uses the London-wide scope from all known stations (not the default
-          Pinner-focused pipeline search radius). School, crime, PM2.5, green, and price
-          constraints are intentionally not limiting results here. Minimum confidence threshold is
-          still applied.
+          School, crime, PM2.5, green, price, and Pinner-access filters are intentionally relaxed
+          here so you can inspect the wider ranked universe. Minimum confidence threshold still
+          applies.
         </p>
         {dataset.config.londonWideSourceStationCount !== undefined &&
         dataset.config.londonWideExcludedByCommuteCount !== undefined ? (
@@ -119,7 +119,7 @@ export const LondonWideRankedPage = () => {
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <p className="text-sm text-slate-700">
-          {filtered.length} micro-areas match London-wide mode. Pin rows, then export your
+          {filtered.length} micro-areas match coverage view. Pin rows, then export your
           shortlist. Use table toggle to focus on charts.
         </p>
         <div className="flex flex-wrap items-center gap-2">
@@ -138,7 +138,7 @@ export const LondonWideRankedPage = () => {
             }
             className="rounded-lg bg-surge px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Export pinned shortlist CSV ({pinned.length})
+            Export pinned coverage CSV ({pinned.length})
           </button>
         </div>
       </div>
@@ -159,12 +159,11 @@ export const LondonWideRankedPage = () => {
 
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Super scope charts (default + London-wide)
+          Cross-scope charts
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          These charts combine all unique micro-areas from both the default Pinner-focused scope
-          and the London-wide scope, so you can inspect the full hundreds-of-points distribution in
-          one place.
+          These charts combine all unique micro-areas from both ranked views, so you can inspect
+          the full distribution in one place.
         </p>
         <p className="mt-1 text-xs text-slate-600">
           Combined unique micro-areas: {superScopeRanked.length}. Tooltips show station names on

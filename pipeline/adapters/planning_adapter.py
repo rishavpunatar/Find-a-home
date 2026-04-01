@@ -19,6 +19,7 @@ class FixturePlanningAdapter(PlanningAdapter):
                 'planning_risk_score': None,
                 'status': 'placeholder',
                 'confidence': 0.2,
+                'provenance': 'heuristic',
                 'methodology_note': (
                     'No structured planning feed connected yet. Placeholder retained for score-model continuity.'
                 ),

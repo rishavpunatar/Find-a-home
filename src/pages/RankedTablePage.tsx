@@ -43,16 +43,16 @@ export const RankedTablePage = () => {
     'Current asking-price snapshot for semi-detached 3+ bed / 2+ bath listings, with latest sold-price fallback where live coverage is thin'
   const schoolsReferencePeriod =
     sourceMetadata.schools?.referencePeriod ??
-    'mixed-year composite proxy (no single source-traceable national cut date wired yet)'
+    'official DfE state-funded school composite with current GIAS footprint and latest available EES performance windows'
   const pollutionReferencePeriod =
     sourceMetadata.pollution?.referencePeriod ??
     'LAEI 2019 (London modelled layers) and DEFRA LAQM 2023 extraction for non-London'
   const crimeReferencePeriod =
     sourceMetadata.crime?.referencePeriod ??
-    'proxy composite (no single source-traceable annual cut date yet)'
+    'latest available police months annualised from direct data.police.uk station-area pulls'
   const greenReferencePeriod =
     sourceMetadata.greenSpace?.referencePeriod ??
-    'mixed proxy baseline (single authoritative timestamp not yet wired)'
+    'current OpenStreetMap greenspace geometry pull via Overpass API'
 
   return (
     <div className="space-y-4">
@@ -111,6 +111,10 @@ export const RankedTablePage = () => {
                 Median is shown instead of average in the table because it is less sensitive to a
                 few unusually expensive listings.
               </p>
+              <p className="mt-1 text-xs text-slate-500">
+                The table also labels each row&apos;s price evidence as either current listings or
+                recent sold-price fallback.
+              </p>
             </details>
 
             <details className="rounded-lg border border-slate-200 bg-slate-50 p-3" open>
@@ -137,7 +141,8 @@ export const RankedTablePage = () => {
               <p className="mt-1 text-xs text-slate-500">
                 Both nearby-school counts and school-quality scores now use state-funded-only DfE
                 data, so private schools are excluded from both sides of the school component. The
-                school catchment is based on roughly 20 minutes drive from the area anchor.
+                school catchment is based on an approximately 20-minute road-adjusted drive-time
+                proxy from the area anchor.
               </p>
             </details>
 
@@ -205,16 +210,16 @@ export const RankedTablePage = () => {
                 Crime (per 1,000, lower is better)
               </summary>
               <p className="mt-2 text-slate-600">
-                Annualized crime-rate proxy per 1,000 residents (`crimeRatePerThousand` metric).
+                Annualized crime rate per 1,000 residents (`crimeRatePerThousand` metric).
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Source:</span> fixture-backed annualised proxy with
-                live cross-check against data.police.uk incidents.
+                <span className="font-semibold">Source:</span> direct `data.police.uk` custom-area
+                incident pulls for the latest available months, annualised with the local
+                population denominator.
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Data reference period:</span> proxy composite (no
-                single source-traceable annual cut date yet: {crimeReferencePeriod}), with live
-                monthly cross-check available in verification reports.
+                <span className="font-semibold">Data reference period:</span> {crimeReferencePeriod}
+                , with a fresh police-feed cross-check available in verification reports.
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 The ranking model converts this into a score with inverse scaling (lower incident
@@ -228,7 +233,7 @@ export const RankedTablePage = () => {
                 Green (% cover, higher is better)
               </summary>
               <p className="mt-2 text-slate-600">
-                Percentage green cover proxy (`greenCoverPct`) around the station catchment.
+                Percentage green cover (`greenCoverPct`) around the station catchment.
               </p>
               <p className="mt-1 text-slate-600">
                 Method: distance-weighted blend of station green-cover values within a wider radius
@@ -236,12 +241,13 @@ export const RankedTablePage = () => {
                 station circle is reflected.
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Source:</span> OS Open Greenspace-derived fixture
-                proxies plus interpolation.
+                <span className="font-semibold">Source:</span> OpenStreetMap greenspace polygons
+                via Overpass API, with a wider neighbourhood blend for this specific percentage
+                metric.
               </p>
               <p className="mt-1 text-slate-600">
-                <span className="font-semibold">Data reference period:</span> mixed proxy baseline
-                ({greenReferencePeriod}).
+                <span className="font-semibold">Data reference period:</span> {greenReferencePeriod}
+                .
               </p>
               <p className="mt-1 text-xs text-slate-500">
                 Environment scoring also uses green-space area and nearest park distance, but this
@@ -294,7 +300,7 @@ export const RankedTablePage = () => {
           </p>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
             <a
-              href="https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads"
+              href="https://www.onthemarket.com/"
               target="_blank"
               rel="noreferrer"
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
@@ -350,12 +356,20 @@ export const RankedTablePage = () => {
               DfE EES (school performance)
             </a>
             <a
-              href="https://www.ordnancesurvey.co.uk/opengreenspace"
+              href="https://overpass-api.de/"
               target="_blank"
               rel="noreferrer"
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
-              OS Open Greenspace
+              Overpass / OpenStreetMap
+            </a>
+            <a
+              href="https://www.planning.data.gov.uk/"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              planning.data.gov.uk
             </a>
             <a
               href="https://www.ons.gov.uk/datasets/wellbeing-local-authority"

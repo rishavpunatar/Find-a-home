@@ -40,7 +40,7 @@ def test_percentile_quality_scores_combines_available_metrics() -> None:
 
 
 def test_estimate_drive_minutes_from_distance_grows_with_distance() -> None:
-    assert estimate_drive_minutes_from_distance(0.0) == 2.0
+    assert estimate_drive_minutes_from_distance(0.0) == 3.0
     assert estimate_drive_minutes_from_distance(5_000.0) > estimate_drive_minutes_from_distance(1_000.0)
 
 

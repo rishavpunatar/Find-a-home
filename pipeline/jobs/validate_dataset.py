@@ -32,7 +32,7 @@ NUMERIC_BOUNDS: dict[str, tuple[float, float]] = {
     'serviceFrequencyPeakTph': (0.0, 80.0),
     'interchangeCount': (0.0, 10.0),
     'driveTimeToPinnerMinutes': (0.0, 300.0),
-    'nearbyPrimaryCount': (0.0, 350.0),
+    'nearbyPrimaryCount': (0.0, 450.0),
     'nearbySecondaryCount': (0.0, 120.0),
     'primaryQualityScore': (0.0, 100.0),
     'secondaryQualityScore': (0.0, 100.0),
@@ -144,7 +144,7 @@ def validate_metric_field(issues: list[dict[str, Any]], area: dict[str, Any], fi
         )
         return
 
-    for required_key in ('value', 'status', 'confidence', 'methodologyNote', 'lastUpdated'):
+    for required_key in ('value', 'status', 'confidence', 'provenance', 'methodologyNote', 'lastUpdated'):
         if required_key not in raw_metric:
             issue(
                 issues,

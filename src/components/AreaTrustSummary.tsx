@@ -1,6 +1,11 @@
 import type { MicroArea } from '@/types/domain'
 
-import { getAreaDomainStatusCounts, getAreaTrustTier, type TrustTier } from '@/lib/dataQuality'
+import {
+  getAreaDomainSourceCounts,
+  getAreaDomainStatusCounts,
+  getAreaTrustTier,
+  type TrustTier,
+} from '@/lib/dataQuality'
 
 const trustTierStyles: Record<TrustTier, string> = {
   high: 'border-emerald-200 bg-emerald-50 text-emerald-800',
@@ -25,6 +30,7 @@ export const AreaTrustSummary = ({
 }: AreaTrustSummaryProps) => {
   const trustTier = getAreaTrustTier(area)
   const counts = getAreaDomainStatusCounts(area)
+  const sourceCounts = getAreaDomainSourceCounts(area)
 
   return (
     <div className={`flex flex-wrap items-center gap-2 ${compact ? 'text-[11px]' : 'text-xs'}`}>
@@ -34,7 +40,11 @@ export const AreaTrustSummary = ({
         {trustTierLabels[trustTier]}
       </span>
       <span className="text-slate-500">
-        Domains: {counts.available} avail · {counts.estimated} est
+        Sources: {sourceCounts.sourceApplied} source-backed · {sourceCounts.modelled} modelled
+        {sourceCounts.missing > 0 ? ` · ${sourceCounts.missing} missing` : ''}
+      </span>
+      <span className="text-slate-500">
+        Status: {counts.available} avail · {counts.estimated} est
         {counts.placeholder > 0 ? ` · ${counts.placeholder} placeholder` : ''}
         {counts.missing > 0 ? ` · ${counts.missing} missing` : ''}
       </span>

@@ -32,9 +32,44 @@ PROCESSED_DIR = ROOT / 'data' / 'processed'
 CONFIG_PATH = ROOT / 'pipeline' / 'config' / 'search_config.json'
 SOURCE_METADATA_PATH = RAW_DIR / 'source_metadata.json'
 TRANSPORT_METRICS_PATH = RAW_DIR / 'transport_metrics.json'
-LONDON_WIDE_MAX_COMMUTE_MINUTES = 60
+LONDON_WIDE_MAX_COMMUTE_MINUTES = 70
 GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER = 2.0
 MAX_ANCHOR_DISTANCE_FOR_ESTIMATION_KM = 15.0
+GREATER_LONDON_AUTHORITIES = {
+    'Barking and Dagenham',
+    'Barnet',
+    'Bexley',
+    'Brent',
+    'Bromley',
+    'Camden',
+    'City of London',
+    'Croydon',
+    'Ealing',
+    'Enfield',
+    'Greenwich',
+    'Hackney',
+    'Hammersmith and Fulham',
+    'Haringey',
+    'Harrow',
+    'Havering',
+    'Hillingdon',
+    'Hounslow',
+    'Islington',
+    'Kensington and Chelsea',
+    'Kingston upon Thames',
+    'Lambeth',
+    'Lewisham',
+    'Merton',
+    'Newham',
+    'Redbridge',
+    'Richmond upon Thames',
+    'Southwark',
+    'Sutton',
+    'Tower Hamlets',
+    'Waltham Forest',
+    'Wandsworth',
+    'Westminster',
+}
 
 EXCLUDED_STATION_NAME_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
@@ -152,6 +187,7 @@ def metric(
     unit: str,
     status: str,
     confidence: float,
+    provenance: str,
     note: str,
     last_updated: str,
 ) -> NumericMetric:
@@ -160,6 +196,7 @@ def metric(
         unit=unit,
         status=status,
         confidence=confidence,
+        provenance=provenance,
         methodology_note=note,
         last_updated=last_updated,
     )
@@ -175,6 +212,7 @@ def metric_from_record(
     fallback_value: float | None = None,
     fallback_status: str = 'missing',
     fallback_confidence: float = 0.2,
+    fallback_provenance: str = 'missing',
 ) -> NumericMetric:
     if record is None or record.get(key) is None:
         return metric(
@@ -182,15 +220,25 @@ def metric_from_record(
             unit,
             fallback_status,
             fallback_confidence,
+            fallback_provenance,
             note,
             last_updated,
         )
 
+    field_statuses = record.get('field_statuses') if isinstance(record.get('field_statuses'), dict) else {}
+    field_confidences = (
+        record.get('field_confidences') if isinstance(record.get('field_confidences'), dict) else {}
+    )
+    field_provenance = (
+        record.get('field_provenance') if isinstance(record.get('field_provenance'), dict) else {}
+    )
+
     return metric(
         record.get(key),
         unit,
-        str(record.get('status', 'estimated')),
-        float(record.get('confidence', fallback_confidence)),
+        str(field_statuses.get(key, record.get('status', 'estimated'))),
+        float(field_confidences.get(key, record.get('confidence', fallback_confidence))),
+        str(field_provenance.get(key, record.get('provenance', 'direct'))),
         str(record.get('methodology_note', note)),
         last_updated,
     )
@@ -277,6 +325,7 @@ def synthesize_record_from_anchors(
 
     synthesized['status'] = 'estimated'
     synthesized['confidence'] = interpolated_confidence(samples)
+    synthesized['provenance'] = 'interpolated'
     synthesized['methodology_note'] = methodology_note
     return synthesized
 
@@ -363,7 +412,9 @@ def widen_green_cover_pct(
         0.9,
     )
 
-    status = str(base_record.get('status', 'estimated')) if sample_count <= 1 else 'estimated'
+    base_status = str(base_record.get('status', 'estimated'))
+    base_provenance = str(base_record.get('provenance', 'direct'))
+    status = base_status if sample_count <= 1 else ('available' if base_status == 'available' else 'estimated')
     catchment_multiplier = int(GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER)
 
     return {
@@ -371,6 +422,7 @@ def widen_green_cover_pct(
         'green_cover_pct': round(float(wider_cover), 3),
         'status': status,
         'confidence': round(float(confidence), 3),
+        'provenance': 'direct_blend' if base_provenance == 'direct' and sample_count > 1 else base_provenance,
         'methodology_note': (
             'Green-cover percentage uses a wider neighbourhood proxy: distance-weighted mean of '
             f'nearby station green-cover values within {int(expanded_radius_m)}m '
@@ -400,25 +452,23 @@ def transport_metric_or_fallback(
     return float(fallback_mapping[key])
 
 
+def is_london_station(station: StationRecord) -> bool:
+    county = station.county_or_borough.strip().lower()
+    local_authority = station.local_authority.strip()
+    return county == 'greater london' or local_authority in GREATER_LONDON_AUTHORITIES
+
+
 def candidate_filter(
     stations: list[StationRecord],
     config: SearchConfig,
     transport_records: dict[str, dict[str, Any]],
 ) -> list[StationRecord]:
-    pinner = config.pinner_coordinate
-    within_belt = [
-        station
-        for station in stations
-        if haversine_distance_m(station.coordinate, pinner) <= config.station_search_radius_km * 1000
-    ]
-
     return [
         station
-        for station in within_belt
+        for station in stations
+        if is_london_station(station)
         if transport_metric_or_fallback(station, transport_records, 'typical_commute_min')
         <= config.max_commute_minutes
-        and transport_metric_or_fallback(station, transport_records, 'drive_to_pinner_min')
-        <= config.max_drive_minutes_to_pinner
     ]
 
 
@@ -426,7 +476,11 @@ def dedupe_micro_areas(stations: list[StationRecord], threshold_m: float) -> lis
     priority_sorted = sorted(
         stations,
         key=lambda station: (
-            station.typical_commute_min + station.drive_to_pinner_min - station.peak_tph * 0.6,
+            station.typical_commute_min
+            + station.peak_commute_min * 0.18
+            + station.interchange_count * 2.5
+            - station.peak_tph * 0.6,
+            station.station_name,
         ),
     )
 
@@ -572,7 +626,7 @@ def ranking_rules(component_scores: dict[str, float]) -> list[str]:
         'schools': 'school quality and access',
         'environment': 'air quality and green space',
         'crime': 'safety',
-        'proximity': 'proximity to Pinner',
+        'proximity': 'Pinner access',
         'planningRisk': 'planning risk exposure',
     }
 
@@ -632,15 +686,23 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     raw_stations = station_adapter.fetch_stations()
     all_stations, excluded_stations = sanitize_station_universe(raw_stations)
     stations_by_code = {station.station_code: station for station in all_stations}
+    london_scope_stations = [station for station in all_stations if is_london_station(station)]
     scoped_stations = candidate_filter(all_stations, config, transport_anchor_records)
     deduped_stations = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
-    london_wide_all_deduped = dedupe_micro_areas(all_stations, config.station_distance_threshold_m)
-    london_wide_deduped = [
+    london_wide_all_deduped = dedupe_micro_areas(
+        london_scope_stations,
+        config.station_distance_threshold_m,
+    )
+    london_wide_candidate_stations = [
         station
-        for station in london_wide_all_deduped
+        for station in london_scope_stations
         if transport_metric_or_fallback(station, transport_anchor_records, 'typical_commute_min')
         <= LONDON_WIDE_MAX_COMMUTE_MINUTES
     ]
+    london_wide_deduped = dedupe_micro_areas(
+        london_wide_candidate_stations,
+        config.station_distance_threshold_m,
+    )
     london_wide_excluded_by_commute = [
         {
             'stationCode': station.station_code,
@@ -692,6 +754,31 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'drive_to_pinner_min': round(float(station.drive_to_pinner_min), 3),
                     'status': 'estimated',
                     'confidence': 0.55,
+                    'provenance': 'heuristic',
+                    'field_statuses': {
+                        'typical_commute_min': 'estimated',
+                        'peak_commute_min': 'estimated',
+                        'offpeak_commute_min': 'estimated',
+                        'peak_tph': 'estimated',
+                        'interchange_count': 'estimated',
+                        'drive_to_pinner_min': 'estimated',
+                    },
+                    'field_confidences': {
+                        'typical_commute_min': 0.55,
+                        'peak_commute_min': 0.55,
+                        'offpeak_commute_min': 0.55,
+                        'peak_tph': 0.5,
+                        'interchange_count': 0.5,
+                        'drive_to_pinner_min': 0.55,
+                    },
+                    'field_provenance': {
+                        'typical_commute_min': 'heuristic',
+                        'peak_commute_min': 'heuristic',
+                        'offpeak_commute_min': 'heuristic',
+                        'peak_tph': 'heuristic',
+                        'interchange_count': 'heuristic',
+                        'drive_to_pinner_min': 'heuristic',
+                    },
                     'methodology_note': (
                         'Fallback transport heuristic from station profile because no direct '
                         'transport source or reliable nearby-anchor transport estimates were available.'
@@ -771,10 +858,10 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 planning_record = synthesize_record_from_anchors(
                     station,
                     stations_by_code,
-                    planning_anchor_records,
-                    ['planning_risk_score'],
-                    'Heuristic planning/development risk estimated by interpolation from nearby placeholder station scores.',
-                ) or planning_record
+                planning_anchor_records,
+                ['planning_risk_score'],
+                'Heuristic planning/development risk estimated by interpolation from nearby structured planning scores.',
+            ) or planning_record
             wellbeing_record = wellbeing_adapter.get_by_local_authority(station.local_authority)
 
             resolved_records_by_station[station.station_code] = {
@@ -877,6 +964,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_value=float(station.typical_commute_min),
                     fallback_status='estimated',
                     fallback_confidence=0.55,
+                    fallback_provenance='heuristic',
                 ),
                 'commutePeakMinutes': metric_from_record(
                     transport_record,
@@ -887,6 +975,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_value=float(station.peak_commute_min),
                     fallback_status='estimated',
                     fallback_confidence=0.55,
+                    fallback_provenance='heuristic',
                 ),
                 'commuteOffPeakMinutes': metric_from_record(
                     transport_record,
@@ -897,6 +986,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_value=float(station.offpeak_commute_min),
                     fallback_status='estimated',
                     fallback_confidence=0.55,
+                    fallback_provenance='heuristic',
                 ),
                 'serviceFrequencyPeakTph': metric_from_record(
                     transport_record,
@@ -907,6 +997,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_value=float(station.peak_tph),
                     fallback_status='estimated',
                     fallback_confidence=0.5,
+                    fallback_provenance='heuristic',
                 ),
                 'interchangeCount': metric_from_record(
                     transport_record,
@@ -917,6 +1008,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_value=float(station.interchange_count),
                     fallback_status='estimated',
                     fallback_confidence=0.5,
+                    fallback_provenance='heuristic',
                 ),
                 'driveTimeToPinnerMinutes': metric_from_record(
                     transport_record,
@@ -927,33 +1019,34 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_value=float(station.drive_to_pinner_min),
                     fallback_status='estimated',
                     fallback_confidence=0.55,
+                    fallback_provenance='heuristic',
                 ),
                 'nearbyPrimaryCount': metric_from_record(
                     school_record,
                     'nearby_primary_count',
                     unit='count',
-                    note='Open state-funded primary schools reachable within roughly 20 minutes drive from the area anchor; private schools excluded.',
+                    note='Open state-funded primary schools reachable within an approximately 20-minute road-adjusted drive-time proxy from the area anchor; private schools excluded.',
                     last_updated=schools_last_updated,
                 ),
                 'nearbySecondaryCount': metric_from_record(
                     school_record,
                     'nearby_secondary_count',
                     unit='count',
-                    note='Open state-funded secondary schools reachable within roughly 20 minutes drive from the area anchor; private schools excluded.',
+                    note='Open state-funded secondary schools reachable within an approximately 20-minute road-adjusted drive-time proxy from the area anchor; private schools excluded.',
                     last_updated=schools_last_updated,
                 ),
                 'primaryQualityScore': metric_from_record(
                     school_record,
                     'primary_quality_score',
                     unit='score',
-                    note='Primary school quality composite from official state-funded KS2 results across schools reachable within roughly 20 minutes drive.',
+                    note='Primary school quality composite from official state-funded KS2 results across schools reachable within an approximately 20-minute road-adjusted drive-time proxy.',
                     last_updated=schools_last_updated,
                 ),
                 'secondaryQualityScore': metric_from_record(
                     school_record,
                     'secondary_quality_score',
                     unit='score',
-                    note='Secondary school quality composite from official state-funded KS4 results across schools reachable within roughly 20 minutes drive.',
+                    note='Secondary school quality composite from official state-funded KS4 results across schools reachable within an approximately 20-minute road-adjusted drive-time proxy.',
                     last_updated=schools_last_updated,
                 ),
                 'annualNo2': metric_from_record(
@@ -995,18 +1088,19 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     crime_record,
                     'crime_rate_per_1000',
                     unit='per_1000',
-                    note='Annualised crime incidents per 1,000 residents proxy.',
+                    note='Annualised recent police incidents per 1,000 residents using direct data.police.uk station-area pulls and the local denominator.',
                     last_updated=crime_last_updated,
                 ),
                 'planningRiskHeuristic': metric_from_record(
                     planning_record,
                     'planning_risk_score',
                     unit='score',
-                    note='Low-confidence planning/development pressure heuristic.',
+                    note='Rule-based planning and development pressure score from structured planning layers.',
                     last_updated=planning_last_updated,
                     fallback_value=55,
                     fallback_status='placeholder',
                     fallback_confidence=0.2,
+                    fallback_provenance='heuristic',
                 ),
                 'boroughQolScore': metric_from_record(
                     wellbeing_record,
@@ -1020,6 +1114,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     fallback_value=None,
                     fallback_status='missing',
                     fallback_confidence=0.25,
+                    fallback_provenance='missing',
                 ),
             }
 
@@ -1028,10 +1123,10 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
 
             flags: list[str] = []
             if metrics['planningRiskHeuristic'].confidence < 0.5:
-                flags.append('Planning risk uses a low-confidence heuristic placeholder.')
+                flags.append('Planning risk fell back to a low-confidence placeholder because direct structured planning data was unavailable.')
             if scope_label == 'londonWide':
                 flags.append(
-                    'Included in London-wide scope generated from all known stations (no Pinner-radius prefilter).',
+                    'Included in the broader London coverage view for this dataset refresh.',
                 )
 
             for metric_name, metric_value in metrics.items():
@@ -1042,9 +1137,9 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
 
             confidence_notes = [
                 'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
-                'School scoring uses composite indicators and does not rely on a single inspection field.',
+                'School scoring uses official state-funded performance composites and a road-adjusted drive-time accessibility proxy rather than a single inspection field.',
                 'Green-cover percentage uses an expanded 2x walk-radius neighborhood blend.',
-                'Planning/development risk is explicitly low-confidence until structured feeds are integrated.',
+                'Planning risk is now derived from structured planning layers, but it remains a rule-based signal rather than a direct planning outcome forecast.',
             ]
 
             micro_area = {
@@ -1075,7 +1170,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 'planningRiskMethodology': str(
                     (planning_record or {}).get(
                         'methodology_note',
-                        'No planning feed linked. Placeholder score only.',
+                        'No structured planning feed was available for this area, so the score fell back to a placeholder.',
                     ),
                 ),
                 'boroughQolAuthority': str(
@@ -1120,6 +1215,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'pinnerCoordinate': asdict(config.pinner_coordinate),
             'centralLondonCoordinate': asdict(config.central_london_coordinate),
             'stationSearchRadiusKm': config.station_search_radius_km,
+            'primaryScopeRegion': 'Greater London',
             'microAreaWalkRadiusM': config.micro_area_walk_radius_m,
             'greenCoverExpandedRadiusM': int(
                 config.micro_area_walk_radius_m * GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER,
@@ -1127,6 +1223,8 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'greenCoverExpandedRadiusMultiplier': GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER,
             'maxCommuteMinutesForCandidate': config.max_commute_minutes,
             'maxDriveMinutesForCandidate': config.max_drive_minutes_to_pinner,
+            'defaultUsesPinnerRadiusPrefilter': False,
+            'defaultUsesDriveToPinnerPrefilter': False,
             'londonWideMaxCommuteMinutesForCandidate': LONDON_WIDE_MAX_COMMUTE_MINUTES,
             'londonWideUsesPinnerRadiusPrefilter': False,
             'londonWideUsesDriveToPinnerPrefilter': False,
@@ -1195,7 +1293,9 @@ def main() -> None:
     verification_report = generate_verification_report(dataset, live_mode=live_verification)
     dataset['verificationSummary'] = {
         'overallStatus': verification_report['overallStatus'],
-        'verificationCompletenessScore': verification_report.get('verificationCompletenessScore'),
+        'sourceCoverageScore': verification_report.get('sourceCoverageScore'),
+        'verificationStrengthScore': verification_report.get('verificationStrengthScore'),
+        'verificationCompletenessScore': verification_report.get('sourceCoverageScore'),
         'crimeCrossCheckStatus': verification_report['crossChecks']['crime']['status'],
         'dataQualityStatus': quality_report['overallStatus'],
         'qualityCriticalIssues': quality_report['counts']['critical'],

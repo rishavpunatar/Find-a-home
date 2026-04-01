@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
-import requests
+from pipeline.jobs.osrm_utils import fetch_json_with_curl_fallback
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -46,23 +46,20 @@ def fetch_tfl_journeys(lat: float, lon: float, date: str, time: str) -> list[dic
         'https://api.tfl.gov.uk/Journey/JourneyResults/'
         f'{lat:.6f},{lon:.6f}/to/{OXFORD_CIRCUS_LAT:.6f},{OXFORD_CIRCUS_LON:.6f}'
     )
-    try:
-        response = requests.get(
-            url,
-            params={
-                'date': date,
-                'time': time,
-                'timeIs': 'Departing',
-                'journeyPreference': 'leasttime',
-            },
-            timeout=12,
-        )
-    except requests.RequestException:
+    payload = fetch_json_with_curl_fallback(
+        url,
+        params={
+            'date': date,
+            'time': time,
+            'timeIs': 'Departing',
+            'journeyPreference': 'leasttime',
+        },
+        timeout_seconds=12,
+        cache_namespace='tfl-journeys',
+        cache_ttl_hours=72,
+    )
+    if not isinstance(payload, dict):
         return []
-
-    if response.status_code != 200:
-        return []
-    payload = response.json()
     journeys = payload.get('journeys')
     return journeys if isinstance(journeys, list) else []
 
@@ -126,15 +123,14 @@ def osrm_probe_available(*, timeout_seconds: float = 5.0) -> bool:
         f'{OSRM_BASE_URL}/route/v1/driving/'
         f'{PINNER_LON:.6f},{PINNER_LAT:.6f};{PINNER_LON + 0.01:.6f},{PINNER_LAT + 0.01:.6f}'
     )
-    try:
-        response = requests.get(
-            probe_url,
-            params={'overview': 'false'},
-            timeout=timeout_seconds,
-        )
-    except requests.RequestException:
-        return False
-    return response.status_code == 200
+    payload = fetch_json_with_curl_fallback(
+        probe_url,
+        params={'overview': 'false'},
+        timeout_seconds=timeout_seconds,
+        cache_namespace='osrm-probe',
+        cache_ttl_hours=168,
+    )
+    return isinstance(payload, dict) and payload.get('code') == 'Ok'
 
 
 def fetch_osrm_drive_minutes(lat: float, lon: float, *, timeout_seconds: float = 6.0) -> float | None:
@@ -142,17 +138,14 @@ def fetch_osrm_drive_minutes(lat: float, lon: float, *, timeout_seconds: float =
         f'{OSRM_BASE_URL}/route/v1/driving/'
         f'{lon:.6f},{lat:.6f};{PINNER_LON:.6f},{PINNER_LAT:.6f}'
     )
-    try:
-        response = requests.get(url, params={'overview': 'false'}, timeout=timeout_seconds)
-    except requests.RequestException:
-        return None
-
-    if response.status_code != 200:
-        return None
-
-    try:
-        payload = response.json()
-    except json.JSONDecodeError:
+    payload = fetch_json_with_curl_fallback(
+        url,
+        params={'overview': 'false'},
+        timeout_seconds=timeout_seconds,
+        cache_namespace='osrm-route',
+        cache_ttl_hours=168,
+    )
+    if not isinstance(payload, dict):
         return None
 
     routes = payload.get('routes')
@@ -236,7 +229,28 @@ def build_transport_record(
         confidence += 0.15
     confidence = round(max(0.25, min(0.95, confidence)), 3)
 
-    status = 'available' if used_peak and used_offpeak and used_osrm else 'estimated'
+    field_statuses = {
+        'typical_commute_min': 'available' if used_tfl else 'estimated',
+        'peak_commute_min': 'available' if used_peak else 'estimated',
+        'offpeak_commute_min': 'available' if used_offpeak else 'estimated',
+        'peak_tph': 'available' if peak_tph is not None else 'estimated',
+        'interchange_count': 'available' if interchange_count is not None else 'estimated',
+        'drive_to_pinner_min': 'available' if used_osrm else 'estimated',
+    }
+    field_confidences = {
+        'typical_commute_min': round(0.88 if used_peak and used_offpeak else 0.72 if used_tfl else 0.48, 3),
+        'peak_commute_min': round(0.84 if used_peak else 0.48, 3),
+        'offpeak_commute_min': round(0.84 if used_offpeak else 0.48, 3),
+        'peak_tph': round(0.78 if peak_tph is not None else 0.45, 3),
+        'interchange_count': round(0.78 if interchange_count is not None else 0.45, 3),
+        'drive_to_pinner_min': round(0.88 if used_osrm else 0.5, 3),
+    }
+    field_provenance = {
+        key: ('direct' if status_value == 'available' else 'heuristic')
+        for key, status_value in field_statuses.items()
+    }
+
+    status = 'available' if used_tfl or used_osrm else 'estimated'
     methodology_parts = [
         'Commute from TfL Journey Planner (least-time route).'
         if used_tfl
@@ -258,6 +272,10 @@ def build_transport_record(
             'drive_to_pinner_min': round(drive_value, 3),
             'status': status,
             'confidence': confidence,
+            'provenance': 'direct' if used_tfl or used_osrm else 'heuristic',
+            'field_statuses': field_statuses,
+            'field_confidences': field_confidences,
+            'field_provenance': field_provenance,
             'methodology_note': ' '.join(methodology_parts),
             'reference_period': 'Snapshot queries to TfL Journey Planner and OSRM routing.',
             'source_release_date': datetime.now(ZoneInfo('Europe/London')).date().isoformat(),

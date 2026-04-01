@@ -4,6 +4,10 @@ import { Link, useLocation } from 'react-router-dom'
 import type { DerivedMicroArea, SortConfig } from '@/types/domain'
 
 import { AreaTrustSummary } from '@/components/AreaTrustSummary'
+import {
+  getAreaPropertyEvidenceLabel,
+  isSourceAppliedProvenance,
+} from '@/lib/dataQuality'
 import { formatCurrency, formatNumber } from '@/lib/format'
 
 interface RankedTableProps {
@@ -14,7 +18,7 @@ interface RankedTableProps {
   onToggleCompare: (id: string) => void
 }
 
-const ROW_HEIGHT = 88
+const ROW_HEIGHT = 96
 const OVERSCAN_ROWS = 10
 
 const getSortValue = (area: DerivedMicroArea, key: string): number | string => {
@@ -121,6 +125,7 @@ export const RankedTable = ({
   const [maxCommuteFilter, setMaxCommuteFilter] = useState('')
   const [minSchoolFilter, setMinSchoolFilter] = useState('')
   const [pinnedOnly, setPinnedOnly] = useState(false)
+  const [sourceBackedPriceOnly, setSourceBackedPriceOnly] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement | null>(null)
   const deferredSearchTerm = useDeferredValue(searchTerm)
 
@@ -132,6 +137,13 @@ export const RankedTable = ({
 
     return areas.filter((area) => {
       if (pinnedOnly && !pinnedIds.includes(area.microAreaId)) {
+        return false
+      }
+
+      if (
+        sourceBackedPriceOnly &&
+        !isSourceAppliedProvenance(area.medianSemiDetachedPrice.provenance)
+      ) {
         return false
       }
 
@@ -170,6 +182,7 @@ export const RankedTable = ({
     minSchoolFilter,
     pinnedIds,
     pinnedOnly,
+    sourceBackedPriceOnly,
   ])
   const sortedRows = useMemo(() => sortRows(locallyFilteredRows, sort), [locallyFilteredRows, sort])
   const fromPath = `${location.pathname}${location.search}`
@@ -191,6 +204,7 @@ export const RankedTable = ({
   }, [
     locallyFilteredRows.length,
     pinnedOnly,
+    sourceBackedPriceOnly,
     searchTerm,
     maxPriceFilter,
     maxCommuteFilter,
@@ -237,7 +251,7 @@ export const RankedTable = ({
               type="text"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder="Pinner, Harrow, Hillingdon..."
+              placeholder="Ealing, Wimbledon, Harrow..."
               className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
             />
           </label>
@@ -281,6 +295,14 @@ export const RankedTable = ({
           <label className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
             <input
               type="checkbox"
+              checked={sourceBackedPriceOnly}
+              onChange={(event) => setSourceBackedPriceOnly(event.target.checked)}
+            />
+            Source-backed price only
+          </label>
+          <label className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
               checked={pinnedOnly}
               onChange={(event) => setPinnedOnly(event.target.checked)}
             />
@@ -293,6 +315,7 @@ export const RankedTable = ({
               setMaxPriceFilter('')
               setMaxCommuteFilter('')
               setMinSchoolFilter('')
+              setSourceBackedPriceOnly(false)
               setPinnedOnly(false)
             }}
             className="rounded-md bg-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
@@ -349,9 +372,10 @@ export const RankedTable = ({
             {visibleRows.map((area, index) => {
               const isPinned = pinnedIds.includes(area.microAreaId)
               const isCompared = compareIds.includes(area.microAreaId)
+              const propertyEvidence = getAreaPropertyEvidenceLabel(area)
 
               return (
-                <tr key={area.microAreaId} className="h-[88px] hover:bg-teal-50/50">
+                <tr key={area.microAreaId} className="h-[96px] hover:bg-teal-50/50">
                   <td className="px-3 py-2 font-medium text-slate-700">{startIndex + index + 1}</td>
                   <td className="px-3 py-2">
                     <Link
@@ -362,6 +386,9 @@ export const RankedTable = ({
                       {area.stationName}
                     </Link>
                     <div className="text-xs text-slate-500">{area.localAuthority}</div>
+                    <div className="mt-1 inline-flex rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] text-slate-600">
+                      Price evidence: {propertyEvidence}
+                    </div>
                     <div className="mt-1">
                       <AreaTrustSummary area={area} compact />
                     </div>

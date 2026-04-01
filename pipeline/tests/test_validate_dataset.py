@@ -12,6 +12,7 @@ def metric(value: float, note: str = 'LAEI 2019 source') -> dict[str, object]:
         'unit': '',
         'status': 'available',
         'confidence': 0.9,
+        'provenance': 'direct',
         'methodologyNote': note,
         'lastUpdated': '2026-03-24',
     }

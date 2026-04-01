@@ -1,8 +1,8 @@
 {
   "property": {
     "source": "OnTheMarket current asking-price snapshot + HM Land Registry PPD fallback",
-    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-03-31 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-03-31 to 2026-03-31 (with prior-year comparison window for trend proxy)",
-    "releaseDate": "2026-03-31"
+    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-04-01 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-04-01 to 2026-04-01 (with prior-year comparison window for trend proxy)",
+    "releaseDate": "2026-04-01"
   },
   "transport": {
     "source": "TfL Journey Planner + OSRM (with station-profile fallback)",
@@ -11,8 +11,8 @@
   },
   "schools": {
     "source": "DfE GIAS open state-funded establishment exports + DfE Explore Education Statistics school performance data",
-    "referencePeriod": "Counts refreshed from GIAS open state-funded export dated 2026-03-31; primary quality from KS2 202425 Revised; secondary quality from KS4 202324 Final",
-    "releaseDate": "2026-03-31"
+    "referencePeriod": "Counts refreshed from GIAS open state-funded export dated 2026-04-01; primary quality from KS2 202425 Revised; secondary quality from KS4 202324 Final",
+    "releaseDate": "2026-04-01"
   },
   "pollution": {
     "source": "London Datastore LAEI + DEFRA UK-AIR LAQM background maps",
@@ -20,18 +20,18 @@
     "releaseDate": "2023-12-31"
   },
   "greenSpace": {
-    "source": "OS Open Greenspace-derived fixture proxies",
-    "referencePeriod": "Proxy baseline (single authoritative timestamp not yet wired)",
-    "releaseDate": "2026-03-01"
+    "source": "OpenStreetMap greenspace polygons via Overpass API",
+    "referencePeriod": "Current OpenStreetMap greenspace snapshot via Overpass API station-scope pull",
+    "releaseDate": "2026-04-01"
   },
   "crime": {
-    "source": "Fixture annualised proxy + data.police.uk cross-check",
-    "referencePeriod": "Proxy composite (live monthly cross-check available separately)",
-    "releaseDate": "2026-03-01"
+    "source": "data.police.uk custom-area street-level crime pulls + interpolated station population denominator",
+    "referencePeriod": "Latest 3 months from data.police.uk (2026-01, 2025-12, 2025-11) annualised",
+    "releaseDate": "2026-01"
   },
   "planning": {
-    "source": "Heuristic placeholder (pending planning.data.gov.uk integration)",
-    "referencePeriod": "Low-confidence placeholder baseline",
-    "releaseDate": "2026-03-01"
+    "source": "planning.data.gov.uk structured geometry layers",
+    "referencePeriod": "Current planning.data.gov.uk geometry pull for brownfield land, conservation areas, and article 4 direction areas",
+    "releaseDate": "2026-04-01"
   }
 }

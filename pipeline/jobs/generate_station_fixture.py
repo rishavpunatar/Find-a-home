@@ -335,7 +335,9 @@ def build_station_records(radius_m: int) -> list[dict[str, object]]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description='Regenerate expanded station fixture around Pinner.')
+    parser = argparse.ArgumentParser(
+        description='Regenerate expanded station fixture around central London with Greater London coverage.',
+    )
     parser.add_argument(
         '--radius-m',
         type=int,

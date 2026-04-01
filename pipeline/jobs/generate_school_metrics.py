@@ -12,15 +12,15 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin
 
-import requests
 from pyproj import Transformer
+
+from pipeline.jobs.station_scope import candidate_scope_stations
+import requests
 
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_PATH = ROOT / 'data' / 'raw' / 'schools_metrics.json'
 SOURCE_METADATA_PATH = ROOT / 'data' / 'raw' / 'source_metadata.json'
-ANCHOR_COORDINATES_PATH = ROOT / 'data' / 'raw' / 'school_anchor_coordinates.json'
-STATIONS_PATH = ROOT / 'data' / 'raw' / 'stations_transport.json'
 
 GIAS_HOME_URL = 'https://www.get-information-schools.service.gov.uk/'
 GIAS_DOWNLOADS_URL = f'{GIAS_HOME_URL}Downloads'
@@ -48,9 +48,7 @@ POLL_MAX_ATTEMPTS = 90
 ALL_ESTABLISHMENTS_TAG = 'all.edubase.data'
 STATE_FUNDED_TAG = 'all.open.state-funded.schools'
 
-OSRM_BASE_URL = 'https://router.project-osrm.org'
 DRIVE_CATCHMENT_MINUTES = 20.0
-OSRM_TABLE_BATCH_SIZE = 40
 STRAIGHT_LINE_PREFILTER_METERS = 15_000.0
 DRIVE_TIME_WEIGHT_FLOOR_MINUTES = 4.0
 
@@ -73,6 +71,7 @@ SECONDARY_QUALITY_WEIGHTS = {
 
 INPUT_PATTERN = re.compile(r'<input[^>]+name="([^"]+)"[^>]+value="([^"]*)"', re.IGNORECASE)
 OSGB_TO_WGS84 = Transformer.from_crs('EPSG:27700', 'EPSG:4326', always_xy=True)
+WGS84_TO_OSGB = Transformer.from_crs('EPSG:4326', 'EPSG:27700', always_xy=True)
 
 
 def read_json(path: Path) -> Any:
@@ -148,70 +147,13 @@ def percentile_quality_scores(
 
 
 def estimate_drive_minutes_from_distance(distance_m: float) -> float:
-    return 2.0 + (distance_m / 500.0)
-
-
-def load_anchor_station_points() -> dict[str, dict[str, float]]:
-    stations = read_json(STATIONS_PATH)
-    output: dict[str, dict[str, float]] = {}
-    for station in stations:
-        if not isinstance(station, dict):
-            continue
-        station_code = station.get('station_code')
-        lat = station.get('lat')
-        lon = station.get('lon')
-        if not isinstance(station_code, str):
-            continue
-        if not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
-            continue
-        output[station_code] = {'lat': float(lat), 'lon': float(lon)}
-    return output
-
-
-def fetch_osrm_drive_minutes_batch(
-    source_lat: float,
-    source_lon: float,
-    destinations: list[dict[str, float]],
-) -> list[float | None]:
-    if not destinations:
-        return []
-
-    coordinates = ';'.join(
-        [f'{source_lon:.6f},{source_lat:.6f}']
-        + [f"{destination['lon']:.6f},{destination['lat']:.6f}" for destination in destinations]
-    )
-    destination_indexes = ';'.join(str(index) for index in range(1, len(destinations) + 1))
-    url = f'{OSRM_BASE_URL}/table/v1/driving/{coordinates}'
-
-    try:
-        response = requests.get(
-            url,
-            params={
-                'annotations': 'duration',
-                'sources': '0',
-                'destinations': destination_indexes,
-            },
-            timeout=30,
-        )
-        response.raise_for_status()
-        payload = response.json()
-    except Exception:  # noqa: BLE001
-        return [None] * len(destinations)
-
-    durations = payload.get('durations')
-    if not isinstance(durations, list) or not durations or not isinstance(durations[0], list):
-        return [None] * len(destinations)
-
-    row = durations[0]
-    return [
-        None if not isinstance(duration_seconds, (int, float)) else float(duration_seconds) / 60.0
-        for duration_seconds in row
-    ]
+    road_adjusted_distance = distance_m * 1.28
+    return 3.0 + (road_adjusted_distance / 550.0)
 
 
 def school_drive_minutes_by_urn(
-    anchor_lat: float,
-    anchor_lon: float,
+    _anchor_lat: float,
+    _anchor_lon: float,
     anchor_easting: float,
     anchor_northing: float,
     school_records: dict[str, dict[str, Any]],
@@ -224,24 +166,12 @@ def school_drive_minutes_by_urn(
     ]
 
     drive_minutes_by_urn: dict[str, float] = {}
-    for start_index in range(0, len(candidate_schools), OSRM_TABLE_BATCH_SIZE):
-        batch = candidate_schools[start_index : start_index + OSRM_TABLE_BATCH_SIZE]
-        destinations = [
-            {
-                'lat': float(record['lat']),
-                'lon': float(record['lon']),
-            }
-            for _urn, record in batch
-        ]
-        osrm_minutes = fetch_osrm_drive_minutes_batch(anchor_lat, anchor_lon, destinations)
-        for (urn, record), drive_minutes in zip(batch, osrm_minutes):
-            if drive_minutes is None:
-                straight_line_distance = math.hypot(
-                    record['easting'] - anchor_easting,
-                    record['northing'] - anchor_northing,
-                )
-                drive_minutes = estimate_drive_minutes_from_distance(straight_line_distance)
-            drive_minutes_by_urn[urn] = float(drive_minutes)
+    for urn, record in candidate_schools:
+        straight_line_distance = math.hypot(
+            record['easting'] - anchor_easting,
+            record['northing'] - anchor_northing,
+        )
+        drive_minutes_by_urn[urn] = float(estimate_drive_minutes_from_distance(straight_line_distance))
 
     return drive_minutes_by_urn
 
@@ -531,7 +461,7 @@ def methodology_note(primary_period: str, secondary_period: str) -> str:
         'Nearby school counts and quality now use state-funded-only DfE sources. '
         'Counts come from open state-funded GIAS establishment exports, excluding private schools. '
         f'Catchment is based on schools reachable within roughly {DRIVE_CATCHMENT_MINUTES:.0f} minutes drive from the area anchor, '
-        'using OSRM drive-time routing with straight-line fallback only if route lookup fails. '
+        'using a road-adjusted drive-time proxy from school and station coordinates. '
         'Primary quality is a percentile-based composite from '
         f'KS2 {primary_period} official school-level results '
         '(expected standard in reading, writing and maths, higher standard, reading progress, maths progress, reading scaled score, maths scaled score). '
@@ -556,25 +486,23 @@ def refresh_source_metadata(gias_release_date: str, primary_period: str, seconda
 
 
 def generate_school_metrics() -> dict[str, dict[str, Any]]:
-    anchor_coordinates = read_json(ANCHOR_COORDINATES_PATH)
-    anchor_station_points = load_anchor_station_points()
+    stations = candidate_scope_stations()
     school_records, gias_release_date = gias_school_records()
     primary_scores, primary_period = primary_quality_scores(school_records)
     secondary_scores, secondary_period = secondary_quality_scores(school_records)
     note = methodology_note(primary_period, secondary_period)
 
     output: dict[str, dict[str, Any]] = {}
-    for station_code, anchor in anchor_coordinates.items():
-        anchor_easting = float(anchor['easting'])
-        anchor_northing = float(anchor['northing'])
-        anchor_point = anchor_station_points.get(station_code)
-        if not anchor_point:
-            raise RuntimeError(f'Missing lat/lon for anchor station {station_code}')
+    for station in stations:
+        anchor_easting, anchor_northing = WGS84_TO_OSGB.transform(
+            station.coordinate.lon,
+            station.coordinate.lat,
+        )
         drive_minutes_by_urn = school_drive_minutes_by_urn(
-            float(anchor_point['lat']),
-            float(anchor_point['lon']),
-            anchor_easting,
-            anchor_northing,
+            float(station.coordinate.lat),
+            float(station.coordinate.lon),
+            float(anchor_easting),
+            float(anchor_northing),
             school_records,
         )
 
@@ -601,13 +529,14 @@ def generate_school_metrics() -> dict[str, dict[str, Any]]:
             allowed_phases=SECONDARY_PHASES,
         )
 
-        output[station_code] = {
+        output[station.station_code] = {
             'nearby_primary_count': nearby_primary_count,
             'nearby_secondary_count': nearby_secondary_count,
             'primary_quality_score': None if primary_quality is None else round(primary_quality, 1),
             'secondary_quality_score': None if secondary_quality is None else round(secondary_quality, 1),
             'status': 'available',
-            'confidence': 0.88,
+            'confidence': 0.82,
+            'provenance': 'direct',
             'methodology_note': note,
         }
 
@@ -618,7 +547,7 @@ def generate_school_metrics() -> dict[str, dict[str, Any]]:
 def main() -> None:
     payload = generate_school_metrics()
     write_json(OUTPUT_PATH, payload)
-    print(f'Generated school metrics for {len(payload)} anchor stations -> {OUTPUT_PATH}')
+    print(f'Generated school metrics for {len(payload)} stations -> {OUTPUT_PATH}')
 
 
 if __name__ == '__main__':

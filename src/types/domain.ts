@@ -5,6 +5,7 @@ export interface NumericMetric {
   unit: string
   status: MetricStatus
   confidence: number
+  provenance?: string
   methodologyNote: string
   lastUpdated: string
 }
@@ -97,6 +98,8 @@ export interface ProcessedDataset {
   }>
   verificationSummary?: {
     overallStatus: string
+    sourceCoverageScore?: number
+    verificationStrengthScore?: number
     verificationCompletenessScore?: number
     crimeCrossCheckStatus: string
     dataQualityStatus?: string
@@ -109,9 +112,12 @@ export interface ProcessedDataset {
     pinnerCoordinate: Coordinate
     centralLondonCoordinate: Coordinate
     stationSearchRadiusKm: number
+    primaryScopeRegion?: string
     microAreaWalkRadiusM: number
     maxCommuteMinutesForCandidate: number
     maxDriveMinutesForCandidate: number
+    defaultUsesPinnerRadiusPrefilter?: boolean
+    defaultUsesDriveToPinnerPrefilter?: boolean
     londonWideMaxCommuteMinutesForCandidate?: number
     londonWideUsesPinnerRadiusPrefilter?: boolean
     londonWideUsesDriveToPinnerPrefilter?: boolean

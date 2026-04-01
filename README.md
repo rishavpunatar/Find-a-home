@@ -1,6 +1,6 @@
-# Find a Home: Station-Centred Micro-Area Ranking
+# Find a Home: Greater London Station Micro-Area Ranking
 
-Static-first web app and pipeline that precomputes and ranks UK station-centred micro-areas around Pinner for buying a semi-detached house.
+Static-first web app and pipeline that precomputes and ranks Greater London station-centred micro-areas for buying a semi-detached house with a practical commute into central London.
 
 ## Start here if you just want to use the tool
 
@@ -8,7 +8,7 @@ You do not need to install anything if you only want to use the app.
 
 Use this project for:
 
-- narrowing down areas around Pinner for a semi-detached house search
+- narrowing down Greater London station areas for a semi-detached house search
 - comparing tradeoffs between commute, price, schools, greenery, crime, and confidence in the data
 - building a shortlist before you spend time on Rightmove, Zoopla, or in-person visits
 
@@ -17,7 +17,7 @@ Use the website like this:
 1. Open the live site linked from this repo.
 2. Leave the filter preset on `Balanced` to start, or switch to `High-confidence only` if you want a stricter shortlist.
 3. Go to `Ranked Table` to see the strongest candidates.
-4. Use `Map` to understand where they sit geographically.
+4. Use the Pinner drive filter only if access back to Pinner matters to you.
 5. Pin the areas you like and compare them side by side.
 
 This project is most useful as a shortlist tool. It is not a guarantee that an area is right for you.
@@ -38,9 +38,9 @@ This project is not:
 
 ## What this app does
 
-- Analyses all candidate station-centred micro-areas in a configurable search belt around Pinner.
+- Analyses Greater London station-centred micro-areas within a 70-minute commute to central London.
 - Models each micro-area as an 800m station walk catchment (configurable).
-- Filters candidate stations by commute and drive constraints.
+- Keeps Pinner access as an optional score/filter instead of a hard candidate prefilter.
 - Computes value, transport, schools, environment, crime, proximity, and planning-risk component scores.
 - Links each micro-area to borough-level QoL from ONS APS personal well-being data.
 - Produces an overall weighted ranking with confidence and data-status metadata.
@@ -64,7 +64,7 @@ If you are a developer or want to run the project locally, the rest of this READ
 
 - Overview dashboard
 - Ranked table (sortable, filterable, pin/compare, CSV export)
-- London `<=60m` ranked tab (commute capped at 60 minutes, drive-to-Pinner filter disabled)
+- Coverage view tab (same source universe, but with most non-commute filters relaxed)
 - Map view (colour by selected metric, detail side panel)
 - Comparison view (up to 5 micro-areas)
 - Micro-area detail page (raw metrics, statuses, confidence, explanations)
@@ -92,7 +92,7 @@ python3 -m pipeline.jobs.build_micro_areas
 python3 -m pipeline.jobs.generate_station_fixture
 ```
 
-This refreshes `data/raw/stations_transport.json` from live station geodata around Pinner and preserves seed records.
+This refreshes `data/raw/stations_transport.json` from live central-London-centred station geodata and preserves seed records.
 
 ### 2b) Generate verification report (live cross-check mode)
 
@@ -157,10 +157,13 @@ The pipeline emits:
 
 Current verification coverage:
 
-- Crime: live cross-check against `data.police.uk` monthly incidents annualised per 1,000 (using denominator proxy)
-- Pollution: dual-source model applied (`source_applied_model_cross_checked`)
-- Property, schools, transport, greenspace, population: explicit `not_live_verified` status
-- Planning risk: explicit `low_confidence_placeholder`
+- Property: current OnTheMarket listing snapshots with recent HM Land Registry sold-price fallback
+- Transport: TfL Journey Planner and OSRM where available, with explicit heuristic gaps where not
+- Schools: official state-funded DfE sources, using a road-adjusted drive-time accessibility proxy
+- Greenspace: direct OpenStreetMap polygon geometry via Overpass
+- Crime: direct `data.police.uk` area pulls, with a fresh police-feed cross-check available
+- Planning: structured `planning.data.gov.uk` layers feeding a rule-based planning-pressure score
+- Verification now reports both `sourceCoverageScore` and `verificationStrengthScore`
 
 This is intentional transparency so the app does not claim precision where full cross-source automation is not yet complete.
 
@@ -220,14 +223,12 @@ Optional London high-resolution mode:
 
 ### Candidate generation process
 
-1. Load broad station set in the configured search radius around Pinner.
-2. Apply candidate constraints:
-   - commute <= configured max
-   - drive to Pinner <= configured max
+1. Load the broader central-London-centred station universe.
+2. Keep Greater London station areas within the configured central-London commute cap.
 3. Deduplicate highly overlapping station micro-areas.
 4. Build per-micro-area metrics via adapters.
    - Property metrics now prefer current asking prices for semi-detached homes with at least 3 bedrooms and 2 bathrooms, using public locality listing snapshots and distance-weighting back to the station area. When current listing coverage is too thin, the pipeline falls back to recent HM Land Registry semi-detached transactions.
-   - If a station has no direct source record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchored stations.
+   - If a station has no direct source record for a metric domain, the pipeline computes an explicit low-confidence estimate via inverse-distance interpolation from nearby anchor stations.
 5. Compute component scores and weighted overall rank.
 6. Persist `data/processed/micro_areas.json` and `data/processed/summary.json`.
 7. Run strict quality checks and persist `data/processed/data_quality_report.json`.
@@ -238,8 +239,8 @@ Configuration lives in:
 
 UI note:
 
-- `/ranked` keeps the standard Pinner-focused filtering model.
-- `/ranked-london` uses a separate London-wide candidate scope (no Pinner-radius prefilter, no drive-to-Pinner candidate prefilter), then applies commute-only filtering in the UI (slider capped at 60 minutes).
+- `/ranked` is the main Greater London shortlist view for the primary 70-minute commute universe.
+- `/ranked-london` is now a coverage view over the same broader source universe, with most non-commute filters relaxed.
 - The filter panel includes `Focus`, `Balanced`, and `Explore` presets. `Balanced` is the default first-run mode.
 - Static GitHub Pages deployments keep clean URLs and copy `index.html` to `404.html` during build so deep links like `/micro-area/<id>` still boot the SPA correctly on refresh.
 
@@ -258,20 +259,21 @@ Adapters are isolated per data domain in `pipeline/adapters/`:
 - planning
 - borough QoL (ONS APS personal well-being)
 
-Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics now prefer current asking prices for semi-detached homes with at least 3 bedrooms and 2 bathrooms, with recent sold-price fallback when live listing coverage is too thin. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means. Some other domains remain fixture/interpolated in this MVP.
+Current implementation uses `data/raw/` adapters so the app runs immediately with reproducible data files. Property metrics now prefer current asking prices for semi-detached homes with at least 3 bedrooms and 2 bathrooms, with recent sold-price fallback when live listing coverage is too thin. Pollution metrics use a dual-source approach: Greater London stations prefer LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields, while non-London stations use DEFRA LAQM catchment values. Borough QoL metrics are sourced from ONS APS local authority personal well-being means.
 
-School counts and school quality now both exclude private schools. Nearby primary and secondary totals and the school-quality composites come from state-funded-only DfE sources, and the school catchment is based on schools reachable within roughly 20 minutes drive from each area anchor.
+School counts and school quality now both exclude private schools. Nearby primary and secondary totals and the school-quality composites come from state-funded-only DfE sources, and the school catchment is based on schools reachable within an approximately 20-minute road-adjusted drive-time proxy from each area anchor.
 
 ## Data quality model (no fake precision)
 
 Each metric emitted to frontend includes:
 
 - `status` (`available`, `estimated`, `placeholder`, `missing`)
+- `provenance` (for example `direct_listing`, `direct_transactions`, `direct`, `interpolated`, `heuristic`)
 - `confidence` (0-1)
 - `methodologyNote`
 - `lastUpdated`
 
-Planning/development risk is intentionally marked as heuristic low-confidence unless a robust structured source is connected.
+Planning/development risk now comes from structured planning layers, but it is still a rule-based score rather than a direct planning-outcome feed.
 Borough QoL is sourced from ONS APS local authority well-being means and linked by normalized local authority name.
 
 In addition to per-metric metadata, a dataset-level audit runs on every build:
@@ -297,13 +299,13 @@ Pages deploys only after those checks pass in the deploy workflow.
 
 ## Default scoring weights
 
-- value for money: 30%
-- transport / commute: 15%
-- schools: 20%
+- value for money: 31%
+- transport / commute: 19%
+- schools: 22%
 - environment: 15%
-- crime / safety: 12.5%
-- proximity to Pinner: 5%
-- planning risk: 2.5%
+- crime / safety: 10%
+- Pinner access: 0% by default
+- planning risk: 3%
 
 UI weights always normalize to 100%.
 
@@ -350,6 +352,6 @@ UI weights always normalize to 100%.
 
 ## Notes and assumptions
 
-- Current pipeline is MVP with explicit confidence/status metadata and mixed source maturity across domains.
-- Commute and drive times are modelled proxies in this version.
+- Current pipeline is explicit about confidence, provenance, and mixed source maturity across domains.
+- Commute metrics are partially live-sourced but still rely on snapshot queries and explicit fallback heuristics where TfL does not return journeys.
 - Use this as an area-prioritization tool, then validate top areas with live market, school, transport, and planning checks.

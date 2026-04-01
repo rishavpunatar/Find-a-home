@@ -3,8 +3,11 @@ import { describe, expect, it } from 'vitest'
 import type { DerivedMicroArea } from '@/types/domain'
 
 import {
+  describeMetricEvidence,
+  getAreaDomainSourceCounts,
   getAreaDomainStatusCounts,
   getAreaDomainStatuses,
+  getAreaPropertyEvidenceLabel,
   getAreaTrustTier,
   isHighConfidenceArea,
 } from './dataQuality'
@@ -262,5 +265,79 @@ describe('dataQuality helpers', () => {
         dataConfidenceScore: 0.42,
       }),
     ).toBe('low')
+  })
+
+  it('summarizes provenance separately from status', () => {
+    const area = {
+      ...baseArea,
+      medianSemiDetachedPrice: {
+        ...baseArea.medianSemiDetachedPrice,
+        provenance: 'direct_transactions',
+      },
+      commuteTypicalMinutes: {
+        ...baseArea.commuteTypicalMinutes,
+        provenance: 'heuristic',
+      },
+      driveTimeToPinnerMinutes: {
+        ...baseArea.driveTimeToPinnerMinutes,
+        provenance: 'heuristic',
+      },
+      nearbyPrimaryCount: {
+        ...baseArea.nearbyPrimaryCount,
+        provenance: 'direct',
+      },
+      nearbySecondaryCount: {
+        ...baseArea.nearbySecondaryCount,
+        provenance: 'direct',
+      },
+      primaryQualityScore: {
+        ...baseArea.primaryQualityScore,
+        provenance: 'direct',
+      },
+      secondaryQualityScore: {
+        ...baseArea.secondaryQualityScore,
+        provenance: 'interpolated',
+      },
+      annualNo2: {
+        ...baseArea.annualNo2,
+        provenance: 'direct',
+      },
+      annualPm25: {
+        ...baseArea.annualPm25,
+        provenance: 'direct',
+      },
+      greenSpaceAreaKm2Within1km: {
+        ...baseArea.greenSpaceAreaKm2Within1km,
+        provenance: 'direct',
+      },
+      greenCoverPct: {
+        ...baseArea.greenCoverPct,
+        provenance: 'direct_blend',
+      },
+      nearestParkDistanceM: {
+        ...baseArea.nearestParkDistanceM,
+        provenance: 'direct',
+      },
+      crimeRatePerThousand: {
+        ...baseArea.crimeRatePerThousand,
+        provenance: 'direct',
+      },
+      planningRiskHeuristic: {
+        ...baseArea.planningRiskHeuristic,
+        provenance: 'direct',
+      },
+      boroughQolScore: {
+        ...baseArea.boroughQolScore,
+        provenance: 'direct',
+      },
+    }
+
+    expect(getAreaDomainSourceCounts(area)).toEqual({
+      sourceApplied: 6,
+      modelled: 2,
+      missing: 0,
+    })
+    expect(getAreaPropertyEvidenceLabel(area)).toBe('Recent sold-price fallback')
+    expect(describeMetricEvidence('direct_listing')).toBe('Current listings')
   })
 })

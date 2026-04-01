@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-03-31T23:51:54+01:00",
-  "count": 660,
-  "londonWideCount": 605,
+  "generatedAt": "2026-04-01T13:55:30+01:00",
+  "count": 534,
+  "londonWideCount": 534,
   "topMicroAreas": [
+    {
+      "microAreaId": "ma-wansta21",
+      "stationName": "Wanstead",
+      "score": 63.6
+    },
+    {
+      "microAreaId": "ma-harlef99",
+      "stationName": "Harlesden",
+      "score": 63.47
+    },
+    {
+      "microAreaId": "ma-black771",
+      "stationName": "Blackheath",
+      "score": 60.98
+    },
+    {
+      "microAreaId": "ma-tooti8a5",
+      "stationName": "Tooting",
+      "score": 60.85
+    },
+    {
+      "microAreaId": "ma-eastc7c4",
+      "stationName": "East Croydon",
+      "score": 60.27
+    },
+    {
+      "microAreaId": "ma-burnt91d",
+      "stationName": "Burnt Oak",
+      "score": 59.62
+    },
+    {
+      "microAreaId": "ma-periv4f7",
+      "stationName": "Perivale",
+      "score": 59.22
+    },
     {
       "microAreaId": "ma-wille265",
       "stationName": "Willesden Green",
-      "score": 53.18
+      "score": 59.15
     },
     {
-      "microAreaId": "ma-fulwe7c3",
-      "stationName": "Fulwell",
-      "score": 51.95
+      "microAreaId": "ma-stepn23c",
+      "stationName": "Stepney Green",
+      "score": 58.8
     },
     {
-      "microAreaId": "ma-ruisl4fe",
-      "stationName": "Ruislip Gardens",
-      "score": 51.69
-    },
-    {
-      "microAreaId": "ma-sri",
-      "stationName": "South Ruislip",
-      "score": 51.55
-    },
-    {
-      "microAreaId": "ma-sloug12c",
-      "stationName": "Slough",
-      "score": 51.54
-    },
-    {
-      "microAreaId": "ma-uxb",
-      "stationName": "Uxbridge",
-      "score": 51.27
-    },
-    {
-      "microAreaId": "ma-wembl900",
-      "stationName": "Wembley Stadium",
-      "score": 51.23
-    },
-    {
-      "microAreaId": "ma-wam",
-      "stationName": "Watford (Met)",
-      "score": 51.11
-    },
-    {
-      "microAreaId": "ma-amh",
-      "stationName": "Amersham",
-      "score": 50.83
-    },
-    {
-      "microAreaId": "ma-chesh3fd",
-      "stationName": "Chesham",
-      "score": 50.83
+      "microAreaId": "ma-canade89",
+      "stationName": "Canada Water",
+      "score": 58.7
     }
   ],
   "topLondonWideMicroAreas": [
     {
+      "microAreaId": "ma-wansta21",
+      "stationName": "Wanstead",
+      "score": 63.6
+    },
+    {
+      "microAreaId": "ma-harlef99",
+      "stationName": "Harlesden",
+      "score": 63.47
+    },
+    {
+      "microAreaId": "ma-black771",
+      "stationName": "Blackheath",
+      "score": 60.98
+    },
+    {
+      "microAreaId": "ma-tooti8a5",
+      "stationName": "Tooting",
+      "score": 60.85
+    },
+    {
+      "microAreaId": "ma-eastc7c4",
+      "stationName": "East Croydon",
+      "score": 60.27
+    },
+    {
+      "microAreaId": "ma-burnt91d",
+      "stationName": "Burnt Oak",
+      "score": 59.62
+    },
+    {
+      "microAreaId": "ma-periv4f7",
+      "stationName": "Perivale",
+      "score": 59.22
+    },
+    {
       "microAreaId": "ma-wille265",
       "stationName": "Willesden Green",
-      "score": 53.18
+      "score": 59.15
     },
     {
-      "microAreaId": "ma-fulwe7c3",
-      "stationName": "Fulwell",
-      "score": 51.95
+      "microAreaId": "ma-stepn23c",
+      "stationName": "Stepney Green",
+      "score": 58.8
     },
     {
-      "microAreaId": "ma-ruisl4fe",
-      "stationName": "Ruislip Gardens",
-      "score": 51.69
-    },
-    {
-      "microAreaId": "ma-sri",
-      "stationName": "South Ruislip",
-      "score": 51.55
-    },
-    {
-      "microAreaId": "ma-sloug12c",
-      "stationName": "Slough",
-      "score": 51.54
-    },
-    {
-      "microAreaId": "ma-wembl900",
-      "stationName": "Wembley Stadium",
-      "score": 51.23
-    },
-    {
-      "microAreaId": "ma-wam",
-      "stationName": "Watford (Met)",
-      "score": 51.11
-    },
-    {
-      "microAreaId": "ma-southa9c",
-      "stationName": "South Harrow",
-      "score": 50.23
-    },
-    {
-      "microAreaId": "ma-hemel124",
-      "stationName": "Hemel Hempstead",
-      "score": 50.17
-    },
-    {
-      "microAreaId": "ma-stone528",
-      "stationName": "Stonebridge Park",
-      "score": 50.15
+      "microAreaId": "ma-canade89",
+      "stationName": "Canada Water",
+      "score": 58.7
     }
   ]
 }

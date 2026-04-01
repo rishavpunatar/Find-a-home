@@ -12,7 +12,7 @@
   "station_search_radius_km": 45,
   "micro_area_walk_radius_m": 800,
   "candidate_filter": {
-    "max_commute_minutes": 90,
+    "max_commute_minutes": 70,
     "max_drive_minutes_to_pinner": 120
   },
   "dedupe": {
@@ -20,13 +20,13 @@
   },
   "destination_station": "Oxford Circus",
   "default_weights": {
-    "value": 30,
-    "transport": 15,
-    "schools": 20,
+    "value": 31,
+    "transport": 19,
+    "schools": 22,
     "environment": 15,
-    "crime": 12.5,
-    "proximity": 5,
-    "planningRisk": 2.5
+    "crime": 10,
+    "proximity": 0,
+    "planningRisk": 3
   },
   "last_updated_default": "2026-03-01"
 }

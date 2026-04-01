@@ -12,7 +12,7 @@ import { ShortlistTray } from './ShortlistTray'
 const navItems = [
   { to: '/', label: 'Overview' },
   { to: '/ranked', label: 'Ranked Table' },
-  { to: '/ranked-london', label: 'London <=60m' },
+  { to: '/ranked-london', label: 'Coverage View' },
   { to: '/map', label: 'Map' },
   { to: '/compare', label: 'Compare' },
 ]
@@ -40,10 +40,11 @@ export const AppLayout = () => {
                 Find a Home
               </p>
               <h1 className="text-xl font-semibold sm:text-2xl">
-                Station-Centred Micro-Area Ranking Around Pinner
+                Greater London Station Micro-Area Ranking
               </h1>
               <p className="text-sm text-slate-700">
-                Use this to shortlist areas around Pinner for a semi-detached house search.
+                Use this to shortlist Greater London station areas within a practical commute to
+                central London, then tighten Pinner access only if it matters to you.
               </p>
               <p className="text-sm text-slate-600">{generatedLabel}</p>
             </div>

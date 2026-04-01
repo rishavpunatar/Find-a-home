@@ -119,8 +119,8 @@ export const OverviewPage = () => {
     },
     {
       key: 'proximity-score',
-      title: 'Proximity score',
-      description: 'How much the proximity-to-Pinner component varies by area.',
+      title: 'Pinner access score',
+      description: 'How much optional access back to Pinner varies across the full area set.',
       values: ranked.map((area) => area.componentScores.proximity),
       barColor: '#f59e0b',
     },
@@ -154,7 +154,7 @@ export const OverviewPage = () => {
     {
       key: 'drive-to-pinner',
       title: 'Drive time to Pinner',
-      description: 'Spread of drive-time estimates from each micro-area back to Pinner.',
+      description: 'Spread of optional drive-time access back to Pinner across the full area set.',
       values: collectValues(ranked, (area) => area.driveTimeToPinnerMinutes.value),
       barColor: '#06b6d4',
       valueFormatter: (value: number) => `${formatNumber(value, 1)} min`,
@@ -183,14 +183,14 @@ export const OverviewPage = () => {
     {
       key: 'primary-quality-score',
       title: 'Primary quality score',
-      description: 'Current primary school quality proxy spread.',
+      description: 'Current primary school quality composite spread.',
       values: collectValues(ranked, (area) => area.primaryQualityScore.value),
       barColor: '#4d7c0f',
     },
     {
       key: 'secondary-quality-score',
       title: 'Secondary quality score',
-      description: 'Current secondary school quality proxy spread.',
+      description: 'Current secondary school quality composite spread.',
       values: collectValues(ranked, (area) => area.secondaryQualityScore.value),
       barColor: '#3f6212',
     },
@@ -217,7 +217,7 @@ export const OverviewPage = () => {
     {
       key: 'crime-rate',
       title: 'Crime rate per 1,000',
-      description: 'All-area spread of the crime-rate proxy.',
+      description: 'All-area spread of the current station-area crime rate.',
       values: collectValues(ranked, (area) => area.crimeRatePerThousand.value),
       barColor: '#0f766e',
       valueFormatter: (value: number) => formatNumber(value, 1),
@@ -239,20 +239,20 @@ export const OverviewPage = () => {
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-lg font-semibold">How to use this app</h2>
         <p className="mt-2 text-sm text-slate-700">
-          This tool helps you narrow down places around Pinner before you spend time on listings,
-          calls, and viewings.
+          This tool helps you narrow down Greater London station areas with workable commutes into
+          central London before you spend time on listings, calls, and viewings.
         </p>
         <ol className="mt-3 space-y-2 text-sm text-slate-700">
           <li>1. Start with the `Balanced` preset in the filter panel.</li>
-          <li>2. Switch to `High-confidence only` if you want a stricter shortlist.</li>
-          <li>3. Open `Ranked Table` to pin the areas you like most.</li>
-          <li>4. Use `Map` and `Compare` to sense-check the shortlist before property viewings.</li>
+          <li>2. Use the Pinner drive filter only if access back to Pinner matters to you.</li>
+          <li>3. Switch to `High-confidence only` if you want a stricter shortlist.</li>
+          <li>4. Open `Ranked Table` to pin areas, then use `Map` and `Compare` to sense-check them.</li>
         </ol>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total micro-areas analysed" value={String(ranked.length)} />
-        <StatCard label="London-wide candidates" value={String(londonWideCount)} />
+        <StatCard label="Primary-scope micro-areas" value={String(ranked.length)} />
+        <StatCard label="Coverage-view candidates" value={String(londonWideCount)} />
         <StatCard label="Passing current filters" value={String(filtered.length)} />
         <StatCard
           label="Average weighted score"
@@ -292,10 +292,13 @@ export const OverviewPage = () => {
             {' '}
             | Live mode: {dataset.verificationSummary.liveMode ? 'on' : 'off'}
           </p>
-          {typeof dataset.verificationSummary.verificationCompletenessScore === 'number' ? (
+          {typeof dataset.verificationSummary.sourceCoverageScore === 'number' ? (
             <p className="mt-1 text-xs text-slate-600">
-              Verification completeness score:{' '}
-              {(dataset.verificationSummary.verificationCompletenessScore * 100).toFixed(1)}%
+              Source coverage score:{' '}
+              {(dataset.verificationSummary.sourceCoverageScore * 100).toFixed(1)}%
+              {typeof dataset.verificationSummary.verificationStrengthScore === 'number'
+                ? ` · verification strength ${(dataset.verificationSummary.verificationStrengthScore * 100).toFixed(1)}%`
+                : ''}
             </p>
           ) : null}
           {dataset.config.stationUniverse ? (
@@ -334,7 +337,7 @@ export const OverviewPage = () => {
           Trust and coverage
         </h2>
         <p className="mt-2 text-sm text-amber-950">
-          The current dataset is intentionally estimate-heavy.{' '}
+          The current dataset combines source-backed and modelled domains.{' '}
           <span className="font-semibold">{highConfidenceCount}</span> of{' '}
           <span className="font-semibold">{ranked.length}</span> default-scope areas meet the
           app&apos;s high-confidence threshold today.
@@ -350,7 +353,8 @@ export const OverviewPage = () => {
               key={domain.key}
               className="rounded-full border border-amber-300 bg-white/70 px-3 py-1 text-xs text-amber-950"
             >
-              {coverageLabelMap[domain.key]}: {domain.availablePct}% direct
+              {coverageLabelMap[domain.key]}: {domain.sourceAppliedPct}% source-backed ·{' '}
+              {domain.availablePct}% populated
             </span>
           ))}
         </div>
@@ -402,20 +406,27 @@ export const OverviewPage = () => {
               <dd className="font-medium">{dataset.destinationStation}</dd>
             </div>
             <div className="flex justify-between gap-2">
-              <dt className="text-slate-600">Search radius around Pinner</dt>
-              <dd className="font-medium">{dataset.config.stationSearchRadiusKm} km</dd>
+              <dt className="text-slate-600">Primary scope</dt>
+              <dd className="font-medium">
+                {dataset.config.primaryScopeRegion ?? 'Greater London'} stations within{' '}
+                {dataset.config.maxCommuteMinutesForCandidate} min
+              </dd>
             </div>
             <div className="flex justify-between gap-2">
               <dt className="text-slate-600">Walk catchment</dt>
               <dd className="font-medium">{dataset.config.microAreaWalkRadiusM} m</dd>
             </div>
             <div className="flex justify-between gap-2">
-              <dt className="text-slate-600">Candidate commute limit</dt>
-              <dd className="font-medium">{dataset.config.maxCommuteMinutesForCandidate} min</dd>
+              <dt className="text-slate-600">Pinner radius prefilter</dt>
+              <dd className="font-medium">
+                {dataset.config.defaultUsesPinnerRadiusPrefilter ? 'On' : 'Off'}
+              </dd>
             </div>
             <div className="flex justify-between gap-2">
-              <dt className="text-slate-600">Candidate drive limit</dt>
-              <dd className="font-medium">{dataset.config.maxDriveMinutesForCandidate} min</dd>
+              <dt className="text-slate-600">Pinner drive prefilter</dt>
+              <dd className="font-medium">
+                {dataset.config.defaultUsesDriveToPinnerPrefilter ? 'On' : 'Off'}
+              </dd>
             </div>
             {dataset.config.boroughQolSource?.coveragePeriod ? (
               <div className="flex justify-between gap-2">

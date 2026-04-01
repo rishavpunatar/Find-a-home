@@ -13,7 +13,7 @@ const labelMap: Record<keyof Weights, string> = {
   schools: 'Schools',
   environment: 'Environment',
   crime: 'Crime / safety',
-  proximity: 'Proximity to Pinner',
+  proximity: 'Pinner access (optional)',
   planningRisk: 'Planning risk',
 }
 

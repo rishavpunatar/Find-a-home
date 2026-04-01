@@ -19,14 +19,14 @@ const metricOptions: Array<{ value: ColorMetric; label: string }> = [
   { value: 'schools', label: 'Schools' },
   { value: 'environment', label: 'Environment' },
   { value: 'crime', label: 'Crime' },
-  { value: 'proximity', label: 'Pinner proximity' },
+  { value: 'proximity', label: 'Pinner access' },
   { value: 'planningRisk', label: 'Planning risk' },
 ]
 
 const DEFAULT_VIEWPORT: MapViewport = {
-  lat: 51.594,
-  lon: -0.381,
-  zoom: 11,
+  lat: 51.515,
+  lon: -0.142,
+  zoom: 9,
 }
 
 const METRIC_KEYS = new Set(metricOptions.map((option) => option.value))

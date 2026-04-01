@@ -60,7 +60,7 @@ const RangeControl = ({
 
 const filterLabels: Record<keyof Filters, string> = {
   maxCommuteMinutes: 'Commute',
-  maxDriveMinutes: 'Drive to Pinner',
+  maxDriveMinutes: 'Pinner drive',
   minSchoolScore: 'School score',
   maxCrimeRatePerThousand: 'Crime',
   maxPm25: 'PM2.5',
@@ -112,13 +112,13 @@ export const FiltersPanel = () => {
   const scope: 'default' | 'londonWide' = isLondonWideTab ? 'londonWide' : 'default'
   const activeFilters = isLondonWideTab ? londonFilters : filters
   const activeQualityMode = isLondonWideTab ? londonQualityMode : qualityMode
-  const commuteCap = isLondonWideTab ? 60 : 70
+  const commuteCap = 70
   const displayedCommuteLimit = isLondonWideTab
     ? Math.min(activeFilters.maxCommuteMinutes, commuteCap)
     : activeFilters.maxCommuteMinutes
 
   const rankedOptions = isLondonWideTab
-    ? ({ scope: 'londonWide', maxCommuteMinutesCap: 60 } as const)
+    ? ({ scope: 'londonWide', maxCommuteMinutesCap: 70 } as const)
     : ({ scope: 'default' } as const)
 
   const { ranked, filtered } = useRankedData(rankedOptions)
@@ -226,9 +226,9 @@ export const FiltersPanel = () => {
       </div>
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
-          London {'<=60m'} mode is active: only commute is applied here. Drive-to-Pinner, school,
-          crime, PM2.5, green-cover, and price filters are ignored in this tab, and candidates are
-          not prefiltered by the Pinner search radius. Confidence filter still applies.
+          Coverage view is active: commute stays capped at 70 minutes while the broader table
+          relaxes most non-commute constraints. Use the main Ranked Table when you want the full
+          shortlist logic, including the optional Pinner-access filter.
         </p>
       ) : null}
 
@@ -324,14 +324,14 @@ export const FiltersPanel = () => {
           label="Max drive to Pinner"
           value={activeFilters.maxDriveMinutes}
           min={10}
-          max={80}
+          max={120}
           step={1}
           unit=" min"
           onChange={(next) => updateFilter('maxDriveMinutes', next, scope)}
           disabled={isLondonWideTab}
           exclusionLabel={
             isLondonWideTab
-              ? 'Ignored in London <=60m mode'
+              ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.drive, totalAreaCount)
           }
         />
@@ -346,7 +346,7 @@ export const FiltersPanel = () => {
           disabled={isLondonWideTab}
           exclusionLabel={
             isLondonWideTab
-              ? 'Ignored in London <=60m mode'
+              ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.school, totalAreaCount)
           }
         />
@@ -361,7 +361,7 @@ export const FiltersPanel = () => {
           disabled={isLondonWideTab}
           exclusionLabel={
             isLondonWideTab
-              ? 'Ignored in London <=60m mode'
+              ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.crime, totalAreaCount)
           }
         />
@@ -376,7 +376,7 @@ export const FiltersPanel = () => {
           disabled={isLondonWideTab}
           exclusionLabel={
             isLondonWideTab
-              ? 'Ignored in London <=60m mode'
+              ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.pm25, totalAreaCount)
           }
         />
@@ -391,7 +391,7 @@ export const FiltersPanel = () => {
           disabled={isLondonWideTab}
           exclusionLabel={
             isLondonWideTab
-              ? 'Ignored in London <=60m mode'
+              ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.green, totalAreaCount)
           }
         />
@@ -406,7 +406,7 @@ export const FiltersPanel = () => {
           disabled={isLondonWideTab}
           exclusionLabel={
             isLondonWideTab
-              ? 'Ignored in London <=60m mode'
+              ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.price, totalAreaCount)
           }
         />

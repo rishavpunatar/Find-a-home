@@ -237,7 +237,7 @@ describe('matchesFilters', () => {
           ...baseArea,
           commuteTypicalMinutes: {
             ...baseArea.commuteTypicalMinutes,
-            value: 66,
+            value: 71,
           },
         },
         DEFAULT_FILTERS,

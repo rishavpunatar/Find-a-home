@@ -1,8 +1,10 @@
 {
-  "generatedAt": "2026-03-31T23:52:01+01:00",
+  "generatedAt": "2026-04-01T13:55:30+01:00",
   "methodologyVersion": "2026.1",
-  "overallStatus": "attention_required",
-  "verificationCompletenessScore": 0.2495,
+  "overallStatus": "strong_source_coverage",
+  "sourceCoverageScore": 0.8802,
+  "verificationStrengthScore": 0.6617,
+  "verificationCompletenessScore": 0.8802,
   "sourceMatrix": {
     "property": {
       "status": "source_applied_not_live_verified",
@@ -11,16 +13,16 @@
       "note": "Station-level property metrics now prefer current asking prices for semi-detached homes with 3+ bedrooms and 2+ bathrooms from public locality search results. If live listing coverage is too thin, the pipeline falls back to recent HM Land Registry semi-detached transactions."
     },
     "transport": {
-      "status": "not_live_verified",
-      "primarySource": "TfL/National Rail journey-time feeds (planned)",
-      "secondarySource": "Google/other routing benchmark (planned)",
-      "note": "Current commute/frequency metrics are source-applied where available, with documented fallback estimates when APIs are unavailable."
+      "status": "source_applied_partially_live_verified",
+      "primarySource": "TfL Journey Planner + OSRM routing",
+      "secondarySource": "Station-profile fallback for uncovered routes",
+      "note": "Drive times now use direct OSRM routing where available, and public-transport commute metrics use TfL Journey Planner where it returns journeys. Remaining uncovered stations retain an explicit station-profile heuristic fallback."
     },
     "schools": {
-      "status": "not_live_verified",
+      "status": "source_applied_not_live_verified",
       "primarySource": "DfE GIAS open state-funded establishment exports",
       "secondarySource": "DfE Explore Education Statistics school performance data",
-      "note": "Nearby school counts and quality now use official state-funded DfE sources. Private schools are excluded from both the count and quality side, and the school catchment now reflects roughly 20 minutes drive from each area anchor. A secondary cross-check source has not yet been wired for live verification."
+      "note": "Nearby school counts and quality now use official state-funded DfE sources. Private schools are excluded from both the count and quality side, and the school catchment now reflects an approximately 20-minute road-adjusted drive-time proxy from each area anchor. A secondary cross-check source has not yet been wired for live verification."
     },
     "pollution": {
       "status": "source_applied_model_cross_checked",
@@ -29,16 +31,16 @@
       "note": "Greater London uses LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields. Non-London currently uses DEFRA 1km catchment values. Live monitor reconciliation is still pending."
     },
     "greenSpace": {
-      "status": "not_live_verified",
-      "primarySource": "OS Open Greenspace",
-      "secondarySource": "Local authority park inventories (planned)",
-      "note": "Current greenspace and park-distance values are fixture-backed proxies."
+      "status": "source_applied_not_live_verified",
+      "primarySource": "OpenStreetMap greenspace polygons via Overpass API",
+      "secondarySource": "OS Open Greenspace / local authority park inventories (planned)",
+      "note": "Greenspace area, cover, and nearest-park distance are now computed directly from station-level polygon geometry pulls rather than anchor-only fixture proxies."
     },
     "crime": {
-      "status": "live_cross_check_available",
-      "primarySource": "Fixture-based annualised crime-rate proxy",
+      "status": "source_applied_live_cross_check_available",
+      "primarySource": "data.police.uk custom-area street-level crime pulls",
       "secondarySource": "data.police.uk street-level monthly crime incidents",
-      "note": "Live cross-check compares relative station ordering from monthly incident counts. It is not a direct like-for-like per-1,000 replacement metric."
+      "note": "Crime rates now use direct custom-area pulls from recent police street-level incidents, annualised with the station population denominator. Live cross-check still compares the resulting ordering against the same underlying police feed for sanity checking."
     },
     "population": {
       "status": "not_live_verified",
@@ -47,10 +49,10 @@
       "note": "Current population denominators are fixture-based estimates."
     },
     "planning": {
-      "status": "low_confidence_placeholder",
-      "primarySource": "Heuristic placeholder",
-      "secondarySource": "planning.data.gov.uk + LA planning application feeds (planned)",
-      "note": "Planning risk remains explicitly low-confidence until authoritative structured planning layers are integrated and quality-assured."
+      "status": "source_applied_not_live_verified",
+      "primarySource": "planning.data.gov.uk structured geometry layers",
+      "secondarySource": "Local planning-application feeds (planned)",
+      "note": "Planning risk now uses brownfield-land pressure plus conservation/article-4 constraint coverage from authoritative planning.data.gov.uk geometry layers. It remains a rule-based score rather than a direct planning-permission outcome measure."
     },
     "wellbeing": {
       "status": "source_applied_not_live_verified",
@@ -61,82 +63,90 @@
   },
   "domainCoverage": {
     "default": {
-      "count": 660,
+      "count": 534,
       "domains": {
         "property": {
-          "availablePct": 10.76,
+          "availablePct": 51.87,
+          "sourceAppliedPct": 51.87,
           "statusCounts": {
-            "available": 71,
-            "estimated": 587,
+            "available": 277,
+            "estimated": 257,
             "placeholder": 0,
-            "missing": 2,
+            "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 0.0,
+          "availablePct": 12.17,
+          "sourceAppliedPct": 55.27,
           "statusCounts": {
-            "available": 0,
-            "estimated": 660,
+            "available": 65,
+            "estimated": 469,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "schools": {
-          "availablePct": 4.09,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 27,
-            "estimated": 298,
+            "available": 534,
+            "estimated": 0,
             "placeholder": 0,
-            "missing": 335,
+            "missing": 0,
             "other": 0
           }
         },
         "pollution": {
-          "availablePct": 79.85,
+          "availablePct": 99.81,
+          "sourceAppliedPct": 99.81,
           "statusCounts": {
-            "available": 527,
-            "estimated": 103,
+            "available": 533,
+            "estimated": 1,
             "placeholder": 0,
-            "missing": 30,
+            "missing": 0,
             "other": 0
           }
         },
         "greenSpace": {
-          "availablePct": 1.06,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 7,
-            "estimated": 318,
+            "available": 534,
+            "estimated": 0,
             "placeholder": 0,
-            "missing": 335,
+            "missing": 0,
             "other": 0
           }
         },
         "crime": {
-          "availablePct": 4.09,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 27,
-            "estimated": 298,
+            "available": 534,
+            "estimated": 0,
             "placeholder": 0,
-            "missing": 335,
+            "missing": 0,
             "other": 0
           }
         },
         "planning": {
-          "availablePct": 0.0,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 0,
-            "estimated": 323,
-            "placeholder": 337,
+            "available": 534,
+            "estimated": 0,
+            "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "wellbeing": {
-          "availablePct": 97.73,
+          "availablePct": 97.19,
+          "sourceAppliedPct": 97.19,
           "statusCounts": {
-            "available": 645,
+            "available": 519,
             "estimated": 0,
             "placeholder": 0,
             "missing": 15,
@@ -146,82 +156,90 @@
       }
     },
     "londonWide": {
-      "count": 605,
+      "count": 534,
       "domains": {
         "property": {
-          "availablePct": 10.41,
+          "availablePct": 51.87,
+          "sourceAppliedPct": 51.87,
           "statusCounts": {
-            "available": 63,
-            "estimated": 540,
+            "available": 277,
+            "estimated": 257,
             "placeholder": 0,
-            "missing": 2,
+            "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 0.0,
+          "availablePct": 12.17,
+          "sourceAppliedPct": 55.27,
           "statusCounts": {
-            "available": 0,
-            "estimated": 605,
+            "available": 65,
+            "estimated": 469,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "schools": {
-          "availablePct": 3.47,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 21,
-            "estimated": 283,
+            "available": 534,
+            "estimated": 0,
             "placeholder": 0,
-            "missing": 301,
+            "missing": 0,
             "other": 0
           }
         },
         "pollution": {
-          "availablePct": 86.45,
+          "availablePct": 99.81,
+          "sourceAppliedPct": 99.81,
           "statusCounts": {
-            "available": 523,
-            "estimated": 76,
+            "available": 533,
+            "estimated": 1,
             "placeholder": 0,
-            "missing": 6,
+            "missing": 0,
             "other": 0
           }
         },
         "greenSpace": {
-          "availablePct": 0.33,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 2,
-            "estimated": 302,
+            "available": 534,
+            "estimated": 0,
             "placeholder": 0,
-            "missing": 301,
+            "missing": 0,
             "other": 0
           }
         },
         "crime": {
-          "availablePct": 3.47,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 21,
-            "estimated": 283,
+            "available": 534,
+            "estimated": 0,
             "placeholder": 0,
-            "missing": 301,
+            "missing": 0,
             "other": 0
           }
         },
         "planning": {
-          "availablePct": 0.0,
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 0,
-            "estimated": 303,
-            "placeholder": 302,
+            "available": 534,
+            "estimated": 0,
+            "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "wellbeing": {
-          "availablePct": 97.52,
+          "availablePct": 97.19,
+          "sourceAppliedPct": 97.19,
           "statusCounts": {
-            "available": 590,
+            "available": 519,
             "estimated": 0,
             "placeholder": 0,
             "missing": 15,
@@ -234,7 +252,7 @@
   "crossChecks": {
     "crime": {
       "status": "skipped",
-      "method": "Spearman rank correlation between fixture annualised crime-rate proxy and data.police.uk monthly incidents annualised per 1,000 using local denominator.",
+      "method": "Spearman rank correlation between the stored station-area crime metric and a fresh data.police.uk monthly incident pull annualised per 1,000 using the local denominator.",
       "latestMonth": null,
       "stationSampleSize": 0,
       "spearmanRankCorrelation": null,
@@ -245,9 +263,11 @@
     }
   },
   "limitations": [
-    "Property, schools, greenspace, transport, and population are not yet live cross-verified in this MVP.",
+    "Source coverage score reflects direct-source provenance, not independently audited accuracy.",
+    "Verification strength score discounts domains that still lack a strong secondary benchmark or live reconciliation path.",
+    "Property, schools, greenspace, transport, planning, and population still lack a full independent secondary benchmark.",
     "Pollution has model-to-model cross-checks (LAEI vs DEFRA) but still lacks full monitor-network reconciliation.",
-    "Planning risk is intentionally low-confidence placeholder data until structured feeds are integrated.",
+    "Crime rates still depend on the station population denominator, which remains weaker than the new direct incident pull.",
     "Borough QoL currently uses ONS source application without a separate secondary cross-check.",
     "This report improves transparency but is not equivalent to a full production data-audit pipeline."
   ]

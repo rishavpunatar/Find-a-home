@@ -55,7 +55,7 @@ export const buildRankingExplanation = (area: MicroArea): string[] => {
     { key: 'schools', value: area.componentScores.schools, label: 'schools' },
     { key: 'environment', value: area.componentScores.environment, label: 'environment' },
     { key: 'crime', value: area.componentScores.crime, label: 'safety' },
-    { key: 'proximity', value: area.componentScores.proximity, label: 'proximity to Pinner' },
+    { key: 'proximity', value: area.componentScores.proximity, label: 'Pinner access' },
     { key: 'planningRisk', value: area.componentScores.planningRisk, label: 'planning risk' },
   ]
 

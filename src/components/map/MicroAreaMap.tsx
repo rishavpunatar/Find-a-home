@@ -41,7 +41,7 @@ const mapMetricLabel: Record<ColorMetric, string> = {
   schools: 'School score',
   environment: 'Environment score',
   crime: 'Crime score',
-  proximity: 'Pinner proximity score',
+  proximity: 'Pinner access score',
   planningRisk: 'Planning risk score',
 }
 

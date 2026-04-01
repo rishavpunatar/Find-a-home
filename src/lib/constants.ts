@@ -1,18 +1,18 @@
 import type { Filters, QualityMode, Weights } from '@/types/domain'
 
 export const DEFAULT_WEIGHTS: Weights = {
-  value: 30,
-  transport: 15,
-  schools: 20,
+  value: 31,
+  transport: 19,
+  schools: 22,
   environment: 15,
-  crime: 12.5,
-  proximity: 5,
-  planningRisk: 2.5,
+  crime: 10,
+  proximity: 0,
+  planningRisk: 3,
 }
 
 export const DEFAULT_FILTERS: Filters = {
-  maxCommuteMinutes: 65,
-  maxDriveMinutes: 40,
+  maxCommuteMinutes: 70,
+  maxDriveMinutes: 90,
   minSchoolScore: 48,
   maxCrimeRatePerThousand: 95,
   maxPm25: 14,
@@ -30,10 +30,10 @@ export const DEFAULT_QUALITY_MODE: QualityMode = 'all'
 export const FILTER_PRESETS = {
   focus: {
     label: 'Focus',
-    description: 'Tighter shortlist around stronger commute, schools, and confidence.',
+    description: 'Tighter shortlist with stronger commute, schools, and optional Pinner access.',
     filters: {
-      maxCommuteMinutes: 58,
-      maxDriveMinutes: 32,
+      maxCommuteMinutes: 60,
+      maxDriveMinutes: 50,
       minSchoolScore: 52,
       maxCrimeRatePerThousand: 88,
       maxPm25: 12.8,
@@ -52,7 +52,7 @@ export const FILTER_PRESETS = {
     description: 'Broad scan mode for discovery before tightening constraints.',
     filters: {
       maxCommuteMinutes: 70,
-      maxDriveMinutes: 60,
+      maxDriveMinutes: 120,
       minSchoolScore: 35,
       maxCrimeRatePerThousand: 110,
       maxPm25: 16,
@@ -69,8 +69,8 @@ export const FILTER_PRESET_ORDER: FilterPresetKey[] = ['focus', 'balanced', 'exp
 
 export const STORAGE_KEYS = {
   weights: 'find-a-home.weights',
-  filters: 'find-a-home.v2.filters.default',
-  filtersLondon: 'find-a-home.v2.filters.london',
+  filters: 'find-a-home.v3.filters.default',
+  filtersLondon: 'find-a-home.v3.filters.london',
   qualityMode: 'find-a-home.v2.quality.default',
   qualityModeLondon: 'find-a-home.v2.quality.london',
   pinned: 'find-a-home.pinned',
