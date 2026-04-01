@@ -10,6 +10,8 @@ import { useSettings } from '@/context/SettingsContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import { shortlistToCsv } from '@/lib/csv'
 import { DEFAULT_FILTERS, HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT } from '@/lib/constants'
+import { formatNumber } from '@/lib/format'
+import { totalSchoolAccessPerPopulation } from '@/lib/schoolAccess'
 
 const downloadCsv = (filename: string, data: string) => {
   const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' })
@@ -230,6 +232,76 @@ export const LondonWideRankedPage = () => {
             fill="#7c3aed"
             formatValue={(value) => value.toFixed(1)}
             getValue={(area) => area.componentScores.schools}
+            renderSelectedAreaDetail={(area) => {
+              const adjustedSchoolAccess =
+                area.nearbyPrimaryCount.value !== null && area.nearbySecondaryCount.value !== null
+                  ? totalSchoolAccessPerPopulation(
+                      area.nearbyPrimaryCount.value,
+                      area.nearbySecondaryCount.value,
+                      area.populationDenominator ?? null,
+                    )
+                  : null
+              const totalReachableSchools =
+                (area.nearbyPrimaryCount.value ?? 0) + (area.nearbySecondaryCount.value ?? 0)
+
+              return (
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Selected area
+                      </p>
+                      <p className="font-semibold text-slate-900">{area.stationName}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Overall school score
+                      </p>
+                      <p className="font-semibold text-slate-900">
+                        {area.componentScores.schools.toFixed(1)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                        School access per 10,000
+                      </p>
+                      <p className="font-semibold text-slate-900">
+                        {adjustedSchoolAccess === null ? 'N/A' : adjustedSchoolAccess.toFixed(1)}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                        Reachable schools
+                      </p>
+                      <p className="font-semibold text-slate-900">{formatNumber(totalReachableSchools, 0)}</p>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                        Reachable primary
+                      </p>
+                      <p className="font-semibold text-slate-900">
+                        {formatNumber(area.nearbyPrimaryCount.value, 0)}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2">
+                      <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                        Reachable secondary
+                      </p>
+                      <p className="font-semibold text-slate-900">
+                        {formatNumber(area.nearbySecondaryCount.value, 0)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                    Outstanding-school count is not currently tracked in this dataset. The current
+                    school model uses reachable state-funded school counts plus DfE attainment
+                    performance composites, not Ofsted inspection-history counts.
+                  </div>
+                </div>
+              )
+            }}
           />
         </article>
       </section>
