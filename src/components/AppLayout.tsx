@@ -6,7 +6,6 @@ import { useSettings } from '@/context/SettingsContext'
 import { formatDate } from '@/lib/format'
 
 import { SettingsPanel } from './SettingsPanel'
-import { ShortlistTray } from './ShortlistTray'
 
 const navItems = [
   { to: '/', label: 'Overview' },
@@ -87,11 +86,10 @@ export const AppLayout = () => {
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 pb-44 sm:px-6 lg:px-8">
+      <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
         {showWeightControls && settingsOpen ? <SettingsPanel onClose={() => setSettingsOpen(false)} /> : null}
         <Outlet />
       </main>
-      <ShortlistTray />
     </div>
   )
 }
