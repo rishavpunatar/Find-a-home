@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 
-import { isHighConfidenceArea } from '@/lib/dataQuality'
 import { filterAreas } from '@/lib/filters'
 import { rankMicroAreas } from '@/lib/scoring'
 import type { DerivedMicroArea, Filters } from '@/types/domain'
@@ -29,15 +28,12 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
     normalizedWeights,
     filters,
     londonFilters,
-    qualityMode,
-    londonQualityMode,
     pinnedIds,
     compareIds,
   } = useSettings()
 
   return useMemo(() => {
     const scopedFilters = options.scope === 'londonWide' ? londonFilters : filters
-    const scopedQualityMode = options.scope === 'londonWide' ? londonQualityMode : qualityMode
     const sourceFilters = options.overrideFilters ?? scopedFilters
     const effectiveFilters: Filters = {
       ...sourceFilters,
@@ -67,10 +63,7 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
       effectiveFilters,
       options.ignoreMaxDriveMinutes ? { ignoreMaxDriveMinutes: true } : {},
     )
-    const filtered =
-      scopedQualityMode === 'highConfidence'
-        ? filteredByConstraints.filter((area) => isHighConfidenceArea(area))
-        : filteredByConstraints
+    const filtered = filteredByConstraints
 
     const byId = new Map(filtered.map((area) => [area.microAreaId, area]))
 
@@ -93,7 +86,6 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
     compareIds,
     dataset,
     filters,
-    londonQualityMode,
     londonFilters,
     normalizedWeights,
     options.ignoreMaxDriveMinutes,
@@ -101,6 +93,5 @@ export const useRankedData = (options: RankedDataOptions = {}): RankedDataResult
     options.overrideFilters,
     options.scope,
     pinnedIds,
-    qualityMode,
   ])
 }

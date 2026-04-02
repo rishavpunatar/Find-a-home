@@ -9,7 +9,7 @@ import { useDataContext } from '@/context/DataContext'
 import { useSettings } from '@/context/SettingsContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import { shortlistToCsv } from '@/lib/csv'
-import { DEFAULT_FILTERS, HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT } from '@/lib/constants'
+import { DEFAULT_FILTERS } from '@/lib/constants'
 import { formatNumber } from '@/lib/format'
 import { schoolAccessPerPopulation } from '@/lib/schoolAccess'
 
@@ -27,19 +27,14 @@ const LONDON_WIDE_COMMUTE_CAP_MINUTES = 70
 
 export const LondonWideRankedPage = () => {
   const { dataset, loading, error } = useDataContext()
-  const { pinnedIds, togglePin, londonQualityMode, setQualityMode } = useSettings()
+  const { pinnedIds, togglePin } = useSettings()
   const [showTable, setShowTable] = useState(false)
   const relaxedTrendFilters = useMemo(
     () => ({
       ...DEFAULT_FILTERS,
       maxCommuteMinutes: LONDON_WIDE_COMMUTE_CAP_MINUTES,
       maxDriveMinutes: 180,
-      minSchoolScore: 0,
-      maxCrimeRatePerThousand: 10_000,
-      maxPm25: 1_000,
-      minGreenCoverPct: 0,
       maxMedianPrice: 10_000_000,
-      minDataConfidencePct: 0,
     }),
     [],
   )
@@ -84,8 +79,8 @@ export const LondonWideRankedPage = () => {
         </p>
         <p className="mt-1 text-xs text-slate-600">
           Effective scope in this page: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
-          School, crime, PM2.5, green cover, price, and Pinner-access constraints are deliberately
-          relaxed here. Use Filtered View when you want the stricter shortlist logic.
+          Price and optional Pinner-access constraints are deliberately relaxed here. Use Filtered
+          View when you want the stricter shortlist logic.
         </p>
         {dataset.config.londonWideSourceStationCount !== undefined &&
         dataset.config.londonWideExcludedByCommuteCount !== undefined ? (
@@ -109,26 +104,8 @@ export const LondonWideRankedPage = () => {
           <p className="text-sm text-slate-700">
             {filtered.length} micro-areas are currently in the trends universe.
           </p>
-          <p className="mt-1 text-xs text-slate-600">
-            High-confidence mode keeps only areas at or above {HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT}%
-            confidence.
-          </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {(['all', 'highConfidence'] as const).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              onClick={() => setQualityMode(mode, 'londonWide')}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                londonQualityMode === mode
-                  ? 'bg-teal-600 text-white'
-                  : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              {mode === 'all' ? 'All trend areas' : 'High-confidence only'}
-            </button>
-          ))}
           <button
             type="button"
             onClick={() => setShowTable((current) => !current)}
@@ -166,8 +143,8 @@ export const LondonWideRankedPage = () => {
           aim here is to show how the market actually clusters and where the main tensions sit.
         </p>
         <p className="mt-1 text-xs text-slate-600">
-          Tooltips show station names on hover. Switch to high-confidence mode if you want a
-          cleaner, lower-noise subset.
+          Tooltips show station names on hover. Use the filtered shortlist views when you want a
+          tighter decision set rather than a broad trend scan.
         </p>
       </section>
 

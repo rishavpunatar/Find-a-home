@@ -8,11 +8,10 @@ import {
   type ReactNode,
 } from 'react'
 
-import type { Filters, QualityMode, WeightingMode, Weights } from '@/types/domain'
+import type { Filters, WeightingMode, Weights } from '@/types/domain'
 
 import {
   DEFAULT_FILTERS,
-  DEFAULT_QUALITY_MODE,
   DEFAULT_WEIGHTS,
   FILTER_PRESETS,
   type FilterPresetKey,
@@ -29,8 +28,6 @@ interface SettingsContextValue {
   weightingMode: WeightingMode
   filters: Filters
   londonFilters: Filters
-  qualityMode: QualityMode
-  londonQualityMode: QualityMode
   pinnedIds: string[]
   compareIds: string[]
   updateWeight: (key: keyof Weights, nextValue: number) => void
@@ -44,7 +41,6 @@ interface SettingsContextValue {
   applyFilterPreset: (preset: FilterPresetKey, scope?: 'default' | 'londonWide') => void
   resetFilters: (scope?: 'default' | 'londonWide') => void
   resetRankingView: (scope?: 'default' | 'londonWide') => void
-  setQualityMode: (mode: QualityMode, scope?: 'default' | 'londonWide') => void
   togglePin: (id: string) => void
   toggleCompare: (id: string) => void
 }
@@ -117,13 +113,6 @@ const parseFilters = (key: typeof STORAGE_KEYS.filters | typeof STORAGE_KEYS.fil
   )
 }
 
-const parseQualityMode = (
-  key: typeof STORAGE_KEYS.qualityMode | typeof STORAGE_KEYS.qualityModeLondon,
-): QualityMode => {
-  const parsed = parseLocalStorageValue(key)
-  return parsed === 'highConfidence' ? 'highConfidence' : DEFAULT_QUALITY_MODE
-}
-
 const parseWeightingMode = (): WeightingMode => {
   const parsed = parseLocalStorageValue(STORAGE_KEYS.weightingMode)
   return parsed === 'varianceAwareDefaults' ? 'varianceAwareDefaults' : 'manual'
@@ -135,12 +124,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [weightingMode, setWeightingModeState] = useState<WeightingMode>(parseWeightingMode)
   const [filters, setFilters] = useState<Filters>(() => parseFilters(STORAGE_KEYS.filters))
   const [londonFilters, setLondonFilters] = useState<Filters>(() => parseFilters(STORAGE_KEYS.filtersLondon))
-  const [qualityMode, setQualityModeState] = useState<QualityMode>(() =>
-    parseQualityMode(STORAGE_KEYS.qualityMode),
-  )
-  const [londonQualityMode, setLondonQualityModeState] = useState<QualityMode>(() =>
-    parseQualityMode(STORAGE_KEYS.qualityModeLondon),
-  )
   const [pinnedIds, setPinnedIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.pinned))
   const [compareIds, setCompareIds] = useState<string[]>(() => parseArray(STORAGE_KEYS.compare))
 
@@ -172,14 +155,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.filtersLondon, JSON.stringify(londonFilters))
   }, [londonFilters])
-
-  useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEYS.qualityMode, JSON.stringify(qualityMode))
-  }, [qualityMode])
-
-  useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEYS.qualityModeLondon, JSON.stringify(londonQualityMode))
-  }, [londonQualityMode])
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEYS.pinned, JSON.stringify(pinnedIds))
@@ -245,23 +220,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     setFilters({ ...DEFAULT_FILTERS })
   }, [])
 
-  const setQualityMode = useCallback(
-    (mode: QualityMode, scope: 'default' | 'londonWide' = 'default') => {
-      if (scope === 'londonWide') {
-        setLondonQualityModeState(mode)
-        return
-      }
-      setQualityModeState(mode)
-    },
-    [],
-  )
-
   const resetRankingView = useCallback(
     (scope: 'default' | 'londonWide' = 'default') => {
       resetFilters(scope)
-      setQualityMode(DEFAULT_QUALITY_MODE, scope)
     },
-    [resetFilters, setQualityMode],
+    [resetFilters],
   )
 
   const togglePin = useCallback((id: string) => {
@@ -292,8 +255,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       weightingMode,
       filters,
       londonFilters,
-      qualityMode,
-      londonQualityMode,
       pinnedIds,
       compareIds,
       updateWeight,
@@ -303,7 +264,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       applyFilterPreset,
       resetFilters,
       resetRankingView,
-      setQualityMode,
       togglePin,
       toggleCompare,
     }),
@@ -311,18 +271,15 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       applyFilterPreset,
       compareIds,
       filters,
-      londonQualityMode,
       londonFilters,
       normalizedWeights,
       pinnedIds,
-      qualityMode,
       rawWeights,
       activeWeights,
       resetFilters,
       resetRankingView,
       resetWeights,
       setWeightingMode,
-      setQualityMode,
       toggleCompare,
       togglePin,
       updateFilter,

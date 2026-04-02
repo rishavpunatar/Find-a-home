@@ -166,15 +166,8 @@ export type WeightingMode = 'manual' | 'varianceAwareDefaults'
 export interface Filters {
   maxCommuteMinutes: number
   maxDriveMinutes: number
-  minSchoolScore: number
-  maxCrimeRatePerThousand: number
-  maxPm25: number
-  minGreenCoverPct: number
   maxMedianPrice: number
-  minDataConfidencePct: number
 }
-
-export type QualityMode = 'all' | 'highConfidence'
 
 export type SortDirection = 'asc' | 'desc'
 

@@ -1,18 +1,15 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import type { Filters, QualityMode } from '@/types/domain'
+import type { Filters } from '@/types/domain'
 
 import { useSettings } from '@/context/SettingsContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import {
   DEFAULT_FILTERS,
-  DEFAULT_QUALITY_MODE,
   FILTER_PRESETS,
   FILTER_PRESET_ORDER,
-  HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT,
 } from '@/lib/constants'
-import { isHighConfidenceArea } from '@/lib/dataQuality'
 import { matchesFilters } from '@/lib/filters'
 
 interface RangeControlProps {
@@ -61,12 +58,7 @@ const RangeControl = ({
 const filterLabels: Record<keyof Filters, string> = {
   maxCommuteMinutes: 'Commute',
   maxDriveMinutes: 'Pinner drive',
-  minSchoolScore: 'School score',
-  maxCrimeRatePerThousand: 'Crime',
-  maxPm25: 'PM2.5',
-  minGreenCoverPct: 'Green cover',
   maxMedianPrice: 'Median semi price',
-  minDataConfidencePct: 'Confidence',
 }
 
 const formatFilterValue = (key: keyof Filters, value: number): string => {
@@ -74,13 +66,6 @@ const formatFilterValue = (key: keyof Filters, value: number): string => {
     case 'maxCommuteMinutes':
     case 'maxDriveMinutes':
       return `${value} min`
-    case 'maxCrimeRatePerThousand':
-      return `${value} / 1,000`
-    case 'maxPm25':
-      return `${value.toFixed(1)} ug/m3`
-    case 'minGreenCoverPct':
-    case 'minDataConfidencePct':
-      return `${value}%`
     case 'maxMedianPrice':
       return `GBP ${value.toLocaleString('en-GB')}`
     default:
@@ -91,27 +76,18 @@ const formatFilterValue = (key: keyof Filters, value: number): string => {
 const excludedLabel = (count: number, total: number): string =>
   `${count.toLocaleString('en-GB')} excluded (${total.toLocaleString('en-GB')} total)`
 
-const qualityModeLabel: Record<QualityMode, string> = {
-  all: 'All ranked areas',
-  highConfidence: 'High-confidence only',
-}
-
 export const FiltersPanel = () => {
   const location = useLocation()
   const {
     filters,
     londonFilters,
-    qualityMode,
-    londonQualityMode,
     updateFilter,
     applyFilterPreset,
     resetRankingView,
-    setQualityMode,
   } = useSettings()
   const isLondonWideTab = location.pathname === '/ranked-london'
   const scope: 'default' | 'londonWide' = isLondonWideTab ? 'londonWide' : 'default'
   const activeFilters = isLondonWideTab ? londonFilters : filters
-  const activeQualityMode = isLondonWideTab ? londonQualityMode : qualityMode
   const commuteCap = 70
   const displayedCommuteLimit = isLondonWideTab
     ? Math.min(activeFilters.maxCommuteMinutes, commuteCap)
@@ -123,9 +99,7 @@ export const FiltersPanel = () => {
 
   const { ranked, filtered } = useRankedData(rankedOptions)
 
-  const hasCustomFilters =
-    JSON.stringify(activeFilters) !== JSON.stringify(DEFAULT_FILTERS) ||
-    activeQualityMode !== DEFAULT_QUALITY_MODE
+  const hasCustomFilters = JSON.stringify(activeFilters) !== JSON.stringify(DEFAULT_FILTERS)
   const totalAreaCount = ranked.length
 
   const exclusionCounts = useMemo(() => {
@@ -143,37 +117,15 @@ export const FiltersPanel = () => {
           (ranked[index]?.driveTimeToPinnerMinutes.value ?? Number.POSITIVE_INFINITY) <=
           activeFilters.maxDriveMinutes,
       ),
-      school: countExcluded((index) => (ranked[index]?.componentScores.schools ?? 0) >= activeFilters.minSchoolScore),
-      crime: countExcluded(
-        (index) =>
-          (ranked[index]?.crimeRatePerThousand.value ?? Number.POSITIVE_INFINITY) <=
-          activeFilters.maxCrimeRatePerThousand,
-      ),
-      pm25: countExcluded(
-        (index) =>
-          (ranked[index]?.annualPm25.value ?? Number.POSITIVE_INFINITY) <= activeFilters.maxPm25,
-      ),
-      green: countExcluded(
-        (index) => (ranked[index]?.greenCoverPct.value ?? Number.NEGATIVE_INFINITY) >= activeFilters.minGreenCoverPct,
-      ),
       price: countExcluded(
         (index) =>
           (ranked[index]?.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY) <=
           activeFilters.maxMedianPrice,
       ),
-      confidence: countExcluded(
-        (index) =>
-          ((ranked[index]?.dataConfidenceScore ?? 0) * 100) >= activeFilters.minDataConfidencePct,
-      ),
     }
   }, [
-    activeFilters.maxCrimeRatePerThousand,
     activeFilters.maxDriveMinutes,
     activeFilters.maxMedianPrice,
-    activeFilters.maxPm25,
-    activeFilters.minDataConfidencePct,
-    activeFilters.minGreenCoverPct,
-    activeFilters.minSchoolScore,
     displayedCommuteLimit,
     ranked,
   ])
@@ -194,14 +146,12 @@ export const FiltersPanel = () => {
   const presetCounts = useMemo(
     () =>
       FILTER_PRESET_ORDER.reduce<Record<string, number>>((counts, presetKey) => {
-        const baseCount = ranked.filter((area) => matchesFilters(area, FILTER_PRESETS[presetKey].filters))
-        counts[presetKey] =
-          activeQualityMode === 'highConfidence'
-            ? baseCount.filter((area) => isHighConfidenceArea(area)).length
-            : baseCount.length
+        counts[presetKey] = ranked.filter((area) =>
+          matchesFilters(area, FILTER_PRESETS[presetKey].filters),
+        ).length
         return counts
       }, {}),
-    [activeQualityMode, ranked],
+    [ranked],
   )
 
   return (
@@ -221,14 +171,14 @@ export const FiltersPanel = () => {
       </div>
       <div className="mb-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
         Showing <span className="font-semibold">{filtered.length}</span> of{' '}
-        <span className="font-semibold">{totalAreaCount}</span> ranked micro-areas in{' '}
-        <span className="font-semibold">{qualityModeLabel[activeQualityMode]}</span> mode.
+        <span className="font-semibold">{totalAreaCount}</span> ranked micro-areas after the
+        active shortlist constraints.
       </div>
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
           Coverage view is active: commute stays capped at 70 minutes while the broader table
-          relaxes most non-commute constraints. Use the main Ranked Table when you want the full
-          shortlist logic, including the optional Pinner-access filter.
+          relaxes the optional Pinner-drive and price constraints. Use the main Ranked Table when
+          you want the stricter shortlist view.
         </p>
       ) : null}
 
@@ -256,32 +206,6 @@ export const FiltersPanel = () => {
         </div>
       ) : null}
 
-      <div className="mb-3">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-          Trust mode
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {(['all', 'highConfidence'] as QualityMode[]).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              onClick={() => setQualityMode(mode, scope)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                activeQualityMode === mode
-                  ? 'bg-teal-600 text-white'
-                  : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              {qualityModeLabel[mode]}
-            </button>
-          ))}
-        </div>
-        <p className="mt-2 text-xs text-slate-600">
-          High-confidence mode keeps only areas at or above {HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT}%
-          confidence. Use it when you want a cleaner shortlist rather than maximum coverage.
-        </p>
-      </div>
-
       <div className="mb-3 flex flex-wrap gap-2">
         {activeFilterChips.length > 0 ? (
           activeFilterChips.map((chip) => (
@@ -298,18 +222,9 @@ export const FiltersPanel = () => {
         ) : (
           <p className="text-xs text-slate-500">No active filter overrides.</p>
         )}
-        {activeQualityMode !== DEFAULT_QUALITY_MODE ? (
-          <button
-            type="button"
-            onClick={() => setQualityMode(DEFAULT_QUALITY_MODE, scope)}
-            className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs text-amber-900 hover:bg-amber-100"
-          >
-            Trust mode: {qualityModeLabel[activeQualityMode]} ✕
-          </button>
-        ) : null}
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         <RangeControl
           label="Max commute"
           value={displayedCommuteLimit}
@@ -336,66 +251,6 @@ export const FiltersPanel = () => {
           }
         />
         <RangeControl
-          label="Min school score"
-          value={activeFilters.minSchoolScore}
-          min={0}
-          max={100}
-          step={1}
-          unit=""
-          onChange={(next) => updateFilter('minSchoolScore', next, scope)}
-          disabled={isLondonWideTab}
-          exclusionLabel={
-            isLondonWideTab
-              ? 'Relaxed in coverage view'
-              : excludedLabel(exclusionCounts.school, totalAreaCount)
-          }
-        />
-        <RangeControl
-          label="Max crime / 1,000"
-          value={activeFilters.maxCrimeRatePerThousand}
-          min={20}
-          max={160}
-          step={1}
-          unit=""
-          onChange={(next) => updateFilter('maxCrimeRatePerThousand', next, scope)}
-          disabled={isLondonWideTab}
-          exclusionLabel={
-            isLondonWideTab
-              ? 'Relaxed in coverage view'
-              : excludedLabel(exclusionCounts.crime, totalAreaCount)
-          }
-        />
-        <RangeControl
-          label="Max PM2.5"
-          value={activeFilters.maxPm25}
-          min={5}
-          max={20}
-          step={0.1}
-          unit=" ug/m3"
-          onChange={(next) => updateFilter('maxPm25', next, scope)}
-          disabled={isLondonWideTab}
-          exclusionLabel={
-            isLondonWideTab
-              ? 'Relaxed in coverage view'
-              : excludedLabel(exclusionCounts.pm25, totalAreaCount)
-          }
-        />
-        <RangeControl
-          label="Min green cover"
-          value={activeFilters.minGreenCoverPct}
-          min={0}
-          max={80}
-          step={1}
-          unit="%"
-          onChange={(next) => updateFilter('minGreenCoverPct', next, scope)}
-          disabled={isLondonWideTab}
-          exclusionLabel={
-            isLondonWideTab
-              ? 'Relaxed in coverage view'
-              : excludedLabel(exclusionCounts.green, totalAreaCount)
-          }
-        />
-        <RangeControl
           label="Max median semi price"
           value={activeFilters.maxMedianPrice}
           min={300000}
@@ -409,16 +264,6 @@ export const FiltersPanel = () => {
               ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.price, totalAreaCount)
           }
-        />
-        <RangeControl
-          label="Min confidence"
-          value={activeFilters.minDataConfidencePct}
-          min={0}
-          max={100}
-          step={1}
-          unit="%"
-          onChange={(next) => updateFilter('minDataConfidencePct', next, scope)}
-          exclusionLabel={excludedLabel(exclusionCounts.confidence, totalAreaCount)}
         />
       </div>
     </section>

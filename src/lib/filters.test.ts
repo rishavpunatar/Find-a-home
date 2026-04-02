@@ -234,14 +234,14 @@ describe('matchesFilters', () => {
     ).toBe(false)
   })
 
-  it('returns false when minimum school score is not met', () => {
+  it('returns false when price exceeds the threshold', () => {
     expect(
       matchesFilters(
         {
           ...baseArea,
-          componentScores: {
-            ...baseArea.componentScores,
-            schools: 40,
+          medianSemiDetachedPrice: {
+            ...baseArea.medianSemiDetachedPrice,
+            value: 1_200_000,
           },
         },
         DEFAULT_FILTERS,
@@ -270,17 +270,17 @@ describe('matchesFilters', () => {
     ).toBe(true)
   })
 
-  it('returns false when confidence is below minimum threshold', () => {
+  it('returns false when drive time exceeds the threshold', () => {
     expect(
       matchesFilters(
         {
           ...baseArea,
-          dataConfidenceScore: 0.42,
+          driveTimeToPinnerMinutes: {
+            ...baseArea.driveTimeToPinnerMinutes,
+            value: 121,
+          },
         },
-        {
-          ...DEFAULT_FILTERS,
-          minDataConfidencePct: 60,
-        },
+        DEFAULT_FILTERS,
       ),
     ).toBe(false)
   })

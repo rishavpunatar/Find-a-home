@@ -2,8 +2,6 @@ import type { DerivedMicroArea, Filters, MicroArea } from '@/types/domain'
 
 const isAtMost = (value: number | null, max: number): boolean => value !== null && value <= max
 
-const isAtLeast = (value: number | null, min: number): boolean => value !== null && value >= min
-
 interface FilterOptions {
   ignoreMaxDriveMinutes?: boolean
 }
@@ -24,27 +22,7 @@ export const matchesFilters = (
     return false
   }
 
-  if (!isAtLeast(area.componentScores.schools, filters.minSchoolScore)) {
-    return false
-  }
-
-  if (!isAtMost(area.crimeRatePerThousand.value, filters.maxCrimeRatePerThousand)) {
-    return false
-  }
-
-  if (!isAtMost(area.annualPm25.value, filters.maxPm25)) {
-    return false
-  }
-
-  if (!isAtLeast(area.greenCoverPct.value, filters.minGreenCoverPct)) {
-    return false
-  }
-
   if (!isAtMost(area.medianSemiDetachedPrice.value, filters.maxMedianPrice)) {
-    return false
-  }
-
-  if (!isAtLeast(area.dataConfidenceScore * 100, filters.minDataConfidencePct)) {
     return false
   }
 

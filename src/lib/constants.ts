@@ -1,4 +1,4 @@
-import type { Filters, QualityMode, Weights } from '@/types/domain'
+import type { Filters, Weights } from '@/types/domain'
 
 export const DEFAULT_WEIGHTS: Weights = {
   value: 32,
@@ -11,33 +11,21 @@ export const DEFAULT_WEIGHTS: Weights = {
 export const DEFAULT_FILTERS: Filters = {
   maxCommuteMinutes: 70,
   maxDriveMinutes: 90,
-  minSchoolScore: 48,
-  maxCrimeRatePerThousand: 95,
-  maxPm25: 14,
-  minGreenCoverPct: 16,
   maxMedianPrice: 950000,
-  minDataConfidencePct: 45,
 }
 
 export const MAX_COMPARE_ITEMS = 5
 
 export const HIGH_CONFIDENCE_MIN_CONFIDENCE_PCT = 65
 
-export const DEFAULT_QUALITY_MODE: QualityMode = 'all'
-
 export const FILTER_PRESETS = {
   focus: {
     label: 'Focus',
-    description: 'Tighter shortlist with stronger commute, schools, and cleaner core ranking signals.',
+    description: 'Tighter shortlist with stronger commute, access back to Pinner, and price discipline.',
     filters: {
       maxCommuteMinutes: 60,
       maxDriveMinutes: 50,
-      minSchoolScore: 52,
-      maxCrimeRatePerThousand: 88,
-      maxPm25: 12.8,
-      minGreenCoverPct: 19,
       maxMedianPrice: 900000,
-      minDataConfidencePct: 52,
     },
   },
   balanced: {
@@ -51,12 +39,7 @@ export const FILTER_PRESETS = {
     filters: {
       maxCommuteMinutes: 70,
       maxDriveMinutes: 120,
-      minSchoolScore: 35,
-      maxCrimeRatePerThousand: 110,
-      maxPm25: 16,
-      minGreenCoverPct: 10,
       maxMedianPrice: 1200000,
-      minDataConfidencePct: 35,
     },
   },
 } as const
@@ -68,10 +51,8 @@ export const FILTER_PRESET_ORDER: FilterPresetKey[] = ['focus', 'balanced', 'exp
 export const STORAGE_KEYS = {
   weights: 'find-a-home.v2.weights',
   weightingMode: 'find-a-home.v2.weighting-mode',
-  filters: 'find-a-home.v3.filters.default',
-  filtersLondon: 'find-a-home.v3.filters.london',
-  qualityMode: 'find-a-home.v2.quality.default',
-  qualityModeLondon: 'find-a-home.v2.quality.london',
+  filters: 'find-a-home.v4.filters.default',
+  filtersLondon: 'find-a-home.v4.filters.london',
   pinned: 'find-a-home.pinned',
   compare: 'find-a-home.compare',
 } as const
