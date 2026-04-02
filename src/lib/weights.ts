@@ -42,7 +42,7 @@ const scoreMetricValues = (
 ): number[] => areas.map((area) => area.componentScores[key]).filter((value) => Number.isFinite(value))
 
 const componentMetricGroups = {
-  value: (area: MicroArea) => [area.medianSemiDetachedPrice, area.commuteTypicalMinutes],
+  value: (area: MicroArea) => [area.priceScore],
   transport: (area: MicroArea) => [
     area.commuteTypicalMinutes,
     area.commutePeakMinutes,

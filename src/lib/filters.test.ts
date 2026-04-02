@@ -43,16 +43,8 @@ const baseArea: DerivedMicroArea = {
     methodologyNote: 'Test',
     lastUpdated: '2026-03-01',
   },
-  affordabilityScore: {
+  priceScore: {
     value: 66,
-    unit: 'score',
-    status: 'available',
-    confidence: 0.8,
-    methodologyNote: 'Test',
-    lastUpdated: '2026-03-01',
-  },
-  valueForMoneyScore: {
-    value: 70,
     unit: 'score',
     status: 'available',
     confidence: 0.8,

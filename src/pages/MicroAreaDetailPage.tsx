@@ -180,6 +180,15 @@ export const MicroAreaDetailPage = () => {
         </p>
         <div className="mt-4 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
           <MetricRow
+            label="Price score"
+            value={formatNumber(area.priceScore.value, 1)}
+            status={area.priceScore.status}
+            confidence={area.priceScore.confidence}
+            provenance={area.priceScore.provenance}
+            note={area.priceScore.methodologyNote}
+            updated={area.priceScore.lastUpdated}
+          />
+          <MetricRow
             label="Median semi-detached price"
             value={formatCurrency(area.medianSemiDetachedPrice.value)}
             status={area.medianSemiDetachedPrice.status}

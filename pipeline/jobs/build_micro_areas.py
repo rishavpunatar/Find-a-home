@@ -365,71 +365,6 @@ def synthesize_crime_breakdown(
     return {category: round(max(0.0, crime_rate * proportion), 1) for category, proportion in proportions.items()}
 
 
-def widen_green_cover_pct(
-    target: StationRecord,
-    stations_for_scope: list[StationRecord],
-    green_records_by_station: dict[str, dict[str, Any] | None],
-    walk_catchment_radius_m: int,
-) -> dict[str, Any] | None:
-    base_record = green_records_by_station.get(target.station_code)
-    if not base_record:
-        return None
-
-    expanded_radius_m = walk_catchment_radius_m * GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER
-    weighted_cover_sum = 0.0
-    weighted_confidence_sum = 0.0
-    weight_total = 0.0
-    sample_count = 0
-
-    for neighbour in stations_for_scope:
-        neighbour_record = green_records_by_station.get(neighbour.station_code)
-        if not neighbour_record:
-            continue
-
-        neighbour_cover = neighbour_record.get('green_cover_pct')
-        if neighbour_cover is None:
-            continue
-
-        distance_m = haversine_distance_m(target.coordinate, neighbour.coordinate)
-        if distance_m > expanded_radius_m:
-            continue
-
-        weight = 1.0 / (max(distance_m, 80.0) ** 1.2)
-        weighted_cover_sum += float(neighbour_cover) * weight
-        weighted_confidence_sum += float(neighbour_record.get('confidence', 0.6)) * weight
-        weight_total += weight
-        sample_count += 1
-
-    if weight_total == 0:
-        return base_record
-
-    wider_cover = weighted_cover_sum / weight_total
-    wider_confidence = weighted_confidence_sum / weight_total
-    confidence = clamp(
-        wider_confidence * (0.9 + 0.08 * min(1.0, sample_count / 6.0)),
-        0.25,
-        0.9,
-    )
-
-    base_status = str(base_record.get('status', 'estimated'))
-    base_provenance = str(base_record.get('provenance', 'direct'))
-    status = base_status if sample_count <= 1 else ('available' if base_status == 'available' else 'estimated')
-    catchment_multiplier = int(GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER)
-
-    return {
-        **base_record,
-        'green_cover_pct': round(float(wider_cover), 3),
-        'status': status,
-        'confidence': round(float(confidence), 3),
-        'provenance': 'direct_blend' if base_provenance == 'direct' and sample_count > 1 else base_provenance,
-        'methodology_note': (
-            'Green-cover percentage uses a wider neighbourhood proxy: distance-weighted mean of '
-            f'nearby station green-cover values within {int(expanded_radius_m)}m '
-            f'({catchment_multiplier}x the walk catchment radius).'
-        ),
-    }
-
-
 def transport_metric_or_fallback(
     station: StationRecord,
     transport_records: dict[str, dict[str, Any]],
@@ -558,9 +493,7 @@ def score_components(
         if transport and transport.get('interchange_count') is not None
         else float(station.interchange_count)
     )
-    affordability = number_or_default(price, 'affordability_score', 45)
-    value_for_money = number_or_default(price, 'value_for_money_score', 45)
-    value_score = mean([affordability, value_for_money])
+    value_score = number_or_default(price, 'price_score', 45)
 
     commute_score = inverse_score(commute_typical, best=20, worst=60)
     peak_score = inverse_score(commute_peak, best=22, worst=70)
@@ -622,7 +555,7 @@ def confidence_score(metrics: list[NumericMetric], overlap_conf: float) -> float
 
 def ranking_rules(component_scores: dict[str, float]) -> list[str]:
     labels = {
-        'value': 'value-for-money',
+        'value': 'price',
         'transport': 'transport',
         'schools': 'school quality and access',
         'environment': 'air quality and green space',
@@ -796,8 +729,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'average_semi_price',
                     'median_semi_price',
                     'price_trend_pct_5y',
-                    'affordability_score',
-                    'value_for_money_score',
+                    'price_score',
                 ],
                 'Estimated by inverse-distance interpolation from nearby station asking-price metrics where direct current listing samples are unavailable.',
             )
@@ -868,27 +800,13 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 'wellbeing': wellbeing_record,
             }
 
-        base_green_records = {
-            station_code: records['green']
-            for station_code, records in resolved_records_by_station.items()
-        }
-        widened_green_records = {
-            station.station_code: widen_green_cover_pct(
-                station,
-                stations_for_scope,
-                base_green_records,
-                config.micro_area_walk_radius_m,
-            )
-            for station in stations_for_scope
-        }
-
         for station in stations_for_scope:
             station_records = resolved_records_by_station.get(station.station_code, {})
             transport_record = station_records.get('transport')
             property_record = station_records.get('property')
             school_record = station_records.get('school')
             pollution_record = station_records.get('pollution')
-            green_record = widened_green_records.get(station.station_code) or station_records.get('green')
+            green_record = station_records.get('green')
             crime_record = station_records.get('crime')
             population_record = station_records.get('population')
             wellbeing_record = station_records.get('wellbeing')
@@ -932,18 +850,11 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     note='Approximate 5-year trend in sold price levels.',
                     last_updated=property_last_updated,
                 ),
-                'affordabilityScore': metric_from_record(
+                'priceScore': metric_from_record(
                     property_record,
-                    'affordability_score',
+                    'price_score',
                     unit='score',
-                    note='Affordability proxy from local median prices and commuting context.',
-                    last_updated=property_last_updated,
-                ),
-                'valueForMoneyScore': metric_from_record(
-                    property_record,
-                    'value_for_money_score',
-                    unit='score',
-                    note='Composite balancing median semi prices against commute and schools.',
+                    note='Simple inverse price score based only on the local median semi-detached price: lower prices score higher and higher prices score lower.',
                     last_updated=property_last_updated,
                 ),
                 'commuteTypicalMinutes': metric_from_record(
@@ -1065,7 +976,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     green_record,
                     'green_cover_pct',
                     unit='%',
-                    note='Estimated green cover fraction using a wider (2x) catchment neighborhood proxy.',
+                    note='Direct green-cover fraction measured within a double-radius station greenspace catchment.',
                     last_updated=green_last_updated,
                 ),
                 'nearestParkDistanceM': metric_from_record(
@@ -1079,7 +990,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     crime_record,
                     'crime_rate_per_1000',
                     unit='per_1000',
-                    note='Annualised recent police incidents per 1,000 residents using direct data.police.uk station-area pulls and the local denominator.',
+                    note='Annualised station-area crime rate per 1,000 residents using all currently available data.police.uk monthly street-level archive snapshots from 2023 onward and the local denominator.',
                     last_updated=crime_last_updated,
                 ),
                 'boroughQolScore': metric_from_record(

@@ -225,10 +225,9 @@ export const DataMethodologyGuide = ({
               : 'How ranked axes are determined'}
           </h2>
           <div className="mt-3 space-y-3 text-sm text-slate-700">
-            <DetailBlock title="Value axis">
+            <DetailBlock title="Price axis">
               <p>
-                The value axis is the property-led part of the model. It combines the affordability
-                score and the value-for-money score, both of which start from the target home type:
+                The price axis starts from the target home type:
                 semi-detached homes with at least 3 bedrooms and 2 bathrooms.
               </p>
               <p>
@@ -244,6 +243,10 @@ export const DataMethodologyGuide = ({
                 If live listing coverage is still too thin, the pipeline falls back to recent HM
                 Land Registry sold-price data, first using the tighter local catchment and then an
                 explicitly lower-confidence extended nearby area.
+              </p>
+              <p>
+                The ranking score for this axis is a simple inverse transform of the local median
+                semi-detached price. Lower prices score higher. Higher prices score lower.
               </p>
               <p>
                 <span className="font-semibold">Source:</span> OnTheMarket current locality search
@@ -343,7 +346,9 @@ export const DataMethodologyGuide = ({
               </p>
               <p>
                 On the green side, the app uses OpenStreetMap greenspace polygons via Overpass to
-                estimate green cover, nearby green-space area, and park access.
+                estimate green cover, nearby green-space area, and park access. Green cover is
+                measured over a wider double-radius station buffer so the score reflects the
+                broader neighborhood canopy rather than only the immediate 800m catchment.
               </p>
               <p>
                 <span className="font-semibold">Source:</span> DEFRA UK-AIR PCM modelled
@@ -364,6 +369,10 @@ export const DataMethodologyGuide = ({
                 The app converts that into a higher-is-better safety score inside the ranking
                 model, but the raw table value is still shown in the more intuitive per-1,000
                 format.
+              </p>
+              <p>
+                The raw rate is now averaged across all currently available monthly police snapshots
+                from 2023 onward, rather than just a short recent window.
               </p>
               <p>
                 <span className="font-semibold">Source:</span> direct data.police.uk custom-area

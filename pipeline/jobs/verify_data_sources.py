@@ -152,17 +152,19 @@ def source_matrix() -> dict[str, dict[str, str]]:
             'secondarySource': 'OS Open Greenspace / local authority park inventories (planned)',
             'note': (
                 'Greenspace area, cover, and nearest-park distance are now computed directly from station-level '
-                'polygon geometry pulls rather than anchor-only fixture proxies.'
+                'polygon geometry pulls rather than anchor-only fixture proxies. Green cover now uses a direct '
+                'double-radius neighbourhood buffer instead of a nearby-station blend.'
             ),
         },
         'crime': {
             'status': 'source_applied_live_cross_check_available',
-            'primarySource': 'data.police.uk custom-area street-level crime pulls',
-            'secondarySource': 'data.police.uk street-level monthly crime incidents',
+            'primarySource': 'data.police.uk monthly street-level crime archive',
+            'secondarySource': 'data.police.uk custom-area live street-level incident API',
             'note': (
-                'Crime rates now use direct custom-area pulls from recent police street-level incidents, '
-                'annualised with the station population denominator. Live cross-check still compares the '
-                'resulting ordering against the same underlying police feed for sanity checking.'
+                'Crime rates now use the official monthly data.police.uk archive, averaged across all currently '
+                'available street-level incident months from 2023 onward and annualised with the station '
+                'population denominator. Live cross-check still compares the stored ordering against the police '
+                'API for sanity checking.'
             ),
         },
         'population': {

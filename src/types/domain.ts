@@ -46,8 +46,7 @@ export interface MicroArea {
   averageSemiDetachedPrice: NumericMetric
   medianSemiDetachedPrice: NumericMetric
   semiPriceTrendPct5y: NumericMetric
-  affordabilityScore: NumericMetric
-  valueForMoneyScore: NumericMetric
+  priceScore: NumericMetric
 
   walkCatchmentAssumption: string
   commuteDestination: string

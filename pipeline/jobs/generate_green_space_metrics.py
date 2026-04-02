@@ -34,7 +34,8 @@ GREENSPACE_QUERY = """
 out geom;
 """
 
-BUFFER_METERS = 1000.0
+AREA_BUFFER_METERS = 1000.0
+GREEN_COVER_BUFFER_METERS = 1600.0
 BBOX_MARGIN_DEGREES = 0.04
 WGS84_TO_OSGB = Transformer.from_crs('EPSG:4326', 'EPSG:27700', always_xy=True)
 
@@ -144,20 +145,25 @@ def station_green_record(
     tree: STRtree,
     geometries: list[Polygon],
 ) -> dict[str, Any]:
-    buffer_1km = point.buffer(BUFFER_METERS)
-    nearby_indexes = tree.query(buffer_1km)
+    buffer_1km = point.buffer(AREA_BUFFER_METERS)
+    green_cover_buffer = point.buffer(GREEN_COVER_BUFFER_METERS)
+    nearby_indexes = tree.query(green_cover_buffer)
     nearby_geometries = [geometries[index] for index in nearby_indexes]
 
     if nearby_geometries:
         greenspace_union = unary_union(nearby_geometries)
         greenspace_area_m2 = float(greenspace_union.intersection(buffer_1km).area)
+        green_cover_area_m2 = float(greenspace_union.intersection(green_cover_buffer).area)
     else:
         greenspace_area_m2 = 0.0
+        green_cover_area_m2 = 0.0
 
     nearest_index = tree.nearest(point)
     nearest_geometry = None if nearest_index is None else geometries[int(nearest_index)]
     nearest_distance = None if nearest_geometry is None else float(point.distance(nearest_geometry))
-    green_cover_pct = (greenspace_area_m2 / float(buffer_1km.area)) * 100.0 if buffer_1km.area else 0.0
+    green_cover_pct = (
+        (green_cover_area_m2 / float(green_cover_buffer.area)) * 100.0 if green_cover_buffer.area else 0.0
+    )
 
     return {
         'green_space_area_km2_within_1km': round(greenspace_area_m2 / 1_000_000.0, 3),
@@ -169,8 +175,9 @@ def station_green_record(
         'methodology_note': (
             'Direct greenspace geometry calculation from OpenStreetMap polygons pulled via the Overpass API. '
             'Greenspace set includes parks, nature reserves, recreation grounds, and village greens. '
-            'Area is measured as intersecting greenspace within a 1km station buffer, and nearest park distance '
-            'is measured from the station centroid to the nearest mapped greenspace boundary.'
+            'Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within '
+            'a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance is measured from '
+            'the station centroid to the nearest mapped greenspace boundary.'
         ),
     }
 

@@ -18,17 +18,17 @@ export interface RankingAxisDefinition {
 export const rankingAxes: RankingAxisDefinition[] = [
   {
     key: 'value',
-    label: 'Value',
-    rankingExplanationLabel: 'value',
-    mapLabel: 'Value score',
-    distributionTitle: 'Value score',
-    distributionDescription: 'Spread of the value-for-money axis across all areas.',
+    label: 'Price',
+    rankingExplanationLabel: 'price',
+    mapLabel: 'Price score',
+    distributionTitle: 'Price score',
+    distributionDescription: 'Spread of the price axis across all areas.',
     chartColor: '#0d9488',
     detail:
-      'A higher value score means the target home type looks cheaper relative to the rest of the search universe once price and commute are both considered.',
+      'A higher price score means the target home type looks cheaper relative to the rest of the search universe.',
     recipe:
-      'This starts from the property layer. The app takes the affordability score and the value-for-money score, then averages them into one 0-100 value score.',
-    formula: 'Value score = average of affordability score and value-for-money score',
+      'This starts from the property layer. The app converts the local median semi-detached price into one simple 0-100 score. Lower prices score higher; higher prices score lower.',
+    formula: 'Price score = inverse transform of median semi-detached price',
   },
   {
     key: 'transport',
@@ -73,7 +73,7 @@ export const rankingAxes: RankingAxisDefinition[] = [
     detail:
       'A higher environment score means cleaner air and better nearby green-space access.',
     recipe:
-      'This mixes air quality with greenery. Lower PM2.5, lower NO2, higher green cover, more green area within 1 km, and a shorter distance to the nearest park all help.',
+      'This mixes air quality with greenery. Lower PM2.5, lower NO2, higher green cover in a wider double-radius neighborhood buffer, more green area within 1 km, and a shorter distance to the nearest park all help.',
     formula:
       'Environment score = PM2.5 34% + NO2 16% + green cover 20% + green area 18% + park distance 12%',
   },
@@ -88,7 +88,7 @@ export const rankingAxes: RankingAxisDefinition[] = [
     detail:
       'A higher crime score means lower recorded crime in the station-area catchment. It is effectively a safety score.',
     recipe:
-      'The raw crime metric is annualised crime incidents per 1,000 residents. Lower raw crime rates are converted into higher-is-better safety scores for ranking.',
+      'The raw crime metric is annualised crime incidents per 1,000 residents, averaged across all currently available monthly police snapshots from 2023 onward. Lower raw crime rates are converted into higher-is-better safety scores for ranking.',
     formula: 'Crime score = inverse transform of crime rate per 1,000 residents',
   },
 ]

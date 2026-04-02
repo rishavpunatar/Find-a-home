@@ -353,9 +353,7 @@ def build_live_listing_property_record(
     max_distance_used = max(float(item['distance_m']) for item in live_listings)
     used_extended_radius = max_distance_used > PRIMARY_CATCHMENT_RADIUS_M
 
-    commute_score = commute_value_score(float(station.get('typical_commute_min', 55)))
-    afford_score = affordability_score(median_price)
-    value_for_money = round(afford_score * 0.68 + commute_score * 0.32, 2)
+    simple_price_score = price_score(median_price)
 
     confidence = 0.47 if used_extended_radius else 0.52
     confidence += min(0.26, len(live_listings) / 20 * 0.26)
@@ -375,8 +373,7 @@ def build_live_listing_property_record(
         'average_semi_price': round(average_price, 2),
         'median_semi_price': round(median_price, 2),
         'price_trend_pct_5y': None,
-        'affordability_score': afford_score,
-        'value_for_money_score': value_for_money,
+        'price_score': simple_price_score,
         'status': status,
         'confidence': confidence,
         'provenance': 'direct_listing_extended' if used_extended_radius else 'direct_listing',
@@ -619,13 +616,9 @@ def sample_station_transactions(
     return sampled, strata_counts, len(postcodes_with_transactions)
 
 
-def affordability_score(median_price: float) -> float:
+def price_score(median_price: float) -> float:
     # Lower prices score higher; range tuned to semi-detached market in target region.
     return round(clamp(100 * (1 - (median_price - 250_000) / (1_300_000 - 250_000)), 0, 100), 2)
-
-
-def commute_value_score(typical_commute_min: float) -> float:
-    return round(clamp(100 * (1 - (typical_commute_min - 20) / (75 - 20)), 0, 100), 2)
 
 
 def build_property_record(
@@ -696,9 +689,7 @@ def build_property_record(
     confidence += 0.08 if trend_proxy is not None else 0.0
     confidence = round(clamp(confidence, 0.22 if is_extended else 0.25, 0.92), 3)
 
-    commute_score = commute_value_score(float(station.get('typical_commute_min', 55)))
-    afford_score = affordability_score(median_price)
-    value_for_money = round(afford_score * 0.68 + commute_score * 0.32, 2)
+    simple_price_score = price_score(median_price)
 
     current_start, current_end = current_window
     prior_start, prior_end = prior_window
@@ -719,8 +710,7 @@ def build_property_record(
         'average_semi_price': round(average_price, 2),
         'median_semi_price': round(median_price, 2),
         'price_trend_pct_5y': None if trend_proxy is None else round(float(trend_proxy), 3),
-        'affordability_score': afford_score,
-        'value_for_money_score': value_for_money,
+        'price_score': simple_price_score,
         'status': status,
         'confidence': confidence,
         'provenance': provenance,

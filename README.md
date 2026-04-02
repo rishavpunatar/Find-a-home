@@ -299,13 +299,11 @@ Pages deploys only after those checks pass in the deploy workflow.
 
 ## Default scoring weights
 
-- value for money: 31%
-- transport / commute: 19%
-- schools: 22%
+- price: 32%
+- transport / commute: 20%
+- schools: 23%
 - environment: 15%
 - crime / safety: 10%
-- Pinner access: 0% by default
-- planning risk: 3%
 
 UI weights always normalize to 100%.
 

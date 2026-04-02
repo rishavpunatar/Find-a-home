@@ -1,8 +1,8 @@
 {
   "property": {
     "source": "OnTheMarket current asking-price snapshot + HM Land Registry PPD fallback",
-    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-04-01 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-04-01 to 2026-04-01 with a local 800m catchment first and an explicit 1600m extended-area fallback when the nearer sample is too sparse (with prior-year comparison window for trend proxy)",
-    "releaseDate": "2026-04-01"
+    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-04-02 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-04-02 to 2026-04-02 with a local 800m catchment first and an explicit 1600m extended-area fallback when the nearer sample is too sparse (with prior-year comparison window for trend proxy)",
+    "releaseDate": "2026-04-02"
   },
   "transport": {
     "source": "TfL Journey Planner + OSRM (with station-profile fallback)",
@@ -22,11 +22,11 @@
   "greenSpace": {
     "source": "OpenStreetMap greenspace polygons via Overpass API",
     "referencePeriod": "Current OpenStreetMap greenspace snapshot via Overpass API station-scope pull",
-    "releaseDate": "2026-04-01"
+    "releaseDate": "2026-04-02"
   },
   "crime": {
-    "source": "data.police.uk custom-area street-level crime pulls + interpolated station population denominator",
-    "referencePeriod": "Latest 3 months from data.police.uk (2026-01, 2025-12, 2025-11) annualised",
+    "source": "data.police.uk monthly street-level crime archive (BTP, City of London, Metropolitan, and London-boundary forces) + interpolated station population denominator",
+    "referencePeriod": "All currently available data.police.uk archive months from 2023-02 to 2026-01 (36 monthly snapshots) averaged and annualised",
     "releaseDate": "2026-01"
   },
   "planning": {
