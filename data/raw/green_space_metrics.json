@@ -3806,6 +3806,15 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "ELSTR304": {
+    "green_space_area_km2_within_1km": 0.319,
+    "green_cover_pct": 12.278,
+    "nearest_park_distance_m": 291.6,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "TOLWOBC3": {
     "green_space_area_km2_within_1km": 0.541,
     "green_cover_pct": 13.741,
@@ -3846,6 +3855,15 @@
     "green_space_area_km2_within_1km": 0.356,
     "green_cover_pct": 12.209,
     "nearest_park_distance_m": 146.4,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "STONEC73": {
+    "green_space_area_km2_within_1km": 0.366,
+    "green_cover_pct": 24.752,
+    "nearest_park_distance_m": 453.4,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4103,6 +4121,15 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "WALTH6AE": {
+    "green_space_area_km2_within_1km": 0.589,
+    "green_cover_pct": 24.474,
+    "nearest_park_distance_m": 28.0,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "CANON9EC": {
     "green_space_area_km2_within_1km": 0.459,
     "green_cover_pct": 10.167,
@@ -4157,10 +4184,28 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "POTTE78F": {
+    "green_space_area_km2_within_1km": 0.365,
+    "green_cover_pct": 12.544,
+    "nearest_park_distance_m": 399.6,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "OSTERE41": {
     "green_space_area_km2_within_1km": 0.763,
     "green_cover_pct": 22.474,
     "nearest_park_distance_m": 329.3,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "ESHER68E": {
+    "green_space_area_km2_within_1km": 0.564,
+    "green_cover_pct": 13.045,
+    "nearest_park_distance_m": 40.9,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4247,15 +4292,6 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
-  "BARNE8B6": {
-    "green_space_area_km2_within_1km": 0.467,
-    "green_cover_pct": 14.819,
-    "nearest_park_distance_m": 243.5,
-    "status": "available",
-    "confidence": 0.88,
-    "provenance": "direct",
-    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
-  },
   "BARKI608": {
     "green_space_area_km2_within_1km": 0.395,
     "green_cover_pct": 9.492,
@@ -4278,6 +4314,15 @@
     "green_space_area_km2_within_1km": 0.219,
     "green_cover_pct": 11.172,
     "nearest_park_distance_m": 180.6,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "CUFFLBFC": {
+    "green_space_area_km2_within_1km": 0.041,
+    "green_cover_pct": 0.833,
+    "nearest_park_distance_m": 316.1,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4364,6 +4409,15 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "CLAYG102": {
+    "green_space_area_km2_within_1km": 0.152,
+    "green_cover_pct": 4.628,
+    "nearest_park_distance_m": 267.9,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "STM": {
     "green_space_area_km2_within_1km": 0.748,
     "green_cover_pct": 20.548,
@@ -4377,6 +4431,15 @@
     "green_space_area_km2_within_1km": 0.049,
     "green_cover_pct": 6.26,
     "nearest_park_distance_m": 168.4,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "RADLE554": {
+    "green_space_area_km2_within_1km": 0.356,
+    "green_cover_pct": 10.382,
+    "nearest_park_distance_m": 82.1,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4418,10 +4481,28 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "HERSH093": {
+    "green_space_area_km2_within_1km": 0.65,
+    "green_cover_pct": 10.747,
+    "nearest_park_distance_m": 184.2,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "RAINH386": {
     "green_space_area_km2_within_1km": 0.077,
     "green_cover_pct": 1.529,
     "nearest_park_distance_m": 97.6,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "WHYTE3E9": {
+    "green_space_area_km2_within_1km": 0.547,
+    "green_cover_pct": 15.617,
+    "nearest_park_distance_m": 165.0,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4445,6 +4526,15 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "BROOK0F8": {
+    "green_space_area_km2_within_1km": 0.327,
+    "green_cover_pct": 10.465,
+    "nearest_park_distance_m": 532.4,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "CRAYF950": {
     "green_space_area_km2_within_1km": 0.587,
     "green_cover_pct": 24.841,
@@ -4458,6 +4548,15 @@
     "green_space_area_km2_within_1km": 0.163,
     "green_cover_pct": 8.793,
     "nearest_park_distance_m": 210.9,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "WAM": {
+    "green_space_area_km2_within_1km": 0.967,
+    "green_cover_pct": 24.192,
+    "nearest_park_distance_m": 98.5,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4553,6 +4652,15 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "BUCKHFE9": {
+    "green_space_area_km2_within_1km": 0.381,
+    "green_cover_pct": 10.369,
+    "nearest_park_distance_m": 253.5,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "HEN": {
     "green_space_area_km2_within_1km": 0.302,
     "green_cover_pct": 11.741,
@@ -4598,6 +4706,15 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "CHIGWDAD": {
+    "green_space_area_km2_within_1km": 0.672,
+    "green_cover_pct": 12.149,
+    "nearest_park_distance_m": 52.5,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "ECT": {
     "green_space_area_km2_within_1km": 0.383,
     "green_cover_pct": 11.024,
@@ -4634,10 +4751,37 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "LOUGH0F9": {
+    "green_space_area_km2_within_1km": 0.343,
+    "green_cover_pct": 11.806,
+    "nearest_park_distance_m": 218.4,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "RUM": {
     "green_space_area_km2_within_1km": 0.25,
     "green_cover_pct": 9.628,
     "nearest_park_distance_m": 141.7,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "CARPE00A": {
+    "green_space_area_km2_within_1km": 0.39,
+    "green_cover_pct": 11.211,
+    "nearest_park_distance_m": 255.8,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "THEOBD29": {
+    "green_space_area_km2_within_1km": 0.587,
+    "green_cover_pct": 24.154,
+    "nearest_park_distance_m": 267.9,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4679,6 +4823,69 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "ASHFO3F7": {
+    "green_space_area_km2_within_1km": 0.228,
+    "green_cover_pct": 15.661,
+    "nearest_park_distance_m": 195.9,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "BSH": {
+    "green_space_area_km2_within_1km": 0.469,
+    "green_cover_pct": 17.293,
+    "nearest_park_distance_m": 110.4,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "WALTO962": {
+    "green_space_area_km2_within_1km": 0.031,
+    "green_cover_pct": 5.669,
+    "nearest_park_distance_m": 245.1,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "CHESH86E": {
+    "green_space_area_km2_within_1km": 1.653,
+    "green_cover_pct": 52.738,
+    "nearest_park_distance_m": 80.3,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "WATFO984": {
+    "green_space_area_km2_within_1km": 0.221,
+    "green_cover_pct": 8.382,
+    "nearest_park_distance_m": 147.9,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "DEBDE8C6": {
+    "green_space_area_km2_within_1km": 0.624,
+    "green_cover_pct": 14.953,
+    "nearest_park_distance_m": 286.9,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "ASHTE83D": {
+    "green_space_area_km2_within_1km": 0.131,
+    "green_cover_pct": 5.427,
+    "nearest_park_distance_m": 61.8,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "CHELSE03": {
     "green_space_area_km2_within_1km": 0.17,
     "green_cover_pct": 14.842,
@@ -4715,6 +4922,42 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "GARSTFC0": {
+    "green_space_area_km2_within_1km": 0.226,
+    "green_cover_pct": 11.308,
+    "nearest_park_distance_m": 409.3,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "SWANL01A": {
+    "green_space_area_km2_within_1km": 0.129,
+    "green_cover_pct": 4.81,
+    "nearest_park_distance_m": 313.8,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "WATFOB33": {
+    "green_space_area_km2_within_1km": 0.39,
+    "green_cover_pct": 15.05,
+    "nearest_park_distance_m": 116.2,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "DENHA60D": {
+    "green_space_area_km2_within_1km": 0.587,
+    "green_cover_pct": 16.332,
+    "nearest_park_distance_m": 41.4,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "GIDEA189": {
     "green_space_area_km2_within_1km": 0.326,
     "green_cover_pct": 11.537,
@@ -4728,6 +4971,33 @@
     "green_space_area_km2_within_1km": 0.006,
     "green_cover_pct": 5.386,
     "nearest_park_distance_m": 851.8,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "WOLDICE0": {
+    "green_space_area_km2_within_1km": 0.053,
+    "green_cover_pct": 6.59,
+    "nearest_park_distance_m": 846.4,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "IVERC7B": {
+    "green_space_area_km2_within_1km": 0.283,
+    "green_cover_pct": 13.913,
+    "nearest_park_distance_m": 94.0,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "BRICKD31": {
+    "green_space_area_km2_within_1km": 0.148,
+    "green_cover_pct": 2.118,
+    "nearest_park_distance_m": 205.9,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4751,10 +5021,46 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
+  "DENHA0FF": {
+    "green_space_area_km2_within_1km": 0.677,
+    "green_cover_pct": 9.631,
+    "nearest_park_distance_m": 170.5,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "BROXBEA9": {
+    "green_space_area_km2_within_1km": 0.501,
+    "green_cover_pct": 15.051,
+    "nearest_park_distance_m": 246.8,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "MERST18C": {
+    "green_space_area_km2_within_1km": 0.597,
+    "green_cover_pct": 12.229,
+    "nearest_park_distance_m": 139.0,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
   "UXB": {
     "green_space_area_km2_within_1km": 0.4,
     "green_cover_pct": 15.851,
     "nearest_park_distance_m": 321.0,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "HATFI6D2": {
+    "green_space_area_km2_within_1km": 0.091,
+    "green_cover_pct": 4.525,
+    "nearest_park_distance_m": 251.5,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",
@@ -4778,10 +5084,73 @@
     "provenance": "direct",
     "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
   },
-  "EMERS974": {
-    "green_space_area_km2_within_1km": 0.17,
-    "green_cover_pct": 7.348,
-    "nearest_park_distance_m": 273.7,
+  "LANGL674": {
+    "green_space_area_km2_within_1km": 0.361,
+    "green_cover_pct": 11.798,
+    "nearest_park_distance_m": 284.5,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "STONEFFE": {
+    "green_space_area_km2_within_1km": 0.148,
+    "green_cover_pct": 3.447,
+    "nearest_park_distance_m": 253.9,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "STALB850": {
+    "green_space_area_km2_within_1km": 0.45,
+    "green_cover_pct": 15.703,
+    "nearest_park_distance_m": 222.1,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "SUNNY3BA": {
+    "green_space_area_km2_within_1km": 0.003,
+    "green_cover_pct": 1.4,
+    "nearest_park_distance_m": 743.9,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "KNG": {
+    "green_space_area_km2_within_1km": 0.064,
+    "green_cover_pct": 3.274,
+    "nearest_park_distance_m": 604.7,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "BOOKH31B": {
+    "green_space_area_km2_within_1km": 0.037,
+    "green_cover_pct": 1.554,
+    "nearest_park_distance_m": 347.2,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "SHORE04C": {
+    "green_space_area_km2_within_1km": 0.516,
+    "green_cover_pct": 17.407,
+    "nearest_park_distance_m": 120.2,
+    "status": "available",
+    "confidence": 0.88,
+    "provenance": "direct",
+    "methodology_note": "Direct greenspace geometry calculation from Ordnance Survey OS Open Greenspace. Area is measured as intersecting greenspace within a 1km station buffer, green cover is measured within a wider 1600m buffer (2x the default 800m catchment radius), and nearest park distance uses the nearest mapped public access point where available, otherwise the nearest greenspace boundary."
+  },
+  "BETCHDF1": {
+    "green_space_area_km2_within_1km": 0.014,
+    "green_cover_pct": 1.157,
+    "nearest_park_distance_m": 823.1,
     "status": "available",
     "confidence": 0.88,
     "provenance": "direct",

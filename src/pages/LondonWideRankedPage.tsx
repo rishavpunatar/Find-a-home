@@ -22,7 +22,7 @@ const downloadCsv = (filename: string, data: string) => {
   URL.revokeObjectURL(url)
 }
 
-const LONDON_WIDE_COMMUTE_CAP_MINUTES = 70
+const LONDON_WIDE_COMMUTE_CAP_MINUTES = 60
 
 export const LondonWideRankedPage = () => {
   const { dataset, loading, error } = useDataContext()
@@ -70,10 +70,11 @@ export const LondonWideRankedPage = () => {
           Trends
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          This page is for understanding how the wider London station universe behaves, not for
-          tightening a shortlist. It keeps the <span className="font-semibold">70-minute commute</span>{' '}
-          ceiling but otherwise relaxes the ranking filters so you can inspect variance, outliers,
-          and broad relationships between the ranking axes and supporting context measures.
+          This page is for understanding how the full commute-defined station universe behaves, not
+          for tightening a shortlist. It keeps the{' '}
+          <span className="font-semibold">60-minute commute</span> ceiling but otherwise relaxes
+          the ranking filters so you can inspect variance, outliers, and broad relationships
+          between the ranking axes and supporting context measures.
         </p>
         <p className="mt-1 text-xs text-slate-600">
           Effective scope in this page: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
@@ -151,8 +152,8 @@ export const LondonWideRankedPage = () => {
           Distance Gradients
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          These show how the wider London station universe changes as you move farther from the
-          central destination cluster.
+          These show how the full commute-defined station universe changes as you move farther from
+          the central destination cluster.
         </p>
       </section>
 

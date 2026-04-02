@@ -83,7 +83,7 @@ export const OverviewPage = () => {
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h2 className="text-lg font-semibold">How to use this app</h2>
         <p className="mt-2 text-sm text-slate-700">
-          This tool helps you narrow down Greater London station areas with workable commutes into
+          This tool helps you narrow down station areas with a workable 60-minute commute into
           central London before you spend time on listings, calls, and viewings.
         </p>
         <ol className="mt-3 space-y-2 text-sm text-slate-700">
@@ -251,7 +251,7 @@ export const OverviewPage = () => {
             <div className="flex justify-between gap-2">
               <dt className="text-slate-600">Primary scope</dt>
               <dd className="font-medium">
-                {dataset.config.primaryScopeRegion ?? 'Greater London'} stations within{' '}
+                {dataset.config.primaryScopeRegion ?? 'Commute-defined commuter belt'} stations within{' '}
                 {dataset.config.maxCommuteMinutesForCandidate} min
               </dd>
             </div>

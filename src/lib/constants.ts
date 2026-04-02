@@ -9,7 +9,7 @@ export const DEFAULT_WEIGHTS: Weights = {
 }
 
 export const DEFAULT_FILTERS: Filters = {
-  maxCommuteMinutes: 70,
+  maxCommuteMinutes: 60,
   maxDriveMinutes: 90,
 }
 
@@ -22,7 +22,7 @@ export const FILTER_PRESETS = {
     label: 'Focus',
     description: 'Tighter shortlist with stronger commute discipline and faster access back to Pinner.',
     filters: {
-      maxCommuteMinutes: 60,
+      maxCommuteMinutes: 50,
       maxDriveMinutes: 50,
     },
   },
@@ -35,7 +35,7 @@ export const FILTER_PRESETS = {
     label: 'Explore',
     description: 'Broad scan mode for discovery before tightening constraints.',
     filters: {
-      maxCommuteMinutes: 70,
+      maxCommuteMinutes: 60,
       maxDriveMinutes: 120,
     },
   },
@@ -48,8 +48,8 @@ export const FILTER_PRESET_ORDER: FilterPresetKey[] = ['focus', 'balanced', 'exp
 export const STORAGE_KEYS = {
   weights: 'find-a-home.v2.weights',
   weightingMode: 'find-a-home.v2.weighting-mode',
-  filters: 'find-a-home.v5.filters.default',
-  filtersLondon: 'find-a-home.v5.filters.london',
+  filters: 'find-a-home.v6.filters.default',
+  filtersLondon: 'find-a-home.v6.filters.london',
   pinned: 'find-a-home.pinned',
   compare: 'find-a-home.compare',
 } as const

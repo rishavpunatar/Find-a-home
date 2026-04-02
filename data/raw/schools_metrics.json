@@ -13535,6 +13535,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "ELSTR304": {
+    "nearby_primary_count": 28.8,
+    "raw_primary_count_within_drive_proxy": 87,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 61.2,
+    "primary_attendance_score": 45.3,
+    "primary_ofsted_warning_share": 4.3,
+    "primary_ofsted_penalty": 1.0,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "TOLWOBC3": {
     "nearby_primary_count": 49.1,
     "raw_primary_count_within_drive_proxy": 116,
@@ -13671,6 +13703,38 @@
     "primary_attendance_score": 41.9,
     "primary_ofsted_warning_share": 1.1,
     "primary_ofsted_penalty": 0.2,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "STONEC73": {
+    "nearby_primary_count": 52.6,
+    "raw_primary_count_within_drive_proxy": 129,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 71.0,
+    "primary_attendance_score": 61.6,
+    "primary_ofsted_warning_share": 2.3,
+    "primary_ofsted_penalty": 0.5,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -14591,6 +14655,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "WALTH6AE": {
+    "nearby_primary_count": 36.7,
+    "raw_primary_count_within_drive_proxy": 80,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 52.1,
+    "primary_attendance_score": 40.6,
+    "primary_ofsted_warning_share": 3.3,
+    "primary_ofsted_penalty": 0.7,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "CANON9EC": {
     "nearby_primary_count": 60.9,
     "raw_primary_count_within_drive_proxy": 152,
@@ -14783,6 +14879,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "POTTE78F": {
+    "nearby_primary_count": 13.2,
+    "raw_primary_count_within_drive_proxy": 43,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 61.4,
+    "primary_attendance_score": 46.2,
+    "primary_ofsted_warning_share": 0.9,
+    "primary_ofsted_penalty": 0.2,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "OSTERE41": {
     "nearby_primary_count": 70.7,
     "raw_primary_count_within_drive_proxy": 167,
@@ -14790,6 +14918,38 @@
     "primary_quality_score": 69.3,
     "primary_attendance_score": 50.1,
     "primary_ofsted_warning_share": 0.7,
+    "primary_ofsted_penalty": 0.2,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "ESHER68E": {
+    "nearby_primary_count": 34.1,
+    "raw_primary_count_within_drive_proxy": 96,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 71.1,
+    "primary_attendance_score": 63.1,
+    "primary_ofsted_warning_share": 0.8,
     "primary_ofsted_penalty": 0.2,
     "secondary_quality_score": null,
     "status": "available",
@@ -15103,38 +15263,6 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
-  "BARNE8B6": {
-    "nearby_primary_count": 53.2,
-    "raw_primary_count_within_drive_proxy": 123,
-    "nearby_secondary_count": null,
-    "primary_quality_score": 66.6,
-    "primary_attendance_score": 54.0,
-    "primary_ofsted_warning_share": 3.3,
-    "primary_ofsted_penalty": 0.7,
-    "secondary_quality_score": null,
-    "status": "available",
-    "confidence": 0.84,
-    "provenance": "direct",
-    "field_statuses": {
-      "nearby_primary_count": "available",
-      "nearby_secondary_count": "missing",
-      "primary_quality_score": "available",
-      "secondary_quality_score": "missing"
-    },
-    "field_confidences": {
-      "nearby_primary_count": 0.82,
-      "nearby_secondary_count": 0.2,
-      "primary_quality_score": 0.87,
-      "secondary_quality_score": 0.2
-    },
-    "field_provenance": {
-      "nearby_primary_count": "direct",
-      "nearby_secondary_count": "missing",
-      "primary_quality_score": "direct",
-      "secondary_quality_score": "missing"
-    },
-    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
-  },
   "BARKI608": {
     "nearby_primary_count": 108.2,
     "raw_primary_count_within_drive_proxy": 232,
@@ -15207,6 +15335,38 @@
     "primary_attendance_score": 53.3,
     "primary_ofsted_warning_share": 2.8,
     "primary_ofsted_penalty": 0.6,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "CUFFLBFC": {
+    "nearby_primary_count": 16.9,
+    "raw_primary_count_within_drive_proxy": 60,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 59.1,
+    "primary_attendance_score": 46.3,
+    "primary_ofsted_warning_share": 3.0,
+    "primary_ofsted_penalty": 0.7,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -15519,6 +15679,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "CLAYG102": {
+    "nearby_primary_count": 26.2,
+    "raw_primary_count_within_drive_proxy": 81,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 68.8,
+    "primary_attendance_score": 62.1,
+    "primary_ofsted_warning_share": 1.6,
+    "primary_ofsted_penalty": 0.4,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "STM": {
     "nearby_primary_count": 52.0,
     "raw_primary_count_within_drive_proxy": 131,
@@ -15559,6 +15751,38 @@
     "primary_attendance_score": 55.7,
     "primary_ofsted_warning_share": 1.6,
     "primary_ofsted_penalty": 0.3,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "RADLE554": {
+    "nearby_primary_count": 21.4,
+    "raw_primary_count_within_drive_proxy": 75,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 58.1,
+    "primary_attendance_score": 44.2,
+    "primary_ofsted_warning_share": 3.1,
+    "primary_ofsted_penalty": 0.7,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -15711,6 +15935,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "HERSH093": {
+    "nearby_primary_count": 26.2,
+    "raw_primary_count_within_drive_proxy": 70,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 69.9,
+    "primary_attendance_score": 60.6,
+    "primary_ofsted_warning_share": 0.0,
+    "primary_ofsted_penalty": 0.0,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "RAINH386": {
     "nearby_primary_count": 46.7,
     "raw_primary_count_within_drive_proxy": 131,
@@ -15719,6 +15975,38 @@
     "primary_attendance_score": 50.4,
     "primary_ofsted_warning_share": 2.3,
     "primary_ofsted_penalty": 0.5,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "WHYTE3E9": {
+    "nearby_primary_count": 24.9,
+    "raw_primary_count_within_drive_proxy": 62,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 66.1,
+    "primary_attendance_score": 54.0,
+    "primary_ofsted_warning_share": 3.1,
+    "primary_ofsted_penalty": 0.7,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -15807,6 +16095,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "BROOK0F8": {
+    "nearby_primary_count": 11.3,
+    "raw_primary_count_within_drive_proxy": 33,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 57.6,
+    "primary_attendance_score": 44.6,
+    "primary_ofsted_warning_share": 1.5,
+    "primary_ofsted_penalty": 0.3,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "CRAYF950": {
     "nearby_primary_count": 42.1,
     "raw_primary_count_within_drive_proxy": 101,
@@ -15847,6 +16167,38 @@
     "primary_attendance_score": 47.9,
     "primary_ofsted_warning_share": 1.4,
     "primary_ofsted_penalty": 0.3,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "WAM": {
+    "nearby_primary_count": 36.8,
+    "raw_primary_count_within_drive_proxy": 78,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 63.8,
+    "primary_attendance_score": 56.1,
+    "primary_ofsted_warning_share": 2.2,
+    "primary_ofsted_penalty": 0.5,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -16191,6 +16543,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "BUCKHFE9": {
+    "nearby_primary_count": 42.0,
+    "raw_primary_count_within_drive_proxy": 109,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 69.0,
+    "primary_attendance_score": 50.7,
+    "primary_ofsted_warning_share": 0.4,
+    "primary_ofsted_penalty": 0.1,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "HEN": {
     "nearby_primary_count": 48.3,
     "raw_primary_count_within_drive_proxy": 121,
@@ -16351,6 +16735,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "CHIGWDAD": {
+    "nearby_primary_count": 42.3,
+    "raw_primary_count_within_drive_proxy": 106,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 69.4,
+    "primary_attendance_score": 48.8,
+    "primary_ofsted_warning_share": 0.6,
+    "primary_ofsted_penalty": 0.1,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "ECT": {
     "nearby_primary_count": 53.9,
     "raw_primary_count_within_drive_proxy": 124,
@@ -16479,6 +16895,38 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "LOUGH0F9": {
+    "nearby_primary_count": 29.5,
+    "raw_primary_count_within_drive_proxy": 84,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 64.4,
+    "primary_attendance_score": 49.6,
+    "primary_ofsted_warning_share": 0.3,
+    "primary_ofsted_penalty": 0.1,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "RUM": {
     "nearby_primary_count": 48.8,
     "raw_primary_count_within_drive_proxy": 118,
@@ -16487,6 +16935,70 @@
     "primary_attendance_score": 51.0,
     "primary_ofsted_warning_share": 1.5,
     "primary_ofsted_penalty": 0.3,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "CARPE00A": {
+    "nearby_primary_count": 43.1,
+    "raw_primary_count_within_drive_proxy": 107,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 65.1,
+    "primary_attendance_score": 53.0,
+    "primary_ofsted_warning_share": 2.6,
+    "primary_ofsted_penalty": 0.6,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "THEOBD29": {
+    "nearby_primary_count": 34.7,
+    "raw_primary_count_within_drive_proxy": 77,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 51.6,
+    "primary_attendance_score": 40.2,
+    "primary_ofsted_warning_share": 3.6,
+    "primary_ofsted_penalty": 0.8,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -16639,6 +17151,230 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "ASHFO3F7": {
+    "nearby_primary_count": 26.8,
+    "raw_primary_count_within_drive_proxy": 69,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 53.4,
+    "primary_attendance_score": 42.0,
+    "primary_ofsted_warning_share": 2.3,
+    "primary_ofsted_penalty": 0.5,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "BSH": {
+    "nearby_primary_count": 40.0,
+    "raw_primary_count_within_drive_proxy": 90,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 64.2,
+    "primary_attendance_score": 53.6,
+    "primary_ofsted_warning_share": 3.1,
+    "primary_ofsted_penalty": 0.7,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "WALTO962": {
+    "nearby_primary_count": 23.8,
+    "raw_primary_count_within_drive_proxy": 67,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 67.8,
+    "primary_attendance_score": 58.7,
+    "primary_ofsted_warning_share": 0.0,
+    "primary_ofsted_penalty": 0.0,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "CHESH86E": {
+    "nearby_primary_count": 28.7,
+    "raw_primary_count_within_drive_proxy": 67,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 50.5,
+    "primary_attendance_score": 40.4,
+    "primary_ofsted_warning_share": 5.1,
+    "primary_ofsted_penalty": 1.1,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "WATFO984": {
+    "nearby_primary_count": 34.2,
+    "raw_primary_count_within_drive_proxy": 72,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 61.4,
+    "primary_attendance_score": 53.4,
+    "primary_ofsted_warning_share": 2.4,
+    "primary_ofsted_penalty": 0.5,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "DEBDE8C6": {
+    "nearby_primary_count": 20.8,
+    "raw_primary_count_within_drive_proxy": 56,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 61.7,
+    "primary_attendance_score": 49.7,
+    "primary_ofsted_warning_share": 0.4,
+    "primary_ofsted_penalty": 0.1,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "ASHTE83D": {
+    "nearby_primary_count": 19.0,
+    "raw_primary_count_within_drive_proxy": 55,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 68.0,
+    "primary_attendance_score": 59.5,
+    "primary_ofsted_warning_share": 4.1,
+    "primary_ofsted_penalty": 0.9,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "CHELSE03": {
     "nearby_primary_count": 19.1,
     "raw_primary_count_within_drive_proxy": 48,
@@ -16767,6 +17503,134 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "GARSTFC0": {
+    "nearby_primary_count": 30.5,
+    "raw_primary_count_within_drive_proxy": 74,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 58.5,
+    "primary_attendance_score": 50.9,
+    "primary_ofsted_warning_share": 1.6,
+    "primary_ofsted_penalty": 0.4,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "SWANL01A": {
+    "nearby_primary_count": 22.1,
+    "raw_primary_count_within_drive_proxy": 67,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 60.2,
+    "primary_attendance_score": 46.0,
+    "primary_ofsted_warning_share": 6.3,
+    "primary_ofsted_penalty": 1.4,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "WATFOB33": {
+    "nearby_primary_count": 39.2,
+    "raw_primary_count_within_drive_proxy": 83,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 64.0,
+    "primary_attendance_score": 54.2,
+    "primary_ofsted_warning_share": 3.0,
+    "primary_ofsted_penalty": 0.7,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "DENHA60D": {
+    "nearby_primary_count": 17.8,
+    "raw_primary_count_within_drive_proxy": 54,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 62.5,
+    "primary_attendance_score": 45.4,
+    "primary_ofsted_warning_share": 2.3,
+    "primary_ofsted_penalty": 0.5,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "GIDEA189": {
     "nearby_primary_count": 47.1,
     "raw_primary_count_within_drive_proxy": 102,
@@ -16807,6 +17671,102 @@
     "primary_attendance_score": 42.0,
     "primary_ofsted_warning_share": 2.5,
     "primary_ofsted_penalty": 0.6,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "WOLDICE0": {
+    "nearby_primary_count": 13.9,
+    "raw_primary_count_within_drive_proxy": 42,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 62.3,
+    "primary_attendance_score": 50.7,
+    "primary_ofsted_warning_share": 4.3,
+    "primary_ofsted_penalty": 1.0,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "IVERC7B": {
+    "nearby_primary_count": 26.6,
+    "raw_primary_count_within_drive_proxy": 66,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 58.1,
+    "primary_attendance_score": 34.0,
+    "primary_ofsted_warning_share": 7.5,
+    "primary_ofsted_penalty": 1.7,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "BRICKD31": {
+    "nearby_primary_count": 25.5,
+    "raw_primary_count_within_drive_proxy": 77,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 60.9,
+    "primary_attendance_score": 51.8,
+    "primary_ofsted_warning_share": 1.2,
+    "primary_ofsted_penalty": 0.3,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -16895,6 +17855,102 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
+  "DENHA0FF": {
+    "nearby_primary_count": 13.8,
+    "raw_primary_count_within_drive_proxy": 47,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 63.8,
+    "primary_attendance_score": 46.3,
+    "primary_ofsted_warning_share": 2.2,
+    "primary_ofsted_penalty": 0.5,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "BROXBEA9": {
+    "nearby_primary_count": 17.9,
+    "raw_primary_count_within_drive_proxy": 55,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 51.4,
+    "primary_attendance_score": 44.4,
+    "primary_ofsted_warning_share": 8.0,
+    "primary_ofsted_penalty": 1.8,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "MERST18C": {
+    "nearby_primary_count": 15.6,
+    "raw_primary_count_within_drive_proxy": 42,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 61.1,
+    "primary_attendance_score": 56.3,
+    "primary_ofsted_warning_share": 1.7,
+    "primary_ofsted_penalty": 0.4,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
   "UXB": {
     "nearby_primary_count": 34.3,
     "raw_primary_count_within_drive_proxy": 84,
@@ -16903,6 +17959,38 @@
     "primary_attendance_score": 43.2,
     "primary_ofsted_warning_share": 2.8,
     "primary_ofsted_penalty": 0.6,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "HATFI6D2": {
+    "nearby_primary_count": 19.5,
+    "raw_primary_count_within_drive_proxy": 49,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 56.5,
+    "primary_attendance_score": 50.8,
+    "primary_ofsted_warning_share": 6.7,
+    "primary_ofsted_penalty": 1.5,
     "secondary_quality_score": null,
     "status": "available",
     "confidence": 0.84,
@@ -16991,13 +18079,237 @@
     },
     "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
   },
-  "EMERS974": {
-    "nearby_primary_count": 44.1,
-    "raw_primary_count_within_drive_proxy": 99,
+  "LANGL674": {
+    "nearby_primary_count": 24.0,
+    "raw_primary_count_within_drive_proxy": 64,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 63.5,
+    "primary_attendance_score": 34.2,
+    "primary_ofsted_warning_share": 5.6,
+    "primary_ofsted_penalty": 1.3,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "STONEFFE": {
+    "nearby_primary_count": 27.4,
+    "raw_primary_count_within_drive_proxy": 75,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 69.0,
+    "primary_attendance_score": 51.3,
+    "primary_ofsted_warning_share": 3.4,
+    "primary_ofsted_penalty": 0.7,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "STALB850": {
+    "nearby_primary_count": 27.4,
+    "raw_primary_count_within_drive_proxy": 52,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 75.9,
+    "primary_attendance_score": 64.4,
+    "primary_ofsted_warning_share": 1.0,
+    "primary_ofsted_penalty": 0.2,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "SUNNY3BA": {
+    "nearby_primary_count": 16.7,
+    "raw_primary_count_within_drive_proxy": 56,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 59.0,
+    "primary_attendance_score": 35.8,
+    "primary_ofsted_warning_share": 5.4,
+    "primary_ofsted_penalty": 1.2,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "KNG": {
+    "nearby_primary_count": 27.1,
+    "raw_primary_count_within_drive_proxy": 75,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 55.6,
+    "primary_attendance_score": 53.1,
+    "primary_ofsted_warning_share": 0.8,
+    "primary_ofsted_penalty": 0.2,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "BOOKH31B": {
+    "nearby_primary_count": 8.7,
+    "raw_primary_count_within_drive_proxy": 20,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 73.7,
+    "primary_attendance_score": 53.7,
+    "primary_ofsted_warning_share": 1.8,
+    "primary_ofsted_penalty": 0.4,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "SHORE04C": {
+    "nearby_primary_count": 6.8,
+    "raw_primary_count_within_drive_proxy": 25,
     "nearby_secondary_count": null,
     "primary_quality_score": 62.5,
-    "primary_attendance_score": 54.3,
-    "primary_ofsted_warning_share": 1.6,
+    "primary_attendance_score": 48.3,
+    "primary_ofsted_warning_share": 3.1,
+    "primary_ofsted_penalty": 0.7,
+    "secondary_quality_score": null,
+    "status": "available",
+    "confidence": 0.84,
+    "provenance": "direct",
+    "field_statuses": {
+      "nearby_primary_count": "available",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "available",
+      "secondary_quality_score": "missing"
+    },
+    "field_confidences": {
+      "nearby_primary_count": 0.82,
+      "nearby_secondary_count": 0.2,
+      "primary_quality_score": 0.87,
+      "secondary_quality_score": 0.2
+    },
+    "field_provenance": {
+      "nearby_primary_count": "direct",
+      "nearby_secondary_count": "missing",
+      "primary_quality_score": "direct",
+      "secondary_quality_score": "missing"
+    },
+    "methodology_note": "The current school model is primary-only and uses state-funded-only official sources. Counts come from open state-funded GIAS establishment exports, excluding private schools. Reachable-primary access still starts from an approximate 20-minute road-adjusted drive proxy, but schools are now downweighted when open admissions are less likely in practice: distance matters most, faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from 202324-202425 (combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). Attendance is a separate light-touch supplement from 202324 official primary absence data (overall absence and persistent absence). Ofsted is not the main driver: latest published inspection outcomes as at 2025-08-31 are used only as a warning overlay and modest penalty for weaker leadership, behaviour, safeguarding, or overall effectiveness."
+  },
+  "BETCHDF1": {
+    "nearby_primary_count": 8.0,
+    "raw_primary_count_within_drive_proxy": 27,
+    "nearby_secondary_count": null,
+    "primary_quality_score": 63.6,
+    "primary_attendance_score": 57.5,
+    "primary_ofsted_warning_share": 2.0,
     "primary_ofsted_penalty": 0.4,
     "secondary_quality_score": null,
     "status": "available",

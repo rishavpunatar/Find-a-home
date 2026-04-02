@@ -7,7 +7,6 @@ from pipeline.adapters.station_transport_adapter import FixtureStationTransportA
 from pipeline.jobs.build_micro_areas import (
     candidate_filter,
     dedupe_micro_areas,
-    is_london_station,
     load_config,
     sanitize_station_universe,
 )
@@ -28,8 +27,7 @@ def candidate_scope_stations() -> list[StationRecord]:
     transport_records = json.loads(TRANSPORT_METRICS_PATH.read_text(encoding='utf-8'))
 
     scoped_stations = candidate_filter(all_stations, config, transport_records)
-    deduped_default = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
-    return [station for station in deduped_default if is_london_station(station)]
+    return dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
 
 
 def candidate_scope_station_codes() -> set[str]:

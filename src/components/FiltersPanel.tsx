@@ -82,10 +82,10 @@ export const FiltersPanel = () => {
     applyFilterPreset,
     resetRankingView,
   } = useSettings()
-  const isLondonWideTab = location.pathname === '/ranked-london'
+  const isLondonWideTab = location.pathname === '/trends' || location.pathname === '/ranked-london'
   const scope: 'default' | 'londonWide' = isLondonWideTab ? 'londonWide' : 'default'
   const activeFilters = isLondonWideTab ? londonFilters : filters
-  const commuteCap = 70
+  const commuteCap = 60
   const displayedCommuteLimit = isLondonWideTab
     ? Math.min(activeFilters.maxCommuteMinutes, commuteCap)
     : activeFilters.maxCommuteMinutes
@@ -163,7 +163,7 @@ export const FiltersPanel = () => {
       </div>
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
-          Coverage view is active: commute stays capped at 70 minutes while the broader table
+          Coverage view is active: commute stays capped at 60 minutes while the broader table
           relaxes the optional Pinner-drive constraint. Use the main Ranked Table when you want
           the stricter shortlist view.
         </p>

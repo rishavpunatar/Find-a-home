@@ -39,11 +39,11 @@ export const AppLayout = () => {
                 Find a Home
               </p>
               <h1 className="text-xl font-semibold sm:text-2xl">
-                Greater London Station Micro-Area Ranking
+                Central-London Commute Micro-Area Ranking
               </h1>
               <p className="text-sm text-slate-700">
-                Use this to shortlist Greater London station areas within a practical commute to
-                central London, then tighten Pinner access only if it matters to you.
+                Use this to shortlist station areas within a 60-minute commute to central London,
+                then tighten Pinner access only if it matters to you.
               </p>
               <p className="text-sm text-slate-600">{generatedLabel}</p>
             </div>

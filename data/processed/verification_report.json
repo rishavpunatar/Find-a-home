@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-02T22:02:49+01:00",
+  "generatedAt": "2026-04-03T00:21:42+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "strong_source_coverage",
-  "sourceCoverageScore": 0.9026,
-  "verificationStrengthScore": 0.699,
-  "verificationCompletenessScore": 0.9026,
+  "sourceCoverageScore": 0.9066,
+  "verificationStrengthScore": 0.7017,
+  "verificationCompletenessScore": 0.9066,
   "sourceMatrix": {
     "property": {
       "status": "source_applied_not_live_verified",
@@ -63,25 +63,25 @@
   },
   "domainCoverage": {
     "default": {
-      "count": 533,
+      "count": 575,
       "domains": {
         "property": {
-          "availablePct": 56.66,
-          "sourceAppliedPct": 56.66,
+          "availablePct": 60.0,
+          "sourceAppliedPct": 60.0,
           "statusCounts": {
-            "available": 302,
-            "estimated": 231,
+            "available": 345,
+            "estimated": 230,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 52.91,
-          "sourceAppliedPct": 77.94,
+          "availablePct": 55.13,
+          "sourceAppliedPct": 77.22,
           "statusCounts": {
-            "available": 282,
-            "estimated": 251,
+            "available": 317,
+            "estimated": 258,
             "placeholder": 0,
             "missing": 0,
             "other": 0
@@ -91,7 +91,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -102,7 +102,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -113,7 +113,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -124,7 +124,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -132,10 +132,10 @@
           }
         },
         "wellbeing": {
-          "availablePct": 97.19,
-          "sourceAppliedPct": 97.19,
+          "availablePct": 97.39,
+          "sourceAppliedPct": 97.39,
           "statusCounts": {
-            "available": 518,
+            "available": 560,
             "estimated": 0,
             "placeholder": 0,
             "missing": 15,
@@ -145,25 +145,25 @@
       }
     },
     "londonWide": {
-      "count": 533,
+      "count": 575,
       "domains": {
         "property": {
-          "availablePct": 56.66,
-          "sourceAppliedPct": 56.66,
+          "availablePct": 60.0,
+          "sourceAppliedPct": 60.0,
           "statusCounts": {
-            "available": 302,
-            "estimated": 231,
+            "available": 345,
+            "estimated": 230,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 52.91,
-          "sourceAppliedPct": 77.94,
+          "availablePct": 55.13,
+          "sourceAppliedPct": 77.22,
           "statusCounts": {
-            "available": 282,
-            "estimated": 251,
+            "available": 317,
+            "estimated": 258,
             "placeholder": 0,
             "missing": 0,
             "other": 0
@@ -173,7 +173,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -184,7 +184,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -195,7 +195,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -206,7 +206,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 533,
+            "available": 575,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -214,10 +214,10 @@
           }
         },
         "wellbeing": {
-          "availablePct": 97.19,
-          "sourceAppliedPct": 97.19,
+          "availablePct": 97.39,
+          "sourceAppliedPct": 97.39,
           "statusCounts": {
-            "available": 518,
+            "available": 560,
             "estimated": 0,
             "placeholder": 0,
             "missing": 15,

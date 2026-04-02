@@ -5921,6 +5921,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "ELSTR304": {
+    "crime_rate_per_1000": 119.447,
+    "population_denominator": 30270,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 35.4,
+      "theft": 28.2,
+      "vehicle": 7.0,
+      "other": 48.8
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "TOLWOBC3": {
     "crime_rate_per_1000": 70.92,
     "population_denominator": 47006,
@@ -5988,6 +6002,20 @@
       "theft": 19.6,
       "vehicle": 8.8,
       "other": 31.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "STONEC73": {
+    "crime_rate_per_1000": 51.303,
+    "population_denominator": 41914,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 13.9,
+      "theft": 11.2,
+      "vehicle": 5.9,
+      "other": 20.3
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -6383,6 +6411,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "WALTH6AE": {
+    "crime_rate_per_1000": 115.136,
+    "population_denominator": 40390,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 34.2,
+      "theft": 24.7,
+      "vehicle": 10.8,
+      "other": 45.5
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "CANON9EC": {
     "crime_rate_per_1000": 83.517,
     "population_denominator": 67108,
@@ -6467,6 +6509,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "POTTE78F": {
+    "crime_rate_per_1000": 108.482,
+    "population_denominator": 18467,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 33.5,
+      "theft": 30.0,
+      "vehicle": 7.9,
+      "other": 37.1
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "OSTERE41": {
     "crime_rate_per_1000": 131.283,
     "population_denominator": 55369,
@@ -6478,6 +6534,20 @@
       "theft": 42.1,
       "vehicle": 7.9,
       "other": 48.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "ESHER68E": {
+    "crime_rate_per_1000": 48.936,
+    "population_denominator": 18698,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 16.1,
+      "theft": 10.7,
+      "vehicle": 5.4,
+      "other": 16.8
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -6607,20 +6677,6 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
-  "BARNE8B6": {
-    "crime_rate_per_1000": 85.544,
-    "population_denominator": 55235,
-    "status": "available",
-    "confidence": 0.8,
-    "provenance": "direct",
-    "breakdown": {
-      "violence": 26.9,
-      "theft": 18.0,
-      "vehicle": 6.1,
-      "other": 34.6
-    },
-    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
-  },
   "BARKI608": {
     "crime_rate_per_1000": 113.082,
     "population_denominator": 112812,
@@ -6660,6 +6716,20 @@
       "theft": 17.4,
       "vehicle": 7.8,
       "other": 31.0
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "CUFFLBFC": {
+    "crime_rate_per_1000": 65.14,
+    "population_denominator": 5588,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 20.9,
+      "theft": 13.9,
+      "vehicle": 8.5,
+      "other": 21.9
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -6789,6 +6859,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "CLAYG102": {
+    "crime_rate_per_1000": 51.184,
+    "population_denominator": 12797,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 16.6,
+      "theft": 12.6,
+      "vehicle": 4.2,
+      "other": 17.8
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "STM": {
     "crime_rate_per_1000": 67.797,
     "population_denominator": 35434,
@@ -6814,6 +6898,20 @@
       "theft": 21.2,
       "vehicle": 7.4,
       "other": 25.2
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "RADLE554": {
+    "crime_rate_per_1000": 58.25,
+    "population_denominator": 8246,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 16.8,
+      "theft": 12.7,
+      "vehicle": 7.4,
+      "other": 21.3
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -6873,6 +6971,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "HERSH093": {
+    "crime_rate_per_1000": 67.869,
+    "population_denominator": 25009,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 26.4,
+      "theft": 10.2,
+      "vehicle": 4.1,
+      "other": 27.1
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "RAINH386": {
     "crime_rate_per_1000": 106.306,
     "population_denominator": 20027,
@@ -6884,6 +6996,20 @@
       "theft": 21.2,
       "vehicle": 12.8,
       "other": 44.2
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "WHYTE3E9": {
+    "crime_rate_per_1000": 53.081,
+    "population_denominator": 18456,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 18.2,
+      "theft": 10.0,
+      "vehicle": 4.5,
+      "other": 20.4
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -6915,6 +7041,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "BROOK0F8": {
+    "crime_rate_per_1000": 52.708,
+    "population_denominator": 5483,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 15.5,
+      "theft": 11.3,
+      "vehicle": 3.7,
+      "other": 22.2
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "CRAYF950": {
     "crime_rate_per_1000": 79.722,
     "population_denominator": 31476,
@@ -6939,6 +7079,20 @@
       "violence": 38.6,
       "theft": 27.4,
       "vehicle": 8.4,
+      "other": 50.8
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "WAM": {
+    "crime_rate_per_1000": 129.698,
+    "population_denominator": 48392,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 39.3,
+      "theft": 32.5,
+      "vehicle": 7.1,
       "other": 50.8
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
@@ -7083,6 +7237,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "BUCKHFE9": {
+    "crime_rate_per_1000": 53.556,
+    "population_denominator": 24672,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 17.1,
+      "theft": 9.1,
+      "vehicle": 11.3,
+      "other": 16.0
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "HEN": {
     "crime_rate_per_1000": 55.131,
     "population_denominator": 29076,
@@ -7153,6 +7321,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "CHIGWDAD": {
+    "crime_rate_per_1000": 61.083,
+    "population_denominator": 21326,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 23.1,
+      "theft": 9.8,
+      "vehicle": 8.4,
+      "other": 19.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "ECT": {
     "crime_rate_per_1000": 50.669,
     "population_denominator": 54609,
@@ -7209,6 +7391,20 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "LOUGH0F9": {
+    "crime_rate_per_1000": 74.494,
+    "population_denominator": 24758,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 24.5,
+      "theft": 18.3,
+      "vehicle": 9.7,
+      "other": 22.0
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "RUM": {
     "crime_rate_per_1000": 62.84,
     "population_denominator": 45040,
@@ -7220,6 +7416,34 @@
       "theft": 16.4,
       "vehicle": 7.5,
       "other": 24.2
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "CARPE00A": {
+    "crime_rate_per_1000": 66.775,
+    "population_denominator": 29592,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 20.0,
+      "theft": 16.6,
+      "vehicle": 4.2,
+      "other": 25.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "THEOBD29": {
+    "crime_rate_per_1000": 98.443,
+    "population_denominator": 37057,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 30.2,
+      "theft": 23.3,
+      "vehicle": 7.5,
+      "other": 37.4
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -7279,6 +7503,104 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "ASHFO3F7": {
+    "crime_rate_per_1000": 79.034,
+    "population_denominator": 34850,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 27.8,
+      "theft": 15.5,
+      "vehicle": 5.3,
+      "other": 30.4
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "BSH": {
+    "crime_rate_per_1000": 139.288,
+    "population_denominator": 40068,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 40.3,
+      "theft": 38.5,
+      "vehicle": 7.6,
+      "other": 52.8
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "WALTO962": {
+    "crime_rate_per_1000": 70.029,
+    "population_denominator": 33448,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 23.6,
+      "theft": 14.2,
+      "vehicle": 4.3,
+      "other": 27.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "CHESH86E": {
+    "crime_rate_per_1000": 90.49,
+    "population_denominator": 30998,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 27.3,
+      "theft": 25.6,
+      "vehicle": 5.6,
+      "other": 31.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "WATFO984": {
+    "crime_rate_per_1000": 78.963,
+    "population_denominator": 49103,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 24.2,
+      "theft": 16.7,
+      "vehicle": 6.5,
+      "other": 31.5
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "DEBDE8C6": {
+    "crime_rate_per_1000": 95.077,
+    "population_denominator": 22182,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 32.2,
+      "theft": 24.3,
+      "vehicle": 9.6,
+      "other": 29.0
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "ASHTE83D": {
+    "crime_rate_per_1000": 36.889,
+    "population_denominator": 14774,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 12.7,
+      "theft": 8.0,
+      "vehicle": 3.0,
+      "other": 13.2
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "CHELSE03": {
     "crime_rate_per_1000": 54.589,
     "population_denominator": 18734,
@@ -7335,6 +7657,62 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "GARSTFC0": {
+    "crime_rate_per_1000": 83.758,
+    "population_denominator": 32351,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 26.2,
+      "theft": 17.2,
+      "vehicle": 7.3,
+      "other": 33.0
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "SWANL01A": {
+    "crime_rate_per_1000": 102.365,
+    "population_denominator": 18421,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 36.5,
+      "theft": 20.2,
+      "vehicle": 6.5,
+      "other": 39.2
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "WATFOB33": {
+    "crime_rate_per_1000": 141.155,
+    "population_denominator": 51081,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 41.5,
+      "theft": 36.7,
+      "vehicle": 7.8,
+      "other": 55.1
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "DENHA60D": {
+    "crime_rate_per_1000": 79.44,
+    "population_denominator": 6743,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 28.0,
+      "theft": 16.4,
+      "vehicle": 8.8,
+      "other": 26.3
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "GIDEA189": {
     "crime_rate_per_1000": 116.93,
     "population_denominator": 48599,
@@ -7360,6 +7738,48 @@
       "theft": 65.0,
       "vehicle": 11.6,
       "other": 135.4
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "WOLDICE0": {
+    "crime_rate_per_1000": 42.937,
+    "population_denominator": 7018,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 16.1,
+      "theft": 7.3,
+      "vehicle": 2.8,
+      "other": 16.7
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "IVERC7B": {
+    "crime_rate_per_1000": 61.545,
+    "population_denominator": 9489,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 21.5,
+      "theft": 9.2,
+      "vehicle": 8.7,
+      "other": 22.2
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "BRICKD31": {
+    "crime_rate_per_1000": 66.038,
+    "population_denominator": 8162,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 21.0,
+      "theft": 10.3,
+      "vehicle": 4.3,
+      "other": 30.5
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -7391,6 +7811,48 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
+  "DENHA0FF": {
+    "crime_rate_per_1000": 72.147,
+    "population_denominator": 6168,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 27.8,
+      "theft": 16.2,
+      "vehicle": 7.8,
+      "other": 20.4
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "BROXBEA9": {
+    "crime_rate_per_1000": 100.835,
+    "population_denominator": 14413,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 28.0,
+      "theft": 29.8,
+      "vehicle": 8.3,
+      "other": 34.8
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "MERST18C": {
+    "crime_rate_per_1000": 92.536,
+    "population_denominator": 12687,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 29.4,
+      "theft": 16.4,
+      "vehicle": 4.9,
+      "other": 41.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
   "UXB": {
     "crime_rate_per_1000": 156.659,
     "population_denominator": 31227,
@@ -7402,6 +7864,20 @@
       "theft": 41.0,
       "vehicle": 12.9,
       "other": 67.4
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "HATFI6D2": {
+    "crime_rate_per_1000": 151.047,
+    "population_denominator": 23944,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 49.9,
+      "theft": 33.9,
+      "vehicle": 8.5,
+      "other": 58.8
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
@@ -7433,17 +7909,115 @@
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },
-  "EMERS974": {
-    "crime_rate_per_1000": 67.86,
-    "population_denominator": 44371,
+  "LANGL674": {
+    "crime_rate_per_1000": 80.167,
+    "population_denominator": 30033,
     "status": "available",
     "confidence": 0.8,
     "provenance": "direct",
     "breakdown": {
-      "violence": 17.5,
-      "theft": 17.8,
-      "vehicle": 9.3,
-      "other": 23.2
+      "violence": 30.2,
+      "theft": 12.6,
+      "vehicle": 11.4,
+      "other": 25.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "STONEFFE": {
+    "crime_rate_per_1000": 201.973,
+    "population_denominator": 19902,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 58.6,
+      "theft": 82.9,
+      "vehicle": 13.5,
+      "other": 46.9
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "STALB850": {
+    "crime_rate_per_1000": 110.452,
+    "population_denominator": 42507,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 29.0,
+      "theft": 34.1,
+      "vehicle": 8.0,
+      "other": 39.3
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "SUNNY3BA": {
+    "crime_rate_per_1000": 61.273,
+    "population_denominator": 6501,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 19.9,
+      "theft": 9.3,
+      "vehicle": 6.4,
+      "other": 25.7
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "KNG": {
+    "crime_rate_per_1000": 76.541,
+    "population_denominator": 12281,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 25.5,
+      "theft": 13.6,
+      "vehicle": 7.1,
+      "other": 30.3
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "BOOKH31B": {
+    "crime_rate_per_1000": 49.256,
+    "population_denominator": 10063,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 18.5,
+      "theft": 9.9,
+      "vehicle": 2.5,
+      "other": 18.3
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "SHORE04C": {
+    "crime_rate_per_1000": 52.026,
+    "population_denominator": 1275,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 14.9,
+      "theft": 14.6,
+      "vehicle": 5.2,
+      "other": 17.3
+    },
+    "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
+  },
+  "BETCHDF1": {
+    "crime_rate_per_1000": 76.541,
+    "population_denominator": 1411,
+    "status": "available",
+    "confidence": 0.8,
+    "provenance": "direct",
+    "breakdown": {
+      "violence": 29.3,
+      "theft": 12.8,
+      "vehicle": 4.3,
+      "other": 30.2
     },
     "methodology_note": "Direct monthly street-level crime archive aggregation from data.police.uk for all currently available months since 2023-01 within an 1800m station radius, using the official archive download for BTP, City of London, Metropolitan, and London-boundary forces. Counts are averaged into an annualised per-1,000 rate using the station 1800m catchment population denominator when available, otherwise the nearest-anchor population fallback."
   },

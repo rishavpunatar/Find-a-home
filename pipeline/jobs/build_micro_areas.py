@@ -31,44 +31,9 @@ PROCESSED_DIR = ROOT / 'data' / 'processed'
 CONFIG_PATH = ROOT / 'pipeline' / 'config' / 'search_config.json'
 SOURCE_METADATA_PATH = RAW_DIR / 'source_metadata.json'
 TRANSPORT_METRICS_PATH = RAW_DIR / 'transport_metrics.json'
-LONDON_WIDE_MAX_COMMUTE_MINUTES = 70
+LONDON_WIDE_MAX_COMMUTE_MINUTES = 60
 GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER = 2.0
 MAX_ANCHOR_DISTANCE_FOR_ESTIMATION_KM = 15.0
-GREATER_LONDON_AUTHORITIES = {
-    'Barking and Dagenham',
-    'Barnet',
-    'Bexley',
-    'Brent',
-    'Bromley',
-    'Camden',
-    'City of London',
-    'Croydon',
-    'Ealing',
-    'Enfield',
-    'Greenwich',
-    'Hackney',
-    'Hammersmith and Fulham',
-    'Haringey',
-    'Harrow',
-    'Havering',
-    'Hillingdon',
-    'Hounslow',
-    'Islington',
-    'Kensington and Chelsea',
-    'Kingston upon Thames',
-    'Lambeth',
-    'Lewisham',
-    'Merton',
-    'Newham',
-    'Redbridge',
-    'Richmond upon Thames',
-    'Southwark',
-    'Sutton',
-    'Tower Hamlets',
-    'Waltham Forest',
-    'Wandsworth',
-    'Westminster',
-}
 
 EXCLUDED_STATION_NAME_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
@@ -386,12 +351,6 @@ def transport_metric_or_fallback(
     return float(fallback_mapping[key])
 
 
-def is_london_station(station: StationRecord) -> bool:
-    county = station.county_or_borough.strip().lower()
-    local_authority = station.local_authority.strip()
-    return county == 'greater london' or local_authority in GREATER_LONDON_AUTHORITIES
-
-
 def candidate_filter(
     stations: list[StationRecord],
     config: SearchConfig,
@@ -400,7 +359,6 @@ def candidate_filter(
     return [
         station
         for station in stations
-        if is_london_station(station)
         if transport_metric_or_fallback(station, transport_records, 'typical_commute_min')
         <= config.max_commute_minutes
     ]
@@ -659,23 +617,16 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     raw_stations = station_adapter.fetch_stations()
     all_stations, excluded_stations = sanitize_station_universe(raw_stations)
     stations_by_code = {station.station_code: station for station in all_stations}
-    london_scope_stations = [station for station in all_stations if is_london_station(station)]
     scoped_stations = candidate_filter(all_stations, config, transport_anchor_records)
     deduped_stations = dedupe_micro_areas(scoped_stations, config.station_distance_threshold_m)
-    london_wide_all_deduped = dedupe_micro_areas(
-        london_scope_stations,
-        config.station_distance_threshold_m,
-    )
+    london_wide_all_deduped = dedupe_micro_areas(all_stations, config.station_distance_threshold_m)
     london_wide_candidate_stations = [
         station
-        for station in london_scope_stations
+        for station in london_wide_all_deduped
         if transport_metric_or_fallback(station, transport_anchor_records, 'typical_commute_min')
         <= LONDON_WIDE_MAX_COMMUTE_MINUTES
     ]
-    london_wide_deduped = dedupe_micro_areas(
-        london_wide_candidate_stations,
-        config.station_distance_threshold_m,
-    )
+    london_wide_deduped = london_wide_candidate_stations
     london_wide_excluded_by_commute = [
         {
             'stationCode': station.station_code,
@@ -1146,7 +1097,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             'pinnerCoordinate': asdict(config.pinner_coordinate),
             'centralLondonCoordinate': asdict(config.central_london_coordinate),
             'stationSearchRadiusKm': config.station_search_radius_km,
-            'primaryScopeRegion': 'Greater London',
+            'primaryScopeRegion': 'Commute-defined commuter belt',
             'microAreaWalkRadiusM': config.micro_area_walk_radius_m,
             'greenCoverExpandedRadiusM': int(
                 config.micro_area_walk_radius_m * GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER,
@@ -1246,7 +1197,7 @@ def main() -> None:
 
     print(
         f"Generated {len(dataset['microAreas'])} default micro-areas and "
-        f"{len(dataset.get('londonWideMicroAreas', []))} London-wide micro-areas -> "
+        f"{len(dataset.get('londonWideMicroAreas', []))} coverage-view micro-areas -> "
         f"{PROCESSED_DIR / 'micro_areas.json'}",
     )
 
