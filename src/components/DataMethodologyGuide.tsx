@@ -307,8 +307,10 @@ export const DataMethodologyGuide = ({
                 model.
               </p>
               <p>
-                Where a direct catchment population denominator is missing, the app uses a fixed
-                reference-population fallback so the access score still stays on the same basis.
+                School access is normalized by a local population denominator so dense areas are
+                not rewarded just for having more schools nearby. Right now that denominator is a
+                checked-in estimated reference-population figure for each station area rather than
+                a direct census count of the exact catchment.
               </p>
               <p>
                 The quality side is a smoothed KS2 basket using combined expected standard,
@@ -362,8 +364,8 @@ export const DataMethodologyGuide = ({
 
             <DetailBlock title="Crime axis">
               <p>
-                This is an annualized crime rate for the station-area catchment. Lower raw numbers
-                are better.
+                This is an annualized crime rate for a wider station-area catchment, currently
+                measured within 1800 meters of the station. Lower raw numbers are better.
               </p>
               <p>
                 The app converts that into a higher-is-better safety score inside the ranking
@@ -375,8 +377,10 @@ export const DataMethodologyGuide = ({
                 from 2023 onward, rather than just a short recent window.
               </p>
               <p>
-                <span className="font-semibold">Source:</span> direct data.police.uk custom-area
-                incident pulls, annualised with the local population denominator.
+                <span className="font-semibold">Source:</span> official data.police.uk monthly
+                street-level archive downloads, annualised with the local population denominator.
+                That denominator is currently a checked-in estimated reference-population figure
+                for each station area.
               </p>
               <p>
                 <span className="font-semibold">Data reference period:</span> {crimeReferencePeriod}

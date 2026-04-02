@@ -41,7 +41,7 @@ NUMERIC_BOUNDS: dict[str, tuple[float, float]] = {
     'greenSpaceAreaKm2Within1km': (0.0, 5.0),
     'greenCoverPct': (0.0, 100.0),
     'nearestParkDistanceM': (0.0, 10_000.0),
-    'crimeRatePerThousand': (0.0, 2_000.0),
+    'crimeRatePerThousand': (0.0, 4_000.0),
     'boroughQolScore': (0.0, 100.0),
 }
 

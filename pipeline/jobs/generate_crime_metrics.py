@@ -29,7 +29,7 @@ CRIME_DOWNLOAD_PAGE_URL = 'https://data.police.uk/data/'
 CRIME_ARCHIVE_URL_TEMPLATE = 'https://data.police.uk/data/archive/{archive_month}.zip'
 CRIME_ARCHIVE_CACHE_DIR = ROOT / 'data' / 'cache' / 'police-archive'
 
-BUFFER_METERS = 800.0
+BUFFER_METERS = 1800.0
 GRID_CELL_METERS = BUFFER_METERS
 MIN_CRIME_MONTH = '2023-01'
 CUSTOM_DOWNLOAD_MIN_MONTH = '2023-02'
@@ -550,7 +550,7 @@ def build_station_crime_records(
             'breakdown': breakdown,
             'methodology_note': (
                 'Direct monthly street-level crime archive aggregation from data.police.uk for all currently '
-                f'available months since {MIN_CRIME_MONTH} within an 800m station radius, using the official '
+                f'available months since {MIN_CRIME_MONTH} within an {int(BUFFER_METERS)}m station radius, using the official '
                 'archive download for BTP, City of London, Metropolitan, and London-boundary forces. '
                 'Counts are averaged into an annualised per-1,000 rate using the station reference-zone '
                 'population denominator (direct when present, otherwise nearest-anchor interpolation).'
