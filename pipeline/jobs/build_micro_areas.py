@@ -1030,7 +1030,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     school_record,
                     'primary_quality_score',
                     unit='score',
-                    note='Primary school attainment basket from 3-year official KS2 results across realistically reachable state-funded schools (combined expected standard, combined higher standard, reading scaled score, maths scaled score).',
+                    note='Primary school attainment basket from the latest eligible 2023-onward official KS2 results across realistically reachable state-funded schools (combined expected standard, combined higher standard, reading scaled score, maths scaled score).',
                     last_updated=schools_last_updated,
                 ),
                 'secondaryQualityScore': metric_from_record(
@@ -1044,14 +1044,14 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     pollution_record,
                     'annual_no2',
                     unit='ug/m3',
-                    note='Annual NO2 mean from area-level pollution proxy grid.',
+                    note='Annual NO2 mean from the DEFRA PCM modelled background pollution grid.',
                     last_updated=pollution_last_updated,
                 ),
                 'annualPm25': metric_from_record(
                     pollution_record,
                     'annual_pm25',
                     unit='ug/m3',
-                    note='Annual PM2.5 mean from area-level pollution proxy grid.',
+                    note='Annual PM2.5 mean from the DEFRA PCM modelled background pollution grid.',
                     last_updated=pollution_last_updated,
                 ),
                 'greenSpaceAreaKm2Within1km': metric_from_record(
@@ -1124,7 +1124,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
 
             confidence_notes = [
                 'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
-                'School scoring is now primary-only and blends an admissions-aware access heuristic, a 3-year KS2 attainment basket, a light attendance supplement, and an Ofsted warning overlay rather than a single inspection label.',
+                'School scoring is now primary-only and blends an admissions-aware access heuristic, the latest eligible 2023-onward KS2 attainment basket, a light attendance supplement, and an Ofsted warning overlay rather than a single inspection label.',
                 'Green-cover percentage uses an expanded 2x walk-radius neighborhood blend.',
             ]
 

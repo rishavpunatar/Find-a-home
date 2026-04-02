@@ -49,7 +49,7 @@ export const DataMethodologyGuide = ({
     'official DfE state-funded school composite with current GIAS footprint and latest available EES performance windows'
   const pollutionReferencePeriod =
     sourceMetadata.pollution?.referencePeriod ??
-    'LAEI 2019 (London modelled layers) and DEFRA LAQM 2023 extraction for non-London'
+    'DEFRA PCM 2024 annual mean NO2 and PM2.5 1km grids'
   const crimeReferencePeriod =
     sourceMetadata.crime?.referencePeriod ??
     'latest available police months annualised from direct data.police.uk station-area pulls'
@@ -310,7 +310,7 @@ export const DataMethodologyGuide = ({
               <p>
                 The quality side is a smoothed KS2 basket using combined expected standard,
                 combined higher standard, average reading scaled score, and average maths scaled
-                score, averaged across the latest 3 years where available.
+                score, averaged across the latest eligible 2023-onward years where available.
               </p>
               <p>
                 Attendance is used as one light-touch extra non-attainment signal. Ofsted is kept
@@ -337,18 +337,17 @@ export const DataMethodologyGuide = ({
               </p>
               <p>
                 PM2.5 is the app&apos;s main air-quality input. Lower numbers are better because
-                they mean fewer fine particles in the air. Inside Greater London, the app uses
-                detailed London modelled air-quality layers. Outside that scope, it uses DEFRA
-                background maps.
+                they mean fewer fine particles in the air. The app now uses one consistent
+                official pollution source across the whole search universe: DEFRA&apos;s PCM
+                modelled background grids.
               </p>
               <p>
                 On the green side, the app uses OpenStreetMap greenspace polygons via Overpass to
                 estimate green cover, nearby green-space area, and park access.
               </p>
               <p>
-                <span className="font-semibold">Source:</span> London Datastore LAEI (London) +
-                DEFRA UK-AIR LAQM background maps + OpenStreetMap greenspace polygons via Overpass
-                API.
+                <span className="font-semibold">Source:</span> DEFRA UK-AIR PCM modelled
+                background pollution data + OpenStreetMap greenspace polygons via Overpass API.
               </p>
               <p>
                 <span className="font-semibold">Data reference period:</span>{' '}
@@ -447,14 +446,6 @@ export const DataMethodologyGuide = ({
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
               DEFRA UK-AIR
-            </a>
-            <a
-              href="https://data.london.gov.uk/dataset/london-atmospheric-emissions-inventory--laei--2019"
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
-            >
-              London Datastore
             </a>
             <a
               href="https://www.gov.uk/guidance/get-information-about-schools"

@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from pipeline.jobs.validate_dataset import generate_quality_report
+from pipeline.jobs.validate_dataset import extract_four_digit_years, generate_quality_report
 from pipeline.models.scoring import weighted_score
 
 
-def metric(value: float, note: str = 'LAEI 2019 source') -> dict[str, object]:
+def metric(value: float, note: str = 'DEFRA PCM 2024 source') -> dict[str, object]:
     return {
         'value': value,
         'unit': '',
@@ -51,7 +51,7 @@ def make_area() -> dict[str, object]:
         'nearbySecondaryCount': metric(4.0),
         'primaryQualityScore': metric(78.0),
         'secondaryQualityScore': metric(74.0),
-        'annualNo2': metric(31.0, note='LAEI 2019 source with DEFRA cross-check'),
+        'annualNo2': metric(31.0, note='DEFRA PCM 2024 source'),
         'annualPm25': metric(11.2),
         'greenSpaceAreaKm2Within1km': metric(0.82),
         'greenCoverPct': metric(29.4),
@@ -78,9 +78,7 @@ def pollution_record(no2: float = 31.0, pm25: float = 11.2) -> dict[str, object]
         'annual_pm25': pm25,
         'status': 'available',
         'confidence': 0.93,
-        'methodology_note': 'LAEI based',
-        'secondary_source_no2': 19.5,
-        'secondary_source_pm25': 8.8,
+        'methodology_note': 'DEFRA PCM based',
     }
 
 
@@ -99,7 +97,7 @@ def test_generate_quality_report_passes_valid_dataset() -> None:
 
 def test_generate_quality_report_flags_out_of_bounds_metric() -> None:
     area = make_area()
-    area['annualNo2'] = metric(180.0, note='LAEI 2019 source with DEFRA cross-check')
+    area['annualNo2'] = metric(180.0, note='DEFRA PCM 2024 source')
     dataset = {'methodologyVersion': 'v1', 'microAreas': [area]}
 
     report = generate_quality_report(
@@ -125,3 +123,45 @@ def test_generate_quality_report_flags_pollution_mismatch() -> None:
 
     assert report['overallStatus'] == 'fail'
     assert any(item['code'] == 'pollution_value_mismatch' for item in report['issues'])
+
+
+def test_generate_quality_report_flags_pre_2023_scored_source_metadata() -> None:
+    dataset = {
+        'methodologyVersion': 'v1',
+        'microAreas': [make_area()],
+        'config': {
+            'sourceMetadata': {
+                'pollution': {
+                    'source': 'Old source',
+                    'referencePeriod': 'LAEI 2019 + DEFRA 2023',
+                    'releaseDate': '2023-12-31',
+                },
+            },
+        },
+    }
+
+    report = generate_quality_report(
+        dataset,
+        {'STA001': pollution_record()},
+        weights=default_weights(),
+    )
+
+    assert report['overallStatus'] == 'fail'
+    assert any(item['code'] == 'score_source_pre_2023' for item in report['issues'])
+
+
+def test_extract_four_digit_years_handles_school_academic_years() -> None:
+    years = extract_four_digit_years(
+        'primary attainment basket from 2023-onward KS2 202324-202425; attendance 202324; Ofsted 2025-08-31'
+    )
+
+    assert 2023 in years
+    assert 2024 in years
+    assert 2025 in years
+    assert 2022 not in years
+
+
+def test_extract_four_digit_years_flags_compact_pre_2023_academic_years() -> None:
+    years = extract_four_digit_years('Legacy KS2 202223-202324 results')
+
+    assert 2022 in years

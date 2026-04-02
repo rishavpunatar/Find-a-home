@@ -138,11 +138,12 @@ def source_matrix() -> dict[str, dict[str, str]]:
         },
         'pollution': {
             'status': 'source_applied_model_cross_checked',
-            'primarySource': 'London Datastore LAEI (Greater London) + DEFRA UK-AIR LAQM background (elsewhere)',
-            'secondarySource': 'DEFRA UK-AIR LAQM background (London cross-check) + live monitor feeds (planned)',
+            'primarySource': 'DEFRA UK-AIR modelled background pollution data (PCM)',
+            'secondarySource': 'Live monitor-network reconciliation (planned)',
             'note': (
-                'Greater London uses LAEI 20m modelled catchment values with DEFRA 1km background cross-check fields. '
-                'Non-London currently uses DEFRA 1km catchment values. Live monitor reconciliation is still pending.'
+                'Pollution now uses DEFRA PCM annual mean NO2 and PM2.5 grids for every station. '
+                'The older London-specific LAEI path has been removed so the ranked environment score no longer '
+                'depends on any pre-2023 pollution source.'
             ),
         },
         'greenSpace': {
@@ -487,7 +488,7 @@ def generate_verification_report(dataset: dict[str, Any], live_mode: bool = Fals
             'Source coverage score reflects direct-source provenance, not independently audited accuracy.',
             'Verification strength score discounts domains that still lack a strong secondary benchmark or live reconciliation path.',
             'Property, schools, greenspace, transport, planning, and population still lack a full independent secondary benchmark.',
-            'Pollution has model-to-model cross-checks (LAEI vs DEFRA) but still lacks full monitor-network reconciliation.',
+            'Pollution now uses DEFRA PCM directly, but still lacks a monitor-network reconciliation layer.',
             'Crime rates still depend on the station population denominator, which remains weaker than the new direct incident pull.',
             'Borough QoL currently uses ONS source application without a separate secondary cross-check.',
             'This report improves transparency but is not equivalent to a full production data-audit pipeline.',

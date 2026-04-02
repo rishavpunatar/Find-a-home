@@ -7,6 +7,7 @@ from pipeline.jobs.generate_school_metrics import (
     primary_accessibility_weight,
     primary_ofsted_warning_severity,
     safe_float,
+    time_period_start_year,
     weighted_average,
 )
 
@@ -15,6 +16,12 @@ def test_safe_float_handles_numeric_and_suppressed_values() -> None:
     assert safe_float('12.4') == 12.4
     assert safe_float('z') is None
     assert safe_float('') is None
+
+
+def test_time_period_start_year_parses_ees_formats() -> None:
+    assert time_period_start_year('202223') == 2022
+    assert time_period_start_year('2023/24') == 2023
+    assert time_period_start_year('2024/25') == 2024
 
 
 def test_percentile_rank_map_orders_values() -> None:

@@ -45,6 +45,7 @@ SECONDARY_PERFORMANCE_URL = (
     'c8f753ef-b76f-41a3-8949-13382e131054/csv'
 )
 OFSTED_REFERENCE_DATE = '2025-08-31'
+MIN_SCORE_YEAR = 2023
 
 USER_AGENT = (
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
@@ -127,6 +128,38 @@ def average_available(values: list[float | None]) -> float | None:
     if not available_values:
         return None
     return sum(available_values) / len(available_values)
+
+
+def time_period_start_year(raw_value: str | None) -> int | None:
+    if not raw_value:
+        return None
+
+    match = re.search(r'(20\d{2})', raw_value)
+    if not match:
+        return None
+
+    return int(match.group(1))
+
+
+def eligible_latest_periods(rows: list[dict[str, str]], *, limit: int) -> list[str]:
+    periods = sorted(
+        {
+            row['time_period']
+            for row in rows
+            if row.get('time_period') and (time_period_start_year(row['time_period']) or 0) >= MIN_SCORE_YEAR
+        }
+    )
+    if not periods:
+        raise RuntimeError(f'No eligible time periods found at or after {MIN_SCORE_YEAR}')
+    return periods[-limit:]
+
+
+def format_period_window(periods: list[str]) -> str:
+    if not periods:
+        return ''
+    if len(periods) == 1 or periods[0] == periods[-1]:
+        return periods[0]
+    return f'{periods[0]}-{periods[-1]}'
 
 
 def percentile_rank_map(metric_values: dict[str, float | None]) -> dict[str, float]:
@@ -433,7 +466,7 @@ def primary_quality_scores(school_records: dict[str, dict[str, Any]]) -> tuple[d
     rows = csv_rows(PRIMARY_PERFORMANCE_URL)
     filtered_rows = [row for row in rows if row['geographic_level'] == 'School']
     version_priority = {'Revised': 3, 'Final': 2, 'Provisional': 1}
-    latest_periods = sorted({row['time_period'] for row in filtered_rows if row['time_period']})[-3:]
+    latest_periods = eligible_latest_periods(filtered_rows, limit=3)
     selected_versions = {
         period: max(
             (row['version'] for row in filtered_rows if row['time_period'] == period),
@@ -472,9 +505,10 @@ def primary_quality_scores(school_records: dict[str, dict[str, Any]]) -> tuple[d
         for urn, metrics in yearly_metrics_by_urn.items()
     }
 
-    return percentile_quality_scores(averaged_metrics_by_urn, PRIMARY_QUALITY_WEIGHTS), (
-        f'{latest_periods[0]}-{latest_periods[-1]}'
-    )
+    return percentile_quality_scores(
+        averaged_metrics_by_urn,
+        PRIMARY_QUALITY_WEIGHTS,
+    ), format_period_window(latest_periods)
 
 
 def primary_attendance_scores(school_records: dict[str, dict[str, Any]]) -> tuple[dict[str, float], str]:
@@ -485,7 +519,7 @@ def primary_attendance_scores(school_records: dict[str, dict[str, Any]]) -> tupl
         for row in rows
         if row['geographic_level'] == 'School' and row['education_phase'] == 'State-funded primary'
     ]
-    latest_periods = sorted({row['time_period'] for row in filtered_rows if row['time_period']})[-3:]
+    latest_periods = eligible_latest_periods(filtered_rows, limit=3)
 
     yearly_metrics_by_urn: dict[str, dict[str, list[float | None]]] = {}
     for row in filtered_rows:
@@ -516,9 +550,10 @@ def primary_attendance_scores(school_records: dict[str, dict[str, Any]]) -> tupl
         for urn, metrics in yearly_metrics_by_urn.items()
     }
 
-    return percentile_quality_scores(averaged_metrics_by_urn, PRIMARY_ATTENDANCE_WEIGHTS), (
-        f'{latest_periods[0]}-{latest_periods[-1]}'
-    )
+    return percentile_quality_scores(
+        averaged_metrics_by_urn,
+        PRIMARY_ATTENDANCE_WEIGHTS,
+    ), format_period_window(latest_periods)
 
 
 def parse_ofsted_grade(raw_value: str | None) -> int | None:
@@ -697,7 +732,7 @@ def methodology_note(
         'but schools are now downweighted when open admissions are less likely in practice: distance matters most, '
         'faith-designated schools are discounted, larger schools get a modest capacity uplift, and all-through schools get a small penalty. '
         'National open data does not directly expose sibling or feeder priorities, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. '
-        f'Primary quality is now a 3-year KS2 attainment basket from {primary_period} '
+        f'Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from {primary_period} '
         '(combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). '
         f'Attendance is a separate light-touch supplement from {attendance_period} official primary absence data '
         '(overall absence and persistent absence). '
@@ -719,8 +754,8 @@ def refresh_source_metadata(
         ),
         'referencePeriod': (
             f'Counts refreshed from GIAS open state-funded export dated {gias_release_date}; '
-            f'primary attainment basket from KS2 {primary_period}; '
-            f'attendance supplement from primary absence {attendance_period}; '
+            f'primary attainment basket from 2023-onward KS2 {primary_period}; '
+            f'attendance supplement from 2023-onward primary absence {attendance_period}; '
             f'Ofsted overlay as at {ofsted_period}'
         ),
         'releaseDate': gias_release_date,

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-04-02T01:23:02+01:00",
+  "generatedAt": "2026-04-02T14:45:06+01:00",
   "methodologyVersion": "2026.1",
-  "overallStatus": "warning",
+  "overallStatus": "pass",
   "microAreasAnalysed": 1068,
   "scopeCounts": {
     "default": 534,
@@ -9,108 +9,10 @@
   },
   "counts": {
     "critical": 0,
-    "warning": 8,
+    "warning": 0,
     "info": 0
   },
-  "pollutionCrossSourceSummary": {
-    "londonCrossSourceRows": 1066,
-    "medianAbsNo2Delta": 10.651,
-    "p95AbsNo2Delta": 13.873,
-    "maxAbsNo2Delta": 18.69
-  },
-  "issues": [
-    {
-      "severity": "warning",
-      "code": "pollution_cross_source_delta",
-      "message": "NO2 divergence vs secondary source is high; review recommended.",
-      "scope": "default",
-      "microAreaId": "ma-hange8fb",
-      "stationCode": "HANGE8FB",
-      "stationName": "Hanger Lane",
-      "field": "annualNo2",
-      "observed": 18.69,
-      "expected": "<= 18 ug/m3"
-    },
-    {
-      "severity": "warning",
-      "code": "pollution_source_missing",
-      "message": "No raw pollution source record found for station.",
-      "scope": "default",
-      "microAreaId": "ma-barki472",
-      "stationCode": "BARKI472",
-      "stationName": "Barking Park",
-      "field": "annualNo2"
-    },
-    {
-      "severity": "warning",
-      "code": "pollution_cross_source_delta",
-      "message": "NO2 divergence vs secondary source is high; review recommended.",
-      "scope": "default",
-      "microAreaId": "ma-edgwaa0d",
-      "stationCode": "EDGWAA0D",
-      "stationName": "Edgware Road",
-      "field": "annualNo2",
-      "observed": 18.171,
-      "expected": "<= 18 ug/m3"
-    },
-    {
-      "severity": "warning",
-      "code": "pollution_cross_source_delta",
-      "message": "NO2 divergence vs secondary source is high; review recommended.",
-      "scope": "default",
-      "microAreaId": "ma-great61c",
-      "stationCode": "GREAT61C",
-      "stationName": "Great Portland Street",
-      "field": "annualNo2",
-      "observed": 18.233,
-      "expected": "<= 18 ug/m3"
-    },
-    {
-      "severity": "warning",
-      "code": "pollution_cross_source_delta",
-      "message": "NO2 divergence vs secondary source is high; review recommended.",
-      "scope": "londonWide",
-      "microAreaId": "ma-hange8fb",
-      "stationCode": "HANGE8FB",
-      "stationName": "Hanger Lane",
-      "field": "annualNo2",
-      "observed": 18.69,
-      "expected": "<= 18 ug/m3"
-    },
-    {
-      "severity": "warning",
-      "code": "pollution_source_missing",
-      "message": "No raw pollution source record found for station.",
-      "scope": "londonWide",
-      "microAreaId": "ma-barki472",
-      "stationCode": "BARKI472",
-      "stationName": "Barking Park",
-      "field": "annualNo2"
-    },
-    {
-      "severity": "warning",
-      "code": "pollution_cross_source_delta",
-      "message": "NO2 divergence vs secondary source is high; review recommended.",
-      "scope": "londonWide",
-      "microAreaId": "ma-edgwaa0d",
-      "stationCode": "EDGWAA0D",
-      "stationName": "Edgware Road",
-      "field": "annualNo2",
-      "observed": 18.171,
-      "expected": "<= 18 ug/m3"
-    },
-    {
-      "severity": "warning",
-      "code": "pollution_cross_source_delta",
-      "message": "NO2 divergence vs secondary source is high; review recommended.",
-      "scope": "londonWide",
-      "microAreaId": "ma-great61c",
-      "stationCode": "GREAT61C",
-      "stationName": "Great Portland Street",
-      "field": "annualNo2",
-      "observed": 18.233,
-      "expected": "<= 18 ug/m3"
-    }
-  ],
+  "pollutionCrossSourceSummary": null,
+  "issues": [],
   "issuesTruncated": false
 }

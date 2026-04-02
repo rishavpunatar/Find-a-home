@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -46,6 +47,15 @@ NUMERIC_BOUNDS: dict[str, tuple[float, float]] = {
 }
 
 COMPONENT_KEYS = {'value', 'transport', 'schools', 'environment', 'crime'}
+MIN_SCORE_SOURCE_YEAR = 2023
+SCORE_SOURCE_DOMAINS = {
+    'property': 'value',
+    'transport': 'transport',
+    'schools': 'schools',
+    'pollution': 'environment',
+    'greenSpace': 'environment',
+    'crime': 'crime',
+}
 METRIC_FIELDS = [
     'averageSemiDetachedPrice',
     'medianSemiDetachedPrice',
@@ -70,6 +80,37 @@ METRIC_FIELDS = [
     'crimeRatePerThousand',
     'boroughQolScore',
 ]
+
+
+THRESHOLD_YEAR_PATTERN = re.compile(
+    r'\b(?:pre|post|before|after|since)\s*[-/]?(20\d{2})\b',
+    flags=re.IGNORECASE,
+)
+COMPACT_ACADEMIC_YEAR_PATTERN = re.compile(r'(?<!\d)(20\d{2})(\d{2})(?!\d)')
+SPLIT_ACADEMIC_YEAR_PATTERN = re.compile(r'(?<!\d)(20\d{2})\s*[/-]\s*(\d{2})(?!\d)')
+FOUR_DIGIT_YEAR_PATTERN = re.compile(r'(?<!\d)(20\d{2})(?!\d)')
+
+
+def extract_four_digit_years(*values: Any) -> list[int]:
+    years: list[int] = []
+    for value in values:
+        if not isinstance(value, str):
+            continue
+
+        sanitized = THRESHOLD_YEAR_PATTERN.sub('', value)
+
+        for start_year, end_suffix in COMPACT_ACADEMIC_YEAR_PATTERN.findall(sanitized):
+            start = int(start_year)
+            if int(end_suffix) == (start + 1) % 100:
+                years.append(start)
+
+        for start_year, end_suffix in SPLIT_ACADEMIC_YEAR_PATTERN.findall(sanitized):
+            start = int(start_year)
+            if int(end_suffix) == (start + 1) % 100:
+                years.append(start)
+
+        years.extend(int(match) for match in FOUR_DIGIT_YEAR_PATTERN.findall(sanitized))
+    return years
 
 
 def is_finite_number(value: Any) -> bool:
@@ -357,17 +398,60 @@ def validate_pollution_consistency(
                 expected='<= 10 ug/m3',
             )
 
-    if area.get('countyOrBorough') == 'Greater London':
-        note = str(area.get('annualNo2', {}).get('methodologyNote') or '')
-        if 'LAEI' not in note:
-            issue(
-                issues,
-                severity='warning',
-                code='pollution_london_method',
-                message='London station NO2 note does not mention LAEI source.',
-                area=area,
-                field='annualNo2.methodologyNote',
-            )
+    note = str(area.get('annualNo2', {}).get('methodologyNote') or '')
+    if 'LAEI' in note:
+        issue(
+            issues,
+            severity='critical',
+            code='pollution_pre_2023_source',
+            message='Pollution methodology note still references LAEI, which is pre-2023.',
+            area=area,
+            field='annualNo2.methodologyNote',
+            observed=note,
+        )
+    elif 'DEFRA' not in note and 'PCM' not in note:
+        issue(
+            issues,
+            severity='warning',
+            code='pollution_source_note_unclear',
+            message='Pollution methodology note does not clearly reference the DEFRA PCM source.',
+            area=area,
+            field='annualNo2.methodologyNote',
+            observed=note,
+        )
+
+
+def validate_score_source_metadata(issues: list[dict[str, Any]], dataset: dict[str, Any]) -> None:
+    config = dataset.get('config')
+    if not isinstance(config, dict):
+        return
+
+    source_metadata = config.get('sourceMetadata')
+    if not isinstance(source_metadata, dict):
+        return
+
+    for domain, axis in SCORE_SOURCE_DOMAINS.items():
+        record = source_metadata.get(domain)
+        if not isinstance(record, dict):
+            continue
+
+        years = extract_four_digit_years(record.get('referencePeriod'), record.get('releaseDate'))
+        stale_years = sorted({year for year in years if year < MIN_SCORE_SOURCE_YEAR})
+        if not stale_years:
+            continue
+
+        issue(
+            issues,
+            severity='critical',
+            code='score_source_pre_2023',
+            message=(
+                f'Scored domain `{domain}` metadata still references pre-{MIN_SCORE_SOURCE_YEAR} years.'
+            ),
+            area={'_scope': 'dataset'},
+            field=f'config.sourceMetadata.{domain}',
+            observed={'years': stale_years, 'axis': axis},
+            expected=f'All scored source years >= {MIN_SCORE_SOURCE_YEAR}',
+        )
 
 
 def load_json(path: Path) -> Any:
@@ -414,6 +498,8 @@ def generate_quality_report(
     issues: list[dict[str, Any]] = []
     pollution_deltas: list[float] = []
     scope_counts: dict[str, int] = {}
+
+    validate_score_source_metadata(issues, dataset)
 
     for scope_name, micro_areas in scope_payloads:
         if not micro_areas:

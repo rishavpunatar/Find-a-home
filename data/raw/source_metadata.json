@@ -11,13 +11,13 @@
   },
   "schools": {
     "source": "DfE GIAS open state-funded establishment exports + DfE Explore Education Statistics KS2 and absence data + Ofsted state-funded schools inspections and outcomes",
-    "referencePeriod": "Counts refreshed from GIAS open state-funded export dated 2026-04-01; primary attainment basket from KS2 202223-202425; attendance supplement from primary absence 202122-202324; Ofsted overlay as at 2025-08-31",
-    "releaseDate": "2026-04-01"
+    "referencePeriod": "Counts refreshed from GIAS open state-funded export dated 2026-04-02; primary attainment basket from 2023-onward KS2 202324-202425; attendance supplement from 2023-onward primary absence 202324; Ofsted overlay as at 2025-08-31",
+    "releaseDate": "2026-04-02"
   },
   "pollution": {
-    "source": "London Datastore LAEI + DEFRA UK-AIR LAQM background maps",
-    "referencePeriod": "LAEI 2019 (Greater London) + DEFRA LAQM 2023 (non-London)",
-    "releaseDate": "2023-12-31"
+    "source": "DEFRA UK-AIR modelled background pollution data (PCM)",
+    "referencePeriod": "DEFRA PCM 2024 annual mean NO2 and PM2.5 1km grids",
+    "releaseDate": "2025-09-30"
   },
   "greenSpace": {
     "source": "OpenStreetMap greenspace polygons via Overpass API",
