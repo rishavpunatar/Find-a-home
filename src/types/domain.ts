@@ -166,7 +166,6 @@ export type WeightingMode = 'manual' | 'varianceAwareDefaults'
 export interface Filters {
   maxCommuteMinutes: number
   maxDriveMinutes: number
-  maxMedianPrice: number
 }
 
 export type SortDirection = 'asc' | 'desc'

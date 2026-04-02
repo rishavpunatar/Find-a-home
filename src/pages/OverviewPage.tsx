@@ -13,6 +13,7 @@ import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import { isHighConfidenceArea, summarizeDatasetDomainCoverage } from '@/lib/dataQuality'
 import { formatDate } from '@/lib/format'
+import { rankingAxes } from '@/lib/rankingAxes'
 
 const coverageLabelMap = {
   property: 'Property',
@@ -21,7 +22,7 @@ const coverageLabelMap = {
   pollution: 'Pollution',
   greenSpace: 'Green',
   crime: 'Crime',
-  wellbeing: 'QoL (borough wellbeing)',
+  wellbeing: 'QoL context',
 } as const
 
 const StatCard = ({ label, value, hint }: { label: string; value: string; hint?: string }) => (
@@ -68,41 +69,13 @@ export const OverviewPage = () => {
       values: ranked.map((area) => area.dynamicOverallScore),
       barColor: '#0f766e',
     },
-    {
-      key: 'value-score',
-      title: 'Value score',
-      description: 'Spread of the value-for-money component across all areas.',
-      values: ranked.map((area) => area.componentScores.value),
-      barColor: '#0d9488',
-    },
-    {
-      key: 'transport-score',
-      title: 'Transport score',
-      description: 'How varied the commute and transport component is across the full set.',
-      values: ranked.map((area) => area.componentScores.transport),
-      barColor: '#0284c7',
-    },
-    {
-      key: 'schools-score',
-      title: 'School score',
-      description: 'Spread of the current primary-school component across all default-scope areas.',
-      values: ranked.map((area) => area.componentScores.schools),
-      barColor: '#65a30d',
-    },
-    {
-      key: 'environment-score',
-      title: 'Environment score',
-      description: 'Variation in pollution and green-space strength across all areas.',
-      values: ranked.map((area) => area.componentScores.environment),
-      barColor: '#16a34a',
-    },
-    {
-      key: 'crime-score',
-      title: 'Crime score',
-      description: 'Relative safety spread across the default search universe.',
-      values: ranked.map((area) => area.componentScores.crime),
-      barColor: '#0891b2',
-    },
+    ...rankingAxes.map((axis) => ({
+      key: `${axis.key}-score`,
+      title: axis.distributionTitle,
+      description: axis.distributionDescription,
+      values: ranked.map((area) => area.componentScores[axis.key]),
+      barColor: axis.chartColor,
+    })),
   ]
 
   return (
@@ -300,7 +273,7 @@ export const OverviewPage = () => {
             </div>
             {dataset.config.boroughQolSource?.coveragePeriod ? (
               <div className="flex justify-between gap-2">
-                <dt className="text-slate-600">ONS APS QoL (borough wellbeing) coverage</dt>
+                <dt className="text-slate-600">ONS APS QoL context coverage</dt>
                 <dd className="font-medium">{dataset.config.boroughQolSource.coveragePeriod}</dd>
               </div>
             ) : null}
@@ -359,7 +332,7 @@ export const OverviewPage = () => {
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Borough QoL (borough wellbeing) vs distance from central London
+            Borough QoL context vs distance from central London
           </h3>
           <QolDistanceScatter
             areas={filtered}
@@ -388,13 +361,13 @@ export const OverviewPage = () => {
           </p>
         </div>
         <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-          {scoreDistributions.map((metric) => (
+          {scoreDistributions.map((distribution) => (
             <MetricDistributionCard
-              key={metric.key}
-              title={metric.title}
-              description={metric.description}
-              values={metric.values}
-              barColor={metric.barColor}
+              key={distribution.key}
+              title={distribution.title}
+              description={distribution.description}
+              values={distribution.values}
+              barColor={distribution.barColor}
             />
           ))}
         </div>

@@ -19,6 +19,7 @@ import { QolDistanceScatter } from '@/components/charts/QolDistanceScatter'
 import { SubscoreRadarChart } from '@/components/charts/SubscoreRadarChart'
 import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
+import { rankingAxes } from '@/lib/rankingAxes'
 
 export const ComparisonPage = () => {
   const { dataset, loading, error } = useDataContext()
@@ -85,7 +86,7 @@ export const ComparisonPage = () => {
 
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Grouped component score comparison
+          Grouped ranking-axis comparison
         </h3>
         <div className="h-[420px] w-full">
           <ResponsiveContainer>
@@ -95,11 +96,14 @@ export const ComparisonPage = () => {
               <YAxis domain={[0, 100]} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="value" fill="#0f766e" />
-              <Bar dataKey="transport" fill="#0284c7" />
-              <Bar dataKey="schools" fill="#65a30d" />
-              <Bar dataKey="environment" fill="#16a34a" />
-              <Bar dataKey="crime" fill="#0891b2" />
+              {rankingAxes.map((axis) => (
+                <Bar
+                  key={axis.key}
+                  dataKey={axis.key}
+                  name={axis.label}
+                  fill={axis.chartColor}
+                />
+              ))}
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -129,7 +133,7 @@ export const ComparisonPage = () => {
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Borough QoL (borough wellbeing) vs distance from central London (filtered set)
+            Borough QoL context vs distance from central London (filtered set)
           </h3>
           <QolDistanceScatter
             areas={filtered}

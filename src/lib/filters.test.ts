@@ -234,21 +234,6 @@ describe('matchesFilters', () => {
     ).toBe(false)
   })
 
-  it('returns false when price exceeds the threshold', () => {
-    expect(
-      matchesFilters(
-        {
-          ...baseArea,
-          medianSemiDetachedPrice: {
-            ...baseArea.medianSemiDetachedPrice,
-            value: 1_200_000,
-          },
-        },
-        DEFAULT_FILTERS,
-      ),
-    ).toBe(false)
-  })
-
   it('can ignore the drive to Pinner filter for London-wide mode', () => {
     expect(
       matchesFilters(

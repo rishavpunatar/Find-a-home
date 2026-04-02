@@ -19,6 +19,7 @@ import type { Coordinate, DerivedMicroArea, Weights } from '@/types/domain'
 
 import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { formatCurrency, formatNumber } from '@/lib/format'
+import { rankingAxes, type RankingAxisKey } from '@/lib/rankingAxes'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -26,13 +27,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 })
 
-export type ColorMetric =
-  | 'overall'
-  | 'value'
-  | 'transport'
-  | 'schools'
-  | 'environment'
-  | 'crime'
+export type ColorMetric = 'overall' | RankingAxisKey
 
 export interface MapViewport {
   lat: number
@@ -40,14 +35,10 @@ export interface MapViewport {
   zoom: number
 }
 
-const mapMetricLabel: Record<ColorMetric, string> = {
+const mapMetricLabel = {
   overall: 'Overall score',
-  value: 'Value score',
-  transport: 'Transport score',
-  schools: 'School score',
-  environment: 'Environment score',
-  crime: 'Crime score',
-}
+  ...Object.fromEntries(rankingAxes.map((axis) => [axis.key, axis.mapLabel])),
+} as Record<ColorMetric, string>
 
 const LEGEND_COLORS = [
   '#7f1d1d',
@@ -659,7 +650,7 @@ export const MicroAreaMap = ({
         <p className="mt-2 text-xs text-slate-600">
           {legendMode === 'quantile'
             ? 'Quantile bins keep roughly the same number of areas in each colour bucket, which is useful for seeing relative ranking even when values are tightly clustered.'
-            : 'Equal-range bins split the full numeric range into equal value steps, which is better when you want the colours to reflect absolute differences in the metric itself.'}
+            : 'Equal-range bins split the full numeric range into equal value steps, which is better when you want the colours to reflect absolute differences in the selected score axis itself.'}
         </p>
         {denseLayer && markerLayerVisible ? (
           <p className="mt-1 text-xs text-slate-500">

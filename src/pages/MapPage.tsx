@@ -11,14 +11,14 @@ import {
 import { useDataContext } from '@/context/DataContext'
 import { useRankedData } from '@/hooks/useRankedData'
 import { formatCurrency, formatNumber } from '@/lib/format'
+import { rankingAxes } from '@/lib/rankingAxes'
 
-const metricOptions: Array<{ value: ColorMetric; label: string }> = [
+const colorOptions: Array<{ value: ColorMetric; label: string }> = [
   { value: 'overall', label: 'Overall score' },
-  { value: 'value', label: 'Value for money' },
-  { value: 'transport', label: 'Transport' },
-  { value: 'schools', label: 'Schools' },
-  { value: 'environment', label: 'Environment' },
-  { value: 'crime', label: 'Crime' },
+  ...rankingAxes.map((axis) => ({
+    value: axis.key as ColorMetric,
+    label: axis.label,
+  })),
 ]
 
 const DEFAULT_VIEWPORT: MapViewport = {
@@ -27,7 +27,7 @@ const DEFAULT_VIEWPORT: MapViewport = {
   zoom: 9,
 }
 
-const METRIC_KEYS = new Set(metricOptions.map((option) => option.value))
+const METRIC_KEYS = new Set(colorOptions.map((option) => option.value))
 
 const parseMetric = (value: string | null): ColorMetric =>
   value && METRIC_KEYS.has(value as ColorMetric) ? (value as ColorMetric) : 'overall'
@@ -221,7 +221,7 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
 
           <div>
             <label className="text-sm font-medium text-slate-700" htmlFor="mapMetric">
-              Colour micro-areas by metric
+              Colour micro-areas by score axis
             </label>
             <select
               id="mapMetric"
@@ -229,7 +229,7 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
               onChange={(event) => setMetric(event.currentTarget.value as ColorMetric)}
               className="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
             >
-              {metricOptions.map((option) => (
+              {colorOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>

@@ -63,7 +63,7 @@ export const BoroughQolBarChart = ({ areas }: BoroughQolBarChartProps) => {
                 <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs shadow">
                   <p className="font-semibold text-slate-900">{point.authority}</p>
                   <p className="text-slate-700">
-                    QoL (borough wellbeing) score: {point.qol.toFixed(1)}
+                    QoL context score: {point.qol.toFixed(1)}
                   </p>
                   <p className="text-slate-700">Areas in current view: {point.areaCount}</p>
                 </div>

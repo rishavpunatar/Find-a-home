@@ -34,7 +34,6 @@ export const LondonWideRankedPage = () => {
       ...DEFAULT_FILTERS,
       maxCommuteMinutes: LONDON_WIDE_COMMUTE_CAP_MINUTES,
       maxDriveMinutes: 180,
-      maxMedianPrice: 10_000_000,
     }),
     [],
   )
@@ -75,12 +74,12 @@ export const LondonWideRankedPage = () => {
           This page is for understanding how the wider London station universe behaves, not for
           tightening a shortlist. It keeps the <span className="font-semibold">70-minute commute</span>{' '}
           ceiling but otherwise relaxes the ranking filters so you can inspect variance, outliers,
-          and broad relationships between the metrics.
+          and broad relationships between the ranking axes and supporting context measures.
         </p>
         <p className="mt-1 text-xs text-slate-600">
           Effective scope in this page: commute ≤ {effectiveFilters.maxCommuteMinutes} min.
-          Price and optional Pinner-access constraints are deliberately relaxed here. Use Filtered
-          View when you want the stricter shortlist logic.
+          The optional Pinner-access constraint is deliberately relaxed here. Use Filtered View
+          when you want the stricter shortlist logic.
         </p>
         {dataset.config.londonWideSourceStationCount !== undefined &&
         dataset.config.londonWideExcludedByCommuteCount !== undefined ? (

@@ -58,7 +58,6 @@ const RangeControl = ({
 const filterLabels: Record<keyof Filters, string> = {
   maxCommuteMinutes: 'Commute',
   maxDriveMinutes: 'Pinner drive',
-  maxMedianPrice: 'Median semi price',
 }
 
 const formatFilterValue = (key: keyof Filters, value: number): string => {
@@ -66,8 +65,6 @@ const formatFilterValue = (key: keyof Filters, value: number): string => {
     case 'maxCommuteMinutes':
     case 'maxDriveMinutes':
       return `${value} min`
-    case 'maxMedianPrice':
-      return `GBP ${value.toLocaleString('en-GB')}`
     default:
       return value.toString()
   }
@@ -117,18 +114,8 @@ export const FiltersPanel = () => {
           (ranked[index]?.driveTimeToPinnerMinutes.value ?? Number.POSITIVE_INFINITY) <=
           activeFilters.maxDriveMinutes,
       ),
-      price: countExcluded(
-        (index) =>
-          (ranked[index]?.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY) <=
-          activeFilters.maxMedianPrice,
-      ),
     }
-  }, [
-    activeFilters.maxDriveMinutes,
-    activeFilters.maxMedianPrice,
-    displayedCommuteLimit,
-    ranked,
-  ])
+  }, [activeFilters.maxDriveMinutes, displayedCommuteLimit, ranked])
 
   const activeFilterChips = useMemo(
     () =>
@@ -177,8 +164,8 @@ export const FiltersPanel = () => {
       {isLondonWideTab ? (
         <p className="mb-3 text-xs text-slate-600">
           Coverage view is active: commute stays capped at 70 minutes while the broader table
-          relaxes the optional Pinner-drive and price constraints. Use the main Ranked Table when
-          you want the stricter shortlist view.
+          relaxes the optional Pinner-drive constraint. Use the main Ranked Table when you want
+          the stricter shortlist view.
         </p>
       ) : null}
 
@@ -224,7 +211,7 @@ export const FiltersPanel = () => {
         )}
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2">
         <RangeControl
           label="Max commute"
           value={displayedCommuteLimit}
@@ -248,21 +235,6 @@ export const FiltersPanel = () => {
             isLondonWideTab
               ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.drive, totalAreaCount)
-          }
-        />
-        <RangeControl
-          label="Max median semi price"
-          value={activeFilters.maxMedianPrice}
-          min={300000}
-          max={2000000}
-          step={10000}
-          unit=" GBP"
-          onChange={(next) => updateFilter('maxMedianPrice', next, scope)}
-          disabled={isLondonWideTab}
-          exclusionLabel={
-            isLondonWideTab
-              ? 'Relaxed in coverage view'
-              : excludedLabel(exclusionCounts.price, totalAreaCount)
           }
         />
       </div>

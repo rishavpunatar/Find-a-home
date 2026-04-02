@@ -22,10 +22,6 @@ export const matchesFilters = (
     return false
   }
 
-  if (!isAtMost(area.medianSemiDetachedPrice.value, filters.maxMedianPrice)) {
-    return false
-  }
-
   return true
 }
 

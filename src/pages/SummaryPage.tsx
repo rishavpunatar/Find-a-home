@@ -45,7 +45,8 @@ export const SummaryPage = () => {
             <Link to="/trends" className="font-medium text-surge hover:underline">
               Trends
             </Link>{' '}
-            if you want to inspect how metrics vary across the wider London dataset.
+            if you want to inspect how the wider ranking axes and context measures vary across
+            London.
           </p>
         </div>
       </section>

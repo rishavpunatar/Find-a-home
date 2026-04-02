@@ -1,9 +1,10 @@
 import type { MicroArea, Weights } from '@/types/domain'
 
 import { DEFAULT_WEIGHTS } from './constants'
+import { rankingAxisKeys } from './rankingAxes'
 import { interquartileRange, median, medianAbsoluteDeviation } from './statistics'
 
-export const weightKeys = Object.keys(DEFAULT_WEIGHTS) as (keyof Weights)[]
+export const weightKeys = rankingAxisKeys
 
 const roundTo = (value: number, decimals = 2): number => {
   const factor = 10 ** decimals

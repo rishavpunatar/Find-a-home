@@ -10,18 +10,17 @@ import {
 
 import type { DerivedMicroArea } from '@/types/domain'
 
+import { rankingAxes } from '@/lib/rankingAxes'
+
 interface SubscoreRadarChartProps {
   area: DerivedMicroArea
 }
 
 export const SubscoreRadarChart = ({ area }: SubscoreRadarChartProps) => {
-  const data = [
-    { metric: 'Value', score: area.componentScores.value },
-    { metric: 'Transport', score: area.componentScores.transport },
-    { metric: 'Schools', score: area.componentScores.schools },
-    { metric: 'Environment', score: area.componentScores.environment },
-    { metric: 'Crime', score: area.componentScores.crime },
-  ]
+  const data = rankingAxes.map((axis) => ({
+    metric: axis.label,
+    score: area.componentScores[axis.key],
+  }))
 
   return (
     <div className="h-[320px] w-full">

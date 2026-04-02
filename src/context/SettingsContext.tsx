@@ -18,6 +18,7 @@ import {
   MAX_COMPARE_ITEMS,
   STORAGE_KEYS,
 } from '@/lib/constants'
+import { rankingAxisKeys } from '@/lib/rankingAxes'
 import { clampWeight, buildVarianceAwareDefaultWeights, normalizeWeights } from '@/lib/weights'
 import { useDataContext } from './DataContext'
 
@@ -83,7 +84,7 @@ const parseWeights = (): Weights => {
     return DEFAULT_WEIGHTS
   }
 
-  return (Object.keys(DEFAULT_WEIGHTS) as (keyof Weights)[]).reduce(
+  return rankingAxisKeys.reduce(
     (weights, key) => ({
       ...weights,
       [key]:

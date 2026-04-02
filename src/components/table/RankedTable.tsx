@@ -117,9 +117,7 @@ export const RankedTable = ({
   const [scrollTop, setScrollTop] = useState(0)
   const [viewportHeight, setViewportHeight] = useState(560)
   const [searchTerm, setSearchTerm] = useState('')
-  const [maxPriceFilter, setMaxPriceFilter] = useState('')
   const [maxCommuteFilter, setMaxCommuteFilter] = useState('')
-  const [minSchoolFilter, setMinSchoolFilter] = useState('')
   const [pinnedOnly, setPinnedOnly] = useState(false)
   const [sourceBackedPriceOnly, setSourceBackedPriceOnly] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement | null>(null)
@@ -127,9 +125,7 @@ export const RankedTable = ({
 
   const locallyFilteredRows = useMemo(() => {
     const normalizedSearch = deferredSearchTerm.trim().toLowerCase()
-    const maxPrice = Number(maxPriceFilter)
     const maxCommute = Number(maxCommuteFilter)
-    const minSchool = Number(minSchoolFilter)
 
     return areas.filter((area) => {
       if (pinnedOnly && !pinnedIds.includes(area.microAreaId)) {
@@ -156,15 +152,7 @@ export const RankedTable = ({
         }
       }
 
-      if (maxPriceFilter && (area.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY) > maxPrice) {
-        return false
-      }
-
       if (maxCommuteFilter && (area.commuteTypicalMinutes.value ?? Number.POSITIVE_INFINITY) > maxCommute) {
-        return false
-      }
-
-      if (minSchoolFilter && area.componentScores.schools < minSchool) {
         return false
       }
 
@@ -174,8 +162,6 @@ export const RankedTable = ({
     areas,
     deferredSearchTerm,
     maxCommuteFilter,
-    maxPriceFilter,
-    minSchoolFilter,
     pinnedIds,
     pinnedOnly,
     sourceBackedPriceOnly,
@@ -202,9 +188,7 @@ export const RankedTable = ({
     pinnedOnly,
     sourceBackedPriceOnly,
     searchTerm,
-    maxPriceFilter,
     maxCommuteFilter,
-    minSchoolFilter,
     sort.direction,
     sort.key,
   ])
@@ -251,18 +235,6 @@ export const RankedTable = ({
               className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
             />
           </label>
-          <label className="flex w-36 flex-col gap-1 text-xs font-medium text-slate-600">
-            Max price
-            <input
-              type="number"
-              min="0"
-              step="5000"
-              value={maxPriceFilter}
-              onChange={(event) => setMaxPriceFilter(event.target.value)}
-              placeholder="Any"
-              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-            />
-          </label>
           <label className="flex w-32 flex-col gap-1 text-xs font-medium text-slate-600">
             Max commute
             <input
@@ -271,19 +243,6 @@ export const RankedTable = ({
               step="1"
               value={maxCommuteFilter}
               onChange={(event) => setMaxCommuteFilter(event.target.value)}
-              placeholder="Any"
-              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-            />
-          </label>
-          <label className="flex w-32 flex-col gap-1 text-xs font-medium text-slate-600">
-            Min school
-            <input
-              type="number"
-              min="0"
-              max="100"
-              step="1"
-              value={minSchoolFilter}
-              onChange={(event) => setMinSchoolFilter(event.target.value)}
               placeholder="Any"
               className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
             />
@@ -308,9 +267,7 @@ export const RankedTable = ({
             type="button"
             onClick={() => {
               setSearchTerm('')
-              setMaxPriceFilter('')
               setMaxCommuteFilter('')
-              setMinSchoolFilter('')
               setSourceBackedPriceOnly(false)
               setPinnedOnly(false)
             }}
@@ -331,6 +288,38 @@ export const RankedTable = ({
       >
         <table className="min-w-full divide-y divide-teal-100">
           <thead className="sticky top-0 z-10 bg-teal-50">
+            <tr className="border-b border-teal-100 bg-teal-100/80">
+              <th
+                colSpan={3}
+                className="px-3 py-1 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600"
+              >
+                Ranking result
+              </th>
+              <th
+                colSpan={3}
+                className="px-3 py-1 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600"
+              >
+                Raw shortlist checks
+              </th>
+              <th
+                colSpan={1}
+                className="px-3 py-1 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600"
+              >
+                Ranking axis
+              </th>
+              <th
+                colSpan={5}
+                className="px-3 py-1 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600"
+              >
+                Context and evidence
+              </th>
+              <th
+                colSpan={1}
+                className="px-3 py-1 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600"
+              >
+                Actions
+              </th>
+            </tr>
             <tr>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                 Rank
@@ -340,22 +329,29 @@ export const RankedTable = ({
               <HeaderCell label="Commute" sortKey="commute" current={sort} onSort={toggleSort} />
               <HeaderCell label="Drive" sortKey="drive" current={sort} onSort={toggleSort} />
               <HeaderCell label="Median price" sortKey="price" current={sort} onSort={toggleSort} />
-              <HeaderCell label="School" sortKey="schools" current={sort} onSort={toggleSort} />
               <HeaderCell
-                label="QoL (borough wellbeing)"
+                label="School axis"
+                sortKey="schools"
+                current={sort}
+                onSort={toggleSort}
+                helpText="Weighted primary-school ranking axis, not a raw school count."
+              />
+              <HeaderCell
+                label="QoL context"
                 sortKey="qol"
                 current={sort}
                 onSort={toggleSort}
+                helpText="Borough-wide ONS APS wellbeing context. Not part of the weighted ranking axes."
               />
               <HeaderCell label="PM2.5" sortKey="pm25" current={sort} onSort={toggleSort} />
               <HeaderCell label="Crime" sortKey="crime" current={sort} onSort={toggleSort} />
               <HeaderCell label="Green" sortKey="green" current={sort} onSort={toggleSort} />
               <HeaderCell
-                label="Confidence"
+                label="Evidence"
                 sortKey="confidence"
                 current={sort}
                 onSort={toggleSort}
-                helpText="Confidence is dataConfidenceScore x 100. It blends metric-level confidence and catchment overlap confidence."
+                helpText="Evidence strength flag only. It blends metric-level confidence and catchment overlap confidence, and is not a weighted ranking axis."
               />
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                 Actions
@@ -438,7 +434,7 @@ export const RankedTable = ({
       </div>
 
       <div className="border-t border-teal-100 bg-teal-50 px-4 py-2 text-xs text-slate-600">
-        <span className="font-semibold">Confidence guide:</span> 80-100% high reliability, 60-79%
+        <span className="font-semibold">Evidence guide:</span> 80-100% high reliability, 60-79%
         moderate, below 60% lower-confidence estimates or partial-source metrics.
       </div>
     </div>

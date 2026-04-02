@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { useDataContext } from '@/context/DataContext'
 import { useSettings } from '@/context/SettingsContext'
+import { rankingAxes } from '@/lib/rankingAxes'
 
 const InfoCard = ({
   title,
@@ -29,57 +30,6 @@ const DetailBlock = ({
     <div className="mt-2 space-y-1 text-sm text-slate-600">{children}</div>
   </details>
 )
-
-const scoreAxes = [
-  {
-    key: 'value',
-    label: 'Value',
-    detail:
-      'A higher value score means the target home type looks cheaper relative to the rest of the search universe once price and commute are both considered.',
-    recipe:
-      'This starts from the property layer. The app takes the affordability score and the value-for-money score, then averages them into one 0-100 value score.',
-    formula: 'Value score = average of affordability score and value-for-money score',
-  },
-  {
-    key: 'transport',
-    label: 'Transport',
-    detail:
-      'A higher transport score means the area has a better commute into the central London core, better peak service, fewer changes, or some combination of those.',
-    recipe:
-      'This combines four transformed transport inputs: typical commute, peak commute, peak trains-per-hour, and interchange count. Shorter journeys and fewer changes help; stronger service frequency helps.',
-    formula:
-      'Transport score = typical commute 30% + peak commute 20% + peak service 30% + interchange score 20%',
-  },
-  {
-    key: 'schools',
-    label: 'Schools',
-    detail:
-      'A higher school score means there are more realistically reachable state-funded primary schools and the stronger schools among that primary pool perform better in official data.',
-    recipe:
-      'This is now a primary-only blend of attainment, access, and a small attendance supplement. Access stays population-adjusted, so dense areas are not rewarded just for having more people around them.',
-    formula:
-      'School score = primary attainment basket 68% + population-adjusted primary access 22% + attendance 10%, with a modest Ofsted warning penalty when relevant',
-  },
-  {
-    key: 'environment',
-    label: 'Environment',
-    detail:
-      'A higher environment score means cleaner air and better nearby green-space access.',
-    recipe:
-      'This mixes air quality with greenery. Lower PM2.5, lower NO2, higher green cover, more green area within 1 km, and a shorter distance to the nearest park all help.',
-    formula:
-      'Environment score = PM2.5 34% + NO2 16% + green cover 20% + green area 18% + park distance 12%',
-  },
-  {
-    key: 'crime',
-    label: 'Crime',
-    detail:
-      'A higher crime score means lower recorded crime in the station-area catchment. It is effectively a safety score.',
-    recipe:
-      'The raw crime metric is annualised crime incidents per 1,000 residents. Lower raw crime rates are converted into higher-is-better safety scores for ranking.',
-    formula: 'Crime score = inverse transform of crime rate per 1,000 residents',
-  },
-] as const
 
 interface DataMethodologyGuideProps {
   variant?: 'compact' | 'full'
@@ -113,7 +63,9 @@ export const DataMethodologyGuide = ({
   const qolCoveragePeriod = qolSource?.coveragePeriod ?? 'up to 2022-23'
   const qolReleaseDate = qolSource?.releaseDate ?? '2023-11-28'
   const centralDestination = dataset?.destinationStation ?? 'central London core'
-  const overallFormula = `((Value x ${normalizedWeights.value.toFixed(1)}) + (Transport x ${normalizedWeights.transport.toFixed(1)}) + (Schools x ${normalizedWeights.schools.toFixed(1)}) + (Environment x ${normalizedWeights.environment.toFixed(1)}) + (Crime x ${normalizedWeights.crime.toFixed(1)})) / 100 x confidence factor`
+  const overallFormula = `(${rankingAxes
+    .map((axis) => `${axis.label} x ${normalizedWeights[axis.key].toFixed(1)}`)
+    .join(' + ')}) / 100 x confidence factor`
 
   return (
     <div className="space-y-4">
@@ -127,8 +79,8 @@ export const DataMethodologyGuide = ({
                 areas that fit the kind of home and trade-offs you care about.
               </p>
               <p>
-                The ranking works by combining housing, commute, schools, air quality, green
-                space, and crime into one shortlist model.
+                The ranking works by combining five weighted axes into one shortlist model: value,
+                transport, schools, environment, and crime.
               </p>
             </InfoCard>
 
@@ -167,7 +119,7 @@ export const DataMethodologyGuide = ({
               <p>
                 A score here is not a percentage chance that you will like an area. It is a
                 ranking number built inside this app&apos;s search universe. A station with a score
-                of 72 is doing better on the weighted mix of metrics than a station with a score
+                of 72 is doing better on the weighted mix of ranked axes than a station with a score
                 of 58, under the current weight settings and confidence adjustment.
               </p>
               <p>
@@ -200,7 +152,7 @@ export const DataMethodologyGuide = ({
               currently carries in the overall rank.
             </p>
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {scoreAxes.map((axis) => (
+              {rankingAxes.map((axis) => (
                 <article
                   key={axis.label}
                   className="rounded-xl border border-slate-200 bg-slate-50 p-3"
@@ -269,18 +221,19 @@ export const DataMethodologyGuide = ({
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
             {variant === 'full'
-              ? 'What each key metric means and where it comes from'
-              : 'How key columns are determined'}
+              ? 'How each ranking axis is built and sourced'
+              : 'How ranked axes are determined'}
           </h2>
           <div className="mt-3 space-y-3 text-sm text-slate-700">
-            <DetailBlock title="Median semi-detached house price (GBP)">
+            <DetailBlock title="Value axis">
               <p>
-                This is the app&apos;s best estimate of what a semi-detached home with at least 3
-                bedrooms and 2 bathrooms costs around that station area.
+                The value axis is the property-led part of the model. It combines the affordability
+                score and the value-for-money score, both of which start from the target home type:
+                semi-detached homes with at least 3 bedrooms and 2 bathrooms.
               </p>
               <p>
-                First, the pipeline looks for current OnTheMarket listings that match that home
-                type. Nearer listings count more than farther ones.
+                The underlying property evidence starts with current OnTheMarket listings around the
+                station catchment. Nearer listings count more than farther ones.
               </p>
               <p>
                 If the direct station locality page is too thin, the pipeline can widen to a nearby
@@ -302,14 +255,15 @@ export const DataMethodologyGuide = ({
                 {propertyReferencePeriod}.
               </p>
               <p className="text-xs text-slate-500">
-                The app uses median rather than average in the table because median is less easily
-                distorted by a few unusually expensive homes.
+                The ranked table shows the median price as the clearest raw property read, but the
+                axis itself is a transformed 0-100 score, not the raw GBP number.
               </p>
             </DetailBlock>
 
-            <DetailBlock title="Transport and commute">
+            <DetailBlock title="Transport axis">
               <p>
-                This is about how practical the station is for getting into {centralDestination}.
+                The transport axis is about how practical the station is for getting into{' '}
+                {centralDestination}.
               </p>
               <p>
                 The pipeline uses TfL Journey Planner snapshots for commute time, interchange
@@ -331,7 +285,7 @@ export const DataMethodologyGuide = ({
               </p>
             </DetailBlock>
 
-            <DetailBlock title="School (0-100, higher is better)">
+            <DetailBlock title="Schools axis">
               <p>
                 The school score is now explicitly primary-only. It combines how many
                 state-funded primary schools look realistically reachable and how strong those
@@ -375,45 +329,34 @@ export const DataMethodologyGuide = ({
               </p>
             </DetailBlock>
 
-            <DetailBlock title="QoL (borough wellbeing, 0-100, borough-level ONS APS, higher is better)">
+            <DetailBlock title="Environment axis">
               <p>
-                This is a borough-wide quality-of-life context score, not a station-level street
-                score.
+                The environment axis mixes air quality with greenery. It combines PM2.5, NO2,
+                green cover, green-space area within 1 km, and nearest-park distance into one
+                0-100 environment score.
               </p>
               <p>
-                It comes from ONS personal well-being estimates and gives a sense of how the wider
-                borough performs on life satisfaction, happiness, feeling worthwhile, and anxiety.
+                PM2.5 is the app&apos;s main air-quality input. Lower numbers are better because
+                they mean fewer fine particles in the air. Inside Greater London, the app uses
+                detailed London modelled air-quality layers. Outside that scope, it uses DEFRA
+                background maps.
               </p>
               <p>
-                <span className="font-semibold">Source:</span> ONS personal well-being estimates by
-                local authority.
-              </p>
-              <p>
-                <span className="font-semibold">Data reference period:</span> {qolCoveragePeriod}{' '}
-                (ONS release date {qolReleaseDate}).
-              </p>
-            </DetailBlock>
-
-            <DetailBlock title="PM2.5 (ug/m3, lower is better)">
-              <p>
-                PM2.5 is the app&apos;s main air-quality measure. Lower numbers are better because
-                they mean fewer fine particles in the air.
-              </p>
-              <p>
-                Inside Greater London, the app uses detailed London modelled air-quality layers.
-                Outside that scope, it uses DEFRA background maps.
+                On the green side, the app uses OpenStreetMap greenspace polygons via Overpass to
+                estimate green cover, nearby green-space area, and park access.
               </p>
               <p>
                 <span className="font-semibold">Source:</span> London Datastore LAEI (London) +
-                DEFRA UK-AIR LAQM background maps.
+                DEFRA UK-AIR LAQM background maps + OpenStreetMap greenspace polygons via Overpass
+                API.
               </p>
               <p>
-                <span className="font-semibold">Data reference period:</span> {pollutionReferencePeriod}
-                .
+                <span className="font-semibold">Data reference period:</span>{' '}
+                {pollutionReferencePeriod}; greenspace refresh {greenReferencePeriod}.
               </p>
             </DetailBlock>
 
-            <DetailBlock title="Crime (per 1,000, lower is better)">
+            <DetailBlock title="Crime axis">
               <p>
                 This is an annualized crime rate for the station-area catchment. Lower raw numbers
                 are better.
@@ -432,52 +375,27 @@ export const DataMethodologyGuide = ({
                 .
               </p>
             </DetailBlock>
-
-            <DetailBlock title="Green (% cover, higher is better)">
-              <p>
-                This is the share of the nearby environment that reads as green cover around the
-                station catchment.
-              </p>
-              <p>
-                The app also tracks nearby park distance and total green-space area, but this
-                green-cover percentage is the simplest quick read for the ranked table.
-              </p>
-              <p>
-                <span className="font-semibold">Source:</span> OpenStreetMap greenspace polygons
-                via Overpass API, with a wider neighbourhood blend for this percentage metric.
-              </p>
-              <p>
-                <span className="font-semibold">Data reference period:</span> {greenReferencePeriod}
-                .
-              </p>
-            </DetailBlock>
-
-            <DetailBlock title="Confidence (%)">
-              <p>
-                Confidence tells you how robust the evidence is for that area. It does not tell you
-                whether the area is desirable.
-              </p>
-              <p>
-                The app blends metric-level confidence with a catchment-overlap adjustment, because
-                some station catchments are much more distinct than others.
-              </p>
-              <p>
-                In plain terms: a higher confidence score usually means more of the important
-                metrics are source-backed and less of the area depends on thin or indirect
-                estimates.
-              </p>
-              <p className="text-xs text-slate-500">
-                Dataset-wide quality checks and verification summaries are shown on the{' '}
-                <Link to="/" className="font-medium text-surge hover:underline">
-                  Overview
-                </Link>{' '}
-                page.
-              </p>
-            </DetailBlock>
+          </div>
+          <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
+            <p className="font-semibold">Context-only measures</p>
+            <p className="mt-1">
+              Borough QoL is shown in some table, detail, and trends views as borough-wide context,
+              not as a weighted ranking axis. It comes from ONS personal well-being estimates by
+              local authority, with coverage {qolCoveragePeriod} and ONS release date {qolReleaseDate}.
+            </p>
+            <p className="mt-1">
+              Confidence is also not a ranking axis. It is an evidence-strength flag that blends
+              metric-level confidence with catchment overlap. Dataset-wide verification and quality
+              checks are surfaced on the{' '}
+              <Link to="/" className="font-medium text-surge hover:underline">
+                Overview
+              </Link>{' '}
+              page.
+            </p>
           </div>
 
           <p className="mt-3 text-xs text-slate-500">
-            All metric values also carry status, confidence, methodology note, and last-updated
+            All displayed values carry status, confidence, methodology note, and last-updated
             metadata in the micro-area detail view and dataset JSON.
           </p>
 

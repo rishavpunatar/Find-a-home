@@ -23,7 +23,7 @@ const domainLabelMap = {
   pollution: 'Pollution',
   greenSpace: 'Green',
   crime: 'Crime',
-  wellbeing: 'QoL (borough wellbeing)',
+  wellbeing: 'QoL context',
 } as const
 
 const MetricRow = ({
@@ -170,88 +170,97 @@ export const MicroAreaDetailPage = () => {
         </article>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-        <MetricRow
-          label="Median semi-detached price"
-          value={formatCurrency(area.medianSemiDetachedPrice.value)}
-          status={area.medianSemiDetachedPrice.status}
-          confidence={area.medianSemiDetachedPrice.confidence}
-          provenance={area.medianSemiDetachedPrice.provenance}
-          note={area.medianSemiDetachedPrice.methodologyNote}
-          updated={area.medianSemiDetachedPrice.lastUpdated}
-        />
-        <MetricRow
-          label="Typical commute"
-          value={`${formatNumber(area.commuteTypicalMinutes.value)} min`}
-          status={area.commuteTypicalMinutes.status}
-          confidence={area.commuteTypicalMinutes.confidence}
-          provenance={area.commuteTypicalMinutes.provenance}
-          note={area.commuteTypicalMinutes.methodologyNote}
-          updated={area.commuteTypicalMinutes.lastUpdated}
-        />
-        <MetricRow
-          label="Drive time to Pinner"
-          value={`${formatNumber(area.driveTimeToPinnerMinutes.value)} min`}
-          status={area.driveTimeToPinnerMinutes.status}
-          confidence={area.driveTimeToPinnerMinutes.confidence}
-          provenance={area.driveTimeToPinnerMinutes.provenance}
-          note={area.driveTimeToPinnerMinutes.methodologyNote}
-          updated={area.driveTimeToPinnerMinutes.lastUpdated}
-        />
-        <MetricRow
-          label="Primary attainment basket"
-          value={formatNumber(area.primaryQualityScore.value, 1)}
-          status={area.primaryQualityScore.status}
-          confidence={area.primaryQualityScore.confidence}
-          provenance={area.primaryQualityScore.provenance}
-          note={area.schoolMethodologyNotes}
-          updated={area.primaryQualityScore.lastUpdated}
-        />
-        <MetricRow
-          label="Crime rate per 1,000"
-          value={formatNumber(area.crimeRatePerThousand.value, 1)}
-          status={area.crimeRatePerThousand.status}
-          confidence={area.crimeRatePerThousand.confidence}
-          provenance={area.crimeRatePerThousand.provenance}
-          note={area.crimeRatePerThousand.methodologyNote}
-          updated={area.crimeRatePerThousand.lastUpdated}
-        />
-        <MetricRow
-          label="PM2.5 annual mean (primary)"
-          value={`${formatNumber(area.annualPm25.value, 1)} ug/m3`}
-          status={area.annualPm25.status}
-          confidence={area.annualPm25.confidence}
-          provenance={area.annualPm25.provenance}
-          note={area.annualPm25.methodologyNote}
-          updated={area.annualPm25.lastUpdated}
-        />
-        <MetricRow
-          label="NO2 annual mean (secondary)"
-          value={`${formatNumber(area.annualNo2.value, 1)} ug/m3`}
-          status={area.annualNo2.status}
-          confidence={area.annualNo2.confidence}
-          provenance={area.annualNo2.provenance}
-          note={area.annualNo2.methodologyNote}
-          updated={area.annualNo2.lastUpdated}
-        />
-        <MetricRow
-          label="Green cover"
-          value={formatPercent(area.greenCoverPct.value)}
-          status={area.greenCoverPct.status}
-          confidence={area.greenCoverPct.confidence}
-          provenance={area.greenCoverPct.provenance}
-          note={area.greenCoverPct.methodologyNote}
-          updated={area.greenCoverPct.lastUpdated}
-        />
-        <MetricRow
-          label="Borough QoL (borough wellbeing, ONS APS)"
-          value={formatNumber(area.boroughQolScore.value, 1)}
-          status={area.boroughQolScore.status}
-          confidence={area.boroughQolScore.confidence}
-          provenance={area.boroughQolScore.provenance}
-          note={area.boroughQolMethodology}
-          updated={area.boroughQolScore.lastUpdated}
-        />
+      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+          Raw checks and context
+        </h3>
+        <p className="mt-2 text-sm text-slate-700">
+          These cards show the supporting raw readings and context behind the ranking. Borough
+          QoL is context only, not a weighted ranking axis.
+        </p>
+        <div className="mt-4 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+          <MetricRow
+            label="Median semi-detached price"
+            value={formatCurrency(area.medianSemiDetachedPrice.value)}
+            status={area.medianSemiDetachedPrice.status}
+            confidence={area.medianSemiDetachedPrice.confidence}
+            provenance={area.medianSemiDetachedPrice.provenance}
+            note={area.medianSemiDetachedPrice.methodologyNote}
+            updated={area.medianSemiDetachedPrice.lastUpdated}
+          />
+          <MetricRow
+            label="Typical commute"
+            value={`${formatNumber(area.commuteTypicalMinutes.value)} min`}
+            status={area.commuteTypicalMinutes.status}
+            confidence={area.commuteTypicalMinutes.confidence}
+            provenance={area.commuteTypicalMinutes.provenance}
+            note={area.commuteTypicalMinutes.methodologyNote}
+            updated={area.commuteTypicalMinutes.lastUpdated}
+          />
+          <MetricRow
+            label="Drive time to Pinner"
+            value={`${formatNumber(area.driveTimeToPinnerMinutes.value)} min`}
+            status={area.driveTimeToPinnerMinutes.status}
+            confidence={area.driveTimeToPinnerMinutes.confidence}
+            provenance={area.driveTimeToPinnerMinutes.provenance}
+            note={area.driveTimeToPinnerMinutes.methodologyNote}
+            updated={area.driveTimeToPinnerMinutes.lastUpdated}
+          />
+          <MetricRow
+            label="Primary attainment basket"
+            value={formatNumber(area.primaryQualityScore.value, 1)}
+            status={area.primaryQualityScore.status}
+            confidence={area.primaryQualityScore.confidence}
+            provenance={area.primaryQualityScore.provenance}
+            note={area.schoolMethodologyNotes}
+            updated={area.primaryQualityScore.lastUpdated}
+          />
+          <MetricRow
+            label="Crime rate per 1,000"
+            value={formatNumber(area.crimeRatePerThousand.value, 1)}
+            status={area.crimeRatePerThousand.status}
+            confidence={area.crimeRatePerThousand.confidence}
+            provenance={area.crimeRatePerThousand.provenance}
+            note={area.crimeRatePerThousand.methodologyNote}
+            updated={area.crimeRatePerThousand.lastUpdated}
+          />
+          <MetricRow
+            label="PM2.5 annual mean (primary)"
+            value={`${formatNumber(area.annualPm25.value, 1)} ug/m3`}
+            status={area.annualPm25.status}
+            confidence={area.annualPm25.confidence}
+            provenance={area.annualPm25.provenance}
+            note={area.annualPm25.methodologyNote}
+            updated={area.annualPm25.lastUpdated}
+          />
+          <MetricRow
+            label="NO2 annual mean (secondary)"
+            value={`${formatNumber(area.annualNo2.value, 1)} ug/m3`}
+            status={area.annualNo2.status}
+            confidence={area.annualNo2.confidence}
+            provenance={area.annualNo2.provenance}
+            note={area.annualNo2.methodologyNote}
+            updated={area.annualNo2.lastUpdated}
+          />
+          <MetricRow
+            label="Green cover"
+            value={formatPercent(area.greenCoverPct.value)}
+            status={area.greenCoverPct.status}
+            confidence={area.greenCoverPct.confidence}
+            provenance={area.greenCoverPct.provenance}
+            note={area.greenCoverPct.methodologyNote}
+            updated={area.greenCoverPct.lastUpdated}
+          />
+          <MetricRow
+            label="Borough QoL context (ONS APS)"
+            value={formatNumber(area.boroughQolScore.value, 1)}
+            status={area.boroughQolScore.status}
+            confidence={area.boroughQolScore.confidence}
+            provenance={area.boroughQolScore.provenance}
+            note={area.boroughQolMethodology}
+            updated={area.boroughQolScore.lastUpdated}
+          />
+        </div>
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
@@ -293,11 +302,11 @@ export const MicroAreaDetailPage = () => {
               <dd className="font-medium">{formatNumber(area.nearestParkDistanceM.value)} m</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Borough QoL (borough wellbeing) authority link</dt>
+              <dt className="text-slate-600">Borough QoL context authority link</dt>
               <dd className="font-medium">{area.boroughQolAuthority || 'N/A'}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Borough QoL (borough wellbeing) period</dt>
+              <dt className="text-slate-600">Borough QoL context period</dt>
               <dd className="font-medium">{area.boroughQolPeriod || 'N/A'}</dd>
             </div>
           </dl>

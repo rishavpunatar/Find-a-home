@@ -72,7 +72,7 @@ export const QolDistanceScatter = ({ areas, centralCoordinate }: QolDistanceScat
           <YAxis
             type="number"
             dataKey="y"
-            name="QoL (borough wellbeing) score"
+            name="QoL context score"
             domain={yDomain}
           />
           <Tooltip
@@ -92,7 +92,7 @@ export const QolDistanceScatter = ({ areas, centralCoordinate }: QolDistanceScat
                   <p className="text-slate-700">{point.authority}</p>
                   <p className="text-slate-700">Distance to central London: {point.x.toFixed(1)} km</p>
                   <p className="text-slate-700">
-                    QoL (borough wellbeing) score: {point.y.toFixed(1)}
+                    QoL context score: {point.y.toFixed(1)}
                   </p>
                 </div>
               )
