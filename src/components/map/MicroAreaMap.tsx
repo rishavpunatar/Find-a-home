@@ -50,6 +50,16 @@ const LEGEND_COLORS = [
   '#059669',
 ] as const
 
+const LEGEND_COLOR_LABELS = [
+  'deep red',
+  'red',
+  'orange',
+  'amber',
+  'lime',
+  'green',
+  'deep green',
+] as const
+
 const colorAt = (index: number): string =>
   LEGEND_COLORS[index] ?? LEGEND_COLORS[LEGEND_COLORS.length - 1] ?? '#059669'
 
@@ -161,6 +171,17 @@ const colorForValue = (value: number, bins: LegendBin[]): string => {
   }
 
   return bins[bins.length - 1]?.color ?? '#059669'
+}
+
+const legendBinIndexForValue = (value: number, bins: LegendBin[]): number => {
+  for (const [index, bin] of bins.entries()) {
+    const isLast = index === bins.length - 1
+    if (value >= bin.min && (value < bin.max || isLast)) {
+      return index
+    }
+  }
+
+  return Math.max(0, bins.length - 1)
 }
 
 const haversineDistanceM = (left: Coordinate, right: Coordinate): number => {
@@ -317,16 +338,23 @@ const MapDetailContent = ({
   area,
   fromPath,
   hoverMode = false,
+  colorExplanation,
 }: {
   area: DerivedMicroArea
   fromPath: string
   hoverMode?: boolean
+  colorExplanation?: string
 }) => (
   <div className="text-sm">
     <p className="font-semibold text-slate-900">{area.stationName}</p>
     <p className="text-xs text-slate-600">
       {area.localAuthority}, {area.countyOrBorough}
     </p>
+    {colorExplanation ? (
+      <p className="mt-2 rounded-md border border-teal-100 bg-teal-50 px-2 py-1.5 text-xs text-slate-700">
+        {colorExplanation}
+      </p>
+    ) : null}
     <div className="mt-2 grid gap-2 sm:grid-cols-2">
       <div className="rounded-md bg-slate-50 px-2 py-1.5">
         <p className="text-[11px] uppercase tracking-wide text-slate-500">Overall</p>
@@ -479,6 +507,24 @@ export const MicroAreaMap = ({
     }
   }
 
+  const colorExplanationForArea = (area: DerivedMicroArea): string => {
+    const value = metric === 'overall' ? area.dynamicOverallScore : area.componentScores[metric]
+    const binIndex = legendBinIndexForValue(value, legendBins)
+    const bin = legendBins[binIndex]
+    const colorLabel = LEGEND_COLOR_LABELS[binIndex] ?? 'green'
+    const metricLabel = mapMetricLabel[metric].toLowerCase()
+    const bucketText =
+      legendMode === 'quantile'
+        ? 'relative bucket for the current map view'
+        : 'value bucket for the current map view'
+
+    if (!bin) {
+      return `This circle is ${colorLabel} because its ${metricLabel} is ${formatNumber(value, 1)}.`
+    }
+
+    return `This circle is ${colorLabel} because its ${metricLabel} is ${formatNumber(value, 1)}, which falls in the ${formatNumber(bin.min, 1)}-${formatNumber(bin.max, 1)} ${bucketText}.`
+  }
+
   return (
     <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
       <div className="h-[560px] overflow-hidden rounded-2xl border border-teal-100 bg-white shadow-panel">
@@ -519,7 +565,11 @@ export const MicroAreaMap = ({
                 }}
               >
                 <Popup>
-                  <MapDetailContent area={area} fromPath={fromPath} />
+                  <MapDetailContent
+                    area={area}
+                    fromPath={fromPath}
+                    colorExplanation={colorExplanationForArea(area)}
+                  />
                 </Popup>
               </Circle>
             )
@@ -544,7 +594,11 @@ export const MicroAreaMap = ({
                         }}
                       >
                         <Popup>
-                          <MapDetailContent area={area} fromPath={fromPath} />
+                          <MapDetailContent
+                            area={area}
+                            fromPath={fromPath}
+                            colorExplanation={colorExplanationForArea(area)}
+                          />
                         </Popup>
                       </Marker>
                     )
@@ -603,7 +657,11 @@ export const MicroAreaMap = ({
                     }}
                   >
                     <Popup>
-                      <MapDetailContent area={area} fromPath={fromPath} />
+                      <MapDetailContent
+                        area={area}
+                        fromPath={fromPath}
+                        colorExplanation={colorExplanationForArea(area)}
+                      />
                     </Popup>
                   </Marker>
                 ))
@@ -674,7 +732,12 @@ export const MicroAreaMap = ({
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
               {hovered ? 'Hovered area' : 'Selected area'}
             </p>
-            <MapDetailContent area={inspected} fromPath={fromPath} hoverMode />
+            <MapDetailContent
+              area={inspected}
+              fromPath={fromPath}
+              hoverMode
+              colorExplanation={colorExplanationForArea(inspected)}
+            />
           </div>
         ) : (
           <p className="mt-5 text-sm text-slate-500">
