@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 
-import { CommutePm25Scatter } from '@/components/charts/CommutePm25Scatter'
 import { DistanceMetricScatter } from '@/components/charts/DistanceMetricScatter'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
@@ -145,28 +144,6 @@ export const LondonWideRankedPage = () => {
           Tooltips show station names on hover. Use the filtered shortlist views when you want a
           tighter decision set rather than a broad trend scan.
         </p>
-      </section>
-
-      <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-          Core Trade-Offs
-        </h2>
-        <p className="mt-2 text-sm text-slate-700">
-          These are the clearest decision-shaping relationships in the current London-wide dataset.
-        </p>
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-2">
-        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
-            Commute vs PM2.5
-          </h3>
-          <p className="mt-2 text-xs text-slate-600">
-            This is one of the strongest structural tensions in the dataset: shorter commutes
-            usually come with dirtier air.
-          </p>
-          <CommutePm25Scatter areas={filtered} />
-        </article>
       </section>
 
       <section className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
