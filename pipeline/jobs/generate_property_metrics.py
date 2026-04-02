@@ -30,15 +30,16 @@ OTM_BASE_URL = 'https://www.onthemarket.com'
 OTM_NEXT_DATA_PATTERN = re.compile(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>')
 
 PRIMARY_CATCHMENT_RADIUS_M = 800
-EXTENDED_CATCHMENT_RADIUS_M = 1600
-POSTCODE_LIMIT_PER_STATION = 200
-MAX_POSTCODES_PER_BAND = 30
-MAX_TRANSACTIONS_PER_BAND = 40
+LISTING_EXTENDED_CATCHMENT_RADIUS_M = 1600
+TRANSACTION_EXTENDED_CATCHMENT_RADIUS_M = 5000
+POSTCODE_LIMIT_PER_STATION = 350
+MAX_POSTCODES_PER_BAND = 40
+MAX_TRANSACTIONS_PER_BAND = 60
 OTM_TARGET_LISTINGS = 18
 OTM_MAX_TOTAL_PAGES = 6
 OTM_MAX_PAGES_PER_SLUG = 2
 OTM_MIN_LISTINGS_FOR_DIRECT_RECORD = 3
-OTM_MAX_LISTING_DISTANCE_M = EXTENDED_CATCHMENT_RADIUS_M
+OTM_MAX_LISTING_DISTANCE_M = LISTING_EXTENDED_CATCHMENT_RADIUS_M
 OTM_MIN_STATION_SLUG_DISTANCE_M = PRIMARY_CATCHMENT_RADIUS_M
 
 BANDS: list[tuple[str, float, float]] = [
@@ -47,6 +48,9 @@ BANDS: list[tuple[str, float, float]] = [
     ('outer', 550.0, 800.0),
     ('extended_inner', 800.0, 1200.0),
     ('extended_outer', 1200.0, 1600.0),
+    ('far_inner', 1600.0, 2600.0),
+    ('far_middle', 2600.0, 3800.0),
+    ('far_outer', 3800.0, 5000.0),
 ]
 
 BAND_PRICE_WEIGHTS: dict[str, float] = {
@@ -55,6 +59,9 @@ BAND_PRICE_WEIGHTS: dict[str, float] = {
     'outer': 0.75,
     'extended_inner': 0.58,
     'extended_outer': 0.44,
+    'far_inner': 0.33,
+    'far_middle': 0.24,
+    'far_outer': 0.16,
 }
 
 
@@ -541,8 +548,8 @@ def parse_deed_date(value: str) -> date | None:
         return None
 
 
-def distance_weight(distance_m: float) -> float:
-    normalized = clamp(distance_m / EXTENDED_CATCHMENT_RADIUS_M, 0.0, 1.0)
+def distance_weight(distance_m: float, normalization_radius_m: float) -> float:
+    normalized = clamp(distance_m / max(normalization_radius_m, 1.0), 0.0, 1.0)
     return 0.75 + (1.0 - normalized) * 0.5
 
 
@@ -653,7 +660,7 @@ def build_property_record(
             distance_m = float(postcode_meta.get('distance_m', radius_m * 0.7))
             band_weight = BAND_PRICE_WEIGHTS.get(band, 1.0)
             deed = parse_deed_date(str(row.get('deed_date', '')))
-            weight = band_weight * distance_weight(distance_m) * recency_weight(
+            weight = band_weight * distance_weight(distance_m, radius_m) * recency_weight(
                 deed_date=deed,
                 window_end=window_end,
             )
@@ -678,16 +685,18 @@ def build_property_record(
         else None
     )
 
-    band_coverage = sum(1 for value in current_strata.values() if value > 0)
+    selected_band_names = {str(item['band']) for item in selected_postcodes}
+    band_coverage = sum(1 for band_name, value in current_strata.items() if band_name in selected_band_names and value > 0)
     sample_size = len(prices)
     status = 'available'
 
     is_extended = provenance.endswith('_extended')
-    confidence = 0.28 if is_extended else 0.32
+    is_far = provenance.endswith('_far')
+    confidence = 0.2 if is_far else 0.28 if is_extended else 0.32
     confidence += min(0.38, sample_size / 80 * 0.38)
-    confidence += (band_coverage / 3) * 0.16
+    confidence += (band_coverage / max(1, len(selected_band_names))) * 0.16
     confidence += 0.08 if trend_proxy is not None else 0.0
-    confidence = round(clamp(confidence, 0.22 if is_extended else 0.25, 0.92), 3)
+    confidence = round(clamp(confidence, 0.18 if is_far else 0.22 if is_extended else 0.25, 0.92), 3)
 
     simple_price_score = price_score(median_price)
 
@@ -697,9 +706,9 @@ def build_property_record(
         'Fallback property metric when current 3-bed / 2-bath asking-price coverage is too thin. '
         'HM Land Registry PPD semi-detached standard transactions. '
         f'Catchment postcode sample from postcodes.io within {int(radius_m)}m '
-        'using distance strata (0-300m, 300-550m, 550-800m) and capped per-stratum sampling. '
+        'using capped distance bands with lower weights for outer rings. '
         'Median/average are distance-and-recency weighted so nearer catchment transactions and '
-        'newer sales have higher influence (band weights inner=1.35, middle=1.0, outer=0.75). '
+        'newer sales have higher influence (band weights taper from the inner catchment into the outer fallback rings). '
         f'Current window {current_start.isoformat()} to {current_end.isoformat()}; '
         f'prior window {prior_start.isoformat()} to {prior_end.isoformat()} for trend proxy. '
         f'Sample transactions={sample_size}, postcodes with transactions={postcode_hits}, '
@@ -756,7 +765,7 @@ def run(max_workers: int = 8, max_stations: int | None = None) -> dict[str, Any]
                 fetch_nearby_postcodes,
                 float(station['lat']),
                 float(station['lon']),
-                radius_m=EXTENDED_CATCHMENT_RADIUS_M,
+                radius_m=TRANSACTION_EXTENDED_CATCHMENT_RADIUS_M,
             ): station
             for station in stations
         }
@@ -812,6 +821,19 @@ def run(max_workers: int = 8, max_stations: int | None = None) -> dict[str, Any]
             nearby_postcodes,
             allowed_bands=('inner', 'middle', 'outer', 'extended_inner', 'extended_outer'),
         )
+        far_selected = stratified_postcode_sample(
+            nearby_postcodes,
+            allowed_bands=(
+                'inner',
+                'middle',
+                'outer',
+                'extended_inner',
+                'extended_outer',
+                'far_inner',
+                'far_middle',
+                'far_outer',
+            ),
+        )
         record = build_live_listing_property_record(station, snapshot_date=today)
         if record is None:
             record = build_property_record(
@@ -833,7 +855,18 @@ def run(max_workers: int = 8, max_stations: int | None = None) -> dict[str, Any]
                 current_window=current_window,
                 prior_window=prior_window,
                 provenance='direct_transactions_extended',
-                radius_m=EXTENDED_CATCHMENT_RADIUS_M,
+                radius_m=LISTING_EXTENDED_CATCHMENT_RADIUS_M,
+            )
+        if record is None:
+            record = build_property_record(
+                station,
+                current_by_outcode,
+                prior_by_outcode,
+                far_selected,
+                current_window=current_window,
+                prior_window=prior_window,
+                provenance='direct_transactions_far',
+                radius_m=TRANSACTION_EXTENDED_CATCHMENT_RADIUS_M,
             )
         return station_code, record
 
@@ -851,7 +884,7 @@ def run(max_workers: int = 8, max_stations: int | None = None) -> dict[str, Any]
     reference_period = (
         f'Current 2026 OnTheMarket asking-price snapshot on {today.isoformat()} for semi-detached homes with 3+ bedrooms and 2+ bathrooms; '
         f'fallback uses HM Land Registry 12-month stratified transaction window {current_start.isoformat()} to {current_end.isoformat()} '
-        'with a local 800m catchment first and an explicit 1600m extended-area fallback when the nearer sample is too sparse '
+        'with a local 800m catchment first, a 1600m extended-area fallback, and then a lower-confidence outer transaction ring up to 5000m when the nearer sample is too sparse '
         '(with prior-year comparison window for trend proxy)'
     )
     update_source_metadata(reference_period=reference_period, release_date=today.isoformat())

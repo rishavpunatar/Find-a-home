@@ -148,12 +148,13 @@ def source_matrix() -> dict[str, dict[str, str]]:
         },
         'greenSpace': {
             'status': 'source_applied_not_live_verified',
-            'primarySource': 'OpenStreetMap greenspace polygons via Overpass API',
-            'secondarySource': 'OS Open Greenspace / local authority park inventories (planned)',
+            'primarySource': 'Ordnance Survey OS Open Greenspace GeoPackage',
+            'secondarySource': 'OpenStreetMap / local authority park inventories (cross-check planned)',
             'note': (
                 'Greenspace area, cover, and nearest-park distance are now computed directly from station-level '
-                'polygon geometry pulls rather than anchor-only fixture proxies. Green cover now uses a direct '
-                'double-radius neighbourhood buffer instead of a nearby-station blend.'
+                'official OS Open Greenspace geometry rather than anchor-only fixture proxies or OSM-only pulls. '
+                'Green cover now uses a direct double-radius neighbourhood buffer and nearest-park distance prefers '
+                'mapped public access points where available.'
             ),
         },
         'crime': {
@@ -168,10 +169,13 @@ def source_matrix() -> dict[str, dict[str, str]]:
             ),
         },
         'population': {
-            'status': 'not_live_verified',
-            'primarySource': 'Fixture-based denominator proxy',
-            'secondarySource': 'ONS mid-year estimates + lookup mapping (planned)',
-            'note': 'Current population denominators are fixture-based estimates.',
+            'status': 'source_applied_not_live_verified',
+            'primarySource': 'ONS mid-year LSOA population estimates + ONS 2021 LSOA boundaries',
+            'secondarySource': 'Output Area level apportionment (planned)',
+            'note': (
+                'Population denominators are now geometry-based official estimates built by intersecting station '
+                'buffers with ONS LSOA populations rather than using fixture proxies.'
+            ),
         },
         'planning': {
             'status': 'source_applied_not_live_verified',
@@ -491,7 +495,7 @@ def generate_verification_report(dataset: dict[str, Any], live_mode: bool = Fals
             'Verification strength score discounts domains that still lack a strong secondary benchmark or live reconciliation path.',
             'Property, schools, greenspace, transport, planning, and population still lack a full independent secondary benchmark.',
             'Pollution now uses DEFRA PCM directly, but still lacks a monitor-network reconciliation layer.',
-            'Crime rates still depend on the station population denominator, which remains weaker than the new direct incident pull.',
+            'Crime rates still depend on a modelled station-buffer population denominator, although that denominator now uses direct ONS geometry intersections rather than fixture proxies.',
             'Borough QoL currently uses ONS source application without a separate secondary cross-check.',
             'This report improves transparency but is not equivalent to a full production data-audit pipeline.',
         ],

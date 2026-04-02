@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-04-02T17:51:10+01:00",
-  "count": 534,
-  "londonWideCount": 534,
+  "generatedAt": "2026-04-02T22:01:33+01:00",
+  "count": 533,
+  "londonWideCount": 533,
   "topMicroAreas": [
     {
       "microAreaId": "ma-westhd1f",
       "stationName": "West Ham",
-      "score": 54.07
+      "score": 60.32
     },
     {
       "microAreaId": "ma-plaisaf0",
       "stationName": "Plaistow",
-      "score": 54.0
+      "score": 58.76
     },
     {
       "microAreaId": "ma-harlef99",
       "stationName": "Harlesden",
-      "score": 52.66
+      "score": 57.92
     },
     {
-      "microAreaId": "ma-eastc7c4",
-      "stationName": "East Croydon",
-      "score": 50.64
+      "microAreaId": "ma-greend00",
+      "stationName": "Greenford",
+      "score": 57.72
     },
     {
-      "microAreaId": "ma-chess967",
-      "stationName": "Chessington South",
-      "score": 50.57
+      "microAreaId": "ma-belve013",
+      "stationName": "Belvedere",
+      "score": 57.3
     },
     {
-      "microAreaId": "ma-abbey3a8",
-      "stationName": "Abbey Wood",
-      "score": 50.33
-    },
-    {
-      "microAreaId": "ma-tooti8a5",
-      "stationName": "Tooting",
-      "score": 50.28
-    },
-    {
-      "microAreaId": "ma-chadwcd5",
-      "stationName": "Chadwell Heath",
-      "score": 49.84
-    },
-    {
-      "microAreaId": "ma-burnt91d",
-      "stationName": "Burnt Oak",
-      "score": 48.87
+      "microAreaId": "ma-easta300",
+      "stationName": "East Acton",
+      "score": 56.76
     },
     {
       "microAreaId": "ma-haina50f",
       "stationName": "Hainault",
-      "score": 48.84
+      "score": 56.43
+    },
+    {
+      "microAreaId": "ma-chadwcd5",
+      "stationName": "Chadwell Heath",
+      "score": 56.29
+    },
+    {
+      "microAreaId": "ma-chess967",
+      "stationName": "Chessington South",
+      "score": 55.99
+    },
+    {
+      "microAreaId": "ma-falco176",
+      "stationName": "Falconwood",
+      "score": 55.93
     }
   ],
   "topLondonWideMicroAreas": [
     {
       "microAreaId": "ma-westhd1f",
       "stationName": "West Ham",
-      "score": 54.07
+      "score": 60.32
     },
     {
       "microAreaId": "ma-plaisaf0",
       "stationName": "Plaistow",
-      "score": 54.0
+      "score": 58.76
     },
     {
       "microAreaId": "ma-harlef99",
       "stationName": "Harlesden",
-      "score": 52.66
+      "score": 57.92
     },
     {
-      "microAreaId": "ma-eastc7c4",
-      "stationName": "East Croydon",
-      "score": 50.64
+      "microAreaId": "ma-greend00",
+      "stationName": "Greenford",
+      "score": 57.72
     },
     {
-      "microAreaId": "ma-chess967",
-      "stationName": "Chessington South",
-      "score": 50.57
+      "microAreaId": "ma-belve013",
+      "stationName": "Belvedere",
+      "score": 57.3
     },
     {
-      "microAreaId": "ma-abbey3a8",
-      "stationName": "Abbey Wood",
-      "score": 50.33
-    },
-    {
-      "microAreaId": "ma-tooti8a5",
-      "stationName": "Tooting",
-      "score": 50.28
-    },
-    {
-      "microAreaId": "ma-chadwcd5",
-      "stationName": "Chadwell Heath",
-      "score": 49.84
-    },
-    {
-      "microAreaId": "ma-burnt91d",
-      "stationName": "Burnt Oak",
-      "score": 48.87
+      "microAreaId": "ma-easta300",
+      "stationName": "East Acton",
+      "score": 56.76
     },
     {
       "microAreaId": "ma-haina50f",
       "stationName": "Hainault",
-      "score": 48.84
+      "score": 56.43
+    },
+    {
+      "microAreaId": "ma-chadwcd5",
+      "stationName": "Chadwell Heath",
+      "score": 56.29
+    },
+    {
+      "microAreaId": "ma-chess967",
+      "stationName": "Chessington South",
+      "score": 55.99
+    },
+    {
+      "microAreaId": "ma-falco176",
+      "stationName": "Falconwood",
+      "score": 55.93
     }
   ]
 }

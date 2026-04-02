@@ -83,7 +83,7 @@ def update_source_metadata(reference_period: str, release_date: str) -> None:
         'source': (
             'data.police.uk monthly street-level crime archive '
             '(BTP, City of London, Metropolitan, and London-boundary forces) '
-            '+ interpolated station population denominator'
+            '+ ONS 2024 LSOA-derived station catchment population denominator'
         ),
         'referencePeriod': reference_period,
         'releaseDate': release_date,
@@ -123,7 +123,11 @@ def nearest_population_estimate(
     samples: list[tuple[float, float]] = []
     for station in stations:
         record = population_records.get(station.station_code)
-        population = (record or {}).get('population_in_reference_zone')
+        population = (
+            (record or {}).get('population_in_crime_catchment')
+            if isinstance((record or {}).get('population_in_crime_catchment'), (int, float))
+            else (record or {}).get('population_in_reference_zone')
+        )
         if not isinstance(population, (int, float)):
             continue
         distance = GEOD.inv(
@@ -156,7 +160,9 @@ def station_population_denominators(
     for station in stations:
         population_record = population_records.get(station.station_code)
         population = (
-            float(population_record['population_in_reference_zone'])
+            float(population_record['population_in_crime_catchment'])
+            if population_record and isinstance(population_record.get('population_in_crime_catchment'), (int, float))
+            else float(population_record['population_in_reference_zone'])
             if population_record and isinstance(population_record.get('population_in_reference_zone'), (int, float))
             else nearest_population_estimate(
                 station.coordinate.lat,
@@ -544,6 +550,7 @@ def build_station_crime_records(
         )
         output[station.station_code] = {
             'crime_rate_per_1000': round(annualised_rate, 3),
+            'population_denominator': round(population),
             'status': 'available',
             'confidence': 0.8,
             'provenance': 'direct',
@@ -552,8 +559,9 @@ def build_station_crime_records(
                 'Direct monthly street-level crime archive aggregation from data.police.uk for all currently '
                 f'available months since {MIN_CRIME_MONTH} within an {int(BUFFER_METERS)}m station radius, using the official '
                 'archive download for BTP, City of London, Metropolitan, and London-boundary forces. '
-                'Counts are averaged into an annualised per-1,000 rate using the station reference-zone '
-                'population denominator (direct when present, otherwise nearest-anchor interpolation).'
+                'Counts are averaged into an annualised per-1,000 rate using the station '
+                f'{int(BUFFER_METERS)}m catchment population denominator when available, otherwise the nearest-anchor '
+                'population fallback.'
             ),
         }
     return output

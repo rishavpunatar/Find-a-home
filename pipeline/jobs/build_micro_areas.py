@@ -450,6 +450,38 @@ def overlap_confidence(station: StationRecord, all_stations: list[StationRecord]
     return round(confidence, 3)
 
 
+def quantile(sorted_values: list[float], q: float) -> float:
+    if not sorted_values:
+        raise ValueError('sorted_values must be non-empty')
+    index = int(round((len(sorted_values) - 1) * clamp(q, 0.0, 1.0)))
+    return float(sorted_values[index])
+
+
+def crime_score_bounds(crime_records: dict[str, dict[str, Any]]) -> tuple[float, float]:
+    direct_rates = sorted(
+        float(record['crime_rate_per_1000'])
+        for record in crime_records.values()
+        if isinstance(record, dict) and isinstance(record.get('crime_rate_per_1000'), (int, float))
+    )
+    if not direct_rates:
+        return (25.0, 130.0)
+
+    best = max(1.0, direct_rates[0])
+    worst = max(best + 1.0, quantile(direct_rates, 0.95))
+    return (best, worst)
+
+
+def log_inverse_score(value: float, *, best: float, worst: float) -> float:
+    safe_value = max(value, best)
+    safe_best = max(best, 1e-6)
+    safe_worst = max(worst, safe_best * 1.0001)
+    numerator = math.log(safe_value) - math.log(safe_best)
+    denominator = math.log(safe_worst) - math.log(safe_best)
+    if denominator <= 0:
+        return 0.0
+    return clamp(100.0 * (1.0 - numerator / denominator), 0.0, 100.0)
+
+
 def score_components(
     station: StationRecord,
     transport: dict[str, Any] | None,
@@ -459,6 +491,8 @@ def score_components(
     pollution: dict[str, Any] | None,
     green: dict[str, Any] | None,
     crime: dict[str, Any] | None,
+    *,
+    crime_scale_bounds: tuple[float, float],
 ) -> dict[str, float]:
     default_population_denominator = 25_650.0
 
@@ -538,7 +572,11 @@ def score_components(
     )
 
     crime_rate = number_or_default(crime, 'crime_rate_per_1000', 95)
-    crime_score = inverse_score(crime_rate, best=25, worst=130)
+    crime_score = log_inverse_score(
+        crime_rate,
+        best=crime_scale_bounds[0],
+        worst=crime_scale_bounds[1],
+    )
 
     return {
         'value': round(clamp(value_score), 1),
@@ -616,6 +654,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     green_anchor_records = json.loads((RAW_DIR / 'green_space_metrics.json').read_text(encoding='utf-8'))
     crime_anchor_records = json.loads((RAW_DIR / 'crime_metrics.json').read_text(encoding='utf-8'))
     population_anchor_records = json.loads((RAW_DIR / 'population_metrics.json').read_text(encoding='utf-8'))
+    crime_scale = crime_score_bounds(crime_anchor_records)
 
     raw_stations = station_adapter.fetch_stations()
     all_stations, excluded_stations = sanitize_station_universe(raw_stations)
@@ -820,6 +859,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 pollution_record,
                 green_record,
                 crime_record,
+                crime_scale_bounds=crime_scale,
             )
 
             overlap_conf = overlap_confidence(

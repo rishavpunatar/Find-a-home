@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-02T17:51:10+01:00",
+  "generatedAt": "2026-04-02T22:02:49+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "strong_source_coverage",
-  "sourceCoverageScore": 0.881,
-  "verificationStrengthScore": 0.6782,
-  "verificationCompletenessScore": 0.881,
+  "sourceCoverageScore": 0.9026,
+  "verificationStrengthScore": 0.699,
+  "verificationCompletenessScore": 0.9026,
   "sourceMatrix": {
     "property": {
       "status": "source_applied_not_live_verified",
@@ -32,9 +32,9 @@
     },
     "greenSpace": {
       "status": "source_applied_not_live_verified",
-      "primarySource": "OpenStreetMap greenspace polygons via Overpass API",
-      "secondarySource": "OS Open Greenspace / local authority park inventories (planned)",
-      "note": "Greenspace area, cover, and nearest-park distance are now computed directly from station-level polygon geometry pulls rather than anchor-only fixture proxies. Green cover now uses a direct double-radius neighbourhood buffer instead of a nearby-station blend."
+      "primarySource": "Ordnance Survey OS Open Greenspace GeoPackage",
+      "secondarySource": "OpenStreetMap / local authority park inventories (cross-check planned)",
+      "note": "Greenspace area, cover, and nearest-park distance are now computed directly from station-level official OS Open Greenspace geometry rather than anchor-only fixture proxies or OSM-only pulls. Green cover now uses a direct double-radius neighbourhood buffer and nearest-park distance prefers mapped public access points where available."
     },
     "crime": {
       "status": "source_applied_live_cross_check_available",
@@ -43,10 +43,10 @@
       "note": "Crime rates now use the official monthly data.police.uk archive, averaged across all currently available street-level incident months from 2023 onward and annualised with the station population denominator. Live cross-check still compares the stored ordering against the police API for sanity checking."
     },
     "population": {
-      "status": "not_live_verified",
-      "primarySource": "Fixture-based denominator proxy",
-      "secondarySource": "ONS mid-year estimates + lookup mapping (planned)",
-      "note": "Current population denominators are fixture-based estimates."
+      "status": "source_applied_not_live_verified",
+      "primarySource": "ONS mid-year LSOA population estimates + ONS 2021 LSOA boundaries",
+      "secondarySource": "Output Area level apportionment (planned)",
+      "note": "Population denominators are now geometry-based official estimates built by intersecting station buffers with ONS LSOA populations rather than using fixture proxies."
     },
     "planning": {
       "status": "source_applied_not_live_verified",
@@ -63,25 +63,25 @@
   },
   "domainCoverage": {
     "default": {
-      "count": 534,
+      "count": 533,
       "domains": {
         "property": {
-          "availablePct": 52.25,
-          "sourceAppliedPct": 52.25,
+          "availablePct": 56.66,
+          "sourceAppliedPct": 56.66,
           "statusCounts": {
-            "available": 279,
-            "estimated": 255,
+            "available": 302,
+            "estimated": 231,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 41.39,
-          "sourceAppliedPct": 67.23,
+          "availablePct": 52.91,
+          "sourceAppliedPct": 77.94,
           "statusCounts": {
-            "available": 221,
-            "estimated": 313,
+            "available": 282,
+            "estimated": 251,
             "placeholder": 0,
             "missing": 0,
             "other": 0
@@ -91,7 +91,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -102,7 +102,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -113,7 +113,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -124,7 +124,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -135,7 +135,7 @@
           "availablePct": 97.19,
           "sourceAppliedPct": 97.19,
           "statusCounts": {
-            "available": 519,
+            "available": 518,
             "estimated": 0,
             "placeholder": 0,
             "missing": 15,
@@ -145,25 +145,25 @@
       }
     },
     "londonWide": {
-      "count": 534,
+      "count": 533,
       "domains": {
         "property": {
-          "availablePct": 52.25,
-          "sourceAppliedPct": 52.25,
+          "availablePct": 56.66,
+          "sourceAppliedPct": 56.66,
           "statusCounts": {
-            "available": 279,
-            "estimated": 255,
+            "available": 302,
+            "estimated": 231,
             "placeholder": 0,
             "missing": 0,
             "other": 0
           }
         },
         "transport": {
-          "availablePct": 41.39,
-          "sourceAppliedPct": 67.23,
+          "availablePct": 52.91,
+          "sourceAppliedPct": 77.94,
           "statusCounts": {
-            "available": 221,
-            "estimated": 313,
+            "available": 282,
+            "estimated": 251,
             "placeholder": 0,
             "missing": 0,
             "other": 0
@@ -173,7 +173,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -184,7 +184,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -195,7 +195,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -206,7 +206,7 @@
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
-            "available": 534,
+            "available": 533,
             "estimated": 0,
             "placeholder": 0,
             "missing": 0,
@@ -217,7 +217,7 @@
           "availablePct": 97.19,
           "sourceAppliedPct": 97.19,
           "statusCounts": {
-            "available": 519,
+            "available": 518,
             "estimated": 0,
             "placeholder": 0,
             "missing": 15,
@@ -245,7 +245,7 @@
     "Verification strength score discounts domains that still lack a strong secondary benchmark or live reconciliation path.",
     "Property, schools, greenspace, transport, planning, and population still lack a full independent secondary benchmark.",
     "Pollution now uses DEFRA PCM directly, but still lacks a monitor-network reconciliation layer.",
-    "Crime rates still depend on the station population denominator, which remains weaker than the new direct incident pull.",
+    "Crime rates still depend on a modelled station-buffer population denominator, although that denominator now uses direct ONS geometry intersections rather than fixture proxies.",
     "Borough QoL currently uses ONS source application without a separate secondary cross-check.",
     "This report improves transparency but is not equivalent to a full production data-audit pipeline."
   ]

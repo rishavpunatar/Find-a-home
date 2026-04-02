@@ -1,13 +1,13 @@
 {
   "property": {
     "source": "OnTheMarket current asking-price snapshot + HM Land Registry PPD fallback",
-    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-04-02 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-04-02 to 2026-04-02 with a local 800m catchment first and an explicit 1600m extended-area fallback when the nearer sample is too sparse (with prior-year comparison window for trend proxy)",
+    "referencePeriod": "Current 2026 OnTheMarket asking-price snapshot on 2026-04-02 for semi-detached homes with 3+ bedrooms and 2+ bathrooms; fallback uses HM Land Registry 12-month stratified transaction window 2025-04-02 to 2026-04-02 with a local 800m catchment first, a 1600m extended-area fallback, and then a lower-confidence outer transaction ring up to 5000m when the nearer sample is too sparse (with prior-year comparison window for trend proxy)",
     "releaseDate": "2026-04-02"
   },
   "transport": {
-    "source": "TfL Journey Planner + OSRM (with station-profile fallback)",
-    "referencePeriod": "Snapshot query windows (peak/off-peak) with fallback where unavailable",
-    "releaseDate": "2026-03-24"
+    "source": "TfL Journey Planner + TfL StopPoint arrivals + OSRM (with station-profile fallback)",
+    "referencePeriod": "Snapshot queries to the TfL Journey Planner central-London core, TfL StopPoint arrivals, and OSRM routing using query windows on 2026-03-25 and 2026-03-26.",
+    "releaseDate": "2026-04-02"
   },
   "schools": {
     "source": "DfE GIAS open state-funded establishment exports + DfE Explore Education Statistics KS2 and absence data + Ofsted state-funded schools inspections and outcomes",
@@ -20,12 +20,12 @@
     "releaseDate": "2025-09-30"
   },
   "greenSpace": {
-    "source": "OpenStreetMap greenspace polygons via Overpass API",
-    "referencePeriod": "Current OpenStreetMap greenspace snapshot via Overpass API station-scope pull",
+    "source": "Ordnance Survey OS Open Greenspace GeoPackage",
+    "referencePeriod": "Current OS Open Greenspace GB GeoPackage snapshot",
     "releaseDate": "2026-04-02"
   },
   "crime": {
-    "source": "data.police.uk monthly street-level crime archive (BTP, City of London, Metropolitan, and London-boundary forces) + interpolated station population denominator",
+    "source": "data.police.uk monthly street-level crime archive (BTP, City of London, Metropolitan, and London-boundary forces) + ONS 2024 LSOA-derived station catchment population denominator",
     "referencePeriod": "All currently available data.police.uk archive months from 2023-02 to 2026-01 (36 monthly snapshots) averaged and annualised",
     "releaseDate": "2026-01"
   },
@@ -33,5 +33,10 @@
     "source": "planning.data.gov.uk structured geometry layers",
     "referencePeriod": "Current planning.data.gov.uk geometry pull for brownfield land, conservation areas, and article 4 direction areas",
     "releaseDate": "2026-04-01"
+  },
+  "population": {
+    "source": "ONS mid-year LSOA population estimates + ONS 2021 LSOA boundaries",
+    "referencePeriod": "ONS mid-2024 LSOA population estimates apportioned into station 800m and 1800m buffers",
+    "releaseDate": "2026-04-02"
   }
 }

@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-04-02T17:51:35+01:00",
+  "generatedAt": "2026-04-02T22:02:49+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "pass",
-  "microAreasAnalysed": 1068,
+  "microAreasAnalysed": 1066,
   "scopeCounts": {
-    "default": 534,
-    "londonWide": 534
+    "default": 533,
+    "londonWide": 533
   },
   "counts": {
     "critical": 0,

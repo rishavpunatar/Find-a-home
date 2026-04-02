@@ -442,6 +442,7 @@ def gias_school_records() -> tuple[dict[str, dict[str, Any]], str]:
                     'admissions_policy': row.get('AdmissionsPolicy (name)', ''),
                     'religious_character': row.get('ReligiousCharacter (name)', ''),
                     'school_capacity': safe_int(row.get('SchoolCapacity')),
+                    'number_of_pupils': safe_int(row.get('NumberOfPupils')),
                     'easting': easting,
                     'northing': northing,
                     'lon': float(OSGB_TO_WGS84.transform(easting, northing)[0]),
@@ -625,6 +626,22 @@ def capacity_access_factor(capacity: int | None) -> float:
     return clamp(math.sqrt(capacity / 300.0), 0.85, 1.15)
 
 
+def roll_pressure_access_factor(number_of_pupils: int | None, capacity: int | None) -> float:
+    if number_of_pupils is None or number_of_pupils <= 0 or capacity is None or capacity <= 0:
+        return 1.0
+
+    utilisation = number_of_pupils / capacity
+    if utilisation >= 1.05:
+        return 0.82
+    if utilisation >= 0.97:
+        return 0.9
+    if utilisation >= 0.9:
+        return 0.96
+    if utilisation <= 0.55:
+        return 1.04
+    return 1.0
+
+
 def distance_access_factor(drive_minutes: float) -> float:
     for max_minutes, weight in PRIMARY_DISTANCE_WEIGHT_STEPS:
         if drive_minutes <= max_minutes:
@@ -642,6 +659,10 @@ def primary_accessibility_weight(drive_minutes: float, school_record: dict[str, 
         * admissions_policy_factor(school_record.get('admissions_policy'))
         * faith_access_factor(school_record.get('religious_character'))
         * capacity_access_factor(school_record.get('school_capacity'))
+        * roll_pressure_access_factor(
+            school_record.get('number_of_pupils'),
+            school_record.get('school_capacity'),
+        )
         * phase_factor
     )
 
@@ -730,8 +751,9 @@ def methodology_note(
         'Counts come from open state-funded GIAS establishment exports, excluding private schools. '
         f'Reachable-primary access still starts from an approximate {DRIVE_CATCHMENT_MINUTES:.0f}-minute road-adjusted drive proxy, '
         'but schools are now downweighted when open admissions are less likely in practice: distance matters most, '
-        'faith-designated schools are discounted, larger schools get a modest capacity uplift, and all-through schools get a small penalty. '
-        'National open data does not directly expose sibling or feeder priorities, so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. '
+        'faith-designated schools are discounted, larger schools get a modest capacity uplift, schools that already look very full relative to their published capacity are penalised, '
+        'and all-through schools get a small penalty. National open data does not directly expose sibling or feeder priorities or school-level cut-off distances, '
+        'so this remains a cautious admissions-reachability heuristic rather than a true offer-probability model. '
         f'Primary quality now uses the latest eligible 2023-onward KS2 attainment basket from {primary_period} '
         '(combined expected standard, combined higher standard, average reading scaled score, average maths scaled score). '
         f'Attendance is a separate light-touch supplement from {attendance_period} official primary absence data '
@@ -785,6 +807,11 @@ def generate_school_metrics() -> dict[str, dict[str, Any]]:
             school_records,
         )
 
+        raw_primary_count = count_drive_catchment_schools(
+            drive_minutes_by_urn,
+            school_records,
+            allowed_phases=PRIMARY_PHASES,
+        )
         nearby_primary_count = primary_access_equivalent_count(drive_minutes_by_urn, school_records)
         primary_quality = primary_access_weighted_average(drive_minutes_by_urn, school_records, primary_scores)
         primary_attendance = primary_access_weighted_average(
@@ -808,6 +835,7 @@ def generate_school_metrics() -> dict[str, dict[str, Any]]:
 
         output[station.station_code] = {
             'nearby_primary_count': round(nearby_primary_count, 1),
+            'raw_primary_count_within_drive_proxy': raw_primary_count,
             'nearby_secondary_count': None,
             'primary_quality_score': None if primary_quality is None else round(primary_quality, 1),
             'primary_attendance_score': None if primary_attendance is None else round(primary_attendance, 1),

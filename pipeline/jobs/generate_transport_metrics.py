@@ -11,11 +11,13 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from pipeline.jobs.osrm_utils import fetch_json_with_curl_fallback
+from pipeline.jobs.station_scope import candidate_scope_station_codes
 
 
 ROOT = Path(__file__).resolve().parents[2]
 STATIONS_PATH = ROOT / 'data' / 'raw' / 'stations_transport.json'
 OUTPUT_PATH = ROOT / 'data' / 'raw' / 'transport_metrics.json'
+SOURCE_METADATA_PATH = ROOT / 'data' / 'raw' / 'source_metadata.json'
 
 PINNER_LAT = 51.5931
 PINNER_LON = -0.3818
@@ -26,16 +28,39 @@ CENTRAL_LONDON_DESTINATIONS: tuple[tuple[str, float, float], ...] = (
     ('Waterloo', 51.5033, -0.1147),
 )
 
-PEAK_DATE = '20260325'
-PEAK_TIME = '0830'
-OFFPEAK_DATE = '20260325'
-OFFPEAK_TIME = '1300'
+PEAK_QUERY_WINDOWS: tuple[tuple[str, str], ...] = (
+    ('20260325', '0815'),
+    ('20260325', '0830'),
+    ('20260325', '0845'),
+    ('20260326', '0830'),
+)
+OFFPEAK_QUERY_WINDOWS: tuple[tuple[str, str], ...] = (
+    ('20260325', '1230'),
+    ('20260325', '1300'),
+    ('20260325', '1330'),
+    ('20260326', '1300'),
+)
 OSRM_BASE_URL = 'https://router.project-osrm.org'
 STOPPOINT_SEARCH_TYPES = 'NaptanMetroStation,NaptanRailStation'
 
 
 def load_stations(path: Path) -> list[dict[str, Any]]:
     return json.loads(path.read_text(encoding='utf-8'))
+
+
+def update_source_metadata(reference_period: str, release_date: str) -> None:
+    payload: dict[str, Any] = {}
+    if SOURCE_METADATA_PATH.exists():
+        existing = json.loads(SOURCE_METADATA_PATH.read_text(encoding='utf-8'))
+        if isinstance(existing, dict):
+            payload = existing
+
+    payload['transport'] = {
+        'source': 'TfL Journey Planner + TfL StopPoint arrivals + OSRM (with station-profile fallback)',
+        'referencePeriod': reference_period,
+        'releaseDate': release_date,
+    }
+    SOURCE_METADATA_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=True), encoding='utf-8')
 
 
 def parse_iso_time(raw_value: str | None) -> datetime | None:
@@ -90,28 +115,34 @@ def fetch_best_tfl_window(
     lat: float,
     lon: float,
     *,
-    date: str,
-    time: str,
-) -> tuple[list[dict[str, Any]], str | None]:
+    query_windows: tuple[tuple[str, str], ...],
+) -> tuple[list[dict[str, Any]], str | None, str | None, str | None]:
     best_journeys: list[dict[str, Any]] = []
     best_duration: float | None = None
     selected_label: str | None = None
+    selected_date: str | None = None
+    selected_time: str | None = None
 
-    for idx, destination in enumerate(CENTRAL_LONDON_DESTINATIONS):
-        journeys = fetch_tfl_journeys(lat, lon, date, time, destination=destination)
-        duration = fastest_duration_minutes(journeys)
-        if duration is not None and (best_duration is None or duration < best_duration):
-            best_duration = duration
-            best_journeys = journeys
-            selected_label = destination[0]
+    for date, time in query_windows:
+        for idx, destination in enumerate(CENTRAL_LONDON_DESTINATIONS):
+            journeys = fetch_tfl_journeys(lat, lon, date, time, destination=destination)
+            duration = fastest_duration_minutes(journeys)
+            if duration is not None and (best_duration is None or duration < best_duration):
+                best_duration = duration
+                best_journeys = journeys
+                selected_label = destination[0]
+                selected_date = date
+                selected_time = time
 
-        # Keep the first successful Oxford Circus result to limit extra requests.
-        if idx == 0 and duration is not None:
-            break
+            # Keep the first successful Oxford Circus result within the current window to limit extra requests.
+            if idx == 0 and duration is not None:
+                break
+            if best_duration is not None:
+                break
         if best_duration is not None:
             break
 
-    return best_journeys, selected_label
+    return best_journeys, selected_label, selected_date, selected_time
 
 
 def fastest_duration_minutes(journeys: list[dict[str, Any]]) -> float | None:
@@ -319,17 +350,15 @@ def build_transport_record(
     lat = float(station['lat'])
     lon = float(station['lon'])
 
-    peak_journeys, peak_destination = fetch_best_tfl_window(
+    peak_journeys, peak_destination, peak_date_used, peak_time_used = fetch_best_tfl_window(
         lat,
         lon,
-        date=PEAK_DATE,
-        time=PEAK_TIME,
+        query_windows=PEAK_QUERY_WINDOWS,
     )
-    offpeak_journeys, offpeak_destination = fetch_best_tfl_window(
+    offpeak_journeys, offpeak_destination, offpeak_date_used, offpeak_time_used = fetch_best_tfl_window(
         lat,
         lon,
-        date=OFFPEAK_DATE,
-        time=OFFPEAK_TIME,
+        query_windows=OFFPEAK_QUERY_WINDOWS,
     )
 
     peak_commute = fastest_duration_minutes(peak_journeys)
@@ -435,8 +464,10 @@ def build_transport_record(
         if used_osrm
         else 'Drive-to-Pinner fallback from station profile heuristic.',
         (
-            f'Peak query window: {PEAK_DATE} {PEAK_TIME} (destination {peak_destination or "fallback"}); '
-            f'off-peak query window: {OFFPEAK_DATE} {OFFPEAK_TIME} (destination {offpeak_destination or "fallback"}).'
+            f'Peak query window: {(peak_date_used or PEAK_QUERY_WINDOWS[0][0])} {(peak_time_used or PEAK_QUERY_WINDOWS[0][1])} '
+            f'(destination {peak_destination or "fallback"}); '
+            f'off-peak query window: {(offpeak_date_used or OFFPEAK_QUERY_WINDOWS[0][0])} {(offpeak_time_used or OFFPEAK_QUERY_WINDOWS[0][1])} '
+            f'(destination {offpeak_destination or "fallback"}).'
         ),
     ]
 
@@ -501,7 +532,12 @@ def main() -> None:
     parser.add_argument('--osrm-probe-timeout', type=float, default=5.0)
     args = parser.parse_args()
 
-    stations = load_stations(STATIONS_PATH)
+    scope_station_codes = candidate_scope_station_codes()
+    stations = [
+        station
+        for station in load_stations(STATIONS_PATH)
+        if str(station.get('station_code')) in scope_station_codes
+    ]
     osrm_enabled = not args.disable_osrm and osrm_probe_available(timeout_seconds=max(1.0, args.osrm_probe_timeout))
     if not osrm_enabled:
         print('OSRM unavailable or disabled; drive-time values will use fallback station heuristics.', flush=True)
@@ -512,6 +548,15 @@ def main() -> None:
         osrm_enabled=osrm_enabled,
     )
     args.output.write_text(json.dumps(metrics, indent=2, ensure_ascii=True), encoding='utf-8')
+    release_date = datetime.now(ZoneInfo('Europe/London')).date().isoformat()
+    update_source_metadata(
+        reference_period=(
+            'Snapshot queries to the TfL Journey Planner central-London core, '
+            'TfL StopPoint arrivals, and OSRM routing using query windows on '
+            '2026-03-25 and 2026-03-26.'
+        ),
+        release_date=release_date,
+    )
     print(f'Wrote {len(metrics)} transport metric records -> {args.output}')
 
 

@@ -55,7 +55,7 @@ export const DataMethodologyGuide = ({
     'latest available police months annualised from direct data.police.uk station-area pulls'
   const greenReferencePeriod =
     sourceMetadata.greenSpace?.referencePeriod ??
-    'current OpenStreetMap greenspace geometry pull via Overpass API'
+    'current OS Open Greenspace GB GeoPackage snapshot'
   const transportReferencePeriod =
     sourceMetadata.transport?.referencePeriod ??
     'TfL Journey Planner central-London core snapshots plus TfL StopPoint arrivals and OSRM routing where available'
@@ -308,9 +308,9 @@ export const DataMethodologyGuide = ({
               </p>
               <p>
                 School access is normalized by a local population denominator so dense areas are
-                not rewarded just for having more schools nearby. Right now that denominator is a
-                checked-in estimated reference-population figure for each station area rather than
-                a direct census count of the exact catchment.
+                not rewarded just for having more schools nearby. That denominator is now built
+                directly from official ONS LSOA populations intersected with the station catchment,
+                rather than from a checked-in proxy figure.
               </p>
               <p>
                 The quality side is a smoothed KS2 basket using combined expected standard,
@@ -347,14 +347,15 @@ export const DataMethodologyGuide = ({
                 modelled background grids.
               </p>
               <p>
-                On the green side, the app uses OpenStreetMap greenspace polygons via Overpass to
+                On the green side, the app now uses Ordnance Survey&apos;s OS Open Greenspace to
                 estimate green cover, nearby green-space area, and park access. Green cover is
                 measured over a wider double-radius station buffer so the score reflects the
-                broader neighborhood canopy rather than only the immediate 800m catchment.
+                broader neighborhood canopy rather than only the immediate 800m catchment, and
+                nearest-park distance prefers mapped access points where available.
               </p>
               <p>
                 <span className="font-semibold">Source:</span> DEFRA UK-AIR PCM modelled
-                background pollution data + OpenStreetMap greenspace polygons via Overpass API.
+                background pollution data + Ordnance Survey OS Open Greenspace.
               </p>
               <p>
                 <span className="font-semibold">Data reference period:</span>{' '}
@@ -379,8 +380,8 @@ export const DataMethodologyGuide = ({
               <p>
                 <span className="font-semibold">Source:</span> official data.police.uk monthly
                 street-level archive downloads, annualised with the local population denominator.
-                That denominator is currently a checked-in estimated reference-population figure
-                for each station area.
+                That denominator is now taken from an official geometry-based ONS population
+                estimate for the same wider crime catchment.
               </p>
               <p>
                 <span className="font-semibold">Data reference period:</span> {crimeReferencePeriod}
@@ -477,12 +478,20 @@ export const DataMethodologyGuide = ({
               DfE EES
             </a>
             <a
-              href="https://overpass-api.de/"
+              href="https://www.ordnancesurvey.co.uk/products/os-open-greenspace"
               target="_blank"
               rel="noreferrer"
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
-              Overpass / OpenStreetMap
+              OS Open Greenspace
+            </a>
+            <a
+              href="https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/lowersuperoutputareamidyearpopulationestimatesnationalstatistics"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              ONS LSOA population
             </a>
             <a
               href="https://www.ons.gov.uk/datasets/wellbeing-local-authority"
