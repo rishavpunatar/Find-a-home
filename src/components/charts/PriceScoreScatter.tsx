@@ -20,15 +20,21 @@ interface PriceScorePoint {
   x: number
   y: number
   station: string
+  highlighted: boolean
   area: DerivedMicroArea
 }
 
 interface PriceScoreScatterProps {
   areas: DerivedMicroArea[]
+  highlightedAreaIds?: string[]
 }
 
-export const PriceScoreScatter = ({ areas }: PriceScoreScatterProps) => {
+export const PriceScoreScatter = ({
+  areas,
+  highlightedAreaIds = [],
+}: PriceScoreScatterProps) => {
   const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null)
+  const highlightedSet = useMemo(() => new Set(highlightedAreaIds), [highlightedAreaIds])
 
   const data = areas
     .filter((area) => area.medianSemiDetachedPrice.value !== null)
@@ -37,8 +43,11 @@ export const PriceScoreScatter = ({ areas }: PriceScoreScatterProps) => {
       x: area.medianSemiDetachedPrice.value as number,
       y: area.dynamicOverallScore,
       station: area.stationName,
+      highlighted: highlightedSet.has(area.microAreaId),
       area,
     }))
+  const baseData = data.filter((item) => !item.highlighted)
+  const highlightedData = data.filter((item) => item.highlighted)
 
   const xDomain = computeNumericDomain(data.map((item) => item.x), { minFloor: 0 })
   const yDomain = computeNumericDomain(data.map((item) => item.y), { minFloor: 0, maxCeil: 100 })
@@ -77,13 +86,16 @@ export const PriceScoreScatter = ({ areas }: PriceScoreScatterProps) => {
                       Median semi: {formatCurrency(point.x)}
                     </p>
                     <p className="text-slate-700">Overall score: {formatNumber(point.y, 1)}</p>
+                    {point.highlighted ? (
+                      <p className="text-amber-700">Included in current Filtered View shortlist.</p>
+                    ) : null}
                     <p className="mt-1 text-slate-500">Click the point to keep this area selected.</p>
                   </div>
                 )
               }}
             />
             <Scatter
-              data={data}
+              data={baseData}
               fill="#0f766e"
               onClick={(event) => {
                 const point = (event as { payload?: PriceScorePoint } | undefined)?.payload
@@ -92,6 +104,18 @@ export const PriceScoreScatter = ({ areas }: PriceScoreScatterProps) => {
                 }
               }}
             />
+            {highlightedData.length > 0 ? (
+              <Scatter
+                data={highlightedData}
+                fill="#f97316"
+                onClick={(event) => {
+                  const point = (event as { payload?: PriceScorePoint } | undefined)?.payload
+                  if (point) {
+                    setSelectedAreaId(point.id)
+                  }
+                }}
+              />
+            ) : null}
             {selectedPoint ? (
               <Scatter
                 data={[selectedPoint]}
@@ -111,6 +135,12 @@ export const PriceScoreScatter = ({ areas }: PriceScoreScatterProps) => {
           </ScatterChart>
         </ResponsiveContainer>
       </div>
+      {highlightedData.length > 0 ? (
+        <p className="text-xs text-slate-600">
+          <span className="font-semibold text-amber-600">Highlighted dots</span> are areas
+          currently included in the main Filtered View shortlist.
+        </p>
+      ) : null}
       {selectedPoint ? (
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
           <div className="flex items-start justify-between gap-3">

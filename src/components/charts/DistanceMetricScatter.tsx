@@ -18,6 +18,7 @@ interface DistanceMetricPoint {
   x: number
   y: number
   station: string
+  highlighted: boolean
   area: DerivedMicroArea
 }
 
@@ -26,6 +27,8 @@ interface DistanceMetricScatterProps {
   centralCoordinate: Coordinate
   label: string
   fill?: string
+  highlightFill?: string
+  highlightedAreaIds?: string[]
   getValue: (area: DerivedMicroArea) => number | null
   formatValue?: (value: number) => string
   unit?: string
@@ -37,12 +40,15 @@ export const DistanceMetricScatter = ({
   centralCoordinate,
   label,
   fill = '#0f766e',
+  highlightFill = '#f97316',
+  highlightedAreaIds = [],
   getValue,
   formatValue,
   unit = '',
   renderSelectedAreaDetail,
 }: DistanceMetricScatterProps) => {
   const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null)
+  const highlightedSet = useMemo(() => new Set(highlightedAreaIds), [highlightedAreaIds])
   const data = areas
     .map((area) => {
       const value = getValue(area)
@@ -55,10 +61,13 @@ export const DistanceMetricScatter = ({
         x: haversineKm(area.centroid, centralCoordinate),
         y: value,
         station: area.stationName,
+        highlighted: highlightedSet.has(area.microAreaId),
         area,
       }
     })
     .filter((item): item is DistanceMetricPoint => item !== null)
+  const baseData = data.filter((item) => !item.highlighted)
+  const highlightedData = data.filter((item) => item.highlighted)
 
   const xDomain = computeNumericDomain(data.map((item) => item.x), { minFloor: 0 })
   const yDomain = computeNumericDomain(data.map((item) => item.y), { minFloor: 0 })
@@ -98,6 +107,9 @@ export const DistanceMetricScatter = ({
                     <p className="text-slate-700">
                       {label}: {renderValue(point.y)}
                     </p>
+                    {point.highlighted ? (
+                      <p className="text-amber-700">Included in current Filtered View shortlist.</p>
+                    ) : null}
                     {renderSelectedAreaDetail ? (
                       <p className="mt-1 text-slate-500">Click the point to keep this area selected.</p>
                     ) : null}
@@ -106,7 +118,7 @@ export const DistanceMetricScatter = ({
               }}
             />
             <Scatter
-              data={data}
+              data={baseData}
               fill={fill}
               onClick={(event) => {
                 const point = (event as { payload?: DistanceMetricPoint } | undefined)?.payload
@@ -115,6 +127,18 @@ export const DistanceMetricScatter = ({
                 }
               }}
             />
+            {highlightedData.length > 0 ? (
+              <Scatter
+                data={highlightedData}
+                fill={highlightFill}
+                onClick={(event) => {
+                  const point = (event as { payload?: DistanceMetricPoint } | undefined)?.payload
+                  if (point) {
+                    setSelectedAreaId(point.id)
+                  }
+                }}
+              />
+            ) : null}
             {selectedPoint ? (
               <Scatter
                 data={[selectedPoint]}
@@ -134,6 +158,14 @@ export const DistanceMetricScatter = ({
           </ScatterChart>
         </ResponsiveContainer>
       </div>
+      {highlightedData.length > 0 ? (
+        <p className="text-xs text-slate-600">
+          <span className="font-semibold" style={{ color: highlightFill }}>
+            Highlighted dots
+          </span>{' '}
+          are areas currently included in the main Filtered View shortlist.
+        </p>
+      ) : null}
       {selectedPoint && renderSelectedAreaDetail ? (
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
           {renderSelectedAreaDetail(selectedPoint.area)}

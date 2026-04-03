@@ -43,6 +43,11 @@ export const LondonWideRankedPage = () => {
     ignoreMaxDriveMinutes: true,
     overrideFilters: relaxedTrendFilters,
   })
+  const { filtered: filteredViewShortlist } = useRankedData()
+  const highlightedAreaIds = useMemo(
+    () => filteredViewShortlist.map((area) => area.microAreaId),
+    [filteredViewShortlist],
+  )
   const brightonExclusion = useMemo(
     () =>
       dataset?.londonWideExcludedByCommute?.find(
@@ -167,7 +172,7 @@ export const LondonWideRankedPage = () => {
             This shows how the current weighted score behaves against raw median semi-detached
             price across the full commute-defined universe.
           </p>
-          <PriceScoreScatter areas={filtered} />
+          <PriceScoreScatter areas={filtered} highlightedAreaIds={highlightedAreaIds} />
         </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
@@ -179,6 +184,7 @@ export const LondonWideRankedPage = () => {
             label="PM2.5"
             unit=" ug/m3"
             fill="#0284c7"
+            highlightedAreaIds={highlightedAreaIds}
             formatValue={(value) => `${value.toFixed(1)} ug/m3`}
             getValue={(area) => area.annualPm25.value}
           />
@@ -195,6 +201,8 @@ export const LondonWideRankedPage = () => {
             centralCoordinate={dataset.config.centralLondonCoordinate}
             label="Primary-school score"
             fill="#7c3aed"
+            highlightFill="#f97316"
+            highlightedAreaIds={highlightedAreaIds}
             formatValue={(value) => value.toFixed(1)}
             getValue={(area) => area.componentScores.schools}
             renderSelectedAreaDetail={(area) => {
