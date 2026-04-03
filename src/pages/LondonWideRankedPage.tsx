@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { DistanceMetricScatter } from '@/components/charts/DistanceMetricScatter'
+import { PriceScoreScatter } from '@/components/charts/PriceScoreScatter'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingState } from '@/components/LoadingState'
 import { RankedTable } from '@/components/table/RankedTable'
@@ -158,6 +159,16 @@ export const LondonWideRankedPage = () => {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
+        <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+            Median semi-detached price vs overall score
+          </h3>
+          <p className="mt-2 text-sm text-slate-700">
+            This shows how the current weighted score behaves against raw median semi-detached
+            price across the full commute-defined universe.
+          </p>
+          <PriceScoreScatter areas={filtered} />
+        </article>
         <article className="rounded-2xl border border-teal-100 bg-white p-4 shadow-panel">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
             PM2.5 vs distance from central London

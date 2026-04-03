@@ -40,16 +40,6 @@ const parseNumber = (value: string | null, fallback: number): number => {
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
-const parseBoolean = (value: string | null, fallback: boolean): boolean => {
-  if (value === '1') {
-    return true
-  }
-  if (value === '0') {
-    return false
-  }
-  return fallback
-}
-
 const fromPathString = (pathname: string, search: string) => `${pathname}${search}`
 
 interface MapPageProps {
@@ -63,9 +53,6 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [metric, setMetric] = useState<ColorMetric>(() => parseMetric(searchParams.get('metric')))
-  const [showMarkers, setShowMarkers] = useState<boolean>(() =>
-    parseBoolean(searchParams.get('markers'), true),
-  )
   const [selectedAreaId, setSelectedAreaId] = useState<string | null>(() => searchParams.get('sel'))
   const [focusAreaId, setFocusAreaId] = useState<string | null>(() => searchParams.get('sel'))
   const [hoveredAreaId, setHoveredAreaId] = useState<string | null>(null)
@@ -91,7 +78,6 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
         const latValue = viewport.lat.toFixed(5)
         const lonValue = viewport.lon.toFixed(5)
         const zoomValue = String(Math.round(viewport.zoom))
-        const markerValue = showMarkers ? '1' : '0'
         let changed = false
 
         if (next.get('metric') !== metricValue) {
@@ -110,8 +96,8 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
           next.set('z', zoomValue)
           changed = true
         }
-        if (next.get('markers') !== markerValue) {
-          next.set('markers', markerValue)
+        if (next.has('markers')) {
+          next.delete('markers')
           changed = true
         }
 
@@ -133,7 +119,6 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
     effectiveSelectedAreaId,
     metric,
     setSearchParams,
-    showMarkers,
     viewport.lat,
     viewport.lon,
     viewport.zoom,
@@ -235,25 +220,6 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
                 </option>
               ))}
             </select>
-            <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
-              <div>
-                <p className="text-sm font-medium text-slate-800">Blue teardrop pins</p>
-                <p className="text-xs text-slate-600">
-                  Turn off the Leaflet station pins if you only want the score circles.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowMarkers((current) => !current)}
-                className={`rounded-md px-3 py-1.5 text-xs font-medium ${
-                  showMarkers
-                    ? 'bg-teal-600 text-white'
-                    : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                {showMarkers ? 'Hide blue pins' : 'Show blue pins'}
-              </button>
-            </div>
           </div>
 
           <div className="flex flex-col justify-end gap-2">
@@ -292,7 +258,6 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
         selectedAreaId={effectiveSelectedAreaId}
         hoveredAreaId={hoveredAreaId}
         focusAreaId={focusAreaId}
-        showMarkers={showMarkers}
         initialCenter={[viewport.lat, viewport.lon]}
         initialZoom={viewport.zoom}
         onSelectArea={(id) => {
@@ -300,7 +265,6 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
           setFocusAreaId(null)
         }}
         onHoverArea={setHoveredAreaId}
-        onShowMarkersChange={setShowMarkers}
         onViewportChange={setViewport}
       />
 
