@@ -50,16 +50,6 @@ const LEGEND_COLORS = [
   '#059669',
 ] as const
 
-const LEGEND_COLOR_LABELS = [
-  'deep red',
-  'red',
-  'orange',
-  'amber',
-  'lime',
-  'green',
-  'deep green',
-] as const
-
 const colorAt = (index: number): string =>
   LEGEND_COLORS[index] ?? LEGEND_COLORS[LEGEND_COLORS.length - 1] ?? '#059669'
 
@@ -530,10 +520,20 @@ export const MicroAreaMap = ({
     }
   }
 
+  const broadToneForBinIndex = (binIndex: number): 'green' | 'orange' | 'red' => {
+    if (binIndex >= 4) {
+      return 'green'
+    }
+    if (binIndex >= 2) {
+      return 'orange'
+    }
+    return 'red'
+  }
+
   const colorExplanationForArea = (area: DerivedMicroArea): string => {
     const value = metric === 'overall' ? area.dynamicOverallScore : area.componentScores[metric]
     const binIndex = legendBinIndexForValue(value, legendBins)
-    const colorLabel = LEGEND_COLOR_LABELS[binIndex] ?? 'green'
+    const broadTone = broadToneForBinIndex(binIndex)
 
     if (metric === 'overall') {
       const sortedAxes = [...componentScoreRows].sort(
@@ -542,17 +542,35 @@ export const MicroAreaMap = ({
       const strongest = sortedAxes[0]
       const second = sortedAxes[1]
       const weakest = sortedAxes[sortedAxes.length - 1]
+      const secondWeakest = sortedAxes[sortedAxes.length - 2]
 
-      if (!strongest || !second || !weakest) {
-        return `This ${colorLabel} circle reflects overall score ${formatNumber(value, 1)}.`
+      if (!strongest || !second || !weakest || !secondWeakest) {
+        return `This ${broadTone} circle reflects overall score ${formatNumber(value, 1)}.`
       }
 
-      return `This ${colorLabel} circle is mostly driven by ${strongest.label.toLowerCase()} (${formatNumber(area.componentScores[strongest.key], 1)}) from ${factorSnippetForAxis(area, strongest.key)} and ${second.label.toLowerCase()} (${formatNumber(area.componentScores[second.key], 1)}) from ${factorSnippetForAxis(area, second.key)}; the main drag is ${weakest.label.toLowerCase()} (${formatNumber(area.componentScores[weakest.key], 1)}) from ${factorSnippetForAxis(area, weakest.key)}.`
+      if (broadTone === 'green') {
+        return `This green circle is being lifted mainly by ${strongest.label.toLowerCase()} (${formatNumber(area.componentScores[strongest.key], 1)}) from ${factorSnippetForAxis(area, strongest.key)} and ${second.label.toLowerCase()} (${formatNumber(area.componentScores[second.key], 1)}) from ${factorSnippetForAxis(area, second.key)}.`
+      }
+
+      if (broadTone === 'orange') {
+        return `This orange circle is not greener mainly because ${weakest.label.toLowerCase()} (${formatNumber(area.componentScores[weakest.key], 1)}) from ${factorSnippetForAxis(area, weakest.key)} and ${secondWeakest.label.toLowerCase()} (${formatNumber(area.componentScores[secondWeakest.key], 1)}) from ${factorSnippetForAxis(area, secondWeakest.key)} are holding it back, even though ${strongest.label.toLowerCase()} (${formatNumber(area.componentScores[strongest.key], 1)}) is helping.`
+      }
+
+      return `This red circle is being dragged down mainly by ${weakest.label.toLowerCase()} (${formatNumber(area.componentScores[weakest.key], 1)}) from ${factorSnippetForAxis(area, weakest.key)} and ${secondWeakest.label.toLowerCase()} (${formatNumber(area.componentScores[secondWeakest.key], 1)}) from ${factorSnippetForAxis(area, secondWeakest.key)}.`
     }
 
     const axis = componentScoreRows.find((row) => row.key === metric)
     const axisLabel = axis?.label ?? mapMetricLabel[metric]
-    return `This ${colorLabel} circle reflects ${axisLabel.toLowerCase()} ${formatNumber(value, 1)}, mainly from ${factorSnippetForAxis(area, metric)}.`
+
+    if (broadTone === 'green') {
+      return `This green circle is mainly being helped by ${factorSnippetForAxis(area, metric)}, which is why its ${axisLabel.toLowerCase()} is ${formatNumber(value, 1)}.`
+    }
+
+    if (broadTone === 'orange') {
+      return `This orange circle is not greener mainly because of ${factorSnippetForAxis(area, metric)}, which leaves its ${axisLabel.toLowerCase()} at ${formatNumber(value, 1)}.`
+    }
+
+    return `This red circle is mainly being dragged down by ${factorSnippetForAxis(area, metric)}, which is why its ${axisLabel.toLowerCase()} is only ${formatNumber(value, 1)}.`
   }
 
   return (
