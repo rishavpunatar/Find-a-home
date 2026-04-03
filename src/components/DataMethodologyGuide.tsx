@@ -229,9 +229,9 @@ export const DataMethodologyGuide = ({
               : 'How ranked axes are determined'}
           </h2>
           <div className="mt-3 space-y-3 text-sm text-slate-700">
-            <DetailBlock title="Price axis">
+            <DetailBlock title="Price filter and context">
               <p>
-                The price axis starts from the target home type:
+                The property layer still starts from the target home type:
                 semi-detached homes with at least 3 bedrooms and 2 bathrooms.
               </p>
               <p>
@@ -249,8 +249,8 @@ export const DataMethodologyGuide = ({
                 explicitly lower-confidence extended nearby area.
               </p>
               <p>
-                The ranking score for this axis is a simple inverse transform of the local median
-                semi-detached price. Lower prices score higher. Higher prices score lower.
+                Median semi-detached price is now shown as a raw shortlist filter and context
+                metric. It no longer feeds into the weighted ranking score.
               </p>
               <p>
                 <span className="font-semibold">Source:</span> OnTheMarket current locality search
@@ -262,8 +262,9 @@ export const DataMethodologyGuide = ({
                 {propertyReferencePeriod}.
               </p>
               <p className="text-xs text-slate-500">
-                The ranked table shows the median price as the clearest raw property read, but the
-                axis itself is a transformed 0-100 score, not the raw GBP number.
+                When direct local sold evidence is too sparse, the app now prefers an interpolated
+                nearby-price estimate over treating one or two transactions as a strong local
+                median.
               </p>
             </DetailBlock>
 
