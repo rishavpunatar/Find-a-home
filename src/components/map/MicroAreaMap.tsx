@@ -507,22 +507,52 @@ export const MicroAreaMap = ({
     }
   }
 
+  const factorSnippetForAxis = (area: DerivedMicroArea, key: keyof Weights): string => {
+    switch (key) {
+      case 'value':
+        return `median semi price ${formatCurrency(area.medianSemiDetachedPrice.value)}`
+      case 'transport': {
+        const changeValue = area.interchangeCount.value
+        const changeText =
+          changeValue === null
+            ? 'changes unknown'
+            : `${formatNumber(changeValue)} ${changeValue === 1 ? 'change' : 'changes'}`
+        return `${formatNumber(area.commuteTypicalMinutes.value)} min commute, ${changeText}, ${formatNumber(area.serviceFrequencyPeakTph.value, 1)} peak tph`
+      }
+      case 'schools':
+        return `primary quality ${formatNumber(area.primaryQualityScore.value, 1)} and reachable-primary access ${formatNumber(area.nearbyPrimaryCount.value, 1)}`
+      case 'environment':
+        return `PM2.5 ${formatNumber(area.annualPm25.value, 1)}, green cover ${formatNumber(area.greenCoverPct.value, 1)}%, park distance ${formatNumber(area.nearestParkDistanceM.value, 0)} m`
+      case 'crime':
+        return `crime ${formatNumber(area.crimeRatePerThousand.value, 1)} per 1,000 residents`
+      default:
+        return 'the underlying metrics'
+    }
+  }
+
   const colorExplanationForArea = (area: DerivedMicroArea): string => {
     const value = metric === 'overall' ? area.dynamicOverallScore : area.componentScores[metric]
     const binIndex = legendBinIndexForValue(value, legendBins)
-    const bin = legendBins[binIndex]
     const colorLabel = LEGEND_COLOR_LABELS[binIndex] ?? 'green'
-    const metricLabel = mapMetricLabel[metric].toLowerCase()
-    const bucketText =
-      legendMode === 'quantile'
-        ? 'relative bucket for the current map view'
-        : 'value bucket for the current map view'
 
-    if (!bin) {
-      return `This circle is ${colorLabel} because its ${metricLabel} is ${formatNumber(value, 1)}.`
+    if (metric === 'overall') {
+      const sortedAxes = [...componentScoreRows].sort(
+        (left, right) => area.componentScores[right.key] - area.componentScores[left.key],
+      )
+      const strongest = sortedAxes[0]
+      const second = sortedAxes[1]
+      const weakest = sortedAxes[sortedAxes.length - 1]
+
+      if (!strongest || !second || !weakest) {
+        return `This ${colorLabel} circle reflects overall score ${formatNumber(value, 1)}.`
+      }
+
+      return `This ${colorLabel} circle is mostly driven by ${strongest.label.toLowerCase()} (${formatNumber(area.componentScores[strongest.key], 1)}) from ${factorSnippetForAxis(area, strongest.key)} and ${second.label.toLowerCase()} (${formatNumber(area.componentScores[second.key], 1)}) from ${factorSnippetForAxis(area, second.key)}; the main drag is ${weakest.label.toLowerCase()} (${formatNumber(area.componentScores[weakest.key], 1)}) from ${factorSnippetForAxis(area, weakest.key)}.`
     }
 
-    return `This circle is ${colorLabel} because its ${metricLabel} is ${formatNumber(value, 1)}, which falls in the ${formatNumber(bin.min, 1)}-${formatNumber(bin.max, 1)} ${bucketText}.`
+    const axis = componentScoreRows.find((row) => row.key === metric)
+    const axisLabel = axis?.label ?? mapMetricLabel[metric]
+    return `This ${colorLabel} circle reflects ${axisLabel.toLowerCase()} ${formatNumber(value, 1)}, mainly from ${factorSnippetForAxis(area, metric)}.`
   }
 
   return (
