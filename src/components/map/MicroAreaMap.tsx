@@ -20,6 +20,7 @@ import type { Coordinate, DerivedMicroArea } from '@/types/domain'
 import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { formatCurrency, formatNumber } from '@/lib/format'
 import { rankingAxes, type RankingAxisKey } from '@/lib/rankingAxes'
+import { buildRightmoveAreaUrl } from '@/lib/rightmove'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -332,78 +333,94 @@ const MapDetailContent = ({
   hoverMode?: boolean
   colorExplanation?: string
 }) => (
-  <div className="text-sm">
-    <p className="font-semibold text-slate-900">{area.stationName}</p>
-    <p className="text-xs text-slate-600">
-      {area.localAuthority}, {area.countyOrBorough}
-    </p>
-    {colorExplanation ? (
-      <p className="mt-2 rounded-md border border-teal-100 bg-teal-50 px-2 py-1.5 text-xs text-slate-700">
-        {colorExplanation}
-      </p>
-    ) : null}
-    <div className="mt-2 grid gap-2 sm:grid-cols-2">
-      <div className="rounded-md bg-slate-50 px-2 py-1.5">
-        <p className="text-[11px] uppercase tracking-wide text-slate-500">Overall</p>
-        <p className="font-semibold text-slate-900">{area.dynamicOverallScore.toFixed(1)}</p>
-      </div>
-      <div className="rounded-md bg-slate-50 px-2 py-1.5">
-        <p className="text-[11px] uppercase tracking-wide text-slate-500">Confidence</p>
-        <p className="font-semibold text-slate-900">
-          {formatNumber(area.dataConfidenceScore * 100, 0)}%
+  (() => {
+    const rightmoveUrl = buildRightmoveAreaUrl(area)
+
+    return (
+      <div className="text-sm">
+        <p className="font-semibold text-slate-900">{area.stationName}</p>
+        <p className="text-xs text-slate-600">
+          {area.localAuthority}, {area.countyOrBorough}
         </p>
-      </div>
-      <div className="rounded-md bg-slate-50 px-2 py-1.5">
-        <p className="text-[11px] uppercase tracking-wide text-slate-500">Median Semi</p>
-        <p className="font-semibold text-slate-900">
-          {formatCurrency(area.medianSemiDetachedPrice.value)}
-        </p>
-      </div>
-      <div className="rounded-md bg-slate-50 px-2 py-1.5">
-        <p className="text-[11px] uppercase tracking-wide text-slate-500">Commute</p>
-        <p className="font-semibold text-slate-900">
-          {formatNumber(area.commuteTypicalMinutes.value)} min
-        </p>
-      </div>
-      <div className="rounded-md bg-slate-50 px-2 py-1.5">
-        <p className="text-[11px] uppercase tracking-wide text-slate-500">PM2.5</p>
-        <p className="font-semibold text-slate-900">{formatNumber(area.annualPm25.value, 1)}</p>
-      </div>
-      <div className="rounded-md bg-slate-50 px-2 py-1.5">
-        <p className="text-[11px] uppercase tracking-wide text-slate-500">Green Cover</p>
-        <p className="font-semibold text-slate-900">
-          {formatNumber(area.greenCoverPct.value, 1)}%
-        </p>
-      </div>
-    </div>
-    <div className="mt-3">
-      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-        Score breakdown
-      </p>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        {componentScoreRows.map((row) => (
-          <div key={row.key} className="rounded-md border border-slate-200 px-2 py-1.5">
-            <p className="text-[11px] uppercase tracking-wide text-slate-500">{row.label}</p>
-            <p className="font-medium text-slate-900">
-              {formatNumber(area.componentScores[row.key], 1)}
+        {colorExplanation ? (
+          <p className="mt-2 rounded-md border border-teal-100 bg-teal-50 px-2 py-1.5 text-xs text-slate-700">
+            {colorExplanation}
+          </p>
+        ) : null}
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">Overall</p>
+            <p className="font-semibold text-slate-900">{area.dynamicOverallScore.toFixed(1)}</p>
+          </div>
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">Confidence</p>
+            <p className="font-semibold text-slate-900">
+              {formatNumber(area.dataConfidenceScore * 100, 0)}%
             </p>
           </div>
-        ))}
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">Median Semi</p>
+            <p className="font-semibold text-slate-900">
+              {formatCurrency(area.medianSemiDetachedPrice.value)}
+            </p>
+          </div>
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">Commute</p>
+            <p className="font-semibold text-slate-900">
+              {formatNumber(area.commuteTypicalMinutes.value)} min
+            </p>
+          </div>
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">PM2.5</p>
+            <p className="font-semibold text-slate-900">{formatNumber(area.annualPm25.value, 1)}</p>
+          </div>
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">Green Cover</p>
+            <p className="font-semibold text-slate-900">
+              {formatNumber(area.greenCoverPct.value, 1)}%
+            </p>
+          </div>
+        </div>
+        <div className="mt-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Score breakdown
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            {componentScoreRows.map((row) => (
+              <div key={row.key} className="rounded-md border border-slate-200 px-2 py-1.5">
+                <p className="text-[11px] uppercase tracking-wide text-slate-500">{row.label}</p>
+                <p className="font-medium text-slate-900">
+                  {formatNumber(area.componentScores[row.key], 1)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mt-3">
+          <AreaTrustSummary area={area} compact />
+        </div>
+        <div className="mt-3 flex flex-wrap gap-3">
+          {!hoverMode ? (
+            <Link
+              to={`/micro-area/${area.microAreaId}`}
+              state={{ from: fromPath }}
+              className="inline-block text-surge hover:underline"
+            >
+              Open full details
+            </Link>
+          ) : null}
+          <a
+            href={rightmoveUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block text-surge hover:underline"
+          >
+            Open Rightmove houses
+          </a>
+        </div>
       </div>
-    </div>
-    <div className="mt-3">
-      <AreaTrustSummary area={area} compact />
-    </div>
-    {!hoverMode ? (
-      <Link
-        to={`/micro-area/${area.microAreaId}`}
-        state={{ from: fromPath }}
-        className="mt-2 inline-block text-surge hover:underline"
-      >
-        Open full details
-      </Link>
-    ) : null}
-  </div>
+    )
+  })()
 )
 
 export const MicroAreaMap = ({
