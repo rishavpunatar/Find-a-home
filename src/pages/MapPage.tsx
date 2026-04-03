@@ -247,7 +247,7 @@ export const MapPage = ({ showResultsList = true }: MapPageProps = {}) => {
           </p>
         ) : (
           <p className="mt-3 text-sm text-slate-600">
-            Select any map circle/pin or use the keyboard list below to highlight a micro-area.
+            Select any map circle or use the keyboard list below to highlight a micro-area.
           </p>
         )}
       </section>
