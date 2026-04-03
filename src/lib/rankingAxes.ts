@@ -17,20 +17,6 @@ export interface RankingAxisDefinition {
 
 export const rankingAxes: RankingAxisDefinition[] = [
   {
-    key: 'value',
-    label: 'Price',
-    rankingExplanationLabel: 'price',
-    mapLabel: 'Price score',
-    distributionTitle: 'Price score',
-    distributionDescription: 'Spread of the price axis across all areas.',
-    chartColor: '#0d9488',
-    detail:
-      'A higher price score means the target home type looks cheaper relative to the rest of the search universe.',
-    recipe:
-      'This starts from the property layer. The app converts the local median semi-detached price into one simple 0-100 score. Lower prices score higher; higher prices score lower.',
-    formula: 'Price score = inverse transform of median semi-detached price',
-  },
-  {
     key: 'transport',
     label: 'Transport',
     rankingExplanationLabel: 'transport',

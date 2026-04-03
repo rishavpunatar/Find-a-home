@@ -20,7 +20,6 @@ def metric(value: float, note: str = 'DEFRA PCM 2024 source') -> dict[str, objec
 
 def make_area() -> dict[str, object]:
     component_scores = {
-        'value': 71.0,
         'transport': 68.0,
         'schools': 70.0,
         'environment': 66.0,
@@ -39,7 +38,6 @@ def make_area() -> dict[str, object]:
         'averageSemiDetachedPrice': metric(540_000),
         'medianSemiDetachedPrice': metric(525_000),
         'semiPriceTrendPct5y': metric(22.5),
-        'priceScore': metric(61.0),
         'commuteTypicalMinutes': metric(39.0),
         'commutePeakMinutes': metric(44.0),
         'commuteOffPeakMinutes': metric(35.0),
@@ -63,11 +61,10 @@ def make_area() -> dict[str, object]:
 
 def default_weights() -> dict[str, float]:
     return {
-        'value': 32,
-        'transport': 20,
-        'schools': 23,
-        'environment': 15,
-        'crime': 10,
+        'transport': 29,
+        'schools': 34,
+        'environment': 22,
+        'crime': 15,
     }
 
 

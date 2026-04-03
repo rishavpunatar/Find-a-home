@@ -11,6 +11,7 @@ import {
   FILTER_PRESET_ORDER,
 } from '@/lib/constants'
 import { matchesFilters } from '@/lib/filters'
+import { formatCurrency } from '@/lib/format'
 
 interface RangeControlProps {
   label: string
@@ -22,6 +23,7 @@ interface RangeControlProps {
   onChange: (next: number) => void
   disabled?: boolean
   exclusionLabel?: string
+  displayValue?: string
 }
 
 const RangeControl = ({
@@ -34,11 +36,14 @@ const RangeControl = ({
   onChange,
   disabled = false,
   exclusionLabel,
+  displayValue,
 }: RangeControlProps) => (
   <label className={`flex flex-col gap-1 ${disabled ? 'opacity-60' : ''}`}>
     <span className="text-xs font-medium text-slate-600">
       {label}:{' '}
-      <span className="font-semibold text-slate-800">{value.toLocaleString('en-GB') + unit}</span>
+      <span className="font-semibold text-slate-800">
+        {displayValue ?? value.toLocaleString('en-GB') + unit}
+      </span>
     </span>
     <input
       type="range"
@@ -58,6 +63,7 @@ const RangeControl = ({
 const filterLabels: Record<keyof Filters, string> = {
   maxCommuteMinutes: 'Commute',
   maxDriveMinutes: 'Pinner drive',
+  maxMedianSemiDetachedPrice: 'Median semi',
 }
 
 const formatFilterValue = (key: keyof Filters, value: number): string => {
@@ -65,6 +71,8 @@ const formatFilterValue = (key: keyof Filters, value: number): string => {
     case 'maxCommuteMinutes':
     case 'maxDriveMinutes':
       return `${value} min`
+    case 'maxMedianSemiDetachedPrice':
+      return formatCurrency(value)
     default:
       return value.toString()
   }
@@ -98,6 +106,22 @@ export const FiltersPanel = () => {
 
   const hasCustomFilters = JSON.stringify(activeFilters) !== JSON.stringify(DEFAULT_FILTERS)
   const totalAreaCount = ranked.length
+  const medianPriceValues = useMemo(
+    () =>
+      ranked
+        .map((area) => area.medianSemiDetachedPrice.value)
+        .filter((value): value is number => value !== null && Number.isFinite(value)),
+    [ranked],
+  )
+  const priceSliderMin = medianPriceValues.length
+    ? Math.max(250_000, Math.floor(Math.min(...medianPriceValues) / 25_000) * 25_000)
+    : 250_000
+  const priceSliderMax = medianPriceValues.length
+    ? Math.max(
+        DEFAULT_FILTERS.maxMedianSemiDetachedPrice,
+        Math.ceil(Math.max(...medianPriceValues) / 25_000) * 25_000,
+      )
+    : DEFAULT_FILTERS.maxMedianSemiDetachedPrice
 
   const exclusionCounts = useMemo(() => {
     const countExcluded = (predicate: (index: number) => boolean) =>
@@ -114,8 +138,18 @@ export const FiltersPanel = () => {
           (ranked[index]?.driveTimeToPinnerMinutes.value ?? Number.POSITIVE_INFINITY) <=
           activeFilters.maxDriveMinutes,
       ),
+      price: countExcluded(
+        (index) =>
+          (ranked[index]?.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY) <=
+          activeFilters.maxMedianSemiDetachedPrice,
+      ),
     }
-  }, [activeFilters.maxDriveMinutes, displayedCommuteLimit, ranked])
+  }, [
+    activeFilters.maxDriveMinutes,
+    activeFilters.maxMedianSemiDetachedPrice,
+    displayedCommuteLimit,
+    ranked,
+  ])
 
   const activeFilterChips = useMemo(
     () =>
@@ -236,6 +270,17 @@ export const FiltersPanel = () => {
               ? 'Relaxed in coverage view'
               : excludedLabel(exclusionCounts.drive, totalAreaCount)
           }
+        />
+        <RangeControl
+          label="Max median semi-detached price"
+          value={Math.min(activeFilters.maxMedianSemiDetachedPrice, priceSliderMax)}
+          min={priceSliderMin}
+          max={priceSliderMax}
+          step={25_000}
+          unit=""
+          onChange={(next) => updateFilter('maxMedianSemiDetachedPrice', next, scope)}
+          displayValue={formatCurrency(activeFilters.maxMedianSemiDetachedPrice)}
+          exclusionLabel={excludedLabel(exclusionCounts.price, totalAreaCount)}
         />
       </div>
     </section>

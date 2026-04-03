@@ -8,7 +8,6 @@ import { buildVarianceAwareDefaultWeights, clampWeight, normalizeWeights, weight
 describe('weights helpers', () => {
   it('normalizes arbitrary weights to 100', () => {
     const normalized = normalizeWeights({
-      value: 10,
       transport: 10,
       schools: 10,
       environment: 10,
@@ -16,12 +15,11 @@ describe('weights helpers', () => {
     })
 
     expect(weightsSum(normalized)).toBeCloseTo(100, 0)
-    expect(normalized.value).toBeCloseTo(20, 2)
+    expect(normalized.transport).toBeCloseTo(25, 2)
   })
 
   it('falls back to defaults when total is non-positive', () => {
     const normalized = normalizeWeights({
-      value: 0,
       transport: 0,
       schools: 0,
       environment: 0,
@@ -68,7 +66,6 @@ describe('weights helpers', () => {
       averageSemiDetachedPrice: makeMetric(600000),
       medianSemiDetachedPrice: makeMetric(590000),
       semiPriceTrendPct5y: makeMetric(12),
-      priceScore: makeMetric(60),
       walkCatchmentAssumption: '800m walk radius',
       commuteDestination: 'Central London core',
       commuteTypicalMinutes: makeMetric(40),
@@ -94,7 +91,6 @@ describe('weights helpers', () => {
       boroughQolPeriod: '2022-23',
       boroughQolMethodology: 'Test',
       componentScores: {
-        value: 60,
         transport: 60,
         schools: 60,
         environment: 60,
@@ -106,14 +102,14 @@ describe('weights helpers', () => {
     })
 
     const weights = buildVarianceAwareDefaultWeights([
-      makeArea('a', { value: 40, transport: 25, schools: 60, environment: 62, crime: 55 }),
-      makeArea('b', { value: 65, transport: 55, schools: 61, environment: 63, crime: 56 }),
-      makeArea('c', { value: 90, transport: 85, schools: 62, environment: 64, crime: 57 }),
-      makeArea('d', { value: 55, transport: 45, schools: 63, environment: 65, crime: 58 }),
+      makeArea('a', { transport: 25, schools: 60, environment: 62, crime: 55 }),
+      makeArea('b', { transport: 55, schools: 61, environment: 63, crime: 56 }),
+      makeArea('c', { transport: 85, schools: 62, environment: 64, crime: 57 }),
+      makeArea('d', { transport: 45, schools: 63, environment: 65, crime: 58 }),
     ])
 
     expect(weightsSum(weights)).toBeCloseTo(100, 0)
-    expect(weights.value).toBeGreaterThan(weights.schools)
     expect(weights.transport).toBeGreaterThan(weights.environment)
+    expect(weights.schools).toBeGreaterThan(0)
   })
 })

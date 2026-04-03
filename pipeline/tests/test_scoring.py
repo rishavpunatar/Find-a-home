@@ -4,7 +4,6 @@ from pipeline.models.scoring import inverse_score, normalize_weights, weighted_s
 def test_normalize_weights_sum_to_100() -> None:
     normalized = normalize_weights(
         {
-            'value': 30,
             'transport': 20,
             'schools': 10,
             'environment': 10,
@@ -24,18 +23,16 @@ def test_inverse_score_direction() -> None:
 
 def test_weighted_score_confidence_penalty() -> None:
     scores = {
-        'value': 70,
         'transport': 70,
         'schools': 70,
         'environment': 70,
         'crime': 70,
     }
     weights = {
-        'value': 32,
-        'transport': 20,
-        'schools': 23,
-        'environment': 15,
-        'crime': 10,
+        'transport': 29,
+        'schools': 34,
+        'environment': 22,
+        'crime': 15,
     }
 
     assert weighted_score(scores, weights, confidence=1.0) > weighted_score(scores, weights, confidence=0.2)

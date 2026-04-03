@@ -8,7 +8,6 @@ interface SettingsPanelProps {
 }
 
 const labelMap: Record<keyof Weights, string> = {
-  value: 'Price',
   transport: 'Transport / commute',
   schools: 'Schools',
   environment: 'Environment',

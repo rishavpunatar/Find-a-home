@@ -79,8 +79,12 @@ export const DataMethodologyGuide = ({
                 areas that fit the kind of home and trade-offs you care about.
               </p>
               <p>
-                The ranking works by combining five weighted axes into one shortlist model: value,
+                The ranking works by combining four weighted axes into one shortlist model:
                 transport, schools, environment, and crime.
+              </p>
+              <p>
+                Median semi-detached price is still shown and can be used as a shortlist filter,
+                but it no longer changes the weighted rank.
               </p>
             </InfoCard>
 

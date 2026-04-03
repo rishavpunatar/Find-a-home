@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-03T00:21:42+01:00",
+  "generatedAt": "2026-04-03T12:22:51+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "strong_source_coverage",
-  "sourceCoverageScore": 0.9066,
-  "verificationStrengthScore": 0.7017,
-  "verificationCompletenessScore": 0.9066,
+  "sourceCoverageScore": 0.8852,
+  "verificationStrengthScore": 0.6852,
+  "verificationCompletenessScore": 0.8852,
   "sourceMatrix": {
     "property": {
       "status": "source_applied_not_live_verified",
@@ -66,13 +66,13 @@
       "count": 575,
       "domains": {
         "property": {
-          "availablePct": 60.0,
-          "sourceAppliedPct": 60.0,
+          "availablePct": 45.04,
+          "sourceAppliedPct": 45.04,
           "statusCounts": {
-            "available": 345,
-            "estimated": 230,
+            "available": 259,
+            "estimated": 311,
             "placeholder": 0,
-            "missing": 0,
+            "missing": 5,
             "other": 0
           }
         },
@@ -148,13 +148,13 @@
       "count": 575,
       "domains": {
         "property": {
-          "availablePct": 60.0,
-          "sourceAppliedPct": 60.0,
+          "availablePct": 45.04,
+          "sourceAppliedPct": 45.04,
           "statusCounts": {
-            "available": 345,
-            "estimated": 230,
+            "available": 259,
+            "estimated": 311,
             "placeholder": 0,
-            "missing": 0,
+            "missing": 5,
             "other": 0
           }
         },

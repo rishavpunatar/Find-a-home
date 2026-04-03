@@ -443,7 +443,6 @@ def log_inverse_score(value: float, *, best: float, worst: float) -> float:
 def score_components(
     station: StationRecord,
     transport: dict[str, Any] | None,
-    price: dict[str, Any] | None,
     schools: dict[str, Any] | None,
     population: dict[str, Any] | None,
     pollution: dict[str, Any] | None,
@@ -485,7 +484,6 @@ def score_components(
         if transport and transport.get('interchange_count') is not None
         else float(station.interchange_count)
     )
-    value_score = number_or_default(price, 'price_score', 45)
 
     commute_score = inverse_score(commute_typical, best=20, worst=60)
     peak_score = inverse_score(commute_peak, best=22, worst=70)
@@ -537,7 +535,6 @@ def score_components(
     )
 
     return {
-        'value': round(clamp(value_score), 1),
         'transport': round(clamp(transport_score), 1),
         'schools': round(clamp(schools_score), 1),
         'environment': round(clamp(environment_score), 1),
@@ -551,14 +548,13 @@ def confidence_score(metrics: list[NumericMetric], overlap_conf: float) -> float
 
 def ranking_rules(component_scores: dict[str, float]) -> list[str]:
     labels = {
-        'value': 'price',
         'transport': 'transport',
         'schools': 'school quality and access',
         'environment': 'air quality and green space',
         'crime': 'safety',
     }
 
-    ranked_keys = ['value', 'transport', 'schools', 'environment', 'crime']
+    ranked_keys = ['transport', 'schools', 'environment', 'crime']
     sorted_pairs = sorted(
         [(key, component_scores[key]) for key in ranked_keys],
         key=lambda item: item[1],
@@ -719,7 +715,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'average_semi_price',
                     'median_semi_price',
                     'price_trend_pct_5y',
-                    'price_score',
                 ],
                 'Estimated by inverse-distance interpolation from nearby station asking-price metrics where direct current listing samples are unavailable.',
             )
@@ -804,7 +799,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             components = score_components(
                 station,
                 transport_record,
-                property_record,
                 school_record,
                 population_record,
                 pollution_record,
@@ -839,13 +833,6 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     'price_trend_pct_5y',
                     unit='%',
                     note='Approximate 5-year trend in sold price levels.',
-                    last_updated=property_last_updated,
-                ),
-                'priceScore': metric_from_record(
-                    property_record,
-                    'price_score',
-                    unit='score',
-                    note='Simple inverse price score based only on the local median semi-detached price: lower prices score higher and higher prices score lower.',
                     last_updated=property_last_updated,
                 ),
                 'commuteTypicalMinutes': metric_from_record(
@@ -1000,7 +987,23 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 ),
             }
 
-            confidence = confidence_score(list(metrics.values()), overlap_conf)
+            score_confidence_metrics = [
+                metrics['commuteTypicalMinutes'],
+                metrics['commutePeakMinutes'],
+                metrics['commuteOffPeakMinutes'],
+                metrics['serviceFrequencyPeakTph'],
+                metrics['interchangeCount'],
+                metrics['nearbyPrimaryCount'],
+                metrics['primaryQualityScore'],
+                metrics['annualNo2'],
+                metrics['annualPm25'],
+                metrics['greenSpaceAreaKm2Within1km'],
+                metrics['greenCoverPct'],
+                metrics['nearestParkDistanceM'],
+                metrics['crimeRatePerThousand'],
+            ]
+
+            confidence = confidence_score(score_confidence_metrics, overlap_conf)
             overall = weighted_score(components, config.default_weights, confidence)
 
             flags: list[str] = []
@@ -1026,6 +1029,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
 
             confidence_notes = [
                 'Scores are catchment-level proxies and should be validated with on-the-ground checks.',
+                'Median semi-detached price is now a shortlist filter and raw context metric, not a ranking axis.',
                 'School scoring is now primary-only and blends an admissions-aware access heuristic, the latest eligible 2023-onward KS2 attainment basket, a light attendance supplement, and an Ofsted warning overlay rather than a single inspection label.',
                 'Green-cover percentage uses an expanded 2x walk-radius neighborhood blend.',
             ]

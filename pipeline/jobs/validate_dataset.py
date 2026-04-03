@@ -25,7 +25,6 @@ NUMERIC_BOUNDS: dict[str, tuple[float, float]] = {
     'averageSemiDetachedPrice': (40_000.0, 8_000_000.0),
     'medianSemiDetachedPrice': (40_000.0, 8_000_000.0),
     'semiPriceTrendPct5y': (-90.0, 400.0),
-    'priceScore': (0.0, 100.0),
     'commuteTypicalMinutes': (0.0, 240.0),
     'commutePeakMinutes': (0.0, 300.0),
     'commuteOffPeakMinutes': (0.0, 300.0),
@@ -45,10 +44,9 @@ NUMERIC_BOUNDS: dict[str, tuple[float, float]] = {
     'boroughQolScore': (0.0, 100.0),
 }
 
-COMPONENT_KEYS = {'value', 'transport', 'schools', 'environment', 'crime'}
+COMPONENT_KEYS = {'transport', 'schools', 'environment', 'crime'}
 MIN_SCORE_SOURCE_YEAR = 2023
 SCORE_SOURCE_DOMAINS = {
-    'property': 'value',
     'transport': 'transport',
     'schools': 'schools',
     'pollution': 'environment',
@@ -59,7 +57,6 @@ METRIC_FIELDS = [
     'averageSemiDetachedPrice',
     'medianSemiDetachedPrice',
     'semiPriceTrendPct5y',
-    'priceScore',
     'commuteTypicalMinutes',
     'commutePeakMinutes',
     'commuteOffPeakMinutes',

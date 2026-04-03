@@ -6,7 +6,6 @@ import { DEFAULT_WEIGHTS } from './constants'
 import { computeWeightedScore } from './scoring'
 
 const componentScores: ComponentScores = {
-  value: 80,
   transport: 70,
   schools: 90,
   environment: 60,
@@ -26,7 +25,6 @@ describe('computeWeightedScore', () => {
   it('normalizes equivalent scaled weights to same score', () => {
     const resultA = computeWeightedScore(componentScores, DEFAULT_WEIGHTS, 0.9)
     const scaledWeights = {
-      value: DEFAULT_WEIGHTS.value * 2,
       transport: DEFAULT_WEIGHTS.transport * 2,
       schools: DEFAULT_WEIGHTS.schools * 2,
       environment: DEFAULT_WEIGHTS.environment * 2,
@@ -46,11 +44,10 @@ describe('computeWeightedScore', () => {
     const skewedResult = computeWeightedScore(
       componentScores,
       {
-        value: 5,
         transport: 5,
-        schools: 55,
+        schools: 60,
         environment: 20,
-        crime: 10,
+        crime: 15,
       },
       0.9,
     )

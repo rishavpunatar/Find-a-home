@@ -1,16 +1,16 @@
 import type { Filters, Weights } from '@/types/domain'
 
 export const DEFAULT_WEIGHTS: Weights = {
-  value: 32,
-  transport: 20,
-  schools: 23,
-  environment: 15,
-  crime: 10,
+  transport: 29,
+  schools: 34,
+  environment: 22,
+  crime: 15,
 }
 
 export const DEFAULT_FILTERS: Filters = {
   maxCommuteMinutes: 60,
   maxDriveMinutes: 90,
+  maxMedianSemiDetachedPrice: 8_000_000,
 }
 
 export const MAX_COMPARE_ITEMS = 5
@@ -24,6 +24,7 @@ export const FILTER_PRESETS = {
     filters: {
       maxCommuteMinutes: 50,
       maxDriveMinutes: 50,
+      maxMedianSemiDetachedPrice: DEFAULT_FILTERS.maxMedianSemiDetachedPrice,
     },
   },
   balanced: {
@@ -37,6 +38,7 @@ export const FILTER_PRESETS = {
     filters: {
       maxCommuteMinutes: 60,
       maxDriveMinutes: 120,
+      maxMedianSemiDetachedPrice: DEFAULT_FILTERS.maxMedianSemiDetachedPrice,
     },
   },
 } as const
@@ -46,10 +48,10 @@ export type FilterPresetKey = keyof typeof FILTER_PRESETS
 export const FILTER_PRESET_ORDER: FilterPresetKey[] = ['focus', 'balanced', 'explore']
 
 export const STORAGE_KEYS = {
-  weights: 'find-a-home.v2.weights',
+  weights: 'find-a-home.v3.weights',
   weightingMode: 'find-a-home.v2.weighting-mode',
-  filters: 'find-a-home.v6.filters.default',
-  filtersLondon: 'find-a-home.v6.filters.london',
+  filters: 'find-a-home.v7.filters.default',
+  filtersLondon: 'find-a-home.v7.filters.london',
   pinned: 'find-a-home.pinned',
   compare: 'find-a-home.compare',
 } as const

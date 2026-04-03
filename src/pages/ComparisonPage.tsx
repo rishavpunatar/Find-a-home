@@ -49,11 +49,10 @@ export const ComparisonPage = () => {
 
   const componentData = compared.map((area) => ({
     name: area.stationName,
-    value: area.componentScores.value,
-    transport: area.componentScores.transport,
-    schools: area.componentScores.schools,
-    environment: area.componentScores.environment,
-    crime: area.componentScores.crime,
+    ...rankingAxes.reduce<Record<string, number>>((scores, axis) => {
+      scores[axis.key] = area.componentScores[axis.key]
+      return scores
+    }, {}),
   }))
 
   return (

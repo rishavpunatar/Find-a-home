@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-04-03T00:21:16+01:00",
+  "generatedAt": "2026-04-03T12:22:30+01:00",
   "count": 575,
   "londonWideCount": 575,
   "topMicroAreas": [
     {
-      "microAreaId": "ma-westhd1f",
-      "stationName": "West Ham",
-      "score": 60.0
-    },
-    {
-      "microAreaId": "ma-plaisaf0",
-      "stationName": "Plaistow",
-      "score": 58.42
-    },
-    {
-      "microAreaId": "ma-harlef99",
-      "stationName": "Harlesden",
-      "score": 57.6
-    },
-    {
-      "microAreaId": "ma-greend00",
-      "stationName": "Greenford",
-      "score": 57.38
-    },
-    {
-      "microAreaId": "ma-belve013",
-      "stationName": "Belvedere",
-      "score": 56.96
+      "microAreaId": "ma-cockff74",
+      "stationName": "Cockfosters",
+      "score": 64.81
     },
     {
       "microAreaId": "ma-easta300",
       "stationName": "East Acton",
-      "score": 56.43
+      "score": 63.32
     },
     {
-      "microAreaId": "ma-tooti8a5",
-      "stationName": "Tooting",
-      "score": 56.24
+      "microAreaId": "ma-golde26c",
+      "stationName": "Golders Green",
+      "score": 62.45
     },
     {
-      "microAreaId": "ma-limehb58",
-      "stationName": "Limehouse",
-      "score": 56.1
+      "microAreaId": "ma-eastfb5c",
+      "stationName": "East Finchley",
+      "score": 62.4
     },
     {
-      "microAreaId": "ma-haina50f",
-      "stationName": "Hainault",
-      "score": 56.09
+      "microAreaId": "ma-oakwo246",
+      "stationName": "Oakwood",
+      "score": 62.16
     },
     {
-      "microAreaId": "ma-chadwcd5",
-      "stationName": "Chadwell Heath",
-      "score": 55.95
+      "microAreaId": "ma-redbrbbc",
+      "stationName": "Redbridge",
+      "score": 61.55
+    },
+    {
+      "microAreaId": "ma-mordea4b",
+      "stationName": "Morden",
+      "score": 61.16
+    },
+    {
+      "microAreaId": "ma-wansta21",
+      "stationName": "Wanstead",
+      "score": 61.08
+    },
+    {
+      "microAreaId": "ma-highg369",
+      "stationName": "Highgate",
+      "score": 61.07
+    },
+    {
+      "microAreaId": "ma-highbbae",
+      "stationName": "Highbury & Islington",
+      "score": 61.01
     }
   ],
   "topLondonWideMicroAreas": [
     {
-      "microAreaId": "ma-westhd1f",
-      "stationName": "West Ham",
-      "score": 60.0
-    },
-    {
-      "microAreaId": "ma-plaisaf0",
-      "stationName": "Plaistow",
-      "score": 58.42
-    },
-    {
-      "microAreaId": "ma-harlef99",
-      "stationName": "Harlesden",
-      "score": 57.6
-    },
-    {
-      "microAreaId": "ma-greend00",
-      "stationName": "Greenford",
-      "score": 57.38
-    },
-    {
-      "microAreaId": "ma-belve013",
-      "stationName": "Belvedere",
-      "score": 56.96
+      "microAreaId": "ma-cockff74",
+      "stationName": "Cockfosters",
+      "score": 64.81
     },
     {
       "microAreaId": "ma-easta300",
       "stationName": "East Acton",
-      "score": 56.43
+      "score": 63.32
     },
     {
-      "microAreaId": "ma-tooti8a5",
-      "stationName": "Tooting",
-      "score": 56.24
+      "microAreaId": "ma-golde26c",
+      "stationName": "Golders Green",
+      "score": 62.45
     },
     {
-      "microAreaId": "ma-limehb58",
-      "stationName": "Limehouse",
-      "score": 56.1
+      "microAreaId": "ma-eastfb5c",
+      "stationName": "East Finchley",
+      "score": 62.4
     },
     {
-      "microAreaId": "ma-haina50f",
-      "stationName": "Hainault",
-      "score": 56.09
+      "microAreaId": "ma-oakwo246",
+      "stationName": "Oakwood",
+      "score": 62.16
     },
     {
-      "microAreaId": "ma-chadwcd5",
-      "stationName": "Chadwell Heath",
-      "score": 55.95
+      "microAreaId": "ma-redbrbbc",
+      "stationName": "Redbridge",
+      "score": 61.55
+    },
+    {
+      "microAreaId": "ma-mordea4b",
+      "stationName": "Morden",
+      "score": 61.16
+    },
+    {
+      "microAreaId": "ma-wansta21",
+      "stationName": "Wanstead",
+      "score": 61.08
+    },
+    {
+      "microAreaId": "ma-highg369",
+      "stationName": "Highgate",
+      "score": 61.07
+    },
+    {
+      "microAreaId": "ma-highbbae",
+      "stationName": "Highbury & Islington",
+      "score": 61.01
     }
   ]
 }

@@ -39,6 +39,7 @@ OTM_TARGET_LISTINGS = 18
 OTM_MAX_TOTAL_PAGES = 6
 OTM_MAX_PAGES_PER_SLUG = 2
 OTM_MIN_LISTINGS_FOR_DIRECT_RECORD = 3
+MIN_TRANSACTIONS_FOR_DIRECT_RECORD = 3
 OTM_MAX_LISTING_DISTANCE_M = LISTING_EXTENDED_CATCHMENT_RADIUS_M
 OTM_MIN_STATION_SLUG_DISTANCE_M = PRIMARY_CATCHMENT_RADIUS_M
 
@@ -360,8 +361,6 @@ def build_live_listing_property_record(
     max_distance_used = max(float(item['distance_m']) for item in live_listings)
     used_extended_radius = max_distance_used > PRIMARY_CATCHMENT_RADIUS_M
 
-    simple_price_score = price_score(median_price)
-
     confidence = 0.47 if used_extended_radius else 0.52
     confidence += min(0.26, len(live_listings) / 20 * 0.26)
     confidence += 0.1 if len(live_listings) >= 8 else 0.0
@@ -380,7 +379,6 @@ def build_live_listing_property_record(
         'average_semi_price': round(average_price, 2),
         'median_semi_price': round(median_price, 2),
         'price_trend_pct_5y': None,
-        'price_score': simple_price_score,
         'status': status,
         'confidence': confidence,
         'provenance': 'direct_listing_extended' if used_extended_radius else 'direct_listing',
@@ -622,12 +620,6 @@ def sample_station_transactions(
 
     return sampled, strata_counts, len(postcodes_with_transactions)
 
-
-def price_score(median_price: float) -> float:
-    # Lower prices score higher; range tuned to semi-detached market in target region.
-    return round(clamp(100 * (1 - (median_price - 250_000) / (1_300_000 - 250_000)), 0, 100), 2)
-
-
 def build_property_record(
     station: dict[str, Any],
     current_by_outcode: dict[str, dict[str, list[dict[str, Any]]]],
@@ -646,7 +638,7 @@ def build_property_record(
         selected_postcodes,
         current_by_outcode,
     )
-    if not current_rows:
+    if len(current_rows) < MIN_TRANSACTIONS_FOR_DIRECT_RECORD:
         return None
 
     postcode_lookup = {str(item['postcode']): item for item in selected_postcodes}
@@ -698,8 +690,6 @@ def build_property_record(
     confidence += 0.08 if trend_proxy is not None else 0.0
     confidence = round(clamp(confidence, 0.18 if is_far else 0.22 if is_extended else 0.25, 0.92), 3)
 
-    simple_price_score = price_score(median_price)
-
     current_start, current_end = current_window
     prior_start, prior_end = prior_window
     methodology_note = (
@@ -719,7 +709,6 @@ def build_property_record(
         'average_semi_price': round(average_price, 2),
         'median_semi_price': round(median_price, 2),
         'price_trend_pct_5y': None if trend_proxy is None else round(float(trend_proxy), 3),
-        'price_score': simple_price_score,
         'status': status,
         'confidence': confidence,
         'provenance': provenance,

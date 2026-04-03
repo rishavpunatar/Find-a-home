@@ -50,14 +50,6 @@ const baseArea: DerivedMicroArea = {
     methodologyNote: 'Test',
     lastUpdated: '2026-03-01',
   },
-  priceScore: {
-    value: 66,
-    unit: 'score',
-    status: 'available',
-    confidence: 0.8,
-    methodologyNote: 'Test',
-    lastUpdated: '2026-03-01',
-  },
   walkCatchmentAssumption: '800m walk radius',
   commuteDestination: 'Oxford Circus',
   commuteTypicalMinutes: {
@@ -201,7 +193,6 @@ const baseArea: DerivedMicroArea = {
   boroughQolPeriod: '2022-23',
   boroughQolMethodology: 'Test',
   componentScores: {
-    value: 68,
     transport: 74,
     schools: 78,
     environment: 67,

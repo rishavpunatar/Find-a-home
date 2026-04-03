@@ -1,7 +1,6 @@
 from pipeline.jobs.generate_property_metrics import (
     filter_otm_listings,
     parse_price_to_number,
-    price_score,
     slugify_location_name,
 )
 
@@ -50,7 +49,3 @@ def test_filter_otm_listings_keeps_only_3_plus_bed_2_plus_bath_semis() -> None:
 
     assert len(filtered) == 1
     assert filtered[0]['id'] == 'keep'
-
-
-def test_price_score_falls_as_median_price_rises() -> None:
-    assert price_score(300_000) > price_score(800_000) > price_score(1_200_000)

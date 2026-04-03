@@ -176,18 +176,10 @@ export const MicroAreaDetailPage = () => {
         </h3>
         <p className="mt-2 text-sm text-slate-700">
           These cards show the supporting raw readings and context behind the ranking. Borough
-          QoL is context only, not a weighted ranking axis.
+          QoL is context only, not a weighted ranking axis. Median semi-detached price is now a
+          shortlist filter and context metric, not part of the weighted score.
         </p>
         <div className="mt-4 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-          <MetricRow
-            label="Price score"
-            value={formatNumber(area.priceScore.value, 1)}
-            status={area.priceScore.status}
-            confidence={area.priceScore.confidence}
-            provenance={area.priceScore.provenance}
-            note={area.priceScore.methodologyNote}
-            updated={area.priceScore.lastUpdated}
-          />
           <MetricRow
             label="Median semi-detached price"
             value={formatCurrency(area.medianSemiDetachedPrice.value)}

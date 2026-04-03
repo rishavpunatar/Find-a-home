@@ -21,7 +21,6 @@ export interface Catchment {
 }
 
 export interface ComponentScores {
-  value: number
   transport: number
   schools: number
   environment: number
@@ -46,7 +45,6 @@ export interface MicroArea {
   averageSemiDetachedPrice: NumericMetric
   medianSemiDetachedPrice: NumericMetric
   semiPriceTrendPct5y: NumericMetric
-  priceScore: NumericMetric
 
   walkCatchmentAssumption: string
   commuteDestination: string
@@ -153,7 +151,6 @@ export interface ProcessedDataset {
 }
 
 export interface Weights {
-  value: number
   transport: number
   schools: number
   environment: number
@@ -165,6 +162,7 @@ export type WeightingMode = 'manual' | 'varianceAwareDefaults'
 export interface Filters {
   maxCommuteMinutes: number
   maxDriveMinutes: number
+  maxMedianSemiDetachedPrice: number
 }
 
 export type SortDirection = 'asc' | 'desc'

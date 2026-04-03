@@ -15,7 +15,7 @@ import {
   useMapEvents,
 } from 'react-leaflet'
 
-import type { Coordinate, DerivedMicroArea, Weights } from '@/types/domain'
+import type { Coordinate, DerivedMicroArea } from '@/types/domain'
 
 import { AreaTrustSummary } from '@/components/AreaTrustSummary'
 import { formatCurrency, formatNumber } from '@/lib/format'
@@ -316,13 +316,10 @@ interface MicroAreaMapProps {
   onViewportChange?: (viewport: MapViewport) => void
 }
 
-const componentScoreRows: Array<{ key: keyof Weights; label: string }> = [
-  { key: 'value', label: 'Value' },
-  { key: 'transport', label: 'Transport' },
-  { key: 'schools', label: 'Schools' },
-  { key: 'environment', label: 'Environment' },
-  { key: 'crime', label: 'Crime' },
-]
+const componentScoreRows: Array<{ key: RankingAxisKey; label: string }> = rankingAxes.map((axis) => ({
+  key: axis.key,
+  label: axis.label,
+}))
 
 const MapDetailContent = ({
   area,
@@ -497,10 +494,8 @@ export const MicroAreaMap = ({
     }
   }
 
-  const factorSnippetForAxis = (area: DerivedMicroArea, key: keyof Weights): string => {
+  const factorSnippetForAxis = (area: DerivedMicroArea, key: RankingAxisKey): string => {
     switch (key) {
-      case 'value':
-        return `median semi price ${formatCurrency(area.medianSemiDetachedPrice.value)}`
       case 'transport': {
         const changeValue = area.interchangeCount.value
         const changeText =
