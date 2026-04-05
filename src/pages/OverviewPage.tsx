@@ -22,6 +22,7 @@ const coverageLabelMap = {
   pollution: 'Pollution',
   greenSpace: 'Green',
   crime: 'Crime',
+  roads: 'Main roads',
   wellbeing: 'QoL context',
 } as const
 
@@ -259,6 +260,12 @@ export const OverviewPage = () => {
               <dt className="text-slate-600">Walk catchment</dt>
               <dd className="font-medium">{dataset.config.microAreaWalkRadiusM} m</dd>
             </div>
+            {dataset.config.mainRoadExposureRadiusM ? (
+              <div className="flex justify-between gap-2">
+                <dt className="text-slate-600">Main-road exposure buffer</dt>
+                <dd className="font-medium">{dataset.config.mainRoadExposureRadiusM} m</dd>
+              </div>
+            ) : null}
             <div className="flex justify-between gap-2">
               <dt className="text-slate-600">Pinner radius prefilter</dt>
               <dd className="font-medium">

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-03T12:22:51+01:00",
+  "generatedAt": "2026-04-05T10:45:31+01:00",
   "methodologyVersion": "2026.1",
   "overallStatus": "strong_source_coverage",
-  "sourceCoverageScore": 0.8852,
-  "verificationStrengthScore": 0.6852,
-  "verificationCompletenessScore": 0.8852,
+  "sourceCoverageScore": 0.8996,
+  "verificationStrengthScore": 0.6847,
+  "verificationCompletenessScore": 0.8996,
   "sourceMatrix": {
     "property": {
       "status": "source_applied_not_live_verified",
@@ -41,6 +41,12 @@
       "primarySource": "data.police.uk monthly street-level crime archive",
       "secondarySource": "data.police.uk custom-area live street-level incident API",
       "note": "Crime rates now use the official monthly data.police.uk archive, averaged across all currently available street-level incident months from 2023 onward and annualised with the station population denominator. Live cross-check still compares the stored ordering against the police API for sanity checking."
+    },
+    "roads": {
+      "status": "source_applied_not_live_verified",
+      "primarySource": "OpenStreetMap major-road geometry via Overpass API",
+      "secondarySource": "OS Open Roads / OS OpenMap local (cross-check planned)",
+      "note": "Main-road exposure now uses direct current major-road geometry around each station. The ranked axis combines nearest distance to the nearest motorway, trunk, primary, or secondary road class plus the amount of major-road network intersecting a wider 1600m station buffer."
     },
     "population": {
       "status": "source_applied_not_live_verified",
@@ -121,6 +127,17 @@
           }
         },
         "crime": {
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
+          "statusCounts": {
+            "available": 575,
+            "estimated": 0,
+            "placeholder": 0,
+            "missing": 0,
+            "other": 0
+          }
+        },
+        "roads": {
           "availablePct": 100.0,
           "sourceAppliedPct": 100.0,
           "statusCounts": {
@@ -213,6 +230,17 @@
             "other": 0
           }
         },
+        "roads": {
+          "availablePct": 100.0,
+          "sourceAppliedPct": 100.0,
+          "statusCounts": {
+            "available": 575,
+            "estimated": 0,
+            "placeholder": 0,
+            "missing": 0,
+            "other": 0
+          }
+        },
         "wellbeing": {
           "availablePct": 97.39,
           "sourceAppliedPct": 97.39,
@@ -244,6 +272,7 @@
     "Source coverage score reflects direct-source provenance, not independently audited accuracy.",
     "Verification strength score discounts domains that still lack a strong secondary benchmark or live reconciliation path.",
     "Property, schools, greenspace, transport, planning, and population still lack a full independent secondary benchmark.",
+    "Road exposure currently uses direct OSM geometry without a second benchmark yet.",
     "Pollution now uses DEFRA PCM directly, but still lacks a monitor-network reconciliation layer.",
     "Crime rates still depend on a modelled station-buffer population denominator, although that denominator now uses direct ONS geometry intersections rather than fixture proxies.",
     "Borough QoL currently uses ONS source application without a separate secondary cross-check.",

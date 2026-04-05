@@ -173,6 +173,22 @@ const baseArea: DerivedMicroArea = {
     methodologyNote: 'Test',
     lastUpdated: '2026-03-01',
   },
+  nearestMainRoadDistanceM: {
+    value: 180,
+    unit: 'm',
+    status: 'available',
+    confidence: 0.78,
+    methodologyNote: 'Test',
+    lastUpdated: '2026-03-01',
+  },
+  majorRoadLengthKmWithin1600m: {
+    value: 2.4,
+    unit: 'km',
+    status: 'available',
+    confidence: 0.78,
+    methodologyNote: 'Test',
+    lastUpdated: '2026-03-01',
+  },
   crimeRatePerThousand: {
     value: 60,
     unit: 'per_1000',
@@ -197,6 +213,7 @@ const baseArea: DerivedMicroArea = {
     schools: 78,
     environment: 67,
     crime: 70,
+    roads: 63,
   },
   overallWeightedScore: 71,
   dynamicOverallScore: 69,
@@ -215,7 +232,7 @@ describe('dataQuality helpers', () => {
 
   it('counts domain statuses for summary badges', () => {
     expect(getAreaDomainStatusCounts(baseArea)).toEqual({
-      available: 3,
+      available: 4,
       estimated: 3,
       placeholder: 1,
       missing: 0,
@@ -302,6 +319,14 @@ describe('dataQuality helpers', () => {
         ...baseArea.nearestParkDistanceM,
         provenance: 'direct',
       },
+      nearestMainRoadDistanceM: {
+        ...baseArea.nearestMainRoadDistanceM,
+        provenance: 'direct',
+      },
+      majorRoadLengthKmWithin1600m: {
+        ...baseArea.majorRoadLengthKmWithin1600m,
+        provenance: 'direct',
+      },
       crimeRatePerThousand: {
         ...baseArea.crimeRatePerThousand,
         provenance: 'direct',
@@ -313,7 +338,7 @@ describe('dataQuality helpers', () => {
     }
 
     expect(getAreaDomainSourceCounts(area)).toEqual({
-      sourceApplied: 6,
+      sourceApplied: 7,
       modelled: 1,
       missing: 0,
     })

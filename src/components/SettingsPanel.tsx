@@ -12,6 +12,7 @@ const labelMap: Record<keyof Weights, string> = {
   schools: 'Schools',
   environment: 'Environment',
   crime: 'Crime / safety',
+  roads: 'Main roads',
 }
 
 export const SettingsPanel = ({ onClose }: SettingsPanelProps) => {

@@ -9,6 +9,7 @@ export type DomainKey =
   | 'pollution'
   | 'greenSpace'
   | 'crime'
+  | 'roads'
   | 'wellbeing'
 
 export type TrustTier = 'high' | 'medium' | 'low'
@@ -95,6 +96,7 @@ export const getAreaDomainStatuses = (
   pollution: area.annualPm25.status,
   greenSpace: area.greenCoverPct.status,
   crime: area.crimeRatePerThousand.status,
+  roads: mergeStatuses([area.nearestMainRoadDistanceM.status, area.majorRoadLengthKmWithin1600m.status]),
   wellbeing: area.boroughQolScore.status,
 })
 
@@ -123,6 +125,10 @@ export const getAreaDomainSourceBuckets = (
     getSourceBucket(area.nearestParkDistanceM.provenance),
   ]),
   crime: getSourceBucket(area.crimeRatePerThousand.provenance),
+  roads: mergeSourceBuckets([
+    getSourceBucket(area.nearestMainRoadDistanceM.provenance),
+    getSourceBucket(area.majorRoadLengthKmWithin1600m.provenance),
+  ]),
   wellbeing: getSourceBucket(area.boroughQolScore.provenance),
 })
 
@@ -187,6 +193,7 @@ export const summarizeDatasetDomainCoverage = (areas: DerivedMicroArea[] | Micro
     pollution: countStatuses(areas.map((area) => getAreaDomainStatuses(area).pollution)),
     greenSpace: countStatuses(areas.map((area) => getAreaDomainStatuses(area).greenSpace)),
     crime: countStatuses(areas.map((area) => getAreaDomainStatuses(area).crime)),
+    roads: countStatuses(areas.map((area) => getAreaDomainStatuses(area).roads)),
     wellbeing: countStatuses(areas.map((area) => getAreaDomainStatuses(area).wellbeing)),
   }
 
@@ -197,6 +204,7 @@ export const summarizeDatasetDomainCoverage = (areas: DerivedMicroArea[] | Micro
     pollution: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).pollution)),
     greenSpace: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).greenSpace)),
     crime: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).crime)),
+    roads: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).roads)),
     wellbeing: countSourceBuckets(areas.map((area) => getAreaDomainSourceBuckets(area).wellbeing)),
   }
 

@@ -60,6 +60,10 @@ const componentMetricGroups = {
     area.nearestParkDistanceM,
   ],
   crime: (area: MicroArea) => [area.crimeRatePerThousand],
+  roads: (area: MicroArea) => [
+    area.nearestMainRoadDistanceM,
+    area.majorRoadLengthKmWithin1600m,
+  ],
 } satisfies Record<keyof Weights, (area: MicroArea) => Array<{ confidence: number; provenance?: string }>>
 
 const computeQualityFactor = (areas: MicroArea[], key: keyof Weights): number => {

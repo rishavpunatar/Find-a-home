@@ -1,109 +1,109 @@
 {
-  "generatedAt": "2026-04-03T12:22:30+01:00",
+  "generatedAt": "2026-04-05T10:45:02+01:00",
   "count": 575,
   "londonWideCount": 575,
   "topMicroAreas": [
     {
-      "microAreaId": "ma-cockff74",
-      "stationName": "Cockfosters",
-      "score": 64.81
-    },
-    {
       "microAreaId": "ma-easta300",
       "stationName": "East Acton",
-      "score": 63.32
+      "score": 65.3
     },
     {
-      "microAreaId": "ma-golde26c",
-      "stationName": "Golders Green",
-      "score": 62.45
+      "microAreaId": "ma-fairl093",
+      "stationName": "Fairlop",
+      "score": 63.08
     },
     {
-      "microAreaId": "ma-eastfb5c",
-      "stationName": "East Finchley",
-      "score": 62.4
+      "microAreaId": "ma-periv4f7",
+      "stationName": "Perivale",
+      "score": 62.82
+    },
+    {
+      "microAreaId": "ma-cockff74",
+      "stationName": "Cockfosters",
+      "score": 62.78
+    },
+    {
+      "microAreaId": "ma-hadle3c1",
+      "stationName": "Hadley Wood",
+      "score": 62.1
+    },
+    {
+      "microAreaId": "ma-woods029",
+      "stationName": "Woodside Park",
+      "score": 61.39
+    },
+    {
+      "microAreaId": "ma-barkic87",
+      "stationName": "Barkingside",
+      "score": 61.32
+    },
+    {
+      "microAreaId": "ma-pin",
+      "stationName": "Pinner",
+      "score": 61.04
     },
     {
       "microAreaId": "ma-oakwo246",
       "stationName": "Oakwood",
-      "score": 62.16
+      "score": 60.57
     },
     {
-      "microAreaId": "ma-redbrbbc",
-      "stationName": "Redbridge",
-      "score": 61.55
-    },
-    {
-      "microAreaId": "ma-mordea4b",
-      "stationName": "Morden",
-      "score": 61.16
-    },
-    {
-      "microAreaId": "ma-wansta21",
-      "stationName": "Wanstead",
-      "score": 61.08
-    },
-    {
-      "microAreaId": "ma-highg369",
-      "stationName": "Highgate",
-      "score": 61.07
-    },
-    {
-      "microAreaId": "ma-highbbae",
-      "stationName": "Highbury & Islington",
-      "score": 61.01
+      "microAreaId": "ma-sri",
+      "stationName": "South Ruislip",
+      "score": 60.04
     }
   ],
   "topLondonWideMicroAreas": [
     {
-      "microAreaId": "ma-cockff74",
-      "stationName": "Cockfosters",
-      "score": 64.81
-    },
-    {
       "microAreaId": "ma-easta300",
       "stationName": "East Acton",
-      "score": 63.32
+      "score": 65.3
     },
     {
-      "microAreaId": "ma-golde26c",
-      "stationName": "Golders Green",
-      "score": 62.45
+      "microAreaId": "ma-fairl093",
+      "stationName": "Fairlop",
+      "score": 63.08
     },
     {
-      "microAreaId": "ma-eastfb5c",
-      "stationName": "East Finchley",
-      "score": 62.4
+      "microAreaId": "ma-periv4f7",
+      "stationName": "Perivale",
+      "score": 62.82
+    },
+    {
+      "microAreaId": "ma-cockff74",
+      "stationName": "Cockfosters",
+      "score": 62.78
+    },
+    {
+      "microAreaId": "ma-hadle3c1",
+      "stationName": "Hadley Wood",
+      "score": 62.1
+    },
+    {
+      "microAreaId": "ma-woods029",
+      "stationName": "Woodside Park",
+      "score": 61.39
+    },
+    {
+      "microAreaId": "ma-barkic87",
+      "stationName": "Barkingside",
+      "score": 61.32
+    },
+    {
+      "microAreaId": "ma-pin",
+      "stationName": "Pinner",
+      "score": 61.04
     },
     {
       "microAreaId": "ma-oakwo246",
       "stationName": "Oakwood",
-      "score": 62.16
+      "score": 60.57
     },
     {
-      "microAreaId": "ma-redbrbbc",
-      "stationName": "Redbridge",
-      "score": 61.55
-    },
-    {
-      "microAreaId": "ma-mordea4b",
-      "stationName": "Morden",
-      "score": 61.16
-    },
-    {
-      "microAreaId": "ma-wansta21",
-      "stationName": "Wanstead",
-      "score": 61.08
-    },
-    {
-      "microAreaId": "ma-highg369",
-      "stationName": "Highgate",
-      "score": 61.07
-    },
-    {
-      "microAreaId": "ma-highbbae",
-      "stationName": "Highbury & Islington",
-      "score": 61.01
+      "microAreaId": "ma-sri",
+      "stationName": "South Ruislip",
+      "score": 60.04
     }
   ]
 }

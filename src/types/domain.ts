@@ -25,6 +25,7 @@ export interface ComponentScores {
   schools: number
   environment: number
   crime: number
+  roads: number
 }
 
 export interface MicroArea {
@@ -66,6 +67,8 @@ export interface MicroArea {
   greenSpaceAreaKm2Within1km: NumericMetric
   greenCoverPct: NumericMetric
   nearestParkDistanceM: NumericMetric
+  nearestMainRoadDistanceM: NumericMetric
+  majorRoadLengthKmWithin1600m: NumericMetric
 
   crimeRatePerThousand: NumericMetric
   crimeCategoryBreakdown?: Record<string, number>
@@ -108,6 +111,7 @@ export interface ProcessedDataset {
     stationSearchRadiusKm: number
     primaryScopeRegion?: string
     microAreaWalkRadiusM: number
+    mainRoadExposureRadiusM?: number
     maxCommuteMinutesForCandidate: number
     maxDriveMinutesForCandidate: number
     defaultUsesPinnerRadiusPrefilter?: boolean
@@ -155,6 +159,7 @@ export interface Weights {
   schools: number
   environment: number
   crime: number
+  roads: number
 }
 
 export type WeightingMode = 'manual' | 'varianceAwareDefaults'

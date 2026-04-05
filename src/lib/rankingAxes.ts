@@ -77,6 +77,21 @@ export const rankingAxes: RankingAxisDefinition[] = [
       'The raw crime metric is annualised crime incidents per 1,000 residents, averaged across all currently available monthly police snapshots from 2023 onward. Lower raw crime rates are converted into higher-is-better safety scores for ranking.',
     formula: 'Crime score = inverse transform of crime rate per 1,000 residents',
   },
+  {
+    key: 'roads',
+    label: 'Main roads',
+    rankingExplanationLabel: 'distance from main roads',
+    mapLabel: 'Main-road score',
+    distributionTitle: 'Main-road score',
+    distributionDescription: 'How exposed each area is to major roads across the full search universe.',
+    chartColor: '#b45309',
+    detail:
+      'A higher main-road score means the area sits farther from major roads and has less major-road network around the station catchment.',
+    recipe:
+      'This uses two direct road-exposure inputs from current major-road geometry: the distance to the nearest main road and the total main-road length intersecting a wider 1600m station buffer. Farther is better and less road length is better.',
+    formula:
+      'Main-road score = nearest main-road distance 65% + inverse major-road length within 1600m 35%',
+  },
 ]
 
 export const rankingAxisKeys: RankingAxisKey[] = rankingAxes.map((axis) => axis.key)

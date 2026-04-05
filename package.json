@@ -17,6 +17,7 @@
     "pipeline:property": "python3 -m pipeline.jobs.generate_property_metrics",
     "pipeline:schools": "python3 -m pipeline.jobs.generate_school_metrics",
     "pipeline:green": "python3 -m pipeline.jobs.generate_green_space_metrics",
+    "pipeline:roads": "python3 -m pipeline.jobs.generate_road_metrics",
     "pipeline:crime": "python3 -m pipeline.jobs.generate_crime_metrics",
     "pipeline:planning": "python3 -m pipeline.jobs.generate_planning_metrics",
     "pipeline:pollution": "python3 -m pipeline.jobs.generate_pollution_metrics --year 2023",

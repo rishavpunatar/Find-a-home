@@ -48,6 +48,12 @@ class CrimeAdapter(ABC):
         raise NotImplementedError
 
 
+class RoadAdapter(ABC):
+    @abstractmethod
+    def get_by_station(self, station_code: str) -> dict[str, Any] | None:
+        raise NotImplementedError
+
+
 class PopulationAdapter(ABC):
     @abstractmethod
     def get_by_station(self, station_code: str) -> dict[str, Any] | None:

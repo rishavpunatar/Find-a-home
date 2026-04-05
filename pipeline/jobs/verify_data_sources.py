@@ -168,6 +168,17 @@ def source_matrix() -> dict[str, dict[str, str]]:
                 'API for sanity checking.'
             ),
         },
+        'roads': {
+            'status': 'source_applied_not_live_verified',
+            'primarySource': 'OpenStreetMap major-road geometry via Overpass API',
+            'secondarySource': 'OS Open Roads / OS OpenMap local (cross-check planned)',
+            'note': (
+                'Main-road exposure now uses direct current major-road geometry around each station. '
+                'The ranked axis combines nearest distance to the nearest motorway, trunk, primary, '
+                'or secondary road class plus the amount of major-road network intersecting a wider '
+                '1600m station buffer.'
+            ),
+        },
         'population': {
             'status': 'source_applied_not_live_verified',
             'primarySource': 'ONS mid-year LSOA population estimates + ONS 2021 LSOA boundaries',
@@ -348,6 +359,7 @@ def compute_domain_coverage(dataset: dict[str, Any]) -> dict[str, Any]:
         'pollution': ['annualNo2', 'annualPm25'],
         'greenSpace': ['greenSpaceAreaKm2Within1km', 'greenCoverPct', 'nearestParkDistanceM'],
         'crime': ['crimeRatePerThousand'],
+        'roads': ['nearestMainRoadDistanceM', 'majorRoadLengthKmWithin1600m'],
         'wellbeing': ['boroughQolScore'],
     }
     status_priority = {'available': 0, 'estimated': 1, 'placeholder': 2, 'missing': 3, 'other': 4}
@@ -430,6 +442,7 @@ def verification_strength_score(
         'pollution': 1.0,
         'greenSpace': 0.95,
         'crime': 1.0,
+        'roads': 0.9,
         'planning': 0.75,
         'wellbeing': 0.7,
     }
@@ -494,6 +507,7 @@ def generate_verification_report(dataset: dict[str, Any], live_mode: bool = Fals
             'Source coverage score reflects direct-source provenance, not independently audited accuracy.',
             'Verification strength score discounts domains that still lack a strong secondary benchmark or live reconciliation path.',
             'Property, schools, greenspace, transport, planning, and population still lack a full independent secondary benchmark.',
+            'Road exposure currently uses direct OSM geometry without a second benchmark yet.',
             'Pollution now uses DEFRA PCM directly, but still lacks a monitor-network reconciliation layer.',
             'Crime rates still depend on a modelled station-buffer population denominator, although that denominator now uses direct ONS geometry intersections rather than fixture proxies.',
             'Borough QoL currently uses ONS source application without a separate secondary cross-check.',

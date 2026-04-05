@@ -40,11 +40,13 @@ NUMERIC_BOUNDS: dict[str, tuple[float, float]] = {
     'greenSpaceAreaKm2Within1km': (0.0, 5.0),
     'greenCoverPct': (0.0, 100.0),
     'nearestParkDistanceM': (0.0, 10_000.0),
+    'nearestMainRoadDistanceM': (0.0, 10_000.0),
+    'majorRoadLengthKmWithin1600m': (0.0, 100.0),
     'crimeRatePerThousand': (0.0, 4_000.0),
     'boroughQolScore': (0.0, 100.0),
 }
 
-COMPONENT_KEYS = {'transport', 'schools', 'environment', 'crime'}
+COMPONENT_KEYS = {'transport', 'schools', 'environment', 'crime', 'roads'}
 MIN_SCORE_SOURCE_YEAR = 2023
 SCORE_SOURCE_DOMAINS = {
     'transport': 'transport',
@@ -52,6 +54,7 @@ SCORE_SOURCE_DOMAINS = {
     'pollution': 'environment',
     'greenSpace': 'environment',
     'crime': 'crime',
+    'roads': 'roads',
 }
 METRIC_FIELDS = [
     'averageSemiDetachedPrice',
@@ -72,6 +75,8 @@ METRIC_FIELDS = [
     'greenSpaceAreaKm2Within1km',
     'greenCoverPct',
     'nearestParkDistanceM',
+    'nearestMainRoadDistanceM',
+    'majorRoadLengthKmWithin1600m',
     'crimeRatePerThousand',
     'boroughQolScore',
 ]

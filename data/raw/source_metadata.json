@@ -38,5 +38,10 @@
     "source": "ONS mid-year LSOA population estimates + ONS 2021 LSOA boundaries",
     "referencePeriod": "ONS mid-2024 LSOA population estimates apportioned into station 800m and 1800m buffers",
     "releaseDate": "2026-04-03"
+  },
+  "roads": {
+    "source": "OpenStreetMap major-road geometry via Overpass API",
+    "referencePeriod": "Current OpenStreetMap major-road snapshot via Overpass on 2026-04-05",
+    "releaseDate": "2026-04-05"
   }
 }

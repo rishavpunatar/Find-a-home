@@ -10,6 +10,7 @@ const componentScores: ComponentScores = {
   schools: 90,
   environment: 60,
   crime: 75,
+  roads: 55,
 }
 
 describe('computeWeightedScore', () => {
@@ -29,6 +30,7 @@ describe('computeWeightedScore', () => {
       schools: DEFAULT_WEIGHTS.schools * 2,
       environment: DEFAULT_WEIGHTS.environment * 2,
       crime: DEFAULT_WEIGHTS.crime * 2,
+      roads: DEFAULT_WEIGHTS.roads * 2,
     }
     const resultB = computeWeightedScore(
       componentScores,
@@ -48,6 +50,7 @@ describe('computeWeightedScore', () => {
         schools: 60,
         environment: 20,
         crime: 15,
+        roads: 0,
       },
       0.9,
     )

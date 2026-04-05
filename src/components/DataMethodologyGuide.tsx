@@ -56,6 +56,9 @@ export const DataMethodologyGuide = ({
   const greenReferencePeriod =
     sourceMetadata.greenSpace?.referencePeriod ??
     'current OS Open Greenspace GB GeoPackage snapshot'
+  const roadsReferencePeriod =
+    sourceMetadata.roads?.referencePeriod ??
+    'current OpenStreetMap major-road snapshot via Overpass'
   const transportReferencePeriod =
     sourceMetadata.transport?.referencePeriod ??
     'TfL Journey Planner central-London core snapshots plus TfL StopPoint arrivals and OSRM routing where available'
@@ -79,8 +82,8 @@ export const DataMethodologyGuide = ({
                 areas that fit the kind of home and trade-offs you care about.
               </p>
               <p>
-                The ranking works by combining four weighted axes into one shortlist model:
-                transport, schools, environment, and crime.
+                The ranking works by combining five weighted axes into one shortlist model:
+                transport, schools, environment, crime, and main-road exposure.
               </p>
               <p>
                 Median semi-detached price is still shown and can be used as a shortlist filter,
@@ -368,6 +371,31 @@ export const DataMethodologyGuide = ({
               </p>
             </DetailBlock>
 
+            <DetailBlock title="Main roads axis">
+              <p>
+                This axis is a road-exposure or road-nuisance measure. Higher is better because it
+                means the station catchment is farther from major roads and has less major-road
+                network around it.
+              </p>
+              <p>
+                The app now treats this separately from the broader environment axis, so an area is
+                not implicitly rewarded for greenery while still sitting hard up against a major
+                road corridor.
+              </p>
+              <p>
+                The raw road inputs are the distance to the nearest mapped main road and the total
+                length of major-road geometry intersecting a wider 1600m station buffer. Main roads
+                here mean motorway, trunk, primary, and secondary classes plus their link roads.
+              </p>
+              <p>
+                <span className="font-semibold">Source:</span> current OpenStreetMap major-road
+                geometry queried via Overpass.
+              </p>
+              <p>
+                <span className="font-semibold">Data reference period:</span> {roadsReferencePeriod}.
+              </p>
+            </DetailBlock>
+
             <DetailBlock title="Crime axis">
               <p>
                 This is an annualized crime rate for a wider station-area catchment, currently
@@ -489,6 +517,22 @@ export const DataMethodologyGuide = ({
               className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
             >
               OS Open Greenspace
+            </a>
+            <a
+              href="https://www.openstreetmap.org/"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              OpenStreetMap
+            </a>
+            <a
+              href="https://overpass-api.de/"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md bg-slate-100 px-2 py-1 text-slate-700 hover:bg-slate-200"
+            >
+              Overpass API
             </a>
             <a
               href="https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/lowersuperoutputareamidyearpopulationestimatesnationalstatistics"

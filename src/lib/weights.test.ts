@@ -12,10 +12,11 @@ describe('weights helpers', () => {
       schools: 10,
       environment: 10,
       crime: 10,
+      roads: 10,
     })
 
     expect(weightsSum(normalized)).toBeCloseTo(100, 0)
-    expect(normalized.transport).toBeCloseTo(25, 2)
+    expect(normalized.transport).toBeCloseTo(20, 2)
   })
 
   it('falls back to defaults when total is non-positive', () => {
@@ -24,6 +25,7 @@ describe('weights helpers', () => {
       schools: 0,
       environment: 0,
       crime: 0,
+      roads: 0,
     })
 
     expect(normalized).toEqual(DEFAULT_WEIGHTS)
@@ -84,6 +86,8 @@ describe('weights helpers', () => {
       greenSpaceAreaKm2Within1km: makeMetric(1.1),
       greenCoverPct: makeMetric(30),
       nearestParkDistanceM: makeMetric(300),
+      nearestMainRoadDistanceM: makeMetric(180),
+      majorRoadLengthKmWithin1600m: makeMetric(2.1),
       crimeRatePerThousand: makeMetric(40),
       crimeCategoryBreakdown: {},
       boroughQolScore: makeMetric(74),
@@ -95,6 +99,7 @@ describe('weights helpers', () => {
         schools: 60,
         environment: 60,
         crime: 60,
+        roads: 60,
         ...overrides,
       },
       overallWeightedScore: 60,
@@ -102,10 +107,10 @@ describe('weights helpers', () => {
     })
 
     const weights = buildVarianceAwareDefaultWeights([
-      makeArea('a', { transport: 25, schools: 60, environment: 62, crime: 55 }),
-      makeArea('b', { transport: 55, schools: 61, environment: 63, crime: 56 }),
-      makeArea('c', { transport: 85, schools: 62, environment: 64, crime: 57 }),
-      makeArea('d', { transport: 45, schools: 63, environment: 65, crime: 58 }),
+      makeArea('a', { transport: 25, schools: 60, environment: 62, crime: 55, roads: 42 }),
+      makeArea('b', { transport: 55, schools: 61, environment: 63, crime: 56, roads: 58 }),
+      makeArea('c', { transport: 85, schools: 62, environment: 64, crime: 57, roads: 73 }),
+      makeArea('d', { transport: 45, schools: 63, environment: 65, crime: 58, roads: 64 }),
     ])
 
     expect(weightsSum(weights)).toBeCloseTo(100, 0)

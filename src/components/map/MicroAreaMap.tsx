@@ -282,6 +282,18 @@ const MapDetailContent = ({
               {formatNumber(area.greenCoverPct.value, 1)}%
             </p>
           </div>
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">Main Road</p>
+            <p className="font-semibold text-slate-900">
+              {formatNumber(area.nearestMainRoadDistanceM.value, 0)} m
+            </p>
+          </div>
+          <div className="rounded-md bg-slate-50 px-2 py-1.5">
+            <p className="text-[11px] uppercase tracking-wide text-slate-500">Road Length</p>
+            <p className="font-semibold text-slate-900">
+              {formatNumber(area.majorRoadLengthKmWithin1600m.value, 2)} km
+            </p>
+          </div>
         </div>
         <div className="mt-3">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -413,6 +425,8 @@ export const MicroAreaMap = ({
         return `PM2.5 ${formatNumber(area.annualPm25.value, 1)}, green cover ${formatNumber(area.greenCoverPct.value, 1)}%, park distance ${formatNumber(area.nearestParkDistanceM.value, 0)} m`
       case 'crime':
         return `crime ${formatNumber(area.crimeRatePerThousand.value, 1)} per 1,000 residents`
+      case 'roads':
+        return `nearest main road ${formatNumber(area.nearestMainRoadDistanceM.value, 0)} m away and ${formatNumber(area.majorRoadLengthKmWithin1600m.value, 2)} km of major roads within 1600 m`
       default:
         return 'the underlying metrics'
     }

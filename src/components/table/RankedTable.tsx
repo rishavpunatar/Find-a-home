@@ -33,6 +33,8 @@ const getSortValue = (area: DerivedMicroArea, key: string): number | string => {
       return area.medianSemiDetachedPrice.value ?? Number.POSITIVE_INFINITY
     case 'schools':
       return area.componentScores.schools
+    case 'roads':
+      return area.componentScores.roads
     case 'qol':
       return area.boroughQolScore.value ?? Number.NEGATIVE_INFINITY
     case 'pm25':
@@ -302,7 +304,7 @@ export const RankedTable = ({
                 Raw shortlist checks
               </th>
               <th
-                colSpan={1}
+                colSpan={2}
                 className="px-3 py-1 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600"
               >
                 Ranking axis
@@ -337,6 +339,13 @@ export const RankedTable = ({
                 helpText="Weighted primary-school ranking axis, not a raw school count."
               />
               <HeaderCell
+                label="Roads axis"
+                sortKey="roads"
+                current={sort}
+                onSort={toggleSort}
+                helpText="Higher means farther from major roads and less major-road network nearby."
+              />
+              <HeaderCell
                 label="QoL context"
                 sortKey="qol"
                 current={sort}
@@ -362,7 +371,7 @@ export const RankedTable = ({
           <tbody className="divide-y divide-teal-50 text-sm">
             {topSpacerHeight > 0 ? (
               <tr aria-hidden>
-                <td colSpan={13} style={{ height: topSpacerHeight }} />
+                <td colSpan={14} style={{ height: topSpacerHeight }} />
               </tr>
             ) : null}
 
@@ -396,6 +405,7 @@ export const RankedTable = ({
                   </td>
                   <td className="px-3 py-2">{formatCurrency(area.medianSemiDetachedPrice.value)}</td>
                   <td className="px-3 py-2">{area.componentScores.schools.toFixed(1)}</td>
+                  <td className="px-3 py-2">{area.componentScores.roads.toFixed(1)}</td>
                   <td className="px-3 py-2">{formatNumber(area.boroughQolScore.value, 1)}</td>
                   <td className="px-3 py-2">{formatNumber(area.annualPm25.value, 1)}</td>
                   <td className="px-3 py-2">{formatNumber(area.crimeRatePerThousand.value, 1)}</td>
@@ -426,7 +436,7 @@ export const RankedTable = ({
 
             {bottomSpacerHeight > 0 ? (
               <tr aria-hidden>
-                <td colSpan={13} style={{ height: bottomSpacerHeight }} />
+                <td colSpan={14} style={{ height: bottomSpacerHeight }} />
               </tr>
             ) : null}
           </tbody>

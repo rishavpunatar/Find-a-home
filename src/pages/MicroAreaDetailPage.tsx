@@ -23,6 +23,7 @@ const domainLabelMap = {
   pollution: 'Pollution',
   greenSpace: 'Green',
   crime: 'Crime',
+  roads: 'Main roads',
   wellbeing: 'QoL context',
 } as const
 
@@ -251,6 +252,24 @@ export const MicroAreaDetailPage = () => {
             provenance={area.greenCoverPct.provenance}
             note={area.greenCoverPct.methodologyNote}
             updated={area.greenCoverPct.lastUpdated}
+          />
+          <MetricRow
+            label="Nearest main road distance"
+            value={`${formatNumber(area.nearestMainRoadDistanceM.value)} m`}
+            status={area.nearestMainRoadDistanceM.status}
+            confidence={area.nearestMainRoadDistanceM.confidence}
+            provenance={area.nearestMainRoadDistanceM.provenance}
+            note={area.nearestMainRoadDistanceM.methodologyNote}
+            updated={area.nearestMainRoadDistanceM.lastUpdated}
+          />
+          <MetricRow
+            label="Major-road length within 1600m"
+            value={`${formatNumber(area.majorRoadLengthKmWithin1600m.value, 2)} km`}
+            status={area.majorRoadLengthKmWithin1600m.status}
+            confidence={area.majorRoadLengthKmWithin1600m.confidence}
+            provenance={area.majorRoadLengthKmWithin1600m.provenance}
+            note={area.majorRoadLengthKmWithin1600m.methodologyNote}
+            updated={area.majorRoadLengthKmWithin1600m.lastUpdated}
           />
           <MetricRow
             label="Borough QoL context (ONS APS)"

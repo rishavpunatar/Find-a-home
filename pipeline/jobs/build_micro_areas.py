@@ -15,6 +15,7 @@ from pipeline.adapters.green_space_adapter import FixtureGreenSpaceAdapter
 from pipeline.adapters.pollution_adapter import FixturePollutionAdapter
 from pipeline.adapters.population_adapter import FixturePopulationAdapter
 from pipeline.adapters.property_adapter import FixturePropertyAdapter
+from pipeline.adapters.road_adapter import FixtureRoadAdapter
 from pipeline.adapters.school_adapter import FixtureSchoolAdapter
 from pipeline.adapters.station_transport_adapter import FixtureStationTransportAdapter
 from pipeline.adapters.transport_metrics_adapter import FixtureTransportMetricsAdapter
@@ -33,6 +34,7 @@ SOURCE_METADATA_PATH = RAW_DIR / 'source_metadata.json'
 TRANSPORT_METRICS_PATH = RAW_DIR / 'transport_metrics.json'
 LONDON_WIDE_MAX_COMMUTE_MINUTES = 60
 GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER = 2.0
+MAIN_ROAD_BUFFER_METERS = 1600.0
 MAX_ANCHOR_DISTANCE_FOR_ESTIMATION_KM = 15.0
 
 EXCLUDED_STATION_NAME_PATTERNS = [
@@ -429,6 +431,60 @@ def crime_score_bounds(crime_records: dict[str, dict[str, Any]]) -> tuple[float,
     return (best, worst)
 
 
+def bounded_quantiles(
+    sorted_values: list[float],
+    *,
+    lower_quantile: float,
+    upper_quantile: float,
+    minimum_gap: float,
+    default_low: float,
+    default_high: float,
+) -> tuple[float, float]:
+    if not sorted_values:
+        return (default_low, default_high)
+
+    low = quantile(sorted_values, lower_quantile)
+    high = max(low + minimum_gap, quantile(sorted_values, upper_quantile))
+    return (low, high)
+
+
+def road_score_bounds(road_records: dict[str, dict[str, Any]]) -> dict[str, float]:
+    direct_distances = sorted(
+        float(record['nearest_main_road_distance_m'])
+        for record in road_records.values()
+        if isinstance(record, dict) and isinstance(record.get('nearest_main_road_distance_m'), (int, float))
+    )
+    direct_lengths = sorted(
+        float(record['major_road_length_km_within_1600m'])
+        for record in road_records.values()
+        if isinstance(record, dict) and isinstance(record.get('major_road_length_km_within_1600m'), (int, float))
+    )
+
+    distance_bad, distance_good = bounded_quantiles(
+        direct_distances,
+        lower_quantile=0.15,
+        upper_quantile=0.85,
+        minimum_gap=40.0,
+        default_low=25.0,
+        default_high=260.0,
+    )
+    length_good, length_bad = bounded_quantiles(
+        direct_lengths,
+        lower_quantile=0.15,
+        upper_quantile=0.85,
+        minimum_gap=0.3,
+        default_low=0.35,
+        default_high=5.0,
+    )
+
+    return {
+        'distance_bad': distance_bad,
+        'distance_good': distance_good,
+        'length_good': length_good,
+        'length_bad': length_bad,
+    }
+
+
 def log_inverse_score(value: float, *, best: float, worst: float) -> float:
     safe_value = max(value, best)
     safe_best = max(best, 1e-6)
@@ -448,8 +504,10 @@ def score_components(
     pollution: dict[str, Any] | None,
     green: dict[str, Any] | None,
     crime: dict[str, Any] | None,
+    roads: dict[str, Any] | None,
     *,
     crime_scale_bounds: tuple[float, float],
+    road_scale_bounds: dict[str, float],
 ) -> dict[str, float]:
     default_population_denominator = 25_650.0
 
@@ -534,11 +592,34 @@ def score_components(
         worst=crime_scale_bounds[1],
     )
 
+    nearest_main_road_distance = number_or_default(
+        roads,
+        'nearest_main_road_distance_m',
+        road_scale_bounds['distance_bad'],
+    )
+    major_road_length = number_or_default(
+        roads,
+        'major_road_length_km_within_1600m',
+        road_scale_bounds['length_bad'],
+    )
+    road_distance_score = forward_score(
+        nearest_main_road_distance,
+        min_value=road_scale_bounds['distance_bad'],
+        max_value=road_scale_bounds['distance_good'],
+    )
+    road_length_score = inverse_score(
+        major_road_length,
+        best=road_scale_bounds['length_good'],
+        worst=road_scale_bounds['length_bad'],
+    )
+    roads_score = road_distance_score * 0.65 + road_length_score * 0.35
+
     return {
         'transport': round(clamp(transport_score), 1),
         'schools': round(clamp(schools_score), 1),
         'environment': round(clamp(environment_score), 1),
         'crime': round(clamp(crime_score), 1),
+        'roads': round(clamp(roads_score), 1),
     }
 
 
@@ -552,9 +633,10 @@ def ranking_rules(component_scores: dict[str, float]) -> list[str]:
         'schools': 'school quality and access',
         'environment': 'air quality and green space',
         'crime': 'safety',
+        'roads': 'distance from main roads',
     }
 
-    ranked_keys = ['transport', 'schools', 'environment', 'crime']
+    ranked_keys = ['transport', 'schools', 'environment', 'crime', 'roads']
     sorted_pairs = sorted(
         [(key, component_scores[key]) for key in ranked_keys],
         key=lambda item: item[1],
@@ -578,6 +660,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     pollution_last_updated = source_date(source_metadata, 'pollution', config.last_updated_default)
     green_last_updated = source_date(source_metadata, 'greenSpace', config.last_updated_default)
     crime_last_updated = source_date(source_metadata, 'crime', config.last_updated_default)
+    roads_last_updated = source_date(source_metadata, 'roads', config.last_updated_default)
     transport_last_updated = source_date(source_metadata, 'transport', config.last_updated_default)
 
     station_adapter = FixtureStationTransportAdapter(RAW_DIR / 'stations_transport.json')
@@ -591,6 +674,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     pollution_adapter = FixturePollutionAdapter(RAW_DIR / 'pollution_metrics.json')
     green_adapter = FixtureGreenSpaceAdapter(RAW_DIR / 'green_space_metrics.json')
     crime_adapter = FixtureCrimeAdapter(RAW_DIR / 'crime_metrics.json')
+    road_adapter = FixtureRoadAdapter(RAW_DIR / 'road_metrics.json')
     population_adapter = FixturePopulationAdapter(RAW_DIR / 'population_metrics.json')
     wellbeing_adapter = FixtureWellbeingAdapter(RAW_DIR / 'wellbeing_metrics.json')
     wellbeing_last_updated = str(
@@ -607,8 +691,10 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
     pollution_anchor_records = json.loads((RAW_DIR / 'pollution_metrics.json').read_text(encoding='utf-8'))
     green_anchor_records = json.loads((RAW_DIR / 'green_space_metrics.json').read_text(encoding='utf-8'))
     crime_anchor_records = json.loads((RAW_DIR / 'crime_metrics.json').read_text(encoding='utf-8'))
+    road_anchor_records = json.loads((RAW_DIR / 'road_metrics.json').read_text(encoding='utf-8'))
     population_anchor_records = json.loads((RAW_DIR / 'population_metrics.json').read_text(encoding='utf-8'))
     crime_scale = crime_score_bounds(crime_anchor_records)
+    road_scale = road_score_bounds(road_anchor_records)
 
     raw_stations = station_adapter.fetch_stations()
     all_stations, excluded_stations = sanitize_station_universe(raw_stations)
@@ -754,6 +840,13 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 ['crime_rate_per_1000'],
                 'Estimated by inverse-distance interpolation from nearby station crime-rate proxies.',
             )
+            road_record = road_adapter.get_by_station(station.station_code) or synthesize_record_from_anchors(
+                station,
+                stations_by_code,
+                road_anchor_records,
+                ['nearest_main_road_distance_m', 'major_road_length_km_within_1600m'],
+                'Estimated by inverse-distance interpolation from nearby station major-road exposure metrics.',
+            )
             if crime_record and 'breakdown' not in crime_record:
                 rate = float(crime_record.get('crime_rate_per_1000', 0.0))
                 crime_record['breakdown'] = synthesize_crime_breakdown(
@@ -781,6 +874,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 'pollution': pollution_record,
                 'green': green_record,
                 'crime': crime_record,
+                'roads': road_record,
                 'population': population_record,
                 'wellbeing': wellbeing_record,
             }
@@ -793,6 +887,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
             pollution_record = station_records.get('pollution')
             green_record = station_records.get('green')
             crime_record = station_records.get('crime')
+            road_record = station_records.get('roads')
             population_record = station_records.get('population')
             wellbeing_record = station_records.get('wellbeing')
 
@@ -804,7 +899,9 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 pollution_record,
                 green_record,
                 crime_record,
+                road_record,
                 crime_scale_bounds=crime_scale,
+                road_scale_bounds=road_scale,
             )
 
             overlap_conf = overlap_confidence(
@@ -964,6 +1061,20 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                     note='Distance to nearest substantial park entry point.',
                     last_updated=green_last_updated,
                 ),
+                'nearestMainRoadDistanceM': metric_from_record(
+                    road_record,
+                    'nearest_main_road_distance_m',
+                    unit='m',
+                    note='Distance from the station centroid to the nearest mapped main road (motorway, trunk, primary, or secondary road classes plus links).',
+                    last_updated=roads_last_updated,
+                ),
+                'majorRoadLengthKmWithin1600m': metric_from_record(
+                    road_record,
+                    'major_road_length_km_within_1600m',
+                    unit='km',
+                    note='Total mapped main-road length intersecting a 1600m station buffer.',
+                    last_updated=roads_last_updated,
+                ),
                 'crimeRatePerThousand': metric_from_record(
                     crime_record,
                     'crime_rate_per_1000',
@@ -1000,6 +1111,8 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 metrics['greenSpaceAreaKm2Within1km'],
                 metrics['greenCoverPct'],
                 metrics['nearestParkDistanceM'],
+                metrics['nearestMainRoadDistanceM'],
+                metrics['majorRoadLengthKmWithin1600m'],
                 metrics['crimeRatePerThousand'],
             ]
 
@@ -1032,6 +1145,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 'Median semi-detached price is now a shortlist filter and raw context metric, not a ranking axis.',
                 'School scoring is now primary-only and blends an admissions-aware access heuristic, the latest eligible 2023-onward KS2 attainment basket, a light attendance supplement, and an Ofsted warning overlay rather than a single inspection label.',
                 'Green-cover percentage uses an expanded 2x walk-radius neighborhood blend.',
+                'Main-road exposure is now a separate ranked axis built from current major-road geometry rather than being buried inside the broader environment axis.',
             ]
 
             micro_area = {
@@ -1107,6 +1221,7 @@ def compile_micro_areas(config: SearchConfig) -> dict[str, Any]:
                 config.micro_area_walk_radius_m * GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER,
             ),
             'greenCoverExpandedRadiusMultiplier': GREEN_COVER_EXPANDED_RADIUS_MULTIPLIER,
+            'mainRoadExposureRadiusM': int(MAIN_ROAD_BUFFER_METERS),
             'maxCommuteMinutesForCandidate': config.max_commute_minutes,
             'maxDriveMinutesForCandidate': config.max_drive_minutes_to_pinner,
             'defaultUsesPinnerRadiusPrefilter': False,

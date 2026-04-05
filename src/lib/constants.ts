@@ -1,10 +1,11 @@
 import type { Filters, Weights } from '@/types/domain'
 
 export const DEFAULT_WEIGHTS: Weights = {
-  transport: 29,
-  schools: 34,
-  environment: 22,
-  crime: 15,
+  transport: 26,
+  schools: 31,
+  environment: 20,
+  crime: 13,
+  roads: 10,
 }
 
 export const DEFAULT_FILTERS: Filters = {
@@ -48,7 +49,7 @@ export type FilterPresetKey = keyof typeof FILTER_PRESETS
 export const FILTER_PRESET_ORDER: FilterPresetKey[] = ['focus', 'balanced', 'explore']
 
 export const STORAGE_KEYS = {
-  weights: 'find-a-home.v3.weights',
+  weights: 'find-a-home.v4.weights',
   weightingMode: 'find-a-home.v2.weighting-mode',
   filters: 'find-a-home.v7.filters.default',
   filtersLondon: 'find-a-home.v7.filters.london',
